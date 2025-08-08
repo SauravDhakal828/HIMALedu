@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Facing Death Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Facing Death Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">2. Facing Death Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Facing Death” is a powerful and emotional one-act play written by Swedish playwright August Strindberg, which explores themes of poverty, sacrifice, parental love, and death. The story centers on Monsieur Durand, a former railroad worker, and his three daughters — Adele, Annette, and Therese — who are living in severe poverty. Their financial condition is so dire that they cannot even afford food, and they are dependent on borrowed resources and leftover goods. Despite these hardships, the daughters often complain about their situation and accuse their father of being cold and stingy.<br><br>
+
+At first, Monsieur Durand appears to be a harsh, unaffectionate, and even slightly authoritarian father. His daughters feel neglected and misunderstood. However, as the play progresses, the audience starts to see a deeper side of his character. The truth begins to unravel through subtle conversations and hints — particularly in his monologues and dialogue with the family friend, the Notary. Through these, it is revealed that Durand is actually a deeply loving and selfless father who has been silently sacrificing his own needs to support and protect his daughters.<br><br>
+
+Monsieur Durand’s past is tragic. He married a French woman, which led to him being socially and professionally rejected in his hometown. His wife passed away, and he has since faced all struggles alone. Despite all of this, Durand did everything he could to raise his daughters. Unfortunately, due to his stoic and reserved nature, his love and sacrifices went unrecognized. His daughters misjudge him, believing him to be responsible for their miserable condition, unaware that he has pawned and sold everything he had left — even his own life insurance policy — to keep them alive.<br><br>
+
+The emotional climax of the play comes when it is revealed that Monsieur Durand is planning to end his life. He has taken out a life insurance policy that will only be paid if he dies accidentally — not by suicide. So, he plans to fake his death in such a way that the insurance money will secure a future for his daughters. He even leaves detailed instructions with the Notary to ensure that his daughters receive everything without knowing the true cause of his death. This act shows the ultimate expression of his love: he is willing to die so that his children can live a better life.<br><br>
+
+As the play ends, Durand’s plan is set in motion, and his daughters remain unaware of the depth of his love and the tragic decision he has made. There is a strong sense of irony and emotional weight in the ending, as the man they misunderstood and blamed turns out to be the one who loved them most — so much so that he was ready to give up his own life for them. The audience is left with a heavy heart and a new understanding of how love can sometimes be hidden beneath silence and sacrifice.<br><br>
+
+In conclusion, “Facing Death” is a deeply moving play that forces readers and viewers to reconsider how they judge others, especially those who quietly carry the burdens of love and responsibility. Through Monsieur Durand’s tragic story, Strindberg brilliantly portrays how misunderstood love and silent sacrifice can become the ultimate expression of devotion.<br><br>
+                    </p>
+                    >
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Where does the play take place?</span><br>
+                    The play takes place in Monsieur Durand’s dining room, which is part of the boarding house he owns. He lives there with his three daughters.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why do the grocery, the baker and the butcher send their bills to the Durand household?</span><br>
+                    They send their bills because Monsieur Durand has not paid for their supplies for a long time. The shopkeepers trust him to pay later as he is a regular customer and landlord.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why does Monsieur Durand spend money on candles when he doesn’t have money to buy even bread?</span><br>
+                    Monsieur Durand spends money on candles because he wants to create a good impression on his daughters and maintain dignity in their home despite their financial hardship. Candles symbolize light, hope, and a semblance of normalcy.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why did Monsieur Durand sell his life insurance?</span><br>
+                    He sold his life insurance to get some immediate cash during their difficult times. He needed money to meet the urgent daily expenses and to support his family.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. Why has Monsieur Durand paid fire insurance?</span><br>
+                    Monsieur Durand paid fire insurance to protect the boarding house from any possible fire damage, which could have caused complete financial ruin if the house caught fire.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. How did Monsieur Durand and Mrs. Durand run out of their inheritances from both the sides?</span><br>
+                    They ran out of their inheritances because they had to use their wealth to support their family’s daily expenses over a long time. The money was exhausted due to poverty and continuous financial struggle.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. Why does Monsieur Durand tell a lie about his birthplace?</span><br>
+                    Monsieur Durand lies about his birthplace to hide his humble origins and preserve his self-respect and dignity in front of others, especially his daughters.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">h. What business is Monsieur Durand running to make a living?</span><br>
+                    Monsieur Durand runs a boarding house, where he rents rooms to lodgers. This is his main source of income.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">i. What plan does Monsieur Durand have to help his daughters with money?</span><br>
+                    Monsieur Durand plans to take a loan against the fire insurance policy. He wants to use this money to help support his daughters financially.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">j. How does Monsieur Durand die?</span><br>
+                    Monsieur Durand dies peacefully after a long struggle with poverty and illness. His death symbolizes the end of his sacrifices and the hardships he endured for his family.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Sketch the character of Monsieur Durand.</span><br>
+                    Monsieur Durand is portrayed as a hardworking and dignified man who struggles against poverty with unwavering courage. As the owner of a boarding house, he faces constant financial difficulties but remains determined to provide for his three daughters and uphold the family’s honor. Despite not having enough money even for basic necessities like bread, he spends on candles to create an atmosphere of hope and normalcy in their home, showing his deep care for his family’s emotional well-being. His decision to sell his life insurance and take loans against fire insurance reflects his practical approach to managing crises and his willingness to sacrifice everything to support his loved ones. Monsieur Durand is a man who carries the burden of responsibility silently, always prioritizing his family’s welfare above his own needs.
+                    <br><br>
+                    At the same time, Monsieur Durand’s pride and self-respect strongly influence his actions. He lies about his birthplace to conceal his humble origins and preserve his self-respect and dignity in front of others, especially his daughters. His character symbolizes the silent sacrifices of many ordinary people who endure hardships but never lose their sense of honor and identity. Despite the harshness of his life and the eventual toll it takes on his health, Monsieur Durand remains hopeful and courageous until his last breath. His death is a poignant reminder of the strength and resilience of human spirit, making him a deeply sympathetic and admirable figure in the play.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How do we know that the Durand family has reached a dead end?</span><br>
+                    We know that the Durand family has reached a dead end because their financial situation has become hopeless and they have exhausted all possible means to sustain themselves. Monsieur Durand has already sold his life insurance, which shows that he has used up important safety nets to get immediate money. They cannot even afford basic necessities like bread, yet they still struggle to pay bills from the grocery, baker, and butcher, who keep sending reminders. The boarding house, which is supposed to be their source of income, barely brings in enough money to cover expenses. Moreover, the family has run out of their inherited wealth from both sides, meaning there is no backup support available anymore.
+                    <br><br>
+                    The sense of desperation is also reflected in Monsieur Durand’s actions, such as spending on candles despite the lack of food, symbolizing their clinging to dignity amidst despair. He even lies about his birthplace to protect his pride, showing how deeply their poverty affects their self-respect. Monsieur Durand’s plan to take a loan against the fire insurance policy is a last resort, indicating that they have no other options left. All these signs together clearly show that the Durand family is trapped in a situation with no easy way out, symbolizing a complete dead end in their struggle for survival.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. ‘The mother, though already dead, seems to have had a great influence on the daughters, especially Theresa.’ Do you agree?</span><br>
+                    Yes, I agree that the mother’s influence is strongly felt on the daughters, particularly Theresa, even though she is no longer alive. Throughout the play, Theresa’s behavior and attitudes reflect the values and upbringing instilled by their mother. Theresa appears to be more sensitive, emotional, and protective towards her father and sisters, showing a nurturing side that likely comes from her mother’s teachings. The daughters’ respect for their father and their efforts to keep the family together despite hardships also suggest that their mother’s values of love, unity, and resilience continue to guide them.
+                    <br><br>
+                    Moreover, the mother’s absence is deeply felt, creating a gap that the daughters try to fill by being supportive of each other. Theresa’s character especially stands out as someone who upholds the family’s dignity and acts with compassion—traits that likely mirror the mother’s influence. The way the daughters cherish their father and struggle to face their difficult circumstances together shows the lasting emotional and moral impact their mother left on them. Thus, even in death, the mother continues to shape the daughters’ character and the family’s unity.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Discuss the relationship between Monsieur Durand and his wife.</span><br>
+                    The relationship between Monsieur Durand and his wife was one of deep love, mutual respect, and shared endurance in the face of hardship. Although the play centers primarily on Monsieur Durand and his present struggles, it is clear that the late Mrs. Durand was a significant emotional pillar in the family. The way Monsieur Durand recalls his wife and the lasting impression she has left on their daughters shows the strength of their bond. Together, they faced financial difficulties and the challenges of raising three daughters with courage and hope. Their partnership was built on trust and sacrifice, and Mrs. Durand’s presence is felt in the way the family continues to hold onto values like dignity, unity, and resilience that she must have instilled in them.
+                    <br><br>
+                    Even after her death, the connection between Monsieur Durand and his wife continues to shape the family’s life. Monsieur Durand’s determination to protect and provide for his daughters, even at great personal cost, reflects the influence and support he received from his wife during her lifetime. The family’s emotional strength and ability to cope with adversity are deeply rooted in the love and guidance that Mrs. Durand provided. Though she is physically absent, her spirit remains alive through the way Monsieur Durand and the daughters honor her memory and try to uphold the dignity she valued. This enduring marital bond symbolizes not only their personal relationship but also serves as a foundation for the family’s unity and hope in the face of despair.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. ‘Money determines the relationship between characters in this play.’ Elaborate this statement with examples from the play.</span><br>
+                    In Facing Death, money plays a crucial role in shaping the relationships between the characters, reflecting the harsh realities of poverty and financial struggle. Monsieur Durand’s interactions with others, including his daughters and the shopkeepers, are deeply influenced by their economic condition. For example, the grocery, baker, and butcher continuously send bills to the Durand household because Monsieur Durand cannot pay them on time, which creates an atmosphere of tension and indebtedness. This constant financial pressure affects not only Monsieur Durand’s self-esteem but also his relationship with those around him, as he feels ashamed and burdened by his inability to meet his obligations.
+                    <br><br>
+                    Within the family itself, money influences the dynamics between Monsieur Durand and his daughters. Despite their hardships, Durand tries to maintain his authority and dignity as the head of the family, often making sacrifices such as selling his life insurance or taking loans to secure their future. His daughters respect him deeply, but they are also aware of their precarious financial state, which creates a mix of love, worry, and frustration. For instance, Monsieur Durand’s plan to take a loan against the fire insurance shows how money dictates their decisions and hopes. Even the small act of buying candles despite not having enough for bread reflects their desire to hold onto dignity in difficult times. Thus, the scarcity and management of money are central to the characters’ relationships, highlighting how economic conditions can influence human connections and shape the course of their lives.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. Monsieur Durand kills himself so that his daughters would get 5000 francs as the compensation from the insurance company. What does his plan tell us about him?</span><br>
+                    Monsieur Durand’s plan to take his own life in order to secure 5000 francs for his daughters reveals his deep love, selflessness, and sacrifice as a father. It shows that he is willing to go to any extreme, even sacrificing his own life, to provide financial security and a better future for his daughters. This act reflects his desperation and the hopelessness of their situation but also highlights the strength of his commitment and responsibility towards his family. Monsieur Durand chooses death not out of weakness, but as a final, calculated means to protect and support those he loves when all other options have failed.
+                    <br><br>
+                    His plan also tells us about his practical and determined nature. Rather than leaving his daughters helpless after his death, he tries to ensure that they will receive compensation that can help them survive. This shows that Monsieur Durand is not only emotionally devoted but also mentally strong and resourceful, thinking ahead even in the darkest moments. Overall, his decision reflects the tragic reality faced by many who live in poverty, where love and sacrifice become intertwined with despair, but also the unyielding hope that family bonds can transcend hardship.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">g. Discuss Facing Death as a modern tragedy.</span><br>
+                    Facing Death can be considered a modern tragedy because it deals with the realistic and painful struggles of ordinary people rather than kings or mythical heroes, which is typical of classical tragedies. The play portrays the tragic life of Monsieur Durand, a common man who faces relentless poverty and despair while trying to secure a future for his family. Unlike traditional tragedies where fate or gods determine the outcome, this modern tragedy highlights social and economic forces—poverty, helplessness, and societal neglect—that trap the characters in a hopeless situation. Monsieur Durand’s death is not caused by a fatal flaw or destiny but by harsh social realities and his desperate attempt to protect his daughters, making the tragedy more relatable and poignant to contemporary audiences.
+                    <br><br>
+                    Moreover, the play’s emotional impact arises from its portrayal of human dignity, sacrifice, and love amid suffering. Monsieur Durand’s struggle to maintain his family’s honor and his ultimate sacrifice reveal the deep tragedy of human existence in the face of overwhelming adversity. The play reflects modern themes such as economic hardship, social injustice, and the silent suffering of the poor, making it a powerful commentary on society. Thus, Facing Death transcends individual misfortune and raises broader questions about humanity, making it a compelling example of modern tragedy rooted in social realism.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">a. Write a few paragraphs describing the role of the father in the family.</span><br>
+                    In the play Facing Death, the father, Monsieur Durand, represents the pillar of strength, responsibility, and sacrifice in the family. As the head of the household, he takes on the crucial role of provider, protector, and decision-maker. Despite facing severe financial difficulties, Monsieur Durand remains committed to supporting his three daughters and ensuring their well-being. His actions demonstrate a deep sense of duty and selflessness, as he consistently puts the needs of his family above his own comfort and desires. He sacrifices everything, even selling his life insurance and planning the ultimate sacrifice of his own life, to secure a better future for his daughters.
+                    <br><br>
+                    Apart from being a provider, the father also plays the role of an emotional anchor in the family. Monsieur Durand tries to maintain hope and dignity, creating a nurturing environment for his daughters despite their hardships. He instills values of courage, perseverance, and respect, which help the family face their challenges together. His protective nature is evident in the way he tries to shield his daughters from the harsh realities of poverty, preserving their self-respect and morale.
+                    <br><br>
+                    Overall, the father’s role in the family, as shown in the play, is not limited to financial support but extends to emotional strength, guidance, and sacrifice. Monsieur Durand’s character highlights the importance of a father’s dedication and love in holding the family together during times of crisis, making him a symbol of unwavering commitment and paternal devotion.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='english12.html'">
+                    Back to English 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

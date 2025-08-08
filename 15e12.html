@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Knowledge and Wisdom Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Knowledge and Wisdom Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">3. Knowledge and Wisdom Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        In the essay “Knowledge and Wisdom,” philosopher Bertrand Russell draws a clear distinction between two important human qualities: knowledge and wisdom. He begins by stating that while knowledge refers to the accumulation of facts, information, and skills through education or experience, wisdom is the ability to use that knowledge sensibly and ethically. Russell emphasizes that modern society has made great progress in acquiring knowledge, especially through science and technology, but often lacks the wisdom to use that knowledge for the betterment of humanity.<br><br>
+
+Russell explains that knowledge is easier to teach and spread than wisdom. People can be trained in specific fields—science, engineering, or history—and become highly knowledgeable. However, this does not guarantee that they will use their knowledge wisely. For example, someone may know how to make a powerful weapon, but without wisdom, they might use it to harm others. According to Russell, wisdom involves understanding the broader consequences of our actions, having a sense of proportion, and being guided by values like kindness, patience, and concern for others.<br><br>
+
+One of the key ideas Russell presents is that wisdom includes the capacity to see things in context and not just from a narrow personal perspective. He believes that a wise person considers the well-being of all people, not just their own group, nation, or interest. He warns that knowledge without wisdom can lead to destruction, as seen in wars and conflicts where science and technology are misused. Thus, wisdom requires emotional maturity, compassion, and the ability to see long-term effects.<br><br>
+
+Russell also touches upon the importance of humility in wisdom. A wise person recognizes that they do not know everything and that human understanding has limits. They are open to learning from others, accepting mistakes, and changing their views when necessary. This openness makes wisdom different from mere cleverness or intelligence. According to Russell, wisdom allows individuals to live harmoniously with others and make decisions that support peace and progress.<br><br>
+
+In addition, Russell points out that wisdom involves balancing different aspects of life—such as personal desires, social responsibilities, and long-term goals. It helps people avoid being controlled by strong emotions like hatred, envy, or pride. He believes that by cultivating wisdom, people can become better individuals and create a more just and peaceful society. He encourages education systems to focus not just on imparting knowledge, but also on developing wisdom in students.<br><br>
+
+In conclusion, “Knowledge and Wisdom” is a thoughtful essay that reminds us of the importance of applying what we know in a thoughtful and ethical manner. Bertrand Russell urges people to go beyond collecting facts and strive to develop the qualities that make knowledge truly valuable. Wisdom, he argues, is essential not just for personal success but for the survival and well-being of humanity.<br><br>
+                    </p>
+                    
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What are the factors that contribute to wisdom?</span><br>
+                    According to Bertrand Russell, wisdom depends on several factors. The main ones include:
+                    <ul>
+                        <li>A sense of proportion: The ability to weigh different factors in a problem appropriately.</li>
+                        <li>Awareness of the ends of human life: Understanding what is truly important in life and the goals worth pursuing.</li>
+                        <li>Knowledge combined with the ability to apply it practically: Wisdom requires not just facts but also the insight to use them well.</li>
+                        <li>Experience: Learning from past mistakes and successes helps develop wisdom.</li>
+                    </ul>
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What message does the writer try to convey with the example of technicians?</span><br>
+                    Russell uses technicians to illustrate that specialized knowledge alone is not enough. Technicians may have great technical skill but lack broader wisdom about the consequences of their work. The message is that knowledge without wisdom can be dangerous, and it’s important to combine technical skills with an understanding of the wider impact of one’s actions.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Which leaders does Russell say were able to mix knowledge and wisdom soundly?</span><br>
+                    Russell mentions leaders like Abraham Lincoln and George Washington as examples of individuals who combined knowledge and wisdom effectively. These leaders were able to balance practical knowledge with deep insight into human nature and the needs of society, which made their leadership sound and successful.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why is wisdom needed not only in public ways, but in private life equally?</span><br>
+                    Wisdom is essential in private life because personal decisions affect not only oneself but also family and friends. Managing relationships, understanding human emotions, and making thoughtful choices in daily life require wisdom to avoid unnecessary conflicts and lead a fulfilling life. Just as society needs wise leaders, individuals need wisdom for harmony and happiness at home and in personal affairs.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. What, according to Russell, is the true aim of education?</span><br>
+                    Russell believes the true aim of education is not just the accumulation of knowledge but the cultivation of wisdom. Education should teach people to think critically, understand the world deeply, and develop sound judgment, enabling them to make wise decisions for the benefit of themselves and society.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. Can wisdom be taught? If so, how?</span><br>
+                    Yes, wisdom can be taught, but not in the traditional way of memorizing facts. It is taught through experience, reflection, and learning from others’ successes and failures. Teachers can guide students to develop critical thinking, empathy, and awareness of life’s complexities, which are the foundations of wisdom.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">g. Why does the world need more wisdom in the future?</span><br>
+                    The world needs more wisdom in the future because of the increasing complexity and interconnection of global issues like technology, politics, environment, and social conflicts. Without wisdom, knowledge and power can be misused, leading to harm. Wise decision-making is necessary to solve problems peacefully and ensure a better future for humanity.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. According to Russell, “The pursuit of knowledge may become harmful unless it is combined with wisdom.” Justify this statement.</span><br>
+                    Bertrand Russell warns that knowledge alone, without the guidance of wisdom, can lead to harmful consequences. Knowledge refers to the collection of facts, skills, and technical expertise. While knowledge empowers humans to develop technology and solve problems, it can also be dangerous if applied carelessly or selfishly. For example, scientific discoveries and technical advances, when used without moral judgment or consideration for their impact, can cause destruction, such as in the case of nuclear weapons or environmental damage. Thus, the pursuit of knowledge for its own sake, without the balancing influence of wisdom, risks becoming a tool for harm rather than progress.
+                    <br><br>
+                    Wisdom, on the other hand, is the ability to understand the broader implications of knowledge and to apply it in ways that promote the well-being of individuals and society. It involves sound judgment, ethical values, and a sense of proportion about what really matters in life. Russell emphasizes that knowledge must be combined with wisdom to ensure that the pursuit of knowledge leads to beneficial outcomes rather than disasters. Only when knowledge is guided by wisdom can it serve humanity effectively, promoting peace, justice, and happiness instead of chaos and destruction.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. What, according to Russell, is the essence of wisdom? And how can one acquire the very essence?</span><br>
+                    According to Russell, the essence of wisdom lies in having a clear understanding of life’s true ends and a balanced sense of proportion in assessing problems. Wisdom is not just knowing facts, but appreciating the importance of different factors in human life and giving each its due weight. It involves being aware of the ultimate goals of human existence, such as happiness, peace, and fulfillment, rather than being blinded by trivial or immediate gains. This means recognizing what truly matters beyond superficial success, power, or wealth, and acting accordingly with patience and insight.
+                    <br><br>
+                    Russell believes that one can acquire this essence of wisdom through experience, reflection, and education that encourages critical thinking. Wisdom is not something that can be simply taught as a set of facts but must be developed by learning from one’s own life and observing others. It grows by understanding human nature, recognizing mistakes, and considering the consequences of one’s actions carefully. A wise person is someone who balances knowledge with compassion and foresight, continually questioning and refining their judgments. Therefore, education should focus not only on imparting knowledge but also on cultivating the capacity for wise decision-making.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference beyond the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Write an essay on the importance of balancing knowledge and wisdom in education.</span><br>
+                    In modern education, there is often a strong emphasis on acquiring knowledge—memorizing facts, understanding theories, and mastering skills across various subjects. While knowledge is undeniably crucial as the foundation of learning, true education extends beyond mere accumulation of information to include the development of wisdom. Wisdom is the ability to apply knowledge effectively, ethically, and with deep understanding in real-life situations. Balancing knowledge and wisdom in education means fostering not just what students know, but how they use that knowledge to make sound judgments, solve complex problems, and navigate the world with integrity.
+                    <br><br>
+                    An education focused solely on knowledge risks producing individuals who are well-informed but lack critical thinking, empathy, or moral discernment. Such individuals might excel academically but struggle with practical decision-making or contributing positively to society. Conversely, an education that overemphasizes wisdom without a solid knowledge base can lead to superficial understanding or misguided actions. Therefore, a balanced approach is essential. This involves teaching students to question, analyze, and synthesize information, encouraging them to reflect on the ethical implications of their learning, and providing opportunities for experiential learning that allows them to apply their knowledge in diverse contexts.
+                    <br><br>
+                    Ultimately, balancing knowledge and wisdom in education prepares students not just for careers, but for life. It equips them with the intellectual tools to continuously learn and adapt, and the moral compass to act responsibly and thoughtfully, fostering well-rounded individuals who can contribute meaningfully to their communities and the world.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Give examples from your own life or observations where knowledge without wisdom led to negative consequences.</span><br>
+                    From my observations, there are many instances where knowledge without wisdom has led to negative consequences. One common example is the rapid advancement of technology without sufficient consideration for its societal impact. For instance, the creators of certain social media platforms possessed immense knowledge in computer science and algorithms, enabling them to build highly engaging and interconnected systems. However, in the early stages, there was often a lack of wisdom regarding the potential negative effects on mental health, privacy, and the spread of misinformation. This knowledge, applied without a deeper understanding of human psychology and societal vulnerabilities, contributed to issues like addiction, cyberbullying, and the erosion of trust in information.
+                    <br><br>
+                    Another example can be seen in the financial sector. Individuals with extensive knowledge of complex financial instruments and market mechanisms have sometimes used this knowledge to create schemes that, while technically legal, were ethically questionable and led to widespread economic instability or personal ruin for many. Their deep understanding of financial systems was not balanced by the wisdom to consider the broader ethical implications or the long-term well-being of society.
+                    <br><br>
+                    These examples highlight that while knowledge provides the *capacity* to do things, wisdom provides the *discernment* to do the right things. Without wisdom, even brilliant knowledge can inadvertently, or intentionally, lead to undesirable outcomes.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='english12.html'">
+                    Back to English 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

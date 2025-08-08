@@ -1,0 +1,450 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Neighbours Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Neighbours Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">1. Neighbours Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Neighbours” is a gripping short story by Graham Greene that delves into the fragile nature of human relationships under the stress of war. The story is set during World War II and revolves around two middle-aged couples—George and his wife, and their younger neighbors, the Harrisons. George and his wife have lived peacefully next to the Harrisons for some time. However, one day, they notice that the Harrisons have suddenly packed up and left their house without explanation. This unexpected departure sparks curiosity and suspicion in George’s mind. When the Harrisons’ house stands empty, George’s feelings shift from simple neighborly concern to deep mistrust, driven by the tense atmosphere of wartime. The story begins by portraying the everyday life of neighbors but quickly introduces an element of uncertainty that disrupts this normalcy.<br><br>
+
+As George explores the empty house, his suspicions grow. He carefully searches the rooms and discovers various personal belongings, including some hidden papers that hint at possible wrongdoing. The story doesn’t explicitly say what the Harrisons did, but George’s imagination fills in the gaps—he suspects that they might have been involved in activities considered dangerous or treasonous during the war, such as spying or collaborating with the enemy. This discovery profoundly unsettles George and changes his perception of the Harrisons from friendly neighbors to potential threats. His mind races with fears, and he becomes obsessed with the idea that people he once trusted might have been deceiving him all along. Greene skillfully portrays how uncertainty can turn suspicion into paranoia.<br><br>
+
+Following his unsettling discovery, George’s behavior begins to change noticeably. He becomes nervous and paranoid, constantly worrying that he is being watched or followed. He perceives innocent actions and ordinary occurrences through a lens of fear and mistrust. This change shows how the tension and fear caused by war affect not only the battlefield but also civilian life and personal relationships. George’s paranoia isolates him emotionally, creating a sense of loneliness and anxiety. The story captures the psychological impact of war on ordinary people, demonstrating how fear can erode trust between neighbors and breed suspicion where there was once friendship. Greene’s depiction of George’s mental state is a powerful commentary on the damaging effects of fear and uncertainty.<br><br>
+
+The story ends with ambiguity, leaving readers unsure about the truth behind George’s suspicions. Was the Harrisons’ departure linked to secretive, dangerous activities, or is George’s paranoia playing tricks on him? Greene does not provide clear answers, instead emphasizing the unsettling nature of mistrust during troubled times. This unresolved ending reflects the larger theme of the story—the uncertainty and suspicion that permeate society during war. The narrative leaves readers contemplating how fear and suspicion can distort reality, creating divisions and misunderstandings even among close neighbors. It serves as a reminder that in times of crisis, it is difficult to discern truth from imagination, and this uncertainty can be deeply isolating.<br><br>
+
+In conclusion, “Neighbours” is a thought-provoking story that explores the psychological and emotional effects of war on everyday people. Through George’s experiences, Graham Greene reveals how fear and suspicion can destroy trust and harmony between neighbors, turning once-friendly relationships into sources of anxiety and isolation. The story captures the tension and paranoia that often accompany periods of conflict, making readers reflect on the importance of trust and understanding in difficult times. Ultimately, “Neighbours” is a powerful reminder of how war affects not only countries but also the personal lives and relationships of individuals.<br><br>
+                    </p>
+                </div>
+
+                <!-- New text added below summary -->
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Describe how the young couple’s house looked like.</span><br>
+                    The young couple’s house was small, but its high ceiling and paned windows gave it the charm of an elegant cottage. From the man’s study window, he could see used car yards, rooftops, and the Moreton Bay fig trees in the nearby park, where they often walked their dog. Despite its modest size, the house had a peaceful and warm atmosphere.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How did the young couple identify their neighbours in the beginning of their arrival?</span><br>
+                    When they first moved in, the young couple identified their neighbours by sounds and actions—such as the sound of spitting, washing, and watering at daybreak. These unfamiliar noises and routines made the couple feel like outsiders, and they viewed their neighbours as noisy and strange, due to differences in culture and language.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. How did the neighbours help the young couple in the kitchen garden?</span><br>
+                    Despite the language barriers, the neighbours helped the young couple in their kitchen garden by offering advice and guidance. They taught them about spacing, hilling, and mulching the vegetables. One neighbour even gave them a bag full of garlic cloves to plant, showing kindness through actions instead of words.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why were the people in the neighborhood surprised at the role of the young man and his wife in their family?</span><br>
+                    The neighbours were surprised because the gender roles in the young couple’s family were reversed compared to traditional norms. The wife went out to work at the hospital, while the husband stayed at home, worked on his thesis, and cooked dinner for his wife. This was unusual in the eyes of their traditional, often conservative, neighbours.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. How did the neighbours respond to the woman’s pregnancy?</span><br>
+                    The neighbours responded with genuine joy and warmth. They smiled tirelessly, gave small gifts like chocolates and cigarettes, and offered name suggestions for the baby. Some women even touched the woman’s belly to predict the baby's gender. The woman next door knitted a baby suit, and the Polish widower finished his garage, perhaps as a symbolic gesture of completion and readiness for the new life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">f. Why did the young man begin to weep at the end of the story?</span><br>
+                    The young man began to weep because he was deeply moved by the unexpected love and support from his neighbours. Despite cultural and linguistic differences, their genuine concern, kindness, and sense of community overwhelmed him emotionally. He realized that the real-life warmth he experienced was far deeper than what he had encountered in the twentieth-century novels he was studying.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">g. Why do you think the author did not characterize the persons in the story with proper names?</span><br>
+                    The author likely chose not to use specific names to make the story more universal and symbolic. By not giving the characters names, Tim Winton highlights that human emotions—such as kindness, empathy, and connection—go beyond individual identity, race, or culture. The unnamed couple and neighbours represent everyday people across the world who can coexist peacefully, despite differences.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. The story shows that linguistic and cultural barriers do not create any obstacle in human relationship. Cite some examples from the story where the neighbours have transcended such barriers.</span><br>
+                    The story “Neighbours” clearly shows that differences in language and culture do not prevent people from forming strong human connections. Even though the young couple and their neighbours came from different backgrounds and spoke different languages, they were able to build a meaningful relationship through kindness and shared experiences.
+                    One example is when the couple started a kitchen garden, and the neighbours gave them helpful advice about spacing, hilling, and mulching. A neighbour even offered a bag of garlic cloves to plant. These gestures showed care and support, even without speaking the same language.
+                    Another moment is when the Polish widower helped rebuild the couple’s henhouse. Although they couldn’t communicate with words, he still offered his time and effort, showing that actions can speak louder than words.
+                    The neighbours also showed warmth when the woman became pregnant. They brought gifts, gave name suggestions, and one woman even knitted a baby suit. These acts showed how much the community cared for the couple, despite cultural and linguistic differences.
+                    Through these examples, the story proves that humanity, kindness, and empathy can overcome any cultural or language barrier.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. The last sentence of the story reads “The twentieth-century novel had not prepared him for this.” In your view, what differences did the young man find between twentieth-century novels and human relations?</span><br>
+                    The last sentence, “The twentieth-century novel had not prepared him for this,” reflects the young man’s realization that <span class="font-bold">real-life human relationships</span> can be far more <span class="font-bold">kind, supportive, and emotionally rich</span> than what he had read in literature. In the twentieth-century novels he studied, people were often portrayed as <span class="font-bold">isolated, self-interested, or emotionally detached</span>, especially in urban or modern settings. However, in real life, he experienced something very different. His <span class="font-bold">multicultural neighbours</span>, whom he had first misunderstood, turned out to be <span class="font-bold">caring, helpful, and emotionally connected</span>, especially during his wife’s pregnancy. Their actions — giving gifts, offering advice, and showing genuine concern — touched him deeply. This contrast between the <span class="font-bold">fictional world of cold relationships</span> and the <span class="font-bold">real world of unexpected warmth and humanity</span> is what surprised him and moved him to tears.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. A Nepali proverb says “Neighbors are companions for wedding procession as well as for funeral procession.” Does this proverb apply in the story? Justify.</span><br>
+                    Yes, the Nepali proverb “Neighbors are companions for wedding procession as well as for funeral procession” truly applies to the story <span class="italic">“Neighbours.”</span> This proverb highlights the importance of neighbors in both happy and difficult times of life, and the story beautifully reflects this idea. When the young couple first moved into the multicultural neighborhood, they felt uncomfortable and isolated due to the unfamiliar languages and customs. However, over time, their perception changed as the neighbors began to show kindness and warmth. When the woman became pregnant, the neighbors supported them by offering gifts, advice, and emotional care. Despite the language barrier, they celebrated the couple’s happiness as if it were their own. One woman knitted baby clothes, others brought chocolates, and they all expressed joy for the new life. These actions show that true human connection goes beyond culture or language. The neighbors shared in the couple’s personal journey, making their presence valuable in moments of joy—just as the proverb suggests, neighbors are indeed close companions in every phase of life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. The author has dealt with an issue of multiculturalism in the story. Why do you think multiculturalism has become a major issue in the present world?</span><br>
+                    Multiculturalism has become a major issue in the present world because increased migration and globalization have brought people from diverse cultural, ethnic, and linguistic backgrounds closer together than ever before. While this diversity enriches societies by introducing new ideas, traditions, and perspectives, it also creates challenges such as cultural misunderstandings, social segregation, and difficulties in communication and integration. Many communities struggle to balance preserving their own cultural identities with adapting to new social environments, which can sometimes lead to tensions, discrimination, or feelings of isolation. Additionally, economic competition and unequal access to resources can exacerbate these issues. Therefore, multiculturalism is a major topic today as societies work toward fostering harmony, inclusion, and mutual respect among their diverse populations.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Write an essay on Celebration of Childbirth in my Community.</span><br>
+                    Childbirth is a very special and joyful event in my community, which mainly consists of Hindu families like Brahmin, Chhetri, Newar, and Magar. When a baby is born, the family and neighbors celebrate with traditional rituals and blessings.
+                    One important ceremony is Chhathi, held on the sixth day after birth, when lamps are lit all night, and it is believed that gods come to write the baby’s future. Then, on the eleventh day, the Nwaran or naming ceremony takes place, where the baby is given a meaningful name based on astrology.
+                    After five or six months, a weaning ceremony is done to introduce the baby to solid food, usually rice. During all these celebrations, family members and neighbors come together to offer gifts, advice, and blessings for the baby’s health and happiness.
+                    These traditions show the love and joy our community shares in welcoming a new life and strengthen our bonds with each other.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Do the people in your community respond with similar reactions upon the pregnancy and childbirth as depicted in the story? Give a couple of examples.</span><br>
+                    Yes, the people in my community respond with similar warmth and care upon pregnancy and childbirth, just like in the story <span class="italic">“Neighbours.”</span> When a woman becomes pregnant, relatives and neighbors visit her to offer blessings, advice, and support. For example, pregnant women are often given nutritious food and special care to ensure their health. Also, after the baby is born, family and community members bring gifts such as clothes, sweets, and toys, and they celebrate with the family. Like in the story, the community comes together to share the joy and offer help, showing love and kindness beyond cultural differences.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

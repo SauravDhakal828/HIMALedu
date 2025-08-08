@@ -1,0 +1,760 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>स्टिफन विलियम हकिङ Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for स्टिफन विलियम हकिङ Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">६. स्टिफन विलियम हकिङ Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleStephenHawkingSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleStephenHawkingSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="stephenHawkingSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    स्टिफन विलियम हकिङ विश्वका एक चर्चित वैज्ञानिक र भौतिकशास्त्री हुन् जसले ब्रह्माण्डको गहिरो रहस्यहरू खोज्ने आफ्नो अविचलित उद्देश्यले वैज्ञानिक क्षेत्रमा नयाँ क्रान्ति ल्याए। बाल्यकालदेखि नै उनी विज्ञानमा अत्यन्त रुचि राख्थे र उनको जिज्ञासा र अध्ययनशीलता असाधारण थियो। सानो उमेरदेखि नै उनले भौतिकशास्त्र र गणितमा उत्कृष्टता देखाए। कठिनाइहरू र शारीरिक कमजोरीहरूको सामना गर्दै पनि उनले कहिल्यै आफ्नो सपना र लक्ष्यलाई तितरबितर हुन दिएनन्। उनको जीवन सङ्घर्षपूर्ण भए पनि तीव्र बुद्धि र दृढ इच्छाशक्तिले भरिपूर्ण थियो जसले उनलाई विश्वका महान वैज्ञानिकहरूमध्ये स्थापित गरायो।<br><br>
+
+उनी २१ वर्षको उमेरमा ALS नामक एक घातक रोगबाट पीडित भए, जसले उनको मांसपेशीहरूलाई कमजोर पार्दै अन्ततः शरीरलाई पूर्णरूपमा लकडाउन गर्यो। धेरैले उनलाई लामो समय बाँच्न सक्दैनन् भनेको थिए, तर हकिङले हार मान्नुभएन। शरीर कमजोर भए तापनि उनको दिमाग अझै जति तेज थियो र उनले आफ्नो रोगलाई आफ्ना सपनाहरू पुरा गर्न बाधा बन्न दिएनन्। उनले आफ्नो जीवनलाई विज्ञानमा समर्पित गर्दै हजारौं कठिनाइहरू पार गरे। उनको यो साहस र आत्मबल सबैका लागि एउटा प्रेरणाको स्रोत बन्यो।<br><br>
+
+हकिङले ब्रह्माण्ड र खगोलशास्त्रमा गरेका अनुसन्धानहरूले विज्ञानको दुनियाँलाई नयाँ दिशाहरू देखाए। विशेषगरी ब्ल्याक होल र बिग बैङ सिद्धान्तमा उनको योगदान अतुलनीय छ। उनले ब्ल्याक होलबाट विकिरण निस्कने सम्भावनाको खोजी गरे जुन 'हकिङ विकिरण' भनेर परिचित छ। यसले खगोलशास्त्र र ब्रह्माण्ड विज्ञानलाई नयाँ उचाइमा पुर्‍यायो। उनका अनुसन्धानहरूले मात्र नयाँ तथ्यहरू उद्घाटित गरेनन्, भविष्यका वैज्ञानिकहरूलाई पनि नयाँ खोजका लागि प्रेरित गर्‍यो। यसले समग्र मानव ज्ञानको विस्तारमा ठूलो योगदान पुर्‍यायो।<br><br>
+
+हकिङ केवल एक वैज्ञानिक मात्रै थिएनन्, उनी एक उत्कृष्ट लेखक पनि थिए। उनको प्रसिद्ध पुस्तक “ए ब्रिफ हिस्ट्री अफ टाइम” ले जटिल विज्ञानलाई सरल र रोचक भाषामा आम मानिसलाई बुझाउन सहयोग पुर्‍यायो। यो पुस्तक विश्वभरिका लाखौं पाठकहरूलाई वैज्ञानिक सोच र ब्रह्माण्डको रहस्य बुझ्न प्रेरित गर्‍यो। हकिङले विज्ञानलाई केवल अनुसन्धानको विषय मात्र नभई जीवनको अभिन्न अंग बनाउने प्रयास गरे। उनका विचार र विचारधाराले विज्ञानप्रति मानिसको दृष्टिकोणलाई व्यापक रूपमा परिवर्तन गर्‍यो।<br><br>
+
+अन्ततः, स्टिफन विलियम हकिङको जीवन हामी सबैका लागि एउटा महान प्रेरणा हो। उनले देखाए कि जीवनमा आउने कठिनाइ र बाधाहरूले कहिल्यै पनि मानिसलाई आफ्नो लक्ष्यबाट विचलित गर्न सक्दैनन्। उनको संघर्ष, समर्पण र विज्ञानप्रतिको लगावले सम्पूर्ण मानव जातिलाई प्रेरणा दिएको छ। शरीर कमजोर भए पनि मस्तिष्क र आत्माले असिम शक्ति पाउन सक्दछ भन्ने कुरा उनको जीवनले प्रमाणित गर्‍यो। हकिङका खोजहरू र जीवन दर्शनले सदैव विज्ञानको क्षेत्रमा एउटा उज्यालो मार्गदर्शन दिनेछन्।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>विभीषिका : भय</p>
+                            <p>मानसपटल : मानसिक तह</p>
+                            <p>आनुवंशिक : पुर्ख्यौली</p>
+                            <p>जिज्ञासा : जान्ने इच्छा</p>
+                            <p>अवधारणात्मक : कुनै विषयप्रति विचारपूर्वक निश्चय गरिएको</p>
+                            <p>खगोल : आकाशमण्डल</p>
+                            <p>घनत्व : खँदिलोपन</p>
+                            <p>कृत्रिम : बनावटी</p>
+                            <p>साधना : सफल हुनका लागि कुनै काम बारम्बार गर्ने क्रिया</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) रहनसहन, मर्यादा, सम्पर्क, शिक्षा आदिका कारणबाट मान्छेका मनमा पर्ने प्रभाव<br><strong>संस्कार</strong></p>
+                            <p>(ख) स्नायुसम्बन्धी एक रोग<br><strong>अम्योट्रोफिक ल्याटरल स्क्लेरोसिस</strong></p>
+                            <p>(ग) कलपुर्जा, दम आदिले आफैँ सञ्चालन हुने<br><strong>स्वचालित</strong></p>
+                            <p>(घ) पछि सिद्ध हुन सक्ने कुराको पहिले नै मनमा गरिने अड्कल वा धारणा<br><strong>परिकल्पना</strong></p>
+                            <p>(ङ) ज्ञात राशिका सहायताले अज्ञात राशि निकाल्ने प्रक्रिया<br><strong>वार्महोल</strong></p>
+                            <p>(च) विद्वान्लाई जीवनयापनका लागि दिइने सावधिक आर्थिक अनुदान<br><strong>विद्वतवृत्ति</strong></p>
+                            <p>(छ) पृथ्वी, अन्तरिक्ष, ग्रह, नक्षत्र आदिको वैज्ञानिक अध्ययन गर्ने शास्त्र<br><strong>खगोल शास्त्र (विज्ञान)</strong></p>
+                            <p>(ज) इतिहास, विज्ञान, जीवनी आदि राष्ट्रिय र अन्तर्राष्ट्रिय महत्त्वका विषयवस्तुमा आधारित सामयिक लघु चलचित्र<br><strong>वृत्तचित्र</strong></p>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएका शब्दलाई अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>इच्छाशक्ति</strong> – उसले आफ्नो बलियो इच्छाशक्तिका कारण असम्भव जस्तो लाग्ने काम पनि सफलतापूर्वक पूरा गर्‍यो।</p>
+                            <p><strong>योगदान</strong> – समाज सुधारमा उनले पुर्‍याएको योगदान सदैव सम्झिने गरिन्छ।</p>
+                            <p><strong>सिर्जनशील</strong> – सिर्जनशील मानिसहरूले साधारण कुरामा पनि नयाँपन ल्याउन सक्छन्।</p>
+                            <p><strong>आदर्श</strong> – महात्मा गान्धीको जीवन धेरैका लागि आदर्श बनेको छ।</p>
+                            <p><strong>दाम्पत्य</strong> – उनीहरूको दाम्पत्य जीवन आपसी समझदारी र विश्वासमा टेकेको छ।</p>
+                            <p><strong>शक्तिहीन</strong> – रोगका कारण ऊ शक्तिहीन भएर ओछ्यानमै थलिएर बस्नुपरेको छ।</p>
+                            <p><strong>अशक्त</strong> – वृद्धावस्थामा मानिस अशक्त भएर अरूको सहयोगमा निर्भर हुन सक्छ।</p>
+                            <p><strong>विभूषित</strong> – राष्ट्रसेवामा योगदान दिएका व्यक्तिलाई पदकले विभूषित गरियो।</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. तलका कुनै दशओटा अनुकरणात्मक शब्दको प्रयोग गरी आफ्नो विद्यार्थी जीवनको वर्णन गर्नुहोस् ।</strong><br><span class="text-justify">विद्यार्थी जीवन साँच्चै रमाइलो थियो। म बिहानै **जुरुक्क** उठेर आँखा **झिमिक्क** पार्दै पढ्न बस्थें। स्कुल जाने बेलामा आमा **कचकच** झर्किनुहुन्थ्यो, “छिटो गर नत्र ढिला हुन्छ।” मैले **हतपत** तयारी गर्थें र झोलामा किताब **ठकठक** पारेर राख्थें। स्कुल पुग्दा साथीहरू **खुसखुसी** हाँसिरहेका हुन्थे। पढाइको समयमा शिक्षकले केही सोध्नुभयो भने म **फुरुङ्ग** हुँदै हात उठाउँथे। जब उत्तर सहि हुन्थ्यो, सर **मुसुमुसु** हाँस्नुहुन्थ्यो र म **गम्म** पार्थें।</span></p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>२. दिइएका बुँदालाई जीवनीमा उल्लेख भएअनुसारको क्रममा मिलाउनुहोस् र तिनमा उल्लेख भएका विषयवस्तुबाट मुख्य मुख्य बुँदा टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) पृष्ठभूमि</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>शारीरिक रूपमा अशक्त भए पनि दृढ इच्छाशक्ति, प्रतिभा र साधनामा रमाउने व्यक्ति कहिल्यै शक्तिहीन नहुने,</li>
+                                <li>मानवहितमा समर्पित हुने र योगदानका दिने व्यक्ति सिङ्गो संसारभरि नै उदाहरणीय बन्ने,</li>
+                                <li>स्टिफन विलियम हकिङ शारीरिक रुपमा नाजुक भएर पनि प्रतिभा र निरन्तरको साधनाका कारण भौतिक शास्त्रमा नयाँ तथ्य उजागर गरेर सिङ्गो संसारलाई नै आश्चर्यचकित बनाउनु ।</li>
+                            </ul>
+                            <p><strong>(ख) जन्म र आमाबुबा</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङको जन्म सन् १९४२ जनवरी ८ का दिन हुनु,</li>
+                                <li>आमा इसाबेल र बुबा प्रयाङ्कको पहिलो सन्तानका रूपमा जन्मनु ।</li>
+                            </ul>
+                            <p><strong>(ग) हकिङको विद्यालयीय शिक्षा</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङको विद्यालयीय शिक्षाको प्रारम्भ लन्डन हाइगेटस्थित बायरन हाउस विद्यालयबाट भएको,</li>
+                                <li>अल्बान्स सहरमा सेन्ट अल्बाल्स नामको विद्यालयमा भर्ना भएका,</li>
+                                <li>आफ्नो कक्षामा कमजोर विद्यार्थीमा परेका,</li>
+                                <li>सेन्ट अल्बाल्स नामको विद्यालयबाटै विद्यालयीय शिक्षा पुरा गरेका ।</li>
+                            </ul>
+                            <p><strong>(घ) विद्यावारिधिको उपाधि</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>‘अम्योट्रोफिक ल्याटरल स्क्लेरोसिस’ रोगले हिँड्न नसक्ने भएको विषम परिस्थितिमा पनि सन् १९६६ मा क्याम्ब्रिजबाट नै विद्यावारिधि उपाधि हासिल गर्नु,</li>
+                                <li>विद्यावारिधि पूरा गरिसकेपछि क्याम्ब्रिजमा विद्वत्वृत्ति प्राप्त गरी अनुसन्धाताका रूपमा काम गर्नु,</li>
+                                <li>सन् १८६८ क्याम्ब्रिजमा खगोल अध्ययन संस्थानको सदस्य नियुक्त हुनु,</li>
+                                <li>सन् १८७८ मा गणित विषयमा ल्युकेसियन प्रोफेसर पदमा नियुक्त हुनु.</li>
+                            </ul>
+                            <p><strong>(ङ) क्याम्ब्रिजमा खगोल अध्ययन संस्थानको सदस्यमा नियुक्ति</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>ह्विलचेयरको सहारामा उनी आफ्नो विभाग गएर आफ्नो कामलाई निरन्तरता दिँदै उनले एकपछि अर्को सफलता चुम्दै जानु ।</li>
+                            </ul>
+                            <p><strong>(च) क्याम्ब्रिजकै प्रसिद्ध पद ‘ल्युकेसियन प्रोफेसर’ मा नियुक्ति</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>सन् १९७९ मा गणित विषयमा क्याम्ब्रिजकै प्रसिद्ध पद ‘ल्युकेसियन प्रोफेसर’ मा नियुक्त हुनु,</li>
+                                <li>सन् १९८५ मा उनी धेरै बिरामी परेपछि चिकित्सकले उनको रोगको उपचारका लागि श्वासनलीको शल्यक्रिया गर्नु,</li>
+                                <li>शल्यक्रियापछि उनको आवाज पुरै हराएकाले आफूले गरिरहेको काम अघि बढाउन नसक्नु ।</li>
+                            </ul>
+                            <p><strong>(छ) प्रेमसम्बन्ध, विवाह र दाम्पत्य जीवन</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङ क्याम्ब्रिजमा विद्यावारिधि गरिरहँदा उनले जेन वाइल्डसँग प्रेम गरी सन् १९६५ मा विवाह गर्नु,</li>
+                                <li>उनीहरूका लुसी नामकी छोरी र रोबर्ट र तिमोथी नामका दुई छोरा जन्मनु,</li>
+                                <li>उनीहरूको दाम्पत्य सम्बन्धमा खटपट आएपछि सन् १९९० मा सम्बन्धविच्छेद हुनु,</li>
+                                <li>सन् १९९५ मा उनले आफ्नो स्याहारसुसार गर्ने नर्स एलेन मेसनसँग विवाह गर्नु,</li>
+                                <li>मेसनसितको दाम्पत्य सम्बन्ध पनि लामो समयसम्म रहन नसकी सन् २००६ मा उनीहरुको सम्बन्धविच्छेद हुनु ।</li>
+                            </ul>
+                            <p><strong>(ज) विभिन्न पुस्तक र शोधपत्रको प्रकाशन</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिडले आफ्नो जीवनकालमा दर्जनभन्दा बढी पुस्तक र कैयौं शोधपत्र तयार गरी प्रकाशन गर्नु,</li>
+                                <li>उनका पुस्तकमध्ये सन् १९८८ मा प्रकाशित सर्वाधिक चर्चित पुस्तक ‘अ ब्रिफ हिस्ट्री अफ टाइम’ लाई सन् १९९८ मा गिनिज बुक अफ वर्ल्ड रेकर्डद्वारा सदावहार सर्वाधिक बिक्री हुने पुस्तक घोषणा गर्नु,</li>
+                            </ul>
+                            <p><strong>(झ) ब्रह्माण्डको उत्पत्ति र संरचनासम्बन्धी मौलिक मान्यता</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङले ब्रह्माण्डको उत्पत्ति र संरचनासम्बन्धी गहिरो अध्ययन गरी यससम्बन्धी आफ्ना मौलिक मान्यता प्रस्तुत गर्नु,</li>
+                                <li>ब्रह्माण्डको उत्पत्ति सर्वाधिक घनत्वको अवस्थामा रहेको कुनै बिन्दुबाट भएको र त्यसको अन्त्य पनि त्यस्तै बिन्दुमा हुने बताउनु जसलाई उनले ब्ल्याकहोल भन्नु,</li>
+                                <li>उनले अधिक गुरुत्व शक्तिले गर्दा ब्ल्याकहोलभित्र हरेक चिज खुम्चिएर रहेका हुने र अझ खुम्चँदै जाँदा त्यसबाट विकिरण उत्सर्जन हुन्छ भन्ने पत्ता लगाउनु,</li>
+                            </ul>
+                            <p><strong>(ञ) पृथ्वीमा आइपर्ने सम्भावित विपत्तिबाट बच्न मानव समु गरेको आग्रह</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङले पृथ्वीमा आइपर्ने सम्भावित विपत्तिबाट बच्न मानव समुदायलाई बारम्बार सचेत गराउनु,</li>
+                                <li>परमाणुयुद्ध, विश्वव्यापी तापक्रम वृद्धि, प्रकृति विरुद्धका मानवीय गतिविधिका कारण पृथ्वीमा मानव जीवन खतरामा परेकोले यसतर्फ समयमै सचेत हुन आग्रह गर्नु,</li>
+                                <li>मानिसलाई कृत्रिम बुद्धिमत्तापूर्ण रोबोटको निर्माणमा सचेत हुन आग्रह गर्नु ।</li>
+                            </ul>
+                            <p><strong>(ट) हकिडले समय समयमा दिएका प्रेरणादायी वक्तव्य</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>हकिङले बालबालिकालाई आफूभन्दा तलको पैतालालाई नभई सधैँ तारालाई हेर्न, बिनाकाम जिन्दगी खाली भएकाले सधैँ कर्मशील बन्न र कसैले प्रेम गरेमा त्यसलाई स्वीकार गर्न सुझाव दिनु,</li>
+                                <li>बिनागल्ती संसारका कोही पनि मानिस अघि बढ्न नसक्ने भएकाले गल्तीलाई प्रगतिको पथप्रदर्शकका रूपमा लिनुपर्ने बताउनु,</li>
+                                <li>शारीरिक अशक्ततालाई कहिल्यै पनि दुर्भाग्य सम्मझन नहुने सुझाव दिनु,</li>
+                                <li>इच्छाशक्ति, ज्ञानशक्ति र क्रियाशक्तिका त्रिवेणी रहेका हकिङले शारीरिक अशक्ततामाथि विजय प्राप्त गर्नु ।</li>
+                            </ul>
+                            <p><strong>(ठ) हकिडले पाएका पुरस्कार र उपाधि</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>आफ्नो जीवनमा गरेका योगदानका कारण हकिङल थुप्रै पुरस्कारले विभूषित हुनु,</li>
+                                <li>अल्बर्ट आइन्स्टाइन मेडल (सन् १९७९), ह्युज मेडल अफ रोयल सोसाइटी (सन् १९७६), मेडल अफ रोयल एस्ट्रोनोमिकल सोसाइटी (सन् १९८५) लगायतका दर्जनभन्दा बढी स्वर्ण पदक र पुरस्कार प्राप्त गर्नु,</li>
+                                <li>सन् १९८२ मा ब्रिटिस महारानी एलिजाबेथले उनलाई ‘कमान्डर अफ द ब्रिटिस एम्पायर’ कदरबाट सम्मान गर्नु,</li>
+                                <li>सन् २००९ मा अमेरिकी सरकारले त्यहाँको सर्वोच्च नागरिक सम्मान ‘राष्ट्रपति’ पदकबाट सम्मान गर्नु ।</li>
+                            </ul>
+                            <p><strong>(ड) समग्र योगदान र देहावसान</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>शारीरिक रूपमा अशक्त हुँदा पनि निरन्तर अनुसन्धान गर्दै भौतिक शास्त्रमा नयाँ तथ्य उजागर गरेर मानवीय चेतनालाई नयाँ उचाइमा पुर्याउन उल्लेख्य योगदान गर्ने विशिष्ट प्रतिभा हुनु,</li>
+                                <li>सन् २०१८ मार्च १४ मा ७६ वर्षीय जीवनसङ्घर्षबाट देहावसान हुनु ।</li>
+                            </ul>
+                        </div>
+                        <p class="text-left-align"><strong>३. पाठ पढ़ी दिइएका प्रश्नको उत्तर भन्नुहोस्</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) कस्तो परिस्थितिमा हकिङ जन्मेका हुन् ?</strong><br>स्टीफन हकिङ दोस्रो विश्वयुद्धको कठिन परिस्थितिमा अक्सफोर्डमा जन्मेका हुन्, जब जर्मनीले बेलायतमाथि आक्रमण गरिरहेको थियो।</p>
+                            <p><strong>(ख) हकिङलाई लागेको रोगको नाम के हो ?</strong><br>हकिङलाई लागेको रोगको नाम एमियोट्रोफिक लेटरल स्क्लेरोसिस हो, जसलाई मोटर न्युरोन डिजिज पनि भनिन्छ।</p>
+                            <p><strong>(ग) हकिङको सर्वाधिक चर्चित पुस्तक कुन हो ?</strong><br>हकिङको सर्वाधिक चर्चित पुस्तकको नाम "ए ब्रीफ हिस्ट्री अफ टाइम" हो।</p>
+                            <p><strong>(घ) हकिङका आमाबुबा कुन कुन विषयका विद्वान् थिए ?</strong><br>हकिङका आमाबुबा दुवैजना विज्ञानका विद्वान् थिए। उनका बाबु फिजिक्स (भौतिकशास्त्र) मा विशेषज्ञ थिए भने उनकी आमा बायोलोजी (जीवविज्ञान) मा विद्वान् थिइन्।</p>
+                            <p><strong>(ङ) हकिङसँग रहेका तीन शक्ति के के हुन् ?</strong><br>स्टीफन हकिङसँग रहेका तीन शक्तिहरू हुन्:<br>वैज्ञानिक बुद्धि – गहिरो अनुसन्धान र ज्ञान हासिल गर्ने क्षमता।<br>इच्छाशक्ति – कठिनाइहरूलाई सामना गर्ने अडिग मनोबल।<br>सर्जनशीलता – नयाँ नयाँ विचार र सिद्धान्तहरू विकास गर्ने क्षमता।</p>
+                            <p><strong>(च) हकिङले कसरी सिङ्गो संसारलाई नै आश्चर्यचकित बनाए ?</strong><br>स्टीफन हकिङले ब्ल्याक होल र ब्रह्माण्डको रहस्यबारे नयाँ खोज गरेर सिङ्गो संसारलाई आश्चर्यचकित बनाएका थिए। आफ्नो रोगका बावजुद उनले अद्भुत अनुसन्धान गरेर सबैलाई प्रेरणा दिए।</p>
+                            <p><strong>(छ) हकिङले ब्ल्याकहोलका सम्बन्धमा प्रस्तुत गरेको मौलिक विचार के हो ?</strong><br>स्टीफन हकिङले ब्ल्याकहोलको सम्बन्धमा प्रस्तुत गरेको मौलिक विचार यो हो कि ब्ल्याकहोलहरू पूर्ण रूपमा अन्धकार र निर्वासित ठाउँ होइनन्, बरु तिनीहरूले विकिरण (हकिङ विकिरण) उत्सर्जन गर्छन् र अन्ततः बिस्तारै सुक्दै जान्छन्। यसले ब्ल्याकहोललाई स्थिर र अपरिवर्तनीय मान्ने पुरानो विश्वासलाई चुनौती दिएको छ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. रोग लागेपछि हकिङको जीवनमा शारीरिक रूपमा आइपरेका समस्यालाई क्रमबद्ध रूपमा प्रस्तुत गर्दै एउटा अनुच्छेद लेख्नुहोस् ।</strong><br><span class="text-justify">स्टीफन हकिङलाई लाग्ने रोग एमियोट्रोफिक लेटरल स्क्लेरोसिस थियो, जसले उनको जीवनमा क्रमशः गम्भीर शारीरिक समस्याहरू ल्यायो। सुरुमा उनलाई केवल मांसपेशीहरू कमजोर हुने समस्या देखियो, जसका कारण उनलाई सामान्य हिँडडुलमा कठिनाइ हुन थाल्यो। त्यो बेला उनी अझै आफ्ना काममा सक्रिय थिए तर शारीरिक कमजोरीले उनलाई सताउन थाल्यो। त्यसपछि उनको शरीरको नियन्त्रण क्रमशः गुम्न थाल्यो र हिँड्न नसक्ने अवस्थामा पुगे। यद्यपि उनी प्रयासरत थिए, तर रोगले उनको गतिशीलता घटाउन थालेको थियो। अर्को चरणमा हकिङको समस्या अझ गहिरियो र उनी बोल्न, हात चलाउन समेत असमर्थ हुन थाले। उनको मांसपेशीहरूले काम गर्न छोडेपछि दैनिक जीवनका सामान्य कामहरू गर्न उनलाई पूर्णतया सहयोगको आवश्यकता पर्यो। यस कारणले उनी व्हीलचेयरमा बस्न बाध्य भए। शारीरिक रूपमा पूर्ण रूपमा अशक्त हुँदै गए पनि उनको दिमाग स्पष्ट र सक्रिय रह्यो। यस्ता कठिनाइका बाबजुद उनले वैज्ञानिक अनुसन्धान र लेखनमा निरन्तरता दिए, जसले विश्वव्यापी रूपमा उनको योगदानलाई अझ बढी मूल्यवान बनायो। अन्ततः, रोगको प्रगतिको क्रममा हकिङले बोल्नसमेत कठिनाइ भोग्नुपर्‍यो र उनले सञ्चारका लागि कम्प्युटर र विशेष उपकरणहरूको सहारा लिनुपर्‍यो। उनी कम्प्युटरबाट बोलेर आफ्नो विचार व्यक्त गर्थे। यद्यपि उनको शरीर शक्तिहीन भए पनि उनको मस्तिष्कले असीम ऊर्जा र सृजनशीलता प्रदर्शन गरिरह्यो। हकिङको जीवनले देखायो कि शारीरिक कमजोरीले मानिसको प्रतिभा र साहसलाई कहिल्यै मन्द पार्न सक्दैन। उनले आफ्नो रोगलाई जितेर विज्ञानमा अमूल्य योगदान दिएका छन् र सबैका लागि प्रेरणाको स्रोत बनेका छन्।</span></p>
+                        <p class="text-left-align"><strong>५. दिइएको जीवनी अंश पढी सोधिएका प्रश्नको उत्तर दिनुहोस् ।</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(अ) हकिङ कस्तो स्वभावका थिए ?</strong><br>स्टीफन हकिङ कडा मेहनती, धैर्यवान् र अडिग स्वभावका व्यक्ति थिए। उनी समस्याहरूलाई चुनौतीका रूपमा लिने र निरन्तर समाधान खोज्ने प्रवृत्तिका धनी थिए। शारीरिक अशक्तताले उनलाई कहिल्यै हार मान्न सकेन र उनले आफ्नो रोगलाई कमजोरी होइन, चुनौतीका रूपमा लिएका थिए। उनी अत्यन्त बुद्धिमान् र सृजनशील थिए, जसले जटिल वैज्ञानिक विषयलाई सजिलो र रोचक तरिकाले बुझाउने क्षमता राख्थे। साथै, हकिङको हास्यरस र नम्र स्वभावले सबैलाई आकर्षित गर्थ्यो। उनको जीवन र स्वभावले धेरैलाई प्रेरणा र हौसला दिएको थियो।</p>
+                            <p><strong>(आ) हकिङलाई उनका साथीहरूले आइन्स्टाइन भन्नुको कारण के हो ?</strong><br>स्टीफन हकिङलाई उनका साथीहरूले "आइन्स्टाइन" भन्नुको कारण उनको असाधारण बुद्धिमत्ता र विज्ञानमा गरेको अतुलनीय योगदान हो। जस्तै अल्बर्ट आइन्स्टाइनले आफ्नो समयमा भौतिकशास्त्रमा क्रान्तिकारी सिद्धान्तहरू प्रस्तुत गरे, त्यस्तै हकिङले पनि ब्रह्माण्ड र ब्ल्याकहोल सम्बन्धी नयाँ र मौलिक विचारहरू ल्याएर वैज्ञानिक क्षेत्रमा ठूलो प्रभाव पारे। उनी दुवै महान् वैज्ञानिक थिए जसले जटिल विषयलाई बुझ्न र स्पष्ट पार्न सक्षम थिए, त्यसैले साथीहरूले हकिङलाई आइन्स्टाइनको उपमा दिएका हुन्।</p>
+                        </div>
+                        <p class="text-left-align"><strong>६. दिइएको जीवनी अंश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) पृथ्वीमा मानव जीवन खतरामा पर्नुका कारण के के हुन् ?</strong><br><span class="text-justify">स्टीफन हकिङका अनुसार पृथ्वीमा मानव जीवन खतरामा पर्नुका मुख्य कारणहरू मध्ये सबैभन्दा ठूलो समस्या प्रदूषण हो। हावामा र पानीमा बढ्दो प्रदूषणले वातावरणलाई दूषित बनाइरहेको छ, जसले मानव स्वास्थ्यमा गम्भीर असर पार्दै छ। प्रदूषित वातावरणले विश्वव्यापी रूपमा रोगहरूको जोखिम बढाएको छ र प्राकृतिक प्रणालीलाई कमजोर पारेको छ। यसले मात्र होइन, जीवजन्तु र वनस्पतिहरूको जीवनलाई समेत संकटमा पारिरहेको छ। अर्को ठूलो कारण जलवायु परिवर्तन हो। विश्वभरि बढ्दो तापक्रमका कारण पृथ्वीको मौसम प्रणालीमा ठूलो असन्तुलन आएको छ। यसले गर्मी बढ्नु, बाढी र सुख्खा जस्ता प्राकृतिक प्रकोपहरू बढ्नु, र समुद्री सतहमा वृद्धि हुनु जस्ता गम्भीर समस्या ल्याएको छ। यी सबैले मानव जीवनलाई प्रत्यक्ष र अप्रत्यक्ष रूपमा जोखिममा पारिरहेको छ। हकिङले चेतावनी दिएका छन् कि यदि हामीले जलवायु परिवर्तनलाई नियन्त्रण गर्न सक्दैनौं भने भविष्यमा मानव अस्तित्व नै संकटमा पर्न सक्छ। थप रूपमा, मानव क्रियाकलापहरू, जस्तै वन विनाश, अत्यधिक शोषण, र युद्धले पनि पृथ्वीलाई अस्थिर बनाउँदै छन्। वनहरूको विनाशले जैविक विविधता घटाउन सहयोग पुर्‍याउँछ र प्राकृतिक सन्तुलन बिग्रिन्छ। साथै, मानव निर्मित द्वन्द्व र हतियार प्रयोगले मानव जीवनमा खतराको खतरा थपिएको छ। हकिङका अनुसार यस्ता समस्या समाधान नगरे भविष्यमा पृथ्वी मानव बसोबासका लागि असहज स्थान बन्न सक्छ।</span></p>
+                            <p><strong>(ख) हकिङले मानिसलाई किन कृत्रिम बुद्धिमत्तापूर्ण रोबोटको निर्माणमा सचेत हुन आग्रह गरेका हुन् ?</strong><br><span class="text-justify">स्टीफन हकिङले मानिसहरूलाई कृत्रिम बुद्धिमत्तापूर्ण (कृत्रिम मेधा) रोबोट निर्माणमा सचेत हुन विशेष रूपमा आग्रह गरेका छन् किनभने यस प्रविधिले मानव जीवनमा ठूलो परिवर्तन ल्याउन सक्ने भए पनि त्यसका केही गम्भीर नकारात्मक पक्षहरू पनि छन्। हकिङका अनुसार, यदि कृत्रिम मेधा अत्यधिक विकास गर्यो र मानव नियन्त्रणबाट बाहिर गयो भने त्यसले मानव जातिका लागि ठूलो खतरा निम्त्याउन सक्छ। उनी भन्थे कि अहिलेको अवस्थामा कृत्रिम मेधा प्रोग्रामहरू मानवको निर्देशन र नियन्त्रणमा छन्, तर भविष्यमा यस्ता रोबोटहरू आफैं निर्णय लिन सक्ने अवस्थामा पुग्न सक्छन्। यस्तो भएमा, यदि कृत्रिम मेधा को उद्देश्य र मानवका उद्देश्यहरू बीच भिन्नता आएमा, कृत्रिम मेधा ले मानिसहरूको हित विपरित काम गर्न सक्छ। यसले वैज्ञानिक र सामाजिक क्षेत्रमा ठूलो खतराको संकेत दिन्छ। उदाहरणका लागि, कृत्रिम मेधा द्वारा सञ्चालित स्वचालित हतियारहरू वा रोबोटहरूले मानिसको नियन्त्रण बिना नै घातक काम गर्न सक्ने सम्भावना हुन्छ। हकिङले त्यसैले चेतावनी दिएका छन् कि हामीले कृत्रिम मेधा को विकास गर्दा यसको दीर्घकालीन प्रभाव र सम्भावित खतराहरूलाई गम्भीरतापूर्वक विचार गर्नुपर्छ। नयाँ प्रविधिहरूले मानव जीवन सजिलो र उन्नत बनाउन सक्छन्, तर यदि हामीले सावधानी नअपनायौं भने यिनले मानवताको अस्तित्वलाई नै चुनौती दिन सक्छन्। त्यसकारण, हकिङले वैज्ञानिक, प्राविधिक र सरकारलाई जिम्मेवार र विवेकपूर्ण रूपमा कृत्रिम मेधा को विकास र प्रयोग गर्न आग्रह गरेका छन्, ताकि भविष्यमा यस प्रविधिले मानव समाजलाई हित पुर्‍याओस र कुनै अप्रत्याशित जोखिम ल्याउने अवस्था नआओस्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>७. समीक्षात्मक उत्तर लेख्नुहोस् ।</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) “दृढ इच्छा शक्ति, ज्ञानशक्ति र क्रियाशक्तिका सामु शारीरिक रोग शक्तिहीन हुन्छ ।” यस भनाइलाई पाठका आधारमा पुष्टि गर्नुहोस् :</strong><br><span class="text-justify">स्टीफन हकिङको जीवन यस भनाइलाई स्पष्ट उदाहरणका रूपमा प्रस्तुत गर्दछ। उनको शरीरलाई गम्भीर रोगले कमजोर बनाएको थियो, तर उनको दृढ इच्छा शक्ति कहिल्यै कमजोर भएन। उनलाई लाग्ने ALS रोगले उनको मांसपेशीहरूलाई विस्तारै कम्जोर बनाउँदै लग्यो र अन्ततः उनले हिँड्न, बोल्न र हात चलाउन सक्ने क्षमता गुमाए। यद्यपि, यस्तो अवस्थामा पनि हकिङले हार मान्ने वा जीवनलाई निष्फल ठान्ने काम गरेनन्। उनी आफ्नो लक्ष्यप्रति दृढ थिए र जीवनलाई पूर्ण रूपमा जिउने इच्छा राख्थे। शारीरिक कमजोरीले उनलाई रोक्न सकेन, उल्टै उनले चुनौतीहरूलाई सामना गर्दै निरन्तर अघि बढे। उनको ज्ञानशक्ति अत्यन्त तीव्र र सृजनशील थियो। शारीरिक कमजोरीका बाबजुद हकिङको मस्तिष्कले जटिल वैज्ञानिक विषयहरूलाई बुझ्ने र नयाँ सिद्धान्तहरू विकास गर्ने काममा कुनै असर परेन। उनले ब्रह्माण्ड, काल र अन्तरिक्षका गहिरा रहस्यहरूबारे अनुसन्धान गरे र ब्ल्याक होल तथा बिग बैङ्ग सिद्धान्तमा नयाँ दृष्टिकोण प्रस्तुत गरे। उनको ज्ञान र अनुसन्धानले विश्व विज्ञान समुदायमा ठूलो क्रान्ति ल्यायो र उनी विश्वका चर्चित वैज्ञानिक बने। यसले देखाउँछ कि ज्ञानशक्तिले शारीरिक असक्षमतालाई जित्न सक्छ। थप रूपमा, हकिङको क्रियाशक्ति अर्थात् कर्मशीलता र लगनशीलता पनि अतुलनीय थियो। उनले आफ्नो रोगका कारण भौतिक रूपमा अशक्त भए तापनि प्रविधिको सहारा लिएर लेख्ने, बोल्ने र अनुसन्धान गर्ने काममा कुनै कमी राखेनन्। व्हीलचेयरमा बसेर समेत उनले विश्वका प्रतिष्ठित विश्वविद्यालयहरूमा पढाए, लेखे र विभिन्न वैज्ञानिक कार्यक्रमहरूमा भाग लिए। उनको जीवनशैलीले प्रमाणित गर्‍यो कि दृढ इच्छा शक्ति, ज्ञानशक्ति र निरन्तर क्रियाशक्तिले शारीरिक रोगहरूलाई कमजोर बनाउन सक्छ र मानिसले आफ्नो जीवनलाई सफल र सार्थक बनाउन सक्छ।</span></p>
+                            <p><strong>(ख) हकिङले मानवीय चेतनालाई नयाँ उचाइमा पुयाउन गरेका योगदानको समीक्षा गर्नुहोस् ।</strong><br><span class="text-justify">स्टीफन हकिङले मानवीय चेतनालाई नयाँ उचाइमा पुयाउन महत्वपूर्ण योगदान गरेका छन्। उनका वैज्ञानिक अनुसन्धानहरूले ब्रह्माण्ड, समय र अन्तरिक्षबारे मानिसको सोचाइमा क्रान्ति ल्याए। विशेषगरी, हकिङले ब्ल्याक होलको रहस्य उजागर गरेर हाम्रो ज्ञानको सीमालाई विस्तार गरे। उनको “हकिङ विकिरण” सिद्धान्तले ब्ल्याक होल पूर्ण रूपमा कालो होइन, केही विकिरण उत्सर्जन गर्ने बताएको थियो, जसले पुराना वैज्ञानिक मान्यतामा ठूलो परिवर्तन ल्यायो। यसले विज्ञान र दार्शनिक सोचबीचको सम्बन्धलाई पनि गहिरो बनायो र मानिसलाई ब्रह्माण्डका रहस्यहरू बुझ्न नयाँ दृष्टिकोण दियो। हकिङको कार्यले केवल वैज्ञानिक क्षेत्रमा मात्र नभई सामान्य जनमानसमा पनि वैज्ञानिक चेतना र जिज्ञासा बढाएको छ। उनको लेखिएको पुस्तकहरू र सरल तरिकाले जटिल विषयहरू व्याख्या गर्ने शैलीले ठूलो संख्यामा मानिसलाई विज्ञानतर्फ आकर्षित गर्‍यो। यसले मानवीय चेतनामा वैज्ञानिक दृष्टिकोण र तर्कशीलताको महत्वलाई उजागर गर्‍यो। साथै, शारीरिक रूपले कमजोर भए तापनि उनले आफ्नो प्रतिभा र बुद्धिमत्ताबाट विश्वलाई प्रेरणा दिएका छन्, जसले मानिसलाई आत्मबल र सम्भावनामा विश्वास गर्न प्रोत्साहित गर्‍यो। थप रूपमा, हकिङले प्रविधि र विज्ञानको उपयोगमा सचेत रहनुपर्ने चेतावनी पनि दिएका छन्। उनले कृत्रिम बुद्धिमत्ता जस्ता नयाँ प्रविधिको सम्भावित खतराहरूलाई जनचेतनामा ल्याए र भविष्यका लागि सोच्न उत्प्रेरित गरे। यसले मानवीय चेतनालाई केवल ज्ञान र अनुसन्धानसम्म सीमित नराखी सामाजिक, नैतिक र दार्शनिक आयाममा पनि सोच्न बाध्य बनायो। यसरी स्टीफन हकिङले वैज्ञानिक खोज र मानवताका मूल्यहरूलाई सँगसँगै अघि बढाएर मानवीय चेतनालाई नयाँ उचाइमा पुर्‍याए।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>८. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) आधुनिक भौतिक शास्त्रीहरूले ब्रह्माण्डको सृष्टि केबाट भएको बताएका छन् ?</strong><br>आधुनिक भौतिक शास्त्रीहरूले ब्रह्माण्डको उत्पत्ति सर्वाधिक घनत्वको अवस्थामा रहेको कुनै बिन्दु (ब्ल्याकहोल) बाट भएको बताएका छन् ।</p>
+                            <p><strong>(ख) वेदमा सृष्टिको कारक केलाई मानिएको छ ?</strong><br>वेदमा मा सृष्टिको कारक ब्रह्मलाई मानिएको छ ।</p>
+                            <p><strong>(ग) ब्रह्म र क्वान्टम पुञ्जबिच के समानता रहेको छ ?</strong><br>वेदान्त दर्शनमा सृष्टि, स्थिति र प्रलयको कारकका रूपमा ब्रह्मलाई लिइएको छ भने क्वान्टम पुञ्जको विस्फोटन हुंदा ब्रह्माण्ड बन्ने र सङ्कुचन भएपछि पुनः क्वान्टम पुञ्जमा परिणत हुने भौतिकवादीहरुको मान्यता रहेको छ ।</p>
+                            <p><strong>(घ) वेदान्त दर्शनमा सृष्टि, स्थिति र प्रलयको एकीकृत व्याख्या गर्ने ग्रन्थलाई के नाम दिइएको छ ?</strong><br>वेदान्त दर्शनमा सृष्टि, स्थिति र प्रलयको एकीकृत व्याख्या गर्ने ग्रन्थलाई वैदिक ग्रन्थ नाम दिइएको छ ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">नामयोगी</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. दिइएका वाक्यमा नामयोगी पहिचान गरी लेख्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) उनीहरूसित बन्दुक छ । - <strong>सित</strong></li>
+                                    <li>ख) छानामाथि घिरौँला छ । - <strong>माथि</strong></li>
+                                    <li>ग) रमेश घाटतर्फ लाग्यो । - <strong>तर्फ</strong></li>
+                                    <li>घ) रुखबाट पात झर्‍यो । - <strong>बाट</strong></li>
+                                    <li>ङ) ऊवाहेक कोही बोलेनन् । - <strong>वाहेक</strong></li>
+                                    <li>च) जीवनभरि सुख पाइएन । - <strong>भरि</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएको जीवनीको अंशबाट दशओटा नामयोगी टिप्नुहोस् ।</strong>
+                                <p class="ml-4">अनुसार, सम्म, बाट, सँग, पछि, बाहिर, सहित, प्रति, माथि, पट्टी ।</p>
+                            </li>
+                            <li><strong>३. `योगमाया´ पाठबाट दशओटा नामयोगी टिपी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>सम्म</strong> : मेरो घरबाट विद्यालयसम्म पुग्न एक घण्टा पैदल हिँड्नुपर्छ ।</li>
+                                    <li><strong>बाट</strong> : रुखबाट पात तल खस्यो ।</li>
+                                    <li><strong>सित</strong> : रामले पैसा नभएर आफ्नो साथीसित सापटी माग्यो ।</li>
+                                    <li><strong>सँग</strong> : हामी आफ्नो हकमा लड्दा कोहीसँग पनि डराउनु हुँदैन ।</li>
+                                    <li><strong>वाहेक</strong> : सीतावाहेक कोही बोलेनन् ।</li>
+                                    <li><strong>भरि</strong> : आज रातभरि पानी पर्‍यो ।</li>
+                                    <li><strong>तर्फ</strong> : हरि साथीको घरतर्फ लाग्यो ।</li>
+                                    <li><strong>माथि</strong> : टेबलमाथि किताब छ ।</li>
+                                    <li><strong>समेत</strong> : घरबाट आमासँग बहिनी समेत पोखरा आएकी रहिछिन् ।</li>
+                                    <li><strong>अनुसार</strong> : तिमी मैले भनेअनुसार काम गर ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">क्रियायोगी</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. दिइएका क्रियायोगी पहिचान गरी लेख्नुहोस् ।</strong>
+                                <p class="ml-4">हिजो, पारि, भर्खर, त्यता, ढिलो, ज्यादै, बिस्तारै, डराइ-डराइ-कन, पढ्न आदि ।</p>
+                            </li>
+                            <li><strong>२. दिइएको अनुच्छेदबाट बाह्रओटा क्रियायोगी टिप्नुहोस् ।</strong>
+                                <p class="ml-4">अस्ति, निकै, ढिलो, घर, गल्लीमा, यत्रतत्र, राति, अबेर, लडखडाउँदै, त्यहाँ, ज्यादै, राम्ररी ।</p>
+                            </li>
+                            <li><strong>३. पाठमा प्रयुक्त दसओटा क्रियायोगी टिपी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>घरमै</strong> : योगमाया मानसिक र शारीरिक यातना सहँदै १४ वर्षसम्म घरमै बसिन् ।</li>
+                                    <li><strong>माइत</strong> : सासू र नन्दको यातना सहन नसकेपछि योगमाया माइत गएकी थिइन् ।</li>
+                                    <li><strong>पलाउन</strong> : योगमायामा बिस्तारै विद्रोहको चेतना पलाउन थाल्यो ।</li>
+                                    <li><strong>पुगेर</strong> : योगमाया आसाम पुगेर एक्लो महसुस गरिन् ।</li>
+                                    <li><strong>फर्काउन</strong> : योगमायालाई आफ्नै घर फर्काउन प्रयत्न गरियो ।</li>
+                                    <li><strong>नपाउँदै</strong> : योगमाया पति भनेर चिन्न नपाउँदै विधवा भइन् ।</li>
+                                    <li><strong>गर्न</strong> : योगमायाले नयाँ समाजको निर्माण गर्न धेरै तपस्या गरेकी थिइन् ।</li>
+                                    <li><strong>खुलेरै</strong> : चन्द्रशमशेरको दासप्रथा उन्मुलनको घोषणालाई योगमायाले खुलेरै प्रशंसा गरिन् ।</li>
+                                    <li><strong>बिस्तारै</strong> : योगमायाले बिस्तारै विद्रोहको आवाज उठाउन थालिन् ।</li>
+                                    <li><strong>जमिनमा</strong> : उफ्रौलीटारमा रहेको फराकिलो जमिनमा योगमाया सरिन् ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">संयोजक</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. दिइएका वाक्य पढी संयोजक पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>र</strong></li>
+                                    <li>ख) <strong>तापनि</strong></li>
+                                    <li>ग) <strong>एवम्</strong></li>
+                                    <li>घ) <strong>वा</strong></li>
+                                    <li>ङ) <strong>अनि</strong></li>
+                                    <li>च) <strong>तर</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. योगमाया पाठबाट दशओटा संयोजक टिपोट गर्नुहोस् :</strong>
+                                <p class="ml-4">र, तथा, त्यसैले, तर, भन्ने, पनि, भनी, तथापि, अनि, जहाँ-त्यहीँ ।</p>
+                            </li>
+                            <li><strong>३. दिइएका संयोजक राखी वाक्य बनाउनुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>नत्र</strong> : तिमी पढ्न जाने भए जाऊ नत्र म बुबालाई भनिदिन्छु ।</li>
+                                    <li><strong>किन्तु</strong> : देश विकासका लागि असल नेता हुनुपर्छ किन्तु देशमा असल नेताको अभाव देखिन्छ ।</li>
+                                    <li><strong>यद्यपि</strong> : यद्यपि मेरो घर घोराही होइन, तर म त्यहीँ बस्ने गर्छु ।</li>
+                                    <li><strong>पनि</strong> : म पनि तिमीसँग खेल्न जान्छु ।</li>
+                                    <li><strong>किनभने</strong> : राम आज पढ्न गएको छैन किनभने ऊ बिरामी छ ।</li>
+                                    <li><strong>कि...कि</strong> : कि काम गर कि राम्रोसँग पढ ।</li>
+                                    <li><strong>तथापि</strong> : राम विदेश जान्छु भन्थ्यो तथापि व्यवसाय गरेर बसेछ ।</li>
+                                    <li><strong>न...न</strong> : न तिमी राम्रोसँग पढ्छौ न व्यवसाय गर्छौ ।</li>
+                                    <li><strong>भन्ने</strong> : पढेर जागिर नै गर्नुपर्छ भन्ने सोचाइ गलत हो ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>४. किन्तु, त्यसैले, जब...तब, किनभने, जहाँ...त्यहाँ प्रयोग गरी आफ्ना परिवारका बारेमा एक अनुच्छेद लेख्नुहोस् ।</strong>
+                                <p class="ml-4">म परिवारको पहिलो सदस्य हुँ किन्तु मैले पारिवारिक दायित्व अझै पनि बोध गर्न सकेको छैन । मेरो बुबा जागिरे हुनुहुन्छ त्यसैले मलाई आर्थिक समस्या पनि परेको छैन । जब बाबा अफिसबाट घर फर्किनुहुन्छ तब सधैँ फलफूल किनेर ल्याउनुहुन्छ । हामी शनिबार घुम्न जान्छौँ किनभने बाबाको अफिस छुट्टी हुन्छ । हामी जहाँ घुम्न जान्छौँ त्यहाँ मैले कुनै न कुनै सामान किनेकै हुन्छु ।</p>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">विस्मयादिबोधक</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. दिइएका वाक्य पढी विस्मयादिबोधक पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>आहा!</strong></li>
+                                    <li>ख) <strong>हरे!</strong></li>
+                                    <li>ग) <strong>छ्या!</strong></li>
+                                    <li>घ) <strong>आत्था!</strong></li>
+                                    <li>ङ) <strong>स्याबास!</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएका खाली ठाउँमा मिल्ने विस्मयादिबोधक राखी वाक्य पूरा गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>उफ्!</strong> कस्तो गर्मी ।</li>
+                                    <li>ख) <strong>धिक्कार!</strong> तिम्रो यो जिन्दगीलाई ।</li>
+                                    <li>ग) <strong>आहा!</strong> कति सुन्दर अक्षर ।</li>
+                                    <li>घ) <strong>आत्थु!</strong> कति चिसो हावा ।</li>
+                                    <li>ङ) <strong>छि:!</strong> कस्तो दुर्गन्धित कोठा ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>३. दिइएका विस्मयादिबोधक राखी वाक्य बनाउनुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>आम्मा!</strong> धन्नै लडेको ।</li>
+                                    <li>ख) <strong>स्याबास!</strong> तिमीले राम्रो काम गर्‍यौ ।</li>
+                                    <li>ग) <strong>आब्बुइ!</strong> कति ठूलो सर्प ।</li>
+                                    <li>घ) <strong>छिछि!</strong> कति फोहोर कोठा ।</li>
+                                    <li>ङ) <strong>ऐया!</strong> कस्तो पेट दुख्यो ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">निपात</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. दिइएका वाक्य पढी निपात पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>पो</strong></li>
+                                    <li>ख) <strong>त</strong></li>
+                                    <li>ग) <strong>रे</strong></li>
+                                    <li>घ) <strong>लौ</strong></li>
+                                    <li>ङ) <strong>क्यार</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएको खाली ठाउँमा मिल्ने निपात राखी वाक्य पूरा गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>खै</strong>, मलाई केही थाहा छैन ।</li>
+                                    <li>ख) <strong>ल</strong>, आजलाई बिदा ।</li>
+                                    <li>ग) ऊ <strong>त</strong> आजै आउँछ ।</li>
+                                    <li>घ) ऊ डाक्टर <strong>नै</strong> हुन चाहन्छ ।</li>
+                                    <li>ङ) तँलाई <strong>पो</strong> केही चाहिँदैन ।</li>
+                                    <li>च) तिमी <strong>पनि</strong> हिजो आयौ <strong>र</strong> ?</li>
+                                    <li>छ) उनीहरू सहरमै बस्छन् <strong>रे</strong> ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>३. दिइएका निपातहरूलाई अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>रे</strong> : तिम्रो त आजकल अनलाइनबाट पढाइ हुन्छ रे ।</li>
+                                    <li><strong>क्यारे</strong> : भाइ त आज खेल्न जान्न क्यारे ।</li>
+                                    <li><strong>है</strong> : नानू चाँडै घर जाऊ है ।</li>
+                                    <li><strong>अरे</strong> : श्याम त विदेश गयो अरे ।</li>
+                                    <li><strong>नि</strong> : म पनि तिमीसँग जान्छु नि ।</li>
+                                    <li><strong>पो</strong> : तिमीलाई पो केही चाहिँदैन ।</li>
+                                    <li><strong>ज्यादै</strong> : आज म ज्यादै खुसी छु ।</li>
+                                    <li><strong>ला</strong> : ला, भात बसाएर बाहिर आएको भित्र भात त डढेछ ।</li>
+                                    <li><strong>खै</strong> : खै, मैले राखेको सामान कता छ ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 text-left-align">पदवर्गसम्बन्धि थप अभ्यास</h4>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>१. रेखाङ्कन गरिएका पदहरूको पदवर्ग पहिचान गरी लेख्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>स्याबास</strong> : विस्मयादिबोधक<br><strong>नै</strong> : निपात<br><strong>भन्ने</strong> : संयोजक<br><strong>विश्वास</strong> : नाम<br><strong>त्यो</strong> : विशेषण<br><strong>झलझली</strong> : क्रियायोगी</li>
+                                    <li>ख) <strong>तिर</strong> : नामयोगी<br><strong>फर्केर</strong> : क्रियायोगी<br><strong>सक्छ</strong> : क्रियापद<br><strong>अरू</strong> : सर्वनाम<br><strong>अनौठो</strong> : विशेषण<br><strong>र</strong> : संयोजक</li>
+                                    <li>ग) <strong>प्रचुर</strong> : विशेषण<br><strong>तापनि</strong> : संयोजक<br><strong>यिन</strong> : सर्वनाम<br><strong>सम्म</strong> : नामयोगी<br><strong>राम्ररी</strong> : क्रियायोगी<br><strong>शङ्का</strong> : नाम</li>
+                                    <li>घ) <strong>गरिबको</strong> : विशेषण<br><strong>माथि</strong> : नामयोगी<br><strong>सुन्दर</strong> : विशेषण<br><strong>किनभने</strong> : संयोजक<br><strong>सँग</strong> : नामयोगी</li>
+                                    <li>ङ) <strong>बाटोभरि</strong> : क्रियायोगी<br><strong>सामल</strong> : नाम<br><strong>अनि</strong> : संयोजक<br><strong>आइपुगेर</strong> : क्रियायोगी<br><strong>हामी</strong> : सर्वनाम<br><strong>कहाँ</strong> : क्रियायोगी<br><strong>भाग्यो</strong> : क्रियापद</li>
+                                    <li>च) <strong>अग्ला</strong> : विशेषण<br><strong>कलकल</strong> : क्रियायोगी<br><strong>सँग</strong> : नामयोगी<br><strong>सबै</strong> : विशेषण<br><strong>पर्यटक</strong> : नाम<br><strong>स्वागत</strong> : नाम<br><strong>र</strong> : संयोजक</li>
+                                    <li>छ ) <strong>अरू</strong> : सर्वनाम<br><strong>सर्वथा</strong> : क्रियायोगी<br><strong>हुन्छ</strong> : क्रियापद<br><strong>तर</strong> : संयोजक<br><strong>पूर्वक</strong> : नामयोगी<br><strong>यो</strong> : विशेषण<br><strong>यिनी</strong> : सर्वनाम</li>
+                                    <li>ज ) <strong>आहा</strong> : विस्मयादिबोधक<br><strong>यहाँ</strong> : क्रियायोगी<br><strong>असाध्यै</strong> : क्रियायोगी<br><strong>सुनाउनुभयो</strong> : क्रियापद<br><strong>भनेर</strong> : संयोजक<br><strong>उन</strong> : सर्वनाम</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">रूपायन</h3>
+                        <ul class="list-disc list-inside ml-4 space-y-2 text-left-align">
+                            <li><strong>२. दिइएको अनुच्छेदलाई स्त्रीलिङ्गमा परिवर्तन गर्नुहोस् :</strong>
+                                <p class="ml-4">उत्तर: भान्जी बजार गइन् । उनले त्यहाँ साथीहरूलाई भेटिन् । साथीहरूसँग धेरै बेरसम्म कुराकानी गरिन् । कुराकानीकै क्रममा उनले समय बितेको पत्तै पाइनन् । उनी हतार हतार किनमेल गरेर घर फर्किन् ।</p>
+                            </li>
+                            <li><strong>३. दिइएको अनुच्छेदलाई तृतीय पुरुषमा परिवर्तन गर्नुहोस् :</strong>
+                                <p class="ml-4">उत्तर: उनी समयमै विद्यालय पुग्यो । विद्यालयमा पुगेर उसले सबै सामानको निरीक्षण गर्‍यो । त्यसपछि शिक्षकको निर्देशनअनुसार उसले परियोजना कार्य गर्न थाल्यो । यस क्रममा उसले नयाँ नयाँ वैज्ञानिक तथ्यहरू फेला पार्‍यो ।</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Stephen Hawking Notes
+        function toggleStephenHawkingSummary() {
+            const summaryText = document.getElementById('stephenHawkingSummaryText');
+            const toggleBtn = document.getElementById('toggleStephenHawkingSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

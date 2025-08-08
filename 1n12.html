@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>आमाको सपना Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            text-align: justify; /* Apply justify by default to all brighter-gradient-text */
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for आमाको सपना Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">१. आमाको सपना Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleAmaKoSapanaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleAmaKoSapanaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="amaKoSapanaSummaryText" class="text-lg brighter-gradient-text mb-4" style="display: none;">
+                    “आमाको सपना” पाठमा एउटा आमाले आफ्ना छोराछोरीको उज्जवल भविष्यका लागि गरेको अथक प्रयास र संघर्षलाई निकै भावनात्मक र मार्मिक तरिकाले प्रस्तुत गरिएको छ। आमाको जीवनभरको चाहना केवल आफ्नो लागि होइन, तर परिवारका लागि एक सफल र सम्पन्न जीवन सुनिश्चित गर्ने थियो। उनले आफ्नो व्यक्तिगत सुखसुविधा त्यागेर मात्र आफ्ना छोराछोरीलाई शिक्षा र राम्रो संस्कार दिनु नै आफ्नो सपना बनाइन्। आमाको त्यो सपना उसले धैर्यता, ममता र बलिदानबाट सजाउँदै गइन्, जसले परिवारको जीवनलाई उज्यालो बनायो।<br><br>
+
+पाठमा आमाको दैनिकी र संघर्षका अनेक पाटाहरूलाई गहिरो रूपमा वर्णन गरिएको छ। आर्थिक अभाव, समाजका सामाजिक सीमितताहरू र परिवारिक जिम्मेवारीहरू जति जटिल भए पनि उनले कहिल्यै निराश भएर पन्छिनन्। आमाले आफूले भोगेका पीडा, असफलता र कठिनाइहरूलाई आफ्ना छोराछोरीको भोलिको सफलतामा रूपान्तरण गर्ने साहस देखाइन्। उनको ममता र समर्पणले परिवारमा प्रेम र सद्भाव फैलायो, जसले गर्दा सबै सदस्यहरूलाई राम्रो भविष्य निर्माण गर्न प्रेरणा मिल्यो।<br><br>
+
+आमाको सपना पूरा गर्न परिवारका सबै सदस्यहरूले साथ दिए। छोराछोरीहरूले आमाको माया र त्यागलाई सदैव सम्झेर कडा मेहनत गर्न थाले। शिक्षा प्राप्तिमा उनीहरूले उत्कृष्टता हासिल गरे र आमाको सपना बिर्सिएनन्। यसरी परिवारभित्रको सहकार्य र माया पाठमा विशेष महत्व पाउँछ। आमाको सपना सफल बनाउनका लागि सबैले साथ र समझदारीका साथ अघि बढ्नु जरुरी छ भन्ने कुरा यसले प्रस्ट देखाउँछ।<br><br>
+
+यस पाठले आमाको ममता, त्याग र बलिदानलाई सम्मान गर्न सिकाउँछ। आमाहरूले आफ्नो इच्छा र स्वार्थ भन्दा पनि आफ्ना छोराछोरीको भलो र उज्जवल भविष्यको लागि जीवनभर संघर्ष गरिरहन्छन् भन्ने कुरा पाठले गहिरो भावनासाथ प्रस्तुत गरेको छ। आमाको सपना केवल शैक्षिक सफलता मात्रै नभई, राम्रो संस्कार र समाजमा जिम्मेवार नागरिक बन्ने कुरा पनि हो। यसले आमाको प्रेमलाई आत्मसात् गरी कृतज्ञता व्यक्त गर्न पाठकलाई प्रेरित गर्छ।<br><br>
+
+अन्ततः, “आमाको सपना” पाठले परिवार र आमाको माया, त्याग र बलिदानका मूल्यहरूलाई उजागर गरेको छ। यसले देखाउँछ कि परिवारको सफलताको मूलमा आमाको सपना र तिनलाई पुरा गर्न गरिएको मेहनत हुन्छ। आमाको सपनालाई साकार बनाउन सबै सदस्यहरूबीच सहकार्य, धैर्यता र प्रेम अनिवार्य छ। यसरी यो पाठले पारिवारिक सम्बन्धलाई बलियो बनाउन र प्रेमको महत्त्व बुझ्न प्रेरित गर्छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. उस्तै अर्थ दिने शब्दबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>उषा – झिसमिसे उज्यालो</p>
+                            <p>सपना – रमाइलो भविष्यको आशा वा कल्पना</p>
+                            <p>यौवन – युवा अवस्था</p>
+                            <p>कलिलो – कलकलाउँदो</p>
+                            <p>सङ्ग्राम – लडाइँ</p>
+                            <p>जडता – मूर्खता</p>
+                            <p>कण्ठ – घाँटी</p>
+                            <p>आशा – चाहेको वस्तु पाउने इच्छा</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. अर्थसँग मिल्ने शब्द पाठबाट खोजेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) राती जमिन, रुख, पात आदिमा पर्ने पानीका ससाना थोप्ला : शीत</p>
+                            <p>(ख) ओठमा राखी दाहिने कुमतिर फर्काई बजाइने बासँ, निगालो आदिबाट बनाइएको बाजा : बाँसुरी</p>
+                            <p>(ग) लिने वा समात्ने काम : ग्रहण</p>
+                            <p>(घ) सिर्जना गर्ने क्षमता : सिर्जनाशक्ति</p>
+                            <p>(ङ) सन्तुष्ट हुने वा पार्ने वचन : सान्त्वना</p>
+                            <p>(च) वेगसित चलेको हावा : हुरी</p>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएका शब्दको पर्यायवाची शब्द लेख्नुहोस् र तिनलाई वाक्यमा प्रयोग पनि गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>वायु : हावा</strong><br><span class="brighter-gradient-text">आज धेरै तिव्र हावा चलिरहेको छ।</span></p>
+                            <p><strong>आमा : माता</strong><br><span class="brighter-gradient-text">माता दुर्गा शक्तिको प्रतीक हुन्।</span></p>
+                            <p><strong>मधुर : मन्द</strong><br><span class="brighter-gradient-text">मन्द गति‌मा हावा चलिरहेको छ।</span></p>
+                            <p><strong>गरिमा : गौरव</strong><br><span class="brighter-gradient-text">हाम्रा वीर शहीदहरू हाम्रो गौरव हुन्।</span></p>
+                            <p><strong>करुणा : दया</strong><br><span class="brighter-gradient-text">हामी सबैले असहायप्रति दया देखाउनुपर्छ।</span></p>
+                            <p><strong>नगर : शहर</strong><br><span class="brighter-gradient-text">काठमाडौं नेपालको सबैभन्दा ठूलो शहर हो।</span></p>
+                            <p><strong>दक्ष :कुशल</strong><br><span class="brighter-gradient-text">रामु एक कुशल डाक्टर हुन्।</span></p>
+                            <p><strong>एकान्त : सुनसान</strong><br><span class="brighter-gradient-text">बिहानको सुनसान बाटोमा एक्लै हिँड्न डर लाग्छ।</span></p>
+                            <p><strong>धरती : पृथ्वी</strong><br><span class="brighter-gradient-text">पृथ्वी सूर्यको वरिपरि घुम्छ।</span></p>
+                            <p><strong>शिशु : नानी</strong><br><span class="brighter-gradient-text">नानीले आमा- बाबुलाई देखेर हाँसिन्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएका उखानको प्रयोग गरी आफ्नो जन्मस्थानको वर्णन गर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="brighter-gradient-text">एउटा सानो तर सुन्दर गाउँ हो जहाँ मानिसहरू आपसमा माया र सहयोगको भाव राख्छन्। यहाँको वातावरण यति शान्त छ कि “एकले थुकी सुकी सयले थुकी नदी” जस्तो उखान चरितार्थ हुन्छ, जसले देखाउँछ कि साना प्रयासले ठूलो परिवर्तन ल्याउन सक्छ।</p>
+                            <p class="brighter-gradient-text">गाउँको नजिकै एक पवित्र तीर्थस्थल छ, जहाँ मानिसहरू “नजिकको तीर्थ हेला” अनुसार धार्मिक आस्था पूरा गर्न आउँछन्। हाम्रो समाजमा “जिउँदाको जन्ती मर्दाको मलामी” भन्ने उखान अनुसार, सुख-दुखमा सबै जना एकअर्कासँग हुन्छन् र मरिसकेपछि पनि सम्मानका साथ विदाई गरिन्छ।</p>
+                            <p class="brighter-gradient-text">हामी यहाँ “आफू भलो त जगतै भलो” को भावना मानेर आफू राम्रो हुँदा समाज पनि राम्रो हुन्छ भन्ने विश्वास राख्छौं। सबै मिलेर अघि बढ्दा “एक हातले ताली बज्दैन” भन्ने उखान अनुसार सहयोग र समन्वय बिना केहि सम्भव हुँदैन भन्ने कुरा बुझिन्छ।</p>
+                            <p class="brighter-gradient-text">त्यसैले मेरो जन्मस्थानमा मानिसहरूको सद्भाव, धार्मिक आस्था र परस्पर सहयोगको संस्कृति प्रगाढ छ, जसले यस ठाउँलाई मेरो लागि सधैं खास बनाएको छ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएका पारिभाषिक शब्दलाई शब्दकोशीय अनुक्रममा मिलाउनुहोस् र शब्दकोशको सहायता लिई तिनको अर्थ पनि लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>अनुक्रमअनुसार मिलाइएको :</p>
+                            <p>अधिवक्ता, अध्यादेश, इजलास, कायलनामा, जमानत, तारिख, देवानी, फौजदारी, बिगो, मुचुल्का, वारेस, विधेयक, सनाखत, सरजमिन, हदम्याद</p>
+                            <p>अर्थहरु :</p>
+                            <div class="ml-4 space-y-2">
+                                <p><strong>देवानी :</strong> फौजदारी मुद्दाबाहेक अरू मुद्दा हेर्ने वा सुल्झाउने</p>
+                                <p><strong>फौजदारी :</strong> मारपिट, चोरी, डकैती, ज्यान आदि अपराधको न्यायिक कारवाही गरिने कुरासँग सम्बन्धित</p>
+                                <p><strong>वारेस :</strong> उत्तराधिकारी</p>
+                                <p><strong>सरजमिन :</strong> सम्बन्धित घटना घटेको वा समस्या परेको ठाउँ</p>
+                                <p><strong>मुचुल्का :</strong> सरजमिनका मानिसहरूले लेखिदिएको बयानको कागज</p>
+                                <p><strong>अध्यादेश :</strong> संसद्को अधिवेशन नभएको बेला खास</p>
+                                <p><strong>अधिवक्ता :</strong> अधिकृत तहको कानुन व्यवसायी</p>
+                                <p><strong>विधेयक :</strong> संसद्बाट पारित हुनुभन्दा पूर्वको कानुनी मस्यौदा</p>
+                                <p><strong>जमानत :</strong> धितो, धरौटी</p>
+                                <p><strong>बिगो :</strong> अनुचित किसिमले लिएको धनमाल वा सो धनमालमा दाबी गरिएको निश्चित रकम</p>
+                                <p><strong>इजलास :</strong> अदातल</p>
+                                <p><strong>कायलनामा :</strong> अपराध, कसुर वा गल्ती स्वीकार गरी लेखिदिने कागत</p>
+                                <p><strong>हदम्याद :</strong> आखिरी म्याद</p>
+                                <p><strong>सनाखत :</strong> भिडाउने वा चिनाउने काम, बेवारिसे लास आदि चिन्न लाउने काम</p>
+                                <p><strong>तारिख :</strong> अदातलबाट झगडिया वा निजको वारिसलाई हाजिर हुन आउनू भनी लेखिदिएको मिति</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>३. दिइएको कवितांश पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) ‘त्यो’ र ‘तिमी’ भनेका को को हुन् ?</strong><br><span class="brighter-gradient-text">उत्तर: ‘त्यो’ शब्दले यहाँ आमालाई जनाउँछ, अर्थात् जसले सपना देखेको छ, त्यो आमा हो। ‘तिमी’ शब्दले आमाको छोरा अथवा छोरी (सन्तान) लाई जनाउँछ, जसको लागि आमा आफ्नो सपना देख्छिन्।</span></p>
+                            <p><strong>(ख) किन क्रान्तिको आवश्यकता परेको हो ?</strong><br><span class="brighter-gradient-text">उत्तर: पाठ ‘आमाको सपना’ अनुसार क्रान्तिको आवश्यकता परेको मुख्य कारण समाजमा व्याप्त अन्याय, अत्याचार र असमानता हो। आमाले आफ्ना सन्तानलाई उज्जवल र सुखी जीवन दिन चाहन्छिन् तर वर्तमान समाजको संरचना र व्यवस्थाले यसलाई सम्भव बनाएको छैन। पञ्चायती प्रणालीले गरीब र शोषित वर्गलाई दमन गरेको छ, जसले उनीहरूको जीवनमा कठिनाइ र पीडा ल्याएको छ। यस्तो अवस्थामा समाजमा सुधार ल्याउन र न्याय र समानताको स्थापना गर्न आवश्यक छ कि पुरानो अन्यायपूर्ण र शोषक संरचनालाई परिवर्तन गरियोस्। आमाले आफ्नो सपना देखेकी छिन् कि उसको सन्तानले यस्तो समाज पाओस् जहाँ सबैले स्वतन्त्रता र समानता पाउनेछन् र जहाँ कुनै पनि प्रकारको दमन र शोषण नहोस्। त्यसैले, आमाको सपना पूरा गर्न र नयाँ सामाजिक व्यवस्था बनाउन क्रान्ति अपरिहार्य भएको हो।</span></p>
+                            <p><strong>(ग) ‘त्यो हिउँ र आगोभन्दा पनि बढ्ता छोइने भएर आउँछ’ भन्नुको तात्पर्य के हो ?</strong><br><span class="brighter-gradient-text">उत्तर: ‘त्यो हिउँ र आगोभन्दा पनि बढ्ता छोइने भएर आउँछ’ भन्ने वाक्यको तात्पर्य ‘आमाको सपना’ पाठमा भावनात्मक र मनोवैज्ञानिक रुपमा निकै गहिरो छ। यहाँ ‘त्यो’ ले आमा देख्ने सपना वा अपेक्षालाई जनाउँछ, जसले सधैं एकदमै संवेदनशील, गहिरो र छिटो असर गर्ने प्रकृति राख्छ। हिउँ र आगो सामान्यतया दुःखद र पीडादायी तत्व हुन्, तर आमा देख्ने सपना तिनीहरूभन्दा पनि बढी संवेदनशील हुन्छ। अर्थात्, त्यो सपना यस्तो हुन्छ जसले मान्छेको मनमा अत्यन्तै गहिरो प्रभाव पार्छ, जसले प्रेम, आशा, डर र चिन्ता सबैलाई छुन सक्छ। यो सपना शारीरिक तवरले मात्र होइन, भावनात्मक र मानसिक तवरले पनि मानिसलाई छोइन्छ, असर गर्छ र परिवर्तन ल्याउँछ। सङ्क्षेपमा भन्नुपर्दा, आमाको सपना हिउँ र आगोभन्दा बढी संवेदनशील, असरदार र गहिरो हुन्छ भन्ने जनाइन्छ, जसले मान्छेको जीवनमा गहिरो छाप छोड्छ।</span></p>
+                            <p><strong>(घ) माथिको कवितांशमा कस्तो शैलीको प्रयोग गरिएको छ ?</strong><br><span class="brighter-gradient-text">उत्तर: माथिको कवितांशमा सादगीपूर्ण र भावप्रधान शैलीको प्रयोग गरिएको छ। यसमा सरल भाषा मार्फत गहिरो भाव व्यक्त गरिएको छ जसले पाठकको मन छुने क्षमता राख्छ। यहाँ शब्दहरूको छनोट र व्याकरण सजिलो भए तापनि भावहरू अत्यन्तै गहिरा र संवेदनशील छन्। यस शैलीमा अतिरञ्जना वा जटिल अलंकारको प्रयोग कम हुन्छ र जीवनका सामान्य पक्षहरूलाई नै प्रभावकारी रूपमा प्रस्तुत गरिन्छ। साथै, भावनात्मकता र संवेदनशीलतालाई पहिलो प्राथमिकता दिइएको छ, जसले आमाको ममता, सपना र सामाजिक परिवर्तनको आवश्यकता जस्ता विषयलाई सजिलै बुझ्न सहयोग गर्छ। यस प्रकार, कवितांशले सरल तर प्रभावशाली शैलीबाट पाठकमा प्रभाव पार्ने कोशिस गरेको देखिन्छ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>४. तलको कवितांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>(क) आमाको सपना के थियो ?</strong><br><span class="brighter-gradient-text">उत्तर: आमाको सपना निकै गहिरो र व्यापक थियो। उनले केवल आफ्ना छोराछोरीका लागि मात्र होइन, सम्पूर्ण समाजका लागि उज्जवल भविष्यको आकांक्षा राखेकी थिइन्। उनको सपना यस्तो समाज बनाउने थियो जहाँ कुनै मानिसलाई जात, वर्ग, धर्म, वा आर्थिक अवस्थाका कारण विभेद गरिंदैन। आमाले चाहन्थिन् कि उनका सन्तानहरूले गरिबी, दमन, अन्याय र अशिक्षाबाट मुक्त जीवन बिताउन सकून्। उनको मनमा एउटा यस्तो संसारको कल्पना थियो जहाँ सबैले स्वतन्त्रता र समानता पाउन, आफ्नो अधिकार प्राप्त गर्न, र इज्जतका साथ जीवनयापन गर्न सकून्। उनको सपना समाजमा व्याप्त शोषण र अत्याचारलाई अन्त्य गर्ने क्रान्तिको थियो, जसले गरीब र दीनदुखीहरूको आवाज उठाउनेछ र उनीहरूलाई अधिकार दिलाउनेछ। आमा थिइन् कि उनको सन्तानले पुरानो पञ्चायती व्यवस्थाको दमन र दमनकारी शक्तिहरूलाई चुनौती दिएर नयाँ, प्रगतिशील र न्यायपूर्ण समाजको स्थापना गरोस्। उनको मनमा विश्वास थियो कि शिक्षा, समान अवसर, र सहिष्णुता जस्ता मुल्यहरूले भरिपूर्ण समाजले मात्र साँचो प्रगति गर्न सक्छ। यसैले, आमाको सपना केवल व्यक्तिगत सफलताको सीमामा सीमित थिएन, त्यो सबैको जीवन सुधार गर्ने र नयाँ युगको शुरुवात गर्ने चाहना थियो। उनले आफूले भोगेका दुख र संघर्षलाई आफ्ना सन्तानले नहोस् भनेर द्रढ इच्छा राखेकी थिइन्। त्यसैले आमाले आफूलाई नभए पनि आफ्नो सन्तानलाई उज्जवल भविष्य दिने सोचको साथ कठोर परिश्रम गरिन् र सामाजिक परिवर्तनको आवश्यकता महसुस गरिन्। उनको त्यो सपना भविष्यमा एक क्रान्तिको रूपमा परिणत भएर समाजलाई नयाँ दिशामा लैजाने आशा राख्दछ।</span></p>
+                            <p><strong>(ख) ‘त्यो मिठो गीतले तिमीलाई आफ्नो बाँसुरी बनाएनछ’ भन्नुको तात्पर्य के हो ?</strong><br><span class="brighter-gradient-text">उत्तर: ‘त्यो मिठो गीतले तिमीलाई आफ्नो बाँसुरी बनाएनछ’ भन्ने वाक्यको तात्पर्य ‘आमाको सपना’ पाठमा गहिरो अर्थ बोकेको छ। यहाँ ‘मिठो गीत’ ले त्यो सुन्दर, आकर्षक र मिठासपूर्ण कुरा जनाउँछ जुन कसैलाई प्रभावित पार्न सक्छ। बाँसुरी भनेको त्यो साधन हो जसबाट गीत बज्छ, अर्थात् जसले त्यो मिठासपूर्ण कुरा व्यक्त गर्छ वा फैलाउँछ। तर यो वाक्यले जनाउन खोजेको अर्थ के हो भने, त्यो मिठो गीत अर्थात् आकर्षक कुरा तिमीलाई पूर्णरूपले प्रभावित वा बाँध्न सकेन। अर्थात्, कुनै मिठास, मोह, वा आकर्षणले तिमीलाई आफ्नो प्रभावमा राख्न सकेन र तिमी अझै स्वतन्त्र, आफ्नो सोच र उद्देश्यमा दृढ छौ। यो वाक्यले तिमीलाई प्रलोभन वा बाहिरी प्रभावले होइन, आफ्नै आत्मविश्वास र इच्छाशक्तिले अगाडि बढ्नुपर्ने सन्देश दिन्छ। सारांशमा, त्यो मिठो गीतले तिमीलाई आफ्नो बाँसुरी बनाएनछ भन्नाले तिमी कुनै बाहिरी प्रभाव वा मोहमा नआई आफैं रहन सक्ने र आफ्नो बाटो आफैं छान्न सक्ने व्यक्तित्व भएको कुरा जनाउँछ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>५. कवितामा ‘आमा’ र ‘छोरा’ के केका प्रतीकका रूपमा प्रयोग गरिएका छन्, छलफल गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">उत्तर: कवितामा ‘आमा’ र ‘छोरा’ केवल पारिवारिक सम्बन्ध मात्र होइन, गहिरा प्रतीकात्मक अर्थहरू बोकेको छन्। ‘आमा’लाई यहाँ ममताको, प्रेमको, स्नेहको र त्यागको प्रतीकका रूपमा प्रस्तुत गरिएको छ। आमा त्यो व्यक्ति हो जसले आफ्नो सम्पूर्ण जीवन सन्तानका लागि समर्पित गर्छिन्, जसको सपना र आशा आफ्ना छोराछोरीको उज्जवल भविष्यसँग गाँसिएको हुन्छ। आमा समाजमा शोषित, पीडित र कमजोर वर्गको प्रतिनिधित्व पनि गर्न सक्छिन्, जसले परिवर्तन र क्रान्तिको चाहना राख्छिन्। त्यस्तै, ‘छोरा’ केवल सन्तान मात्र होइन, समाजको नयाँ पुस्ता, परिवर्तनको वाहक र उज्जवल भविष्यको आशाको प्रतीक हो। छोरा त्यो हो जसले आमाको सपना पुरा गर्नुपर्ने जिम्मेवारी बोकेको हुन्छ, जसले पुरानो व्यवस्था तोडेर नयाँ युगको सुरुवात गर्ने शक्ति राख्छ। उनी समाजमा नयाँ चेतना ल्याउने, अन्याय र दमनको अन्त्य गर्ने परिवर्तनकारी शक्ति हुन्। यसरी, कवितामा आमा र छोरा बीचको सम्बन्ध पारिवारिक सीमाभन्दा बाहिर उठेर सामाजिक र राष्ट्रिय स्तरमा पनि फैलिएको छ। आमा पुरानो पीडाका साथ नयाँ सम्भावनाको संकेत हो भने छोरा त्यो सम्भावनालाई साकार पार्ने शक्ति र आशाको रूप हो। यसले समाजमा नयाँ क्रान्ति र प्रगतिको सम्भावना प्रस्तुत गर्दछ।</span></p>
+                        <p class="text-left-align"><strong>६. कवितामा कस्तो परिवेशको चित्रण गरिएको छ, छलफल गरी उत्तर दिनुहोस् ।</strong><br><span class="brighter-gradient-text">उत्तर: कवितामा चित्रण गरिएको परिवेश सामाजिक र भावनात्मक दुवै दृष्टिले संवेदनशील र चुनौतीपूर्ण छ। यहाँ परिवेश केवल भौतिक ठाउँ वा वातावरण मात्र होइन, समाजको यथार्थ र मानवीय मनोस्थिति पनि हो। कविताले यस्तो परिवेश प्रस्तुत गरेको छ जहाँ समाजमा अन्याय, असमानता र दमन व्याप्त छ। गरिबी, शोषण र असमानताको कारण मानिसहरू पीडित छन् र उनीहरूको जीवन संघर्षले भरिएको छ। यस परिवेशमा आमाको ममता र छोराको आशा बीचको सम्बन्धलाई पनि देखाइएको छ, जहाँ आमा आफ्नो सन्तानको उज्जवल भविष्यको लागि क्रान्ति र परिवर्तनको आकांक्षा राख्छिन्। वातावरण यस्तो छ जसले क्रान्ति र सामाजिक सुधारको आवश्यकता औंल्याउँछ। भावनात्मक रुपमा, परिवेशमा गहिरो ममता, चिन्ता र आशाका भावनाहरू व्याप्त छन्। आमा र छोराबीचको संवादले प्रेम र जिम्मेवारीको भावना झल्काउँछ। यस्तो परिवेशले पाठकलाई सामाजिक संरचना र त्यसमा रहेका समस्याहरूलाई बुझ्न र त्यसलाई सुधार्न आवश्यक क्रान्तिको आवश्यकता महसुस गराउँछ। यसरी, कवितामा चित्रित परिवेशले सामाजिक वास्तविकता र मानवीय संवेदनशीलतालाई सँगसँगै उजागर गर्छ, जसले पाठकलाई गहिरो प्रभाव पार्छ र सोच्न बाध्य बनाउँछ।</span></p>
+                        <p class="text-left-align"><strong>७. ‘मैले यसरी रोगीलाई झैँ तिम्रो कपाल मुसारिरहनुपर्ने छैन’कवितांशबाट कविले के भन्न खोजेका हुन्, आफ्नो प्रतिक्रिया व्यक्त गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">उत्तर: कविताको उक्त पंक्तिले गहिरो भाव व्यक्त गर्छ। ‘मैले यसरी रोगीलाई झैँ तिम्रो कपाल मुसारिरहनुपर्ने छैन’ भन्नाले कविले आफ्ना सन्तानप्रति ममता र चिन्ताको भाव प्रकट गरेका छन्। यहाँ ‘रोगीलाई कपाल मुसार्नु’ त्यो व्यक्तिको पीडा, चिन्ता र सदैव हेरचाह गर्ने अवस्था जनाउँछ। कविले भनेका छन् कि उनी आफ्नो सन्तानप्रति यति धेरै माया गर्छन् कि उनलाई बारम्बार चिन्ता गर्नुपर्ने छैन, अर्थात् उनको जीवनमा यस्तो अवस्था आउन नदिन उनी पूरा सतर्क र मिहेनती हुनेछन्। यसबाट हामीलाई थाहा हुन्छ कि कविको मनमा आफ्नो सन्तानप्रति असाधारण ममता छ, र उनी चाहन्छन् कि उनका छोराछोरीले सुखी, स्वस्थ र सुरक्षित जीवन बिताउन पाउन। उनी आफ्नो सन्तानलाई पीडामा नपार्न र कठिनाइमा नफस्न चाहन्छन्। मेरो प्रतिक्रिया अनुसार, यो पंक्ति हामीलाई आमा–छोराको सम्बन्धमा गहिरो ममता र जिम्मेवारीको महत्त्व सिकाउँछ। यो हामीलाई सम्झाउँछ कि माया मात्र होइन, जीवनमा सन्तानको हेरचाह र सुरक्षा पनि अभिभावकको पहिलो कर्तव्य हो। साथै, यो पंक्ति आमाको चिन्ता र प्रेमको समर्पणलाई भावपूर्ण रूपमा प्रस्तुत गरेको छ, जसले हाम्रो मनलाई छुन्छ र आमाबारे हाम्रो सम्मान बढाउँछ।</span></p>
+                        <p class="text-left-align"><strong>८. ‘आमाको सपना’ कवितामा कविले क्रान्ति किन र कसरी आउने कल्पना गरेका छन्, दिइएका बुँदालाई समेत आधार बनाई समीक्षात्मक प्रतिक्रिया लेख्नुहोस् :</strong><br><span class="brighter-gradient-text">उत्तर: ‘आमाको सपना’ कवितामा क्रान्ति किन र कसरी आउने भन्ने विषयलाई कविले सामाजिक अन्याय, दमन र असमानता अन्त्य गर्न आवश्यक परिवर्तनका रूपमा प्रस्तुत गरेका छन्। आमाले आफ्ना सन्तानको उज्जवल भविष्यका लागि देखेको सपना पुरा गर्न क्रान्ति अपरिहार्य भएको छ। कविले क्रान्तिलाई केवल हिंसात्मक आन्दोलन नभई सामाजिक चेतना, शिक्षा र नयाँ सोचको माध्यमबाट आउने सकारात्मक परिवर्तनको रूपमा चित्रण गरेका छन्। आमा र छोराबीचको संवादले नयाँ पुस्ताले आमाको सपना बोकेर पुरानो व्यवस्थालाई चुनौती दिनुपर्ने सन्देश दिन्छ। दिइएका बुँदाहरूले देखाउँछन् कि क्रान्ति सामाजिक संरचना मात्र होइन, मूल्य र चेतनामा पनि परिवर्तन ल्याउने प्रक्रिया हो। कविको दृष्टिकोणले पाठकमा सामाजिक न्याय र समानताको चाहना जगाउँछ र परिवर्तनका लागि सक्रिय हुन प्रेरित गर्छ। यसरी, ‘आमाको सपना’ कविताले क्रान्ति आवश्यकताको कारण र त्यसको सकारात्मक रूपरेखा प्रस्तुत गर्दै सामाजिक सुधार र समानताको लागि सचेत गराउँछ।</span></p>
+                        <p class="text-left-align"><strong>९. आमाको सपना के हो र त्यो कसरी साकार हुन सक्छ, ‘आमाको सपना’ कविताका आधारमा समीक्षात्मक उत्तर लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">उत्तर: ‘आमाको सपना’ कवितामा आमाको सपना केवल व्यक्तिगत आशा होइन, समग्र समाजको उज्जवल भविष्यको आकांक्षा हो। आमाले चाहन्छिन् कि उनका सन्तानहरू गरीबी, अन्याय र दमनबाट मुक्त भएर स्वतन्त्र, समान र न्यायपूर्ण समाजमा बाँचुन्। उनको सपना यस्तो समाजको हो जहाँ सबैले समान अधिकार पाउँछन् र सामाजिक भेदभावको अन्त्य हुन्छ। यो सपना साकार हुनका लागि कविले क्रान्तिको आवश्यकता औँल्याएका छन्। क्रान्ति केवल सत्ता परिवर्तन होइन, सामाजिक चेतना, शिक्षा र मूल्य परिवर्तनको माध्यमबाट आउँछ। नयाँ पुस्ताले आमाको त्यो सपना बोकेर पुरानो अन्यायपूर्ण र शोषक व्यवस्थालाई चुनौती दिनुपर्ने हुन्छ। यो प्रक्रियामा समानता, स्वतन्त्रता र न्यायका लागि संघर्ष जरूरी छ। समीक्षात्मक दृष्टिले हेर्दा, कविले आमाको सपनालाई सामाजिक परिवर्तनको रूपमै प्रस्तुत गरेका छन् जसले वर्तमान असमानता र अन्यायलाई तोडेर नयाँ युगको शुरुवात गर्न सकिन्छ भनी देखाएका छन्। यो सपना पूरा गर्न सबैको सक्रिय भूमिका आवश्यक रहेको सन्देश कविताले दिन्छ। यसरी, ‘आमाको सपना’ कविता मात्र एक व्यक्तिगत कथा नभई समाज सुधार र नयाँ भविष्यको सपना हो, जसको साकार हुन क्रान्ति र सचेत जनताको भूमिका अनिवार्य छ।</span></p>
+                        <p class="text-left-align"><strong>१०. दिएको अनुच्छेद पढी सोधिएको प्रश्नको छोटो उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) पदक्रमका आधारमा संसारका भाषालाई कति प्रकारमा वर्गीकरण गरिएको छ ?</strong><br>उत्तर: पदक्रमका आधारमा संसारका भाषालाई ६ प्रकारमा वर्गीकरण गरिएको छ ।</p>
+                            <p><strong>(ख) नेपाली र अङ्ग्रेजी कस्तो कस्तो पदक्रम भएका भाषा हुन् ?</strong><br>उत्तर: नेपाली कर्ता, कर्म र क्रिया र अङ्ग्रेजी कर्ता, क्रिया र कर्मको पदक्रम भएका भाषा हुन् ।</p>
+                            <p><strong>(ग) ब्याकरणिक पदक्रम र आलङ्कारिक पदक्रममा के भिन्नता छ ?</strong><br>उत्तर: ब्याकरणिक पदक्रममा कर्ता, कर्म र क्रियाको निश्चित क्रमवद्धतामा वाक्यात्मक संरचना हुन्छ भने आलङ्कारिक पदक्रममा स्रष्टाले भनाइमा जोड दिन वा शीर्ष बन्न कर्ता, कर्म र क्रियाको क्रमबद्धतालाई भड़ गरी पदको प्रयोग गर्दा विचलन भएको हुन्छ ।</p>
+                            <p><strong>(घ) भाषामा विचलन किन हुन्छ ?</strong><br>उत्तर: भाषामा प्रधानाता दिन भाषामा विचलन हुन्छ ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>११. दिइएको कवितांश लाई सामान्य पदक्रममा रुपान्तरण गर्नुहोस र कवितांशले भन्न खोजको कुरा के हो छलफल गरी उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="brighter-gradient-text">तिमी सत्य कुरालाई यसरी चुम्बकिएर कथा सुने झैँ सुन्ने छैनौ । तिमी त्यसलाई आफैँ नै देख्न सक्ने, सहन सक्ने र ग्रहण गर्न सक्ने हुने छौ । तिमी मैले यसरी धैर्य दिनुको सट्टा सङ्ग्राममा जाँदा लाख सम्झाएर पनि नमान्ने आमाको मनलाई सान्त्वना दिँदै विदा हुने छौं ।</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Ama Ko Sapana Notes
+        function toggleAmaKoSapanaSummary() {
+            const summaryText = document.getElementById('amaKoSapanaSummaryText');
+            const toggleBtn = document.getElementById('toggleAmaKoSapanaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,511 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Devoted Son Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Devoted Son Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">3. A Devoted Son Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “A Devoted Son” by Manilal Banerjee is a touching story that explores the deep bond between a loving son and his aging parents, focusing on themes of duty, love, and generational differences. The story revolves around Rakesh, a bright and hardworking young man from a poor family, who makes his parents proud by excelling academically and securing a government job. His success brings joy and hope to his family, especially his father.<br><br>
+
+The story begins by highlighting Rakesh’s dedication to his studies and the sacrifices made by his parents to support his education. Rakesh’s father, though poor and uneducated, is proud of his son’s achievements and dreams of a better future for him. After Rakesh’s graduation, he returns home with great respect for his parents, promising to care for them in their old age. This promise reflects the traditional Indian value of filial duty and the son’s devotion to his parents.<br><br>
+
+As Rakesh settles into his job, he continues to care for his aging parents with great responsibility. He ensures they have a comfortable life and follows medical advice to maintain his father’s health. However, as time passes, Rakesh’s insistence on strict medical routines and lifestyle changes for his father leads to some tension. His father feels restricted and sometimes resents the control over his habits, revealing a natural generational gap despite the love between them.<br><br>
+
+The story subtly portrays the complexities in the relationship between parents and children. While Rakesh acts out of concern and duty, his father’s resistance shows the difficulty of adjusting to new ways, especially for the elderly. This tension reflects the challenges faced in balancing respect, care, and independence within a family. The narrative avoids judgment and instead presents a realistic portrayal of love and conflict.<br><br>
+
+In the end, the story leaves readers reflecting on the meaning of devotion and care. Rakesh’s unwavering commitment to his parents demonstrates filial love, but it also shows that love sometimes involves difficult decisions and misunderstandings. The story captures the delicate balance of duty, affection, and respect that defines family relationships.<br><br>
+
+In conclusion, “A Devoted Son” is a heartfelt story that beautifully illustrates the values of love, respect, and responsibility within a family. Manilal Banerjee offers a nuanced view of parent-child relationships, showing that devotion is not always simple but requires patience, understanding, and compromise. The story is a moving tribute to the bonds that hold families together.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How did the morning papers bring an ambience of celebration to the Varma family?</span><br>
+                    The morning papers brought a festive mood to the Varma family because they announced that Rakesh had topped the Medical Examination. This success was a proud moment for the family, turning their home into a place of joy and celebration.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How did the community celebrate Rakesh’s success?</span><br>
+                    The community celebrated by visiting Rakesh’s home, congratulating his parents and Rakesh himself. The house was decorated with garlands and gifts, and everyone wore party clothes. The atmosphere was lively and festive, similar to a festival.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why was Rakesh’s success a special matter of discussion in the neighbourhood?</span><br>
+                    Rakesh’s success was special because he was the first son in his family to get an education. His parents had made great sacrifices to provide him schooling and medical college education. His respectful behavior, like touching his father’s feet after seeing his results, also made the neighbours proud and impressed.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. How does the author make fun with the words ‘America’ and ‘the USA’?</span><br>
+                    Rakesh’s father insisted that the family say “USA” instead of “America,” teasing the neighbors who called it “America” out of ignorance. This humorous distinction pokes fun at the pride and formality sometimes shown when referring to foreign countries.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. How does the author characterize Rakesh’s wife?</span><br>
+                    The author describes Rakesh’s wife as uneducated, old-fashioned, plump, very good-natured, placid, complaisant, and lazy.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. Describe how Rakesh rises in his career.</span><br>
+                    After completing medical education, Rakesh started working at the city hospital. He quickly rose through the ranks and became the director of the hospital’s administrative organization. Later, he opened his own private clinic and became one of the best and richest doctors in the city.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. How does the author describe Rakesh’s family background?</span><br>
+                    Rakesh came from a poor family in an Indian village. His father worked for a kerosene vendor, his mother managed the household, and his grandparents sold vegetables. Despite poverty, his parents sacrificed everything to educate him.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">h. What is the impact of Rakesh’s mother’s death on his father?</span><br>
+                    After his wife’s death, Rakesh’s father was emotionally shattered and physically weakened. He suffered from mysterious ailments and sudden irritability, and his health deteriorated rapidly.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">i. What did Rakesh do to make his father’s old age more comfortable?</span><br>
+                    Rakesh cared for his father by bringing him morning tea in his favorite brass tumbler, helping him get out of bed, reading the morning news aloud, and generally making him comfortable and relaxed.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">j. Why did the old man try to bribe his grandchildren?</span><br>
+                    He bribed his grandchildren to get sweets and Jalebis from the shop, showing a playful, cunning side in his relationship with them.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">k. Are Mr. Varma’s complaints about his diets reasonable? How?</span><br>
+                    No, Mr. Varma’s complaints aren’t reasonable because Rakesh, as a doctor and a caring son, prescribed a diet to ensure his father’s health and longevity. Eating unhealthy foods could worsen his condition, and Rakesh wanted to prevent any risk to his already fragile health.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How did the Varma couple make sacrifices for their son’s higher education?</span><br>
+                    The Varma couple made immense sacrifices to ensure their son Rakesh received a higher education, despite their humble and poor background. Mr. Varma worked as a worker in a kerosene dealer’s depot, which was a low-paying and physically demanding job. His wife, Mrs. Varma, was a housewife who managed all household chores without any income of her own. Neither of them had the privilege of formal education, and Mr. Varma had never even seen the inside of a school.
+                    <br><br>
+                    However, they had a strong desire to provide a better life for their son and were determined to give him opportunities they never had. They worked tirelessly, living a life of simplicity and restraint, sacrificing their own needs and comforts. They saved whatever little money they could manage and spent it on Rakesh’s schooling and further medical education, knowing that this investment would bring pride and prosperity to the family.
+                    <br><br>
+                    Their sacrifices were not only financial but also emotional and physical. They faced hardships without complaint and endured long years of struggle just to fulfill their dream through their son. Their hope and ambition were pinned on Rakesh’s success, as he was the first in the family to get an education. The Varma couple’s selfless efforts and dedication reflected their deep love and strong belief in the power of education to change one’s destiny.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Mr. Varma suffers from diseases one after another after his wife’s death. Would he have enjoyed better health if she had not died before him? Give reasons.</span><br>
+                    Yes, Mr. Varma would likely have enjoyed better health if his wife had not died before him. The death of his wife had a profound emotional and psychological impact on him. They had spent many years together, sharing life’s joys and hardships, and she was a constant source of support and comfort for him. Her passing left him emotionally shattered and deeply lonely.
+                    <br><br>
+                    Before her death, Mr. Varma was mentally peaceful and physically healthier because of the companionship and care they shared. After losing her, he fell into depression and suffered from mysterious illnesses, including sudden irritability and physical weakness. His health deteriorated not just because of aging but due to the mental and emotional trauma caused by her absence.
+                    <br><br>
+                    It is common for people to experience a decline in health when they lose a life partner with whom they have shared decades. The emotional shock and loneliness can weaken the immune system and make them more vulnerable to diseases. Thus, if his wife had lived longer, Mr. Varma might have maintained better mental and physical health, enjoying more peace and stability in his old age.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Dr Rakesh is divided between a doctor and a son. As a son, he loves his father and worries about his weakening health but as a doctor, he is strict on his father’s diet and medicine. In your view, what else could Rakesh have done to make his father’s final years more comfortable?</span><br>
+                    Rakesh was caught between his roles as a loving son and a responsible doctor. While he deeply cared for his father and was concerned about his health, he was also strict about following the medical regimen, including diet and medicines, to ensure his father’s well-being. However, this strictness sometimes made his father feel controlled and unhappy.
+                    <br><br>
+                    To make his father’s final years more comfortable, Rakesh could have balanced his medical responsibilities with more empathy and emotional sensitivity. He could have shown more patience and kindness in communicating with his father, respecting his feelings and giving him some freedom to make small choices. Allowing his father to have a little independence in his daily life might have reduced the frustration and resistance his father felt.
+                    <br><br>
+                    Rakesh could also have spent more quality time with his father, engaging in gentle conversations, sharing memories, and showing affection beyond medical care. This emotional support would have helped ease his father’s loneliness and made the old age more peaceful.
+                    <br><br>
+                    In addition, involving other family members to share caregiving duties and providing companionship could have lessened the burden on Rakesh and offered his father a more loving and supportive environment.
+                    <br><br>
+                    Thus, along with medical care, Rakesh’s compassion, respect for his father’s dignity, and emotional warmth could have made his father’s final years truly comfortable and fulfilling.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. What does the story say about the relationship between grandfather and grandchildren?</span><br>
+                    The story A Devoted Son portrays a warm and affectionate relationship between the grandfather and his grandchildren. There is a close bond built on love, trust, and playfulness. The grandchildren are innocent and enjoy spending time with their grandfather, who in turn loves them deeply.
+                    <br><br>
+                    However, the story also shows a bit of the grandfather’s tricky side. For example, he tries to bribe his grandchildren to bring him sweets like Jalebis from the shop. This playful attempt shows how he uses the innocence and eagerness of children to get what he wants, reflecting a lighthearted and mischievous relationship.
+                    <br><br>
+                    Overall, the relationship between the grandfather and grandchildren is characterized by affection, trust, and a fun, sometimes cunning interaction that adds warmth and realism to the family dynamics in the story.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. Do you call Rakesh a devoted son? Give reasons.</span><br>
+                    Yes, Rakesh can be called a devoted son because throughout the story he consistently demonstrates deep love, respect, and a strong sense of responsibility toward his parents, especially his father. Coming from a poor and humble background, Rakesh understands the value of education and hard work. He studies diligently, tops his medical exams, and fulfills the lifelong dreams of his parents by becoming a successful doctor.
+                    <br><br>
+                    Despite the opportunity to earn more and live a comfortable life abroad, Rakesh chooses to stay in his own country and live close to his family. This decision shows that his commitment to his family is more important to him than personal wealth or status. His choice reflects his devotion and loyalty to his roots and to those who sacrificed so much for his success.
+                    <br><br>
+                    When his father grows old and faces health problems, Rakesh takes on the dual role of a caring son and a responsible doctor. He is strict with his father’s diet and medical treatment to ensure his wellbeing, even though his father sometimes resents these restrictions. Rakesh patiently manages this difficult balance, showing that his concern for his father’s health outweighs convenience or ease. He helps his father with daily tasks, spends time with him, and tries to make his old age as comfortable as possible.
+                    <br><br>
+                    Furthermore, Rakesh respects his parents’ wishes in important life matters, including his marriage, showing obedience and consideration for their feelings. Throughout the story, he puts the needs and happiness of his family above his own desires.
+                    <br><br>
+                    All these actions highlight Rakesh’s dedication, selflessness, and love for his family. He sacrifices his personal comfort, career opportunities abroad, and time to care for his aging parents. This strong sense of duty and affection truly makes Rakesh a devoted son.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Write an essay on The Parents’ Ambition for their Children in Nepali Society. You must give at least five examples.</span><br>
+                    In Nepali society, parents have great hopes and ambitions for their children’s future. They often dream of their children becoming successful in respected professions such as doctors, engineers, or government employees. These careers are seen as paths to social status, financial security, and family honor. Many parents work hard and make sacrifices to provide the best education and opportunities for their children to achieve these goals.
+                    <br><br>
+                    For example, parents encourage their children to excel in science and mathematics to become doctors or engineers. Others push their children to secure stable government jobs or succeed in business to improve the family’s economic condition. Marriage is also important, and parents wish for their children to marry into prosperous families to strengthen social ties and happiness.
+                    <br><br>
+                    However, this strong ambition sometimes pressures children to follow paths that may not interest them, causing stress. Despite this, parents’ ambitions come from love and a desire to see their children succeed. It is important for parents to balance their hopes with understanding their children’s own interests and support their individual dreams for a happier future.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Medicines replace our diets in old age. What can be done to make old ageless less dependent on medicine?</span><br>
+                    As people grow older, their bodies become weaker and less able to fight diseases, which often leads to taking more medicines. In many cases, medicines seem to replace the natural nutrition that diets provide. However, it is possible to reduce this dependence on medicines by adopting healthy habits.
+                    <br><br>
+                    To make elderly people less dependent on medicine, they should maintain a balanced diet that includes all essential nutrients such as carbohydrates, proteins, vitamins, and minerals. Regular exercise like walking, jogging, or simple stretching can improve physical strength and immunity. Adequate sleep and proper hydration are also important for overall health.
+                    <br><br>
+                    Avoiding harmful habits such as smoking and excessive alcohol consumption can prevent many health issues. Regular health check-ups and following doctors’ advice can catch problems early, reducing the need for heavy medication. Most importantly, providing emotional support and reducing stress can improve mental and physical well-being in old age, lessening the reliance on medicines.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">c. Write an essay on “Care of Elderly Citizens” in about 300 words.</span><br>
+                    Elderly citizens are those who have crossed middle age and entered the later stage of life. This period requires special care, love, and attention because older people often face health challenges and need emotional support. Taking care of the elderly is not only a moral duty but also a responsibility that reflects the values of a society.
+                    <br><br>
+                    Physically, elderly people may suffer from various illnesses such as arthritis, heart problems, and weakened immunity. Therefore, they need proper medical care, a nutritious diet, and a healthy lifestyle. Simple things like regular exercise, timely medication, and balanced meals help improve their quality of life. Mental health is equally important; old people need companionship to fight loneliness and depression.
+                    <br><br>
+                    In many families, elderly members are respected and cared for lovingly. However, in today’s fast-paced world, some families neglect their elders due to busy schedules or other reasons. This can lead to emotional distress for the elderly. Sometimes, old age homes are considered, but these should not replace family care. Instead, families should involve elderly members in daily life, listen to their stories, and make them feel valued.
+                    <br><br>
+                    Governments also play a role in elderly care by creating policies that ensure social security, healthcare facilities, and legal protection. Awareness programs can educate people about the importance of respecting and caring for senior citizens.
+                    <br><br>
+                    In conclusion, caring for elderly citizens is essential for their dignity and well-being. It is a collective responsibility of family and society to provide them with love, respect, and proper care so that they can live their final years in comfort and happiness.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

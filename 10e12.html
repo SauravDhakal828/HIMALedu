@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>I Was My Own Route Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for I Was My Own Route Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">3. I Was My Own Route Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “I Was My Own Route” by Suman Pokhrel is a powerful and introspective poem that explores themes of self-discovery, independence, and the journey of life. The poem reflects the poet’s realization that the path to success and fulfillment is not dictated by external influences but forged by one’s own choices, decisions, and perseverance. Through vivid imagery and thoughtful language, Pokhrel inspires readers to take control of their destinies and embrace their individuality.<br><br>
+
+The poem begins with the poet asserting his autonomy and the freedom he has in shaping his life’s direction. Instead of following a pre-determined or societal path, he describes himself as his own route, emphasizing the importance of self-reliance. This metaphor highlights the courage required to step away from conformity and chart one’s unique course in life, regardless of challenges or obstacles. The poem celebrates the spirit of independence and personal responsibility.<br><br>
+
+As the poem progresses, the poet reflects on the difficulties and uncertainties encountered along the way. The journey of life is not smooth or easy; it involves struggles, doubts, and moments of hesitation. However, by being his own route, the poet embraces these challenges as essential parts of growth and learning. The poem encourages readers to view obstacles not as barriers but as opportunities for self-improvement and discovery.<br><br>
+
+The theme of self-empowerment is central throughout the poem. Suman Pokhrel uses strong and confident language to convey the message that each individual holds the power to shape their future. The poem rejects the idea of relying on others to define one’s success or identity. Instead, it promotes introspection, determination, and faith in oneself as the key to overcoming adversity and achieving one’s goals.<br><br>
+
+Towards the end, the poem inspires readers to reflect on their own lives and the choices they make. It serves as a motivational reminder that the path to fulfillment is unique for everyone, and true contentment comes from embracing one’s personal journey. The poet’s assertion that he was his own route is a celebration of self-knowledge and authenticity.<br><br>
+
+In conclusion, “I Was My Own Route” is an inspiring and thought-provoking poem about individuality, courage, and the power of self-determination. Suman Pokhrel’s eloquent use of metaphor and imagery urges readers to take charge of their lives and confidently navigate their own paths. The poem resonates as a tribute to personal freedom and the journey toward self-realization.<br><br>
+
+
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Why did the speaker try to be the way men wanted her to be?</span><br>
+                    The speaker tried to be the way men wanted her to be because society expected women to conform to male-dominated ideals. Although she was a modern woman who disliked being controlled by male ideologies, she initially attempted to fit into those expectations. However, deep inside, she was determined to challenge and fight against the prevailing male domination.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What do you understand by her feet ‘would not accept walking backwards’?</span><br>
+                    The phrase means that the speaker refused to live a life in submission or inferiority to men. She was determined to move forward and carve out her own path toward freedom and equality for women, rejecting any backward steps into oppression or subservience.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Who are the old guards? Why did they grow desperate?</span><br>
+                    The old guards refer to the rigid, traditional members of a male-dominated society who maintain and enforce patriarchal control. They grew desperate because the speaker was advancing toward women’s liberation, challenging their authority and the status quo, which threatened their power and control.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. How did the speaker have ‘a feeling of intimate liberation’?</span><br>
+                    The speaker felt ‘a feeling of intimate liberation’ as she took courageous steps forward, despite difficulties and opposition. By forging her own path, separate from the male-dominated route, she experienced a deep personal freedom and empowerment.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. Why did the speaker’s desire to follow men warp in her?</span><br>
+                    Her desire to follow men warped because she became aware of the strict rules and restrictions imposed by male-dominated society. She wanted independence, freedom, and the chance to realize her own potential, which was suppressed by patriarchal ideologies. This awareness twisted her earlier desire to conform and fueled her determination to break free.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What does the speaker mean when she says she was playing a game of hide and seek with her being?</span><br>
+                    When the speaker says she was playing a game of hide and seek with her being, she is describing an internal struggle between her true self and the societal expectations imposed on her. In the literal game of hide and seek, one person hides while another tries to find them. Similarly, the speaker’s “being”—her true identity, desires, and aspirations—was hidden beneath layers of conformity and restriction. She was trying to avoid or escape the roles that men and society had defined for her, roles that limited her freedom and individuality.
+                    <br><br>
+                    This metaphor expresses how she felt divided within herself—part of her was forced to hide her real feelings and dreams to fit in, while another part longed to be found, to be free and authentic. It reflects her resistance to being controlled by patriarchal norms and her journey to discover and embrace her own path. This “game” shows the tension between oppression and liberation, concealment and expression, and highlights the complexity of her fight for identity and freedom as a woman in a male-dominated society.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why, in your view, was her back ripped by the old guards as she was advancing forward?</span><br>
+                    The speaker’s back was “ripped by the old guards” because the old guards symbolize the entrenched patriarchal forces and traditional societal norms that strongly resisted the progress of women’s liberation. As she courageously moved forward on her own path—breaking free from the limitations and expectations imposed by a male-dominated society—these old guards reacted with desperation and hostility. They felt threatened by her desire to change the status quo, which challenged their control and the rigid social order that kept women submissive.
+                    <br><br>
+                    The phrase “ripped by the old guards” vividly expresses the emotional and psychological pain she endured due to their opposition. It suggests that every step she took toward freedom was met with harsh resistance, criticism, and attempts to pull her back into conformity. Their “flapping wings” symbolize aggressive, frantic efforts to stop her progress, showing how determined they were to maintain their dominance.
+                    <br><br>
+                    This struggle highlights the difficulty of breaking away from deep-rooted traditions and the sacrifices required to advance toward equality and independence. Despite the pain and obstacles inflicted by these old guards, the speaker persisted, reflecting the resilience and courage needed to carve out a new path for herself and for women in general.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What, according to the speaker, did it feel like to be free?</span><br>
+                    According to the speaker, being free felt like an immensely valuable and deeply fulfilling experience—a profound sense of liberation that went beyond just physical freedom. It was the joy and relief of breaking the chains of societal restrictions and male-dominated expectations that had long confined her. To her, freedom meant being able to live authentically, without hiding her true self or compromising her identity to fit into the narrow roles defined by patriarchal norms.
+                    <br><br>
+                    This freedom brought with it a powerful feeling of independence and self-respect. She could finally embrace her own thoughts, desires, and potential without fear of judgment or control. It was like winning a personal battle, an intimate victory that gave her the strength and confidence to walk her own path boldly. The speaker also saw this freedom as a collective triumph for all women—an opportunity for the female race to rise and claim their rightful place as equals in society.
+                    <br><br>
+                    Ultimately, to be free was to experience true happiness and pride—a state where she could cherish her individuality and contribute meaningfully to shaping her own destiny. It was a precious gift that transformed her life, inspiring hope and courage not only within herself but also for those who would follow in her footsteps
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why does the speaker prefer the present to the past?</span><br>
+                    The speaker prefers the present to the past because her past was marked by hardship, oppression, and suffering under a male-dominated society. In the past, she lived as a victim of patriarchal control, restricted by rigid social norms that limited her freedom and potential. Her family background was difficult, with even tragic events like the death of a sibling due to malnutrition, reflecting the harsh realities she faced. She lived under the shadow of male domination, where women’s voices were suppressed and their rights denied.
+                    <br><br>
+                    In contrast, the present represents a time of empowerment and achievement for her. She has become a symbol of strength and independence—a pathfinder who has carved out a new route for herself and other women to follow. The present allows her to live freely, pursue her own identity, and inspire others to do the same. She feels proud of the progress she has made and the legacy she is creating for future generations. This transformation from suffering to liberation is why she values the present far more than the past.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. John Donne, in his poem “No Man is an Island”, says, “No man is an island entire of itself.” Would Burgos agree with Donne? Do you agree with Donne or Burgos?</span><br>
+                    John Donne’s famous line, “No man is an island entire of itself,” emphasizes the idea that no individual can live completely independently—everyone is connected and relies on others in society. Donne’s philosophy highlights human interdependence, community, and the importance of relationships in shaping our lives.
+                    <br><br>
+                    Burgos, the speaker of “I Was My Own Route,” might partly agree with Donne in the sense that men and women are interconnected and society is made up of both. However, Burgos’s focus is on breaking free from male dominance and creating an independent path for women. She expresses a strong desire for women’s liberation and equality, emphasizing the need for women to establish their own identity and freedom, sometimes appearing to challenge the traditional male influence in society. In this sense, Burgos pushes for a distinct and autonomous route for women, which might seem to contrast with Donne’s idea of interdependence.
+                    <br><br>
+                    Personally, I believe both views have value. Donne’s message about human connection is essential because cooperation and mutual support are vital in any society. At the same time, Burgos’s call for independence and self-assertion highlights the importance of individual freedom and equality, especially for those who have been historically marginalized. True progress comes when we balance these ideas—recognizing our shared humanity while respecting each person’s right to freedom and self-determination.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">a. Write an essay on My Idea of Freedom.</span><br>
+                    Freedom, to me, means the power and opportunity to live life on my own terms without unnecessary restrictions or fear. It is the ability to make choices about my education, career, relationships, and personal beliefs. When I am free, I can express my thoughts openly and honestly, share my ideas without hesitation, and pursue my passions with confidence. Freedom also means having the space to learn from my mistakes and grow as a person. Without freedom, life feels limited and controlled by external forces, but with it, I feel empowered to shape my own destiny and create a meaningful life.
+                    <br><br>
+                    Beyond personal liberty, freedom also represents equality and dignity for all individuals. It means being treated fairly regardless of gender, race, religion, or social background. True freedom ensures that no one is oppressed or discriminated against and that everyone has equal opportunities to succeed. In society, freedom allows people to raise their voices against injustice and fight for their rights. It promotes respect, tolerance, and understanding among diverse groups. For me, freedom is not just a personal privilege but a collective goal that uplifts communities and strengthens the bonds that hold us together.
+                    <br><br>
+                    At the same time, freedom carries with it a great responsibility. Enjoying my own freedoms means I must respect the freedoms of others and act in ways that do not harm or limit their rights. Freedom requires balance—between individual rights and social harmony. It calls for empathy, fairness, and cooperation to build a society where everyone can thrive. My idea of freedom is therefore not only about independence but also about living responsibly and contributing to a just world. When freedom is practiced with respect and care, it becomes a powerful force for peace, progress, and happiness.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

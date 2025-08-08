@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>योगमाया Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching 2n11.html */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for योगमाया Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">४. योगमाया Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="summaryText" class="text-lg brighter-gradient-text mb-4" style="display: none;">
+                    योगमाया न्यौपाने नेपालको सामाजिक, धार्मिक र राजनीतिक इतिहासमा एक असाधारण व्यक्तित्वको रूपमा स्मरण गरिन्छ। उनी पूर्वी नेपालको भोजपुर जिल्लामा जन्मेकी एक विदुषी, धार्मिक साधिका र प्रखर सामाजिक सुधारक थिइन्। त्यस समयको नेपाली समाज छुवाछुत, सतीप्रथा, बालविवाह, राणा शासनको दमन, र पितृसत्तात्मक सोचजस्ता कठोर समस्याले ग्रस्त थियो। योगमाया यिनै कुप्रथाविरुद्ध उठ्ने पहिलो महिला थिएनन्, तर उनी ती मध्ये सबैभन्दा साहसी, सशक्त र चेतनशील पात्र हुन् जसले समाजको गहिरो जरोमा रहेको अन्यायविरुद्ध सत्यको स्वर उठाइन्।<br><br>
+
+योगमायाको व्यक्तिगत जीवन कठिनाइले भरिएको थियो। उनले कम उमेरमै विवाह गरिन्, तर पारिवारिक हिंसा र असमानताबाट पीडित भइ घर छोड्न बाध्य भइन्। उनले आफ्नो जीवनलाई धार्मिक साधनामा समर्पित गरिन् तर केवल आत्ममोक्षको लागि होइन—समाजको उद्धारका लागि। उनले आत्मज्ञान, धार्मिक पाठ, र कविताका माध्यमबाट मानिसहरूलाई शिक्षित र जागरूक बनाउन थालिन्। उनले ‘धर्म’लाई कर्म, सेवा, र सत्यको प्रतीक मानेर व्याख्या गरिन्। उनका कवितामूलक वचनहरू (‘वाणी’) आज पनि चेतनाको स्रोत बनेका छन्।<br><br>
+
+योगमायाले धार्मिक प्रवचन मात्र दिइनन्, उनले सक्रिय रूपमा सामाजिक आन्दोलनको नेतृत्व गरिन्। उनले तत्कालीन राणा शासक चन्द्र शमशेरलाई पत्रमार्फत सामाजिक अन्यायको विरोधमा आवाज उठाइन्। उनले महिलाहरूलाई आत्मसम्मान, समानता, र शिक्षा प्राप्त गर्न प्रेरित गरिन्। योगमायाको नेतृत्वमा धेरै महिलाहरू र केही पुरुषहरू पनि समाज सुधारको आन्दोलनमा सहभागी भए। उनको लक्ष्य थियो– न्यायपूर्ण, समान र सचेत समाज निर्माण। तर, उनको यस्ता विचारहरू राणाशासनलाई असह्य लागे र राज्यले उनको आन्दोलनलाई दमन गर्न थाले।<br><br>
+
+जब राज्यबाट निरन्तर उपेक्षा, दमन, र अपमान भयो, तब योगमायाले एक कठोर निर्णय लिइन्। उनले विश्वास गर्थिन् कि जबसम्म अन्यायको शासन छ, तबसम्म साँचो धर्मको स्थापना सम्भव छैन। अन्ततः, उनले आफ्ना ६७ अनुयायीहरूसहित वि.सं. १९९७ सालमा अरुण नदीमा जलसमाधि (साङ्केतिक आत्मदाह) गरिन्। उनीहरूको सामूहिक आत्मत्याग कुनै कमजोरी होइन, त्यो अत्याचार र अन्यायविरुद्धको अन्तिम प्रतिकार र ऐतिहासिक चेतावनी थियो, जसले सम्पूर्ण नेपाली समाजलाई झक्झक्यायो।<br><br>
+
+योगमाया आज पनि सत्य, साहस र परिवर्तनको प्रतीक बनेकी छन्। उनको जीवनले देखाउँछ कि एक व्यक्तिको सोच, चेतना र संकल्पले समाजमा ठूलो परिवर्तन ल्याउन सक्छ। उनले धर्मलाई कर्मसँग जोडिन्, र महिलालाई आफ्ना अधिकारको लागि बोल्न सिकाइन्। उनी केवल धार्मिक नेत्री थिइनन्, उनी नेपालको पहिलो महिला समाज सुधारक हुन् जसले आत्मबलिदानद्वारा न्यायको ज्योति बलाइन्। आजको पुस्ताले योगमायाको जीवनबाट साहस, विवेक, र निष्ठाको पाठ सिक्न सक्छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                        <li><strong>१. दिइएका शब्द र अर्थ बिच जोडा मिलाउनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>क) जलसमाधि - पानीमा डुबेर गरिने प्राणत्याग</li>
+                                <li>ख) बडाहाकिम - राणा शासनका समयमा र त्यसपछि पनि केही समय जिल्लाको सर्वोच्च प्रशासक</li>
+                                <li>ग) आर्य समाज - सनातन धर्ममा उदारता ल्याउन चलाइएको एक धार्मिक सम्प्रदाय</li>
+                                <li>घ) वैधव्य - विधवा हुनाको भाव</li>
+                                <li>ङ) हठयोग - पतञ्जलिद्वारा प्रतिपादित योग (यम, नियम आदि) द्वारा शरीरलाई धेरै कष्ट दिएर चित्तवृत्तिलाई अन्तर्मुखी पार्ने योगको एक विधि</li>
+                                <li>च) प्रताडना - पीडा</li>
+                                <li>छ) विचारी - मुद्दामामिलाको निचोड खिचेर न्यायाधीशलाई अवगत गराउने व्यक्ति</li>
+                                <li>ज) पञ्चाग्नि - वरिपरि पाँच किसिमका अग्नि बालेर गरिने तपस्या</li>
+                            </ul>
+                        </li>
+                        <li><strong>२. पाठपढी गाडा गरिएका पदावलीको सट्टामा मिल्ने शब्द छानेर लेख्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>क) सन्यासी</li>
+                                <li>ख) परम्परागत</li>
+                                <li>ग) शास्त्रार्थ</li>
+                                <li>घ) अग्निसमाधि</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. दिइएका शब्द प्रयोग गरी वाक्य बनाउनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>स्वसिकाइ</strong> - योगमायाले स्वसिकाइ बाट नै आफ्नो ज्ञानको क्षितिजलाई फराकिलो बनाइन् ।</li>
+                                <li><strong>विद्रोह</strong> - योगमायाले अध्यात्म, मानवता र सामाजिक परिवर्तनका लागि विद्रोह गरिन् ।</li>
+                                <li><strong>सञ्जाल</strong> - योगमायाका विषयमा लेखिएको उपन्यासका बारेमा सामाजिक सञ्जाल मा निकै चर्चा भयो ।</li>
+                                <li><strong>धाराप्रवाह</strong> - योगमाया धाराप्रवाह रूपमा बोल्न सक्थिन् ।</li>
+                                <li><strong>योगसाधना</strong> - योगमाया योगसाधना गर्ने महिला हुन् ।</li>
+                                <li><strong>निराहार</strong> - योगमायाले योगसाधना गर्दा निराहार विधिलाई समेत अपनाएकी थिइन् ।</li>
+                                <li><strong>वर्णाश्रम</strong> - योगमायाले छुवाछूत र वर्णाश्रम जस्ता अव्यवहारिक चलनको विरोध गरिन् ।</li>
+                                <li><strong>स्वेच्छिक</strong> - अग्निसमाधि लिन योगमायाका भक्तजनहरूले स्वेच्छिक रूपमा नाम लेखाएका थिए ।</li>
+                                <li><strong>यज्ञस्थल</strong> - यज्ञस्थल लाई पवित्र स्थान मानिन्छ ।</li>
+                                <li><strong>स्मृति</strong> - आज योगमाया हाम्रा स्मृति मा मात्र रहेकी छिन् ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>४. दिइएका शब्दहरु प्रयोग गरि एउटा अनुच्छेद लेख्नुहोस् ।</strong>
+                            <p class="ml-4">सासूससुरा भएको घर सबै दृष्टिकोणबाट राम्रो हुन्छ । बुहारीलाई सारोगारो हुँदा घरमा सासुससुराले हेर्ने गर्नुहुन्छ । नन्द आमाजूको उमेर र भाउजू वा बुहारीको उमेर समूह मिल्ने भएकाले उनीहरु मित्र साथी जस्तो व्यवहार हुन्छ । सम्धी र जेठान घरका इज्जतिला पाहुना हुन्। भदा भदैले पनि कहिलेकाही माइतीको तिर्सना मेट्छन् ।</p>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                        <li><strong>१. पाठ पढ्नुहोस् र दिइएका प्रश्नहरुको भन्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) योगमायाको जीवनी कति अनुच्छेदमा संरचित छ ?</strong><br>उत्तर: योगमायाको जीवनी पाठमा चारवटा अनुच्छेदमा संरचित गरिएको छ। प्रत्येक अनुच्छेदले उनको जीवनका विभिन्न चरणहरू र घटनाहरूलाई क्रमबद्ध रूपमा व्याख्या गरेको छ।</li>
+                                <li><strong>ख) चौथो अनुच्छेदमा कतिवटा वाक्य छन् ?</strong><br>उत्तर: चौथो अनुच्छेदमा कुल सातवटा वाक्यहरू रहेका छन्, जसले योगमायाको जलसमाधि र उनको अन्तिम अवस्थालाई वर्णन गर्छ।</li>
+                                <li><strong>ग) दोस्रो अनुच्छेदमा योगमायाको जीवनी कुन अवस्थामा वर्णन छ ?</strong><br>उत्तर: दोश्रो अनुच्छेदमा योगमायाको जीवनको बाल्यकालीन अवस्था र उनको परिवार, जन्मभूमि तथा प्रारम्भिक जीवनलाई केन्द्रमा राखेर वर्णन गरिएको छ। यस अनुच्छेदमा उनका प्रारम्भिक संघर्ष र परिवेशबारे जानकारी दिइएको छ।</li>
+                                <li><strong>घ) योगमायाको जलसमाधिको सन्दर्भ कुन अनुच्छेदमा छ ?</strong><br>उत्तर: योगमायाको जलसमाधिको सन्दर्भ चौथो अनुच्छेदमा दिइएको छ, जहाँ उनको मृत्यु र जलसमाधिमा लीन हुने घटनाको विवरण छ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. दिएका मितिमा योगमायाको जीवनसंग सम्बन्धित कुन कुन घटना भएको हुन्, भन्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>(क) वि.सं. १९२५ : योगमायाको जन्म भएको वर्ष हो। यो उनको जीवनको प्रारम्भिक घटना हो।</li>
+                                <li>(ख) वि.सं. १९७३ : योगमायाले आफ्नो बाल्यकाल बिताएको र प्रारम्भिक शिक्षा प्राप्त गरेको समय।</li>
+                                <li>(ग) वि.सं. १९८२ : यो समय योगमायाको युवावस्थाको प्रारम्भिक चरण हो, जहाँ उनी सामाजिक र धार्मिक गतिविधिहरूमा सक्रिय भईन्।</li>
+                                <li>(घ) वि.सं. १९८८ : योगमायाले आफ्नो आध्यात्मिक साधना सुरु गरिन् र समाजमा आफ्ना विचारहरू फैलाउन थालिन्।</li>
+                                <li>(ङ) वि.सं. १९९२ : योगमायाको धार्मिक क्रियाकलापहरू बलियो हुँदै गएका थिए र उनी समाजमा प्रख्यात बन्न थालिन्।</li>
+                                <li>(च) वि.सं. १९९३ : योगमायाको जीवनमा केही महत्वपूर्ण घटना वा घटना विकास भएका थिए, जस्तै कुनै विशेष साधना वा आध्यात्मिक अनुभव।</li>
+                                <li>(छ) वि.सं. १९९५ : योगमायाको जीवनमा कठिनाईहरू वा चुनौतीहरूको सामना गर्ने समय।</li>
+                                <li>(ज) वि.सं. १९९७ : यो वर्ष योगमायाको जीवनको अन्तिम चरण वा उनको जलसमाधिको नजिक पुगेको समय।</li>
+                                <li>(झ) वि.सं. १९९८ : योगमायाको जलसमाधि लिएको वर्ष हो, जहाँ उनले शारीरिक जीवन समाप्त गरी आध्यात्मिक मुक्तिको मार्ग अपनाइन्।</li>
+                            </ul>
+                        </li>
+                        <li><strong>४. दिइएका आधारमा घटनाक्रम मिलाएर लेख्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>झ) विधवा हुनु र पुनर्विवाह हुनु,</li>
+                                <li>ग) भागेर माइती जानू,</li>
+                                <li>घ) आसामबाट फर्कनु,</li>
+                                <li>ङ) आर्यसमाजी हुनु,</li>
+                                <li>च) दीक्षा लिई सन्यासी बन्नु,</li>
+                                <li>ञ) उफ्रौलीटारमा कुटी बनाउनु,</li>
+                                <li>ज) निराहर, अल्पहार र जलाहार भएर तपस्या गर्नु,</li>
+                                <li>छ) दासप्रथा, सतिप्रथाका विरुद्ध आवाज दिनु,</li>
+                                <li>क) अग्निसमाधिको घोषणा तर असफल,</li>
+                                <li>ख) जलसमाधिको तयारी र सफलता,</li>
+                            </ul>
+                        </li>
+                        <li><strong>५. पाठको चौथो अनुच्छेद पढ्नुहोस् र सोधिएका प्रश्नहरुको छोटोदिनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) योगमायाले कुटी बनाएको ठाउँहरुको नाम लेख्नुहोस् ।</strong><br>उत्तर: योगमायाले कुटी बनाएको ठाउँहरुको नाम मझुवावेँसी, उफ्रौलीटार र गौडिनी हो ।</li>
+                                <li><strong>ख) मानिसहरु योगमायासँग प्रभावित हुनुको कारण के हो ?</strong><br>उत्तर: ज्ञान, अनुभवका आधारमा पण्डितहरूसंग शास्त्रार्थ गर्ने, धाराप्रवाह प्रवचन दिनसक्ने खुबी भएका कारण मानिसहरू योगमायासंग प्रभावित हुन्थे ।</li>
+                                <li><strong>ग) योगमायाले किन तपस्या गरेकी हुन् ?</strong><br>उत्तर: साधनाको प्राप्ति र सबै प्रकारका मोहबाट मुक्त हुन योगमायाले तपस्या गरेकी हुन् ।</li>
+                                <li><strong>घ) `उनी कहिले निराहार , कहिले जलाहार , कहिले अल्पहार तपस्यागर्थिन् ´ भन्नुको तात्पर्य के हो ?</strong><br>उत्तर: यसको तात्पर्य योगमायाले जीवनका सबै प्रकारका लोभ र मोहबाट उन्मुक्ति एवं समाज सुधारको चाहना पूरा गर्नका लागि कहिले केही पनि नखाई, कहिले पानी मात्र खाई, कहिले थोरै मात्रै खाई कठोर तपस्या गर्थिन् भन्नू हो ।</li>
+                                <li><strong>ङ) योगमायाले जलसमाधि नलिएको भए आन्दोलनले कस्तो स्वरुप लिन्थ्यो होला, अनुमान गरि लेख्नुहोस् ।</strong><br>उत्तर: योगमायाले जलसमाधि नलिएको भए आन्दोलनले शसस्त्र आन्दोलनको रूप लिन्थ्यो होला ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>६. `योगमाया छुवाछूतरहित ………..अविस्मरणीय रहेको छ´ जीवनीको अंश पढी सोधिएका प्रश्नहरुकोदिनुहोस् ।</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) योगमाया कस्तो समाजको खोजीमा लागिन् ?</strong><br>उत्तर: योगमाया एक यस्तो समाजको खोजीमा थिइन् जहाँ छुवाछूत, भेदभाव र असमानता नहोस्। उनी समानता र न्यायको पक्षमा थिइन् जसले सबैलाई बराबरी अधिकार र सम्मान दिन्छ। उनी सबै मानिसलाई मानवता र प्रेमको आधारमा हेर्ने समाजको सपना देख्थिन्, जहाँ जात, वर्ग वा धर्मको आधारमा कुनै विभाजन नहोस्।</li>
+                                <li><strong>ख) तत्कालीन समाजले आफ्नो विचारलाई आविष्कार गरेपछि उनले कसरी विद्रोह गरिन् ?</strong><br>उत्तर: जब तत्कालीन समाजले पुराना रूढीवादी विचार र जातीय छुवाछूतलाई अड्काइरह्यो र सुधार गर्न मनोभाव राखेन, तब योगमायाले शान्तिपूर्ण तर दृढ रूपमा त्यसको बिरूद्ध विद्रोह गरिन्। उनले सामाजिक अन्याय र भेदभावका विरुद्ध आवाज उठाइन्, आफ्नो क्रान्तिकारी विचारहरू फैलाइन् र समानताको पक्षमा अभियान चलाइन्। उनको विद्रोहले तत्कालीन समाजमा परिवर्तनको बीउ रोपे।</li>
+                                <li><strong>ग) योगमायाको सम्मानमा के कस्ता कामहरू भएका छन् ?</strong><br>उत्तर: योगमायाको सम्मानमा विभिन्न सांस्कृतिक, धार्मिक र सामाजिक कार्यक्रमहरू आयोजना भएका छन्। उनको जीवन र क्रान्तिलाई सम्झेर स्मारकहरू निर्माण गरिएको छ। उनी समाजमा समानता र मानवअधिकारको प्रतीकका रूपमा सम्मानित छिन्। साथै उनका सिद्धान्त र कार्यहरूलाई आधुनिक पुस्तामा प्रचार–प्रसार गर्न पुस्तक, नाटक, र अन्य साहित्यिक तथा शैक्षिक सामग्रीहरू तयार गरिएको छ। यसले उनको योगदानलाई सदा स्मरणीय बनाएको छ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>७. दिइएको जीवनीको अंश पढी सोधिएका प्रश्नहरुकोदिनुहोस् ।</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) योगमायाको धर्मसम्बन्धी मान्यता कस्तो रहेको थियो ?</strong><br>उत्तर: योगमायाको धर्मसम्बन्धी मान्यता प्रगतिशील र समावेशी थियो। उनले धर्मलाई केवल अनुष्ठान वा प्रथा मात्र नभएर मानिसको जीवन सुधार्ने, नैतिकता र सहिष्णुता विकास गर्ने माध्यमका रूपमा हेरेकी थिइन्। उनी जातीय, सामाजिक वा आर्थिक भेदभाव नगर्ने धर्मको पक्षमा थिइन् र सबै धर्म र सम्प्रदायलाई समान सम्मान दिनुपर्ने विश्वास राख्थिन्। उनको विचारमा धर्मले मानिसहरूलाई जोड्ने र समाजलाई शान्तिपूर्ण बनाउन मद्दत गर्ने हुनुपर्थ्यो।</li>
+                                <li><strong>ख) पाठसमेतका आधारमा योगमायाले गरेका सुधारका प्रयासहरूको वर्णन गर्नुहोस्।</strong><br>उत्तर: योगमायाले जातीय छुवाछूत र सामाजिक अन्याय विरुद्ध अनेकौं सुधारका प्रयासहरू गरिन्। उनले महिलाको स्थिति सुधार्न, शिक्षामा पहुँच बढाउन, तथा समानता र मानव अधिकारको पक्षमा आवाज उठाइन्। सामाजिक असमानता विरुद्ध क्रियाशील भई, उनी आफ्नो विचारहरूलाई प्रचार गरेर परिवर्तनको मार्ग खोलेकी थिइन्। साथै, उनले धार्मिक र सांस्कृतिक प्रथाहरूमा सुधार गर्दै अन्धविश्वास र रूढीवादी चलनहरूलाई समाप्त गर्ने प्रयास गरिन्। उनका यी प्रयासहरूले तत्कालीन समाजमा नयाँ सोच र प्रगतिशील सोचलाई विकास गर्ने काम गरे।</li>
+                            </ul>
+                        </li>
+                        <li><strong>८. उत्तर दिनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) योगमायाको बाल्यकाल र किशोरावस्था कस्तो रह्यो ?</strong><br>उत्तर: योगमायाको बाल्यकाल सामान्य वातावरणमा बित्यो, जहाँ उनले परिवारको माया पाइनन् भने पनि उनले अनुशासन र संस्कार सिकिन्। बाल्यकालदेखि नै उनको स्वभाव जिज्ञासु र संवेदनशील थियो। उनी आफ्ना वरिपरि भएका सामाजिक असमानता र अन्यायबारे सोच्न थालिन्। परिवार र समाजका फरक–फरक पाटोहरूप्रति उनको चासो बढ्दै गयो। बाल्यकालमा उनले विद्यालय शिक्षासँगै धार्मिक र सामाजिक विषयहरूमा पनि रुचि राख्न थालिन्।
+
+                                    किशोरावस्थामा योगमायाले अझ गहिरो रूपमा सामाजिक कुराहरू बुझ्न थालिन्। उनको मनमा मानवता र समानताका विषयमा प्रश्न उठ्न थाल्यो। समाजमा जातीय भेदभाव, छुवाछूत र अन्य अन्यायलाई उनी अस्वीकार गर्ने भावले भरिइन्। किशोरावस्थामा उनको चिन्तन र अनुभूतिमा गम्भीरता आयो र उनले जीवनमा सामाजिक न्यायको खोजी गर्ने प्रण गरिन्। यो समयमा उनले आध्यात्मिकता र सामाजिक सुधार दुवैमा ध्यान दिन थालेकी थिइन्।</li>
+                                <li><strong>ख) योगमाया कसरी अध्यात्मिक विषयमा आकृष्ट भइन् ?</strong><br>उत्तर: योगमायालाई सामाजिक अन्याय र भेदभावले मात्र होइन, जीवनका गहिरा प्रश्नहरूले पनि चिन्तित बनायो। उनी धार्मिक र अध्यात्मिक कुराहरू प्रति आकर्षित भइन् किनकि उनलाई जीवनका यथार्थ, मृत्यु, आत्मा र मोक्षबारे गहिरो जिज्ञासा थियो। समाजमा देखिएको अव्यवस्था र अमानवीयता प्रति उनी असन्तुष्ट थिइन्, जसले उनलाई आत्मशुद्धि र आध्यात्मिक उन्नतिको खोजीमा लग्यो। उनले धार्मिक ग्रन्थहरू पढ्न थालिन् र आध्यात्मिक गुरूहरूको सल्लाह लिएर आफूलाई सुधार गर्ने निर्णय गरिन्।
+
+                                    आध्यात्मिक मार्गमा लाग्दा योगमायाले आत्म-चिन्तन र ध्यानको अभ्यास गरिन्। उनी केवल व्यक्तिगत उद्धारमा मात्र सीमित रहेकी थिइन् भन्ने होइन, उनी सामाजिक परिवर्तन र मानव कल्याणका लागि पनि अध्यात्मलाई माध्यम बनाएर अघि बढ्न चाहन्थिन्। उनको साधना र तपस्या सामाजिक सुधारसँग जोडिएको थियो जसले उनलाई जीवनका गहिरा सत्य बुझ्न र फैलाउन मद्दत गर्‍यो।</li>
+                                <li><strong>ग) योगमायाको साधना र तपस्याको बारेमा उल्लेख गर्नुहोस् ।</strong><br>उत्तर: योगमायाले जीवनभर गहिरो साधना र तपस्या गरिन् जसमा उनले आफ्नो मन, वाणी र शरीरलाई अनुशासित गरिन्। उनी एकान्तमा बसेर ध्यान र भजन–कीर्तन गर्ने गर्थिन्। उनको साधना केवल आध्यात्मिक उन्नतिको लागि मात्र नभई समाजमा हुने अन्यायलाई हटाउने र समानता ल्याउने उद्देश्यले पनि थियो। उनको तपस्या दृढ र निरन्तर थियो जसले उनलाई मनोबल र शक्ति प्रदान गर्‍यो। साधनाले उनलाई आध्यात्मिक दृष्टिले बलियो बनायो र उनको क्रान्तिकारी विचारहरूलाई आत्मबल प्रदान गर्‍यो।
+
+                                    यस साधना र तपस्याको कारण योगमायाले आफ्नो जीवनलाई उच्च आध्यात्मिक उद्देश्यसँग जोड्न सकिन्। उनको तपस्या समाजमा रहेका रूढिवादी विचार, अन्धविश्वास र छुवाछूतको विरोधमा उभिन सहयोगी साबित भयो। उनले आफ्ना अनुयायीहरूलाई पनि जीवनमा अनुशासन र साधनाको महत्त्व सिकाइन्। यसरी उनका क्रियाकलापहरू अध्यात्म र सामाजिक सुधार दुवैलाई सँगै अगाडि बढाउने शैलीका थिए।</li>
+                                <li><strong>घ) योगमायाको अग्निसमाधिको योजना कसरी असफल भयो ?</strong><br>उत्तर: योगमायाले अग्निसमाधिको योजना बनाएकी थिइन् जसले उनको आध्यात्मिक समर्पण र क्रान्तिकारी दृष्टिकोणलाई जनाउँछ। उनी चाहन्थिन् कि आफ्नो मृत्यु आगोमा जलाएर आफूले स्थापित गरेका सिद्धान्तहरूलाई अमर बनाओस्। तर तत्कालीन राजनीतिक र सामाजिक परिस्थितिले यो योजना सफल हुन दिएन। समुदायका केही मानिसहरूले विरोध गरे र त्यसले उनलाई योजना पुरा गर्नबाट रोक्यो।
+
+                                    त्यसबाहेक, योगमायाको आफ्नै अनुयायीहरूमाझ पनि मतभेद र असमझदारीले योजना कार्यान्वयनमा कठिनाइ पैदा गर्‍यो। यस्ता कारणले गर्दा उनी अग्निसमाधि लिन सकिनन् र उनको योजना असफल रह्यो। यसले देखाउँछ कि व्यक्तिगत इच्छाशक्ति मात्र पर्याप्त हुँदैन, सामाजिक सहयोग र वातावरण पनि महत्वपूर्ण हुन्छ।</li>
+                                <li><strong>ङ) योगमायाको जीवनबाट पाइने शिक्षा के हो ?</strong><br>उत्तर: योगमायाको जीवनले हामीलाई धेरै महत्वपूर्ण शिक्षा दिन्छ। पहिलो, उनले देखाएकी छिन् कि सामाजिक अन्याय र भेदभाव विरुद्ध दृढ संकल्प र साहसले मात्र विजय सम्भव छ। उनका प्रयासहरूले सिकाउँछन् कि परिवर्तन तब मात्र आउँछ जब हामी साहसपूर्वक गलत कुराविरुद्ध आवाज उठाउँछौं। दोस्रो, उनको जीवनबाट हामीले सामाजिक सुधार र आध्यात्मिक उन्नतिलाई सँगै लैजानुपर्छ भन्ने कुरा बुझ्न सक्छौं।
+
+                                    उनले हामीलाई सिकाइन् कि आत्मशुद्धि, अनुशासन र समर्पण बिना कुनै ठूलो लक्ष्य हासिल गर्न सकिन्न। साथै, जीवनमा समानता, न्याय र मानवताको पक्षमा निरन्तर संघर्ष गर्नुपर्छ। योगमायाको जीवनले प्रेरणा दिन्छ कि हरेक व्यक्तिले समाजको सुधार र प्रगतिमा योगदान पुर्‍याउन सक्दछ यदि उसमा इमानदारी, सहिष्णुता र दृढता छ भने।</li>
+                            </ul>
+                        </li>
+                        <li><strong>९. व्याख्या गर्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) यी तपस्याका विविध ……………………
+                                …………चाहना राख्नु थियो ।</strong><br>उत्तर: तपस्या भन्नाले साधारण रूपमा शारीरिक अथवा मानसिक कष्ट सहने अभ्यास मात्र बुझिँदैन, यसले जीवनका सबै पक्षहरूमा अनुशासन र आत्म–शुद्धिको प्रक्रिया जनाउँछ। यी तपस्याका विविध रूपहरू—जसमा ध्यान, योग, अनुष्ठान, सेवा, त्याग, साधना लगायतका अभ्यासहरू समावेश हुन्छन्—ले साधकलाई आफ्नो मन, वाणी र कर्ममा संयम राख्न सिकाउँछन्। शारीरिक रूपमा ताडना सहनु, कठोर नियम पालना गर्नु मात्र होइन, मानसिक रूपमा मोह, क्रोध, लोभ र ईर्ष्याजस्ता विकृत विचारहरूलाई परास्त गर्न प्रयास गर्नु पनि तपस्याको अङ्ग हो। यसरी तपस्या जीवनको सबै आयाममा सुधार र उन्नति ल्याउने साधन हो, जसले व्यक्तिलाई मात्र होइन, समाजलाई पनि लाभान्वित गर्छ।
+
+                                    यी विविध तपस्याका मार्गहरूले साधकलाई आफूभित्र गहिरो आत्मचिन्तन गर्न र जीवनको वास्तविक उद्देश्य पहिचान गर्न मद्दत गर्छन्। साधकले आफ्नो वासनालाई नियन्त्रणमा राख्ने, अहंकार र लोभलाई घटाउने, र सच्चा शान्ति तथा मुक्ति प्राप्त गर्ने चाहना राख्नु आवश्यक हुन्छ। तपस्याले मात्र मानिसलाई दैवी शक्तिसँग जोड्ने काम गर्दैन, यसले उसको हृदयमा करुणा, प्रेम, र सामाजिक उत्तरदायित्व जस्ता गुणहरू पनि विकास गर्छ। तपस्याको माध्यमबाट आउने यो आन्तरिक परिवर्तनले नै सामाजिक रूपान्तरण सम्भव हुन्छ, जसले मानिसलाई केवल आफ्नो जीवन मात्र होइन, वरिपरिका मानिसहरूको जीवन पनि सुधार्न उत्प्रेरित गर्छ।
+
+                                    अन्ततः, यी तपस्याका विविध विधिहरू जीवनलाई अर्थपूर्ण र मूल्यवान बनाउनको लागि एक निरन्तर प्रक्रिया हुन्। उनीहरूले व्यक्ति र समाजलाई नैतिक, आध्यात्मिक र भावनात्मक रूपमा बलियो बनाउँछन्। साधकले आफ्नो जीवनलाई सकारात्मक ऊर्जा र उच्चतम आदर्शमा डोर्याउन निरन्तर प्रयास गर्नुपर्छ। यसैले तपस्या केवल कुनै धार्मिक अनुष्ठान मात्र नभई, जीवनका प्रत्येक पक्षमा सचेत र समर्पित भएर अगाडि बढ्ने अभ्यास हो, जसले अन्ततः जीवनको वास्तविक उद्देश्य, शान्ति र मोक्षको खोजीमा मद्दत पुर्‍याउँछ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>१०. सत्यनिष्ठा र समतामूलक समाजको स्थापनामा योगमायाले दिएको योगदानको चर्चा गर्नुहोस् :</strong>
+                            <p class="ml-4">उत्तर: योगमायाले आफ्नो जीवनलाई सत्यनिष्ठाको सर्वोच्च उदाहरण बनाइन्। उनी सदैव सत्य र इमान्दारीमा अडिग रहिन् र झुट, छलकपट वा अन्यायको विरुद्धमा दृढ रूपमा उभिइन्। उनको व्यवहार र क्रियाकलापले समाजमा सत्यका महत्वलाई उजागर गर्‍यो। उनले आफूले मान्ने न्याय र समानताको पक्षमा कहिल्यै सम्झौता गरिनन् र आफ्ना विचारहरूलाई निरन्तरता दिइन्। योगमायाको सत्यनिष्ठाले उनलाई आफ्नो लक्ष्यमा अविचलित राख्यो र उनको जीवनशैलीले मानिसहरूलाई पनि सच्चाई र नैतिकताको मार्ग अपनाउन प्रेरित गर्‍यो। उनको निरन्तर प्रयासले समाजमा इमान्दारी, नैतिकता र सामाजिक उत्तरदायित्वको भावना विकास गर्‍यो।
+
+                                सत्यनिष्ठासँगै योगमायाले समतामूलक समाजको निर्माणका लागि पनि अतुलनीय योगदान दिइन्। उनी जातीय भेदभाव, छुवाछूत, र सामाजिक असमानताका विरुद्ध साहसपूर्वक आवाज उठाउने क्रान्तिकारी नेतृ थिइन्। उनले आफ्नो सम्पूर्ण जीवनमा सबै मानिसलाई बराबरीको अधिकार र सम्मान दिने संस्कारलाई प्रवर्द्धन गरिन्। तत्कालीन समाजका रूढीवादी र विभाजनकारी प्रथाहरू विरुद्ध उनले व्यापक सामाजिक अभियान चलाइन् जसले नेपाली समाजमा समानताको चेतना फैलायो। उनको प्रयासले विभिन्न वर्ग र समुदायका बीच मेलमिलाप र सहिष्णुताको वातावरण तयार पार्न मद्दत गर्‍यो, जसले गर्दा समावेशी र न्यायपूर्ण समाजको मार्ग प्रशस्त भयो।
+
+                                योगमायाको योगदानले समाजलाई मात्र नभई, भविष्यका पुस्तालाई पनि सामाजिक न्याय र समानताको महत्व बुझ्न र त्यसका लागि संघर्ष गर्न प्रेरणा दियो। उनको जीवन संघर्ष र दृष्टिकोणले देखाउँछ कि सत्यनिष्ठा र समता बिना कुनै समाज स्थायी रुपमा प्रगतिशील र सशक्त हुन सक्दैन। उनले देखाएको साहस, दृढता र मानवताको मर्मले नेपाली समाजमा समानता र न्यायको स्थापनामा अमूल्य भूमिका खेलेको छ, जसलाई आज पनि सबैले सम्मान र श्रद्धाका साथ सम्झिन्छन्।</p>
+                        </li>
+                        <li><strong>११. दिइएको अनुच्छेद पढ्नुहोस् र सोधिएका प्रश्नहरुकोलेख्नुहोस् ।</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) सञ्चारका माध्यम तथा यातायतका साधनाले संसारलाई कसरी नजिक बनाएको छ ?</strong><br>उत्तर: सञ्चार माध्यमका साधनले संसारका कुनाकुनामा तुरुन्तै सम्पर्क गरी घरैमा बसी बसी कुराकानी गर्न, विश्वमा भएका घटनाहरूको समाचार हेर्न र सन्न सक्ने भएर संसारलाई नजिक बनाएको छ ।</li>
+                                <li><strong>ख) यन्त्रमानवले मानिसलाई कसरी सघाउँछ ?</strong><br>उत्तर: यन्त्रमानले मानिसलाई वैज्ञानिक, औद्योगिक, घरायसी आदि विविध क्षेत्रमा मानिसले जस्तै काम गरेर सघाउँछ।</li>
+                                <li><strong>ग) वैज्ञानिक क्षेत्रमा भएको आशातीत प्रगतिले मानव जीवनलाई कस्तो बनाएको छ ?</strong><br>उत्तर: वैज्ञानिक क्षेत्रमा भएको आशातीत प्रगतिले मानव जीवनलाई धरायसी कामदेखि लिएर कृषि, उद्योग वाणिज्य आदि क्षेत्रमा सुखी, सम्पन्न र सुविधायुक्त बनाएको छ ।</li>
+                                <li><strong>घ) `वैज्ञानिक´ र `अनुसन्धान´ शब्दको निर्माण प्रक्रिया देखाउनुहोस् ।</strong><br>उत्तर: वैज्ञानिक : ( विज्ञान + इक )<br>अनुसन्धान : ( अनु + सन्धान )</li>
+                            </ul>
+                        </li>
+                        <li><strong>१२. दिइएको अनुच्छेद पढ्नुहोस् र सोधिएका प्रश्नहरुकोदिनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>क) सरकारले किन निषेधाज्ञा जारी गरेको छ ?</strong><br>उत्तर: सरकारले महामारीको समय भएकाले निषेधाज्ञा जारी गरेको छ ।</li>
+                                <li><strong>ख) जयमङ्गलले कसरी सनाखत गरेर हिँड्छ ?</strong><br>उत्तर: जयमङ्गलले हदम्यादको कुरै नबुझी सनाखत गरेर हिँड्छ ।</li>
+                                <li><strong>ग) माथिको पाठमा `ऊ´ भनेको को होला ?</strong><br>उत्तर: माथिको पाठमा ऊ भनेको जयमङ्गल हो ।</li>
+                                <li><strong>घ) शब्दकोशको सहायता लिई माथिका पाठमा आएका गाढा शब्दहरुको अर्थ लेख्नुहोस् ।</strong>
+                                    <ul class="list-disc list-inside ml-4">
+                                        <li><strong>निषेधाज्ञा</strong> : कुनै सङ्कटको स्थितिमा मालसमानको आयातनिर्यात परिवहनमा प्रतिबन्ध लगाइने सरकारी आदेश</li>
+                                        <li><strong>इजलास</strong> : अदालत, न्यायालय</li>
+                                        <li><strong>कायलनामा</strong> : कसुर वा गल्ती स्वीकार गरी लेखिदिने कागत, अपराध</li>
+                                        <li><strong>गैरन्यायिक</strong> : न्यायको विपरीत भएको</li>
+                                        <li><strong>उत्प्रेषण</strong> : तल्लो तहको अदालतले गरेका कारवाईको पुनरावलोकन गर्ने समादेश</li>
+                                        <li><strong>मुल्तबी</strong> : अर्को कारवाहीको टुङ्गो लागेपछि किनारा लगाउने गरी स्थगित गरिएको मुद्दामामिला</li>
+                                        <li><strong>जमानी</strong> : जमान गर्ने व्यक्ति</li>
+                                        <li><strong>हदम्याद</strong> : आखिरी म्याद</li>
+                                        <li><strong>सनाखत</strong> : अड्डाखानामा सम्बन्धित व्यक्तिका सामुन्ने यो काम मैले गरेको हु भन्ने लेखी गरिने सहीछाप</li>
+                                        <li><strong>पेटबोली</strong> : निवेदनपत्र , फिरादपत्र</li>
+                                        <li><strong>बन्दसवाल</strong> : व्यक्तिको वकपत्र</li>
+                                        <li><strong>सकारनामा</strong> : मन्जुरनामा</li>
+                                        <li><strong>दरपिठ</strong> : अड्डाअदालतमा दर्न लगिएका फिराद वा नालिस</li>
+                                        <li><strong>महामारी</strong> : सङ्क्रामक</li>
+                                        <li><strong>हाजिरजमानी</strong> : कुनै अपराधमा लागेको मानिस अड्डाले खोजेको बखत हाजिर गराउँला भनी बिचको मानिसले आफू जमानी भइ लेखिदिने कागज</li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="w-full py-8 text-center text-sm bright-solid-text">
+        <div class="container mx-auto px-4">
+            <p>&copy; 2024 HIMAL_edu. All rights reserved.</p>
+            <p class="mt-2">Designed with <span class="text-red-500">&hearts;</span> by HIMAL_edu Team</p>
+        </div>
+    </footer>
+
+    <script>
+        // JavaScript for mobile menu toggle
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // JavaScript for summary toggle
+        function toggleSummary() {
+            const summaryText = document.getElementById('summaryText');
+            const toggleSummaryBtn = document.getElementById('toggleSummaryBtn');
+            if (summaryText.style.display === 'none' || summaryText.style.display === '') {
+                summaryText.style.display = 'block';
+                toggleSummaryBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleSummaryBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+    </script>
+</body>
+</html>
+

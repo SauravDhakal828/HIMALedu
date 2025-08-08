@@ -1,0 +1,626 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>सहकारी Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for सहकारी Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">११. सहकारी Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleSahakariSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleSahakariSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="sahakariSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    “सहकारी” पाठले सहकारी संस्थाको महत्व, उद्देश्य र कार्यप्रणालीलाई सरल र स्पष्ट भाषामा प्रस्तुत गरेको छ। सहकारी भन्नाले यस्तो संस्था जनाइन्छ जसमा सदस्यहरू मिलेर सामूहिक हितका लागि काम गर्छन्। यो संस्था सदस्यहरूको आर्थिक, सामाजिक र सांस्कृतिक विकासमा योगदान पुर्‍याउने माध्यम हो। सहकारीले व्यक्तिगतभन्दा माथि उठेर सबैको साझा हितलाई प्राथमिकता दिन सिकाउँछ। पाठले सहकारीको इतिहास, विकास र यसको सामाजिक लाभहरूलाई विस्तारमा उजागर गरेको छ।<br><br>
+
+सहकारी संस्थाहरूले सदस्यहरूलाई विभिन्न आर्थिक क्रियाकलापमा सहभागी गराउँछन्। सदस्यहरूले आपसमा सहयोग गरी ऋण उपलब्ध गराउँछन्, बचत गर्छन् र व्यवसाय विकास गर्छन्। यसले गरिब र मध्यम वर्गका मानिसहरूलाई आर्थिक रूपमा सशक्त बनाउने काम गर्दछ। सहकारी संस्थाले पारदर्शिता, सहकार्य र बराबरीको सिद्धान्तलाई अपनाउँछ जसले सदस्यहरूको विश्वास बढाउँछ। पाठले सहकारीमार्फत गरिने कामहरूको प्रगतिशील पक्षलाई उदाहरणसहित व्याख्या गरेको छ।<br><br>
+
+सहकारीको सफलताको लागि सदस्यहरूको सक्रिय सहभागिता अत्यन्त आवश्यक हुन्छ। सहकारी संस्था सदस्यहरूको साझा प्रयास र सहकार्यले मात्र सफल हुन्छ। पाठले सहकारी सञ्चालन गर्दा आउने चुनौतीहरू र तिनलाई कसरी पार गर्ने भन्ने विषयमा पनि चर्चा गरेको छ। साथै सहकारी संस्थाले सद्भाव र सामाजिक मेलमिलापको विकासमा भूमिका खेल्छ। यसले सदस्यहरूबीचको सम्बन्धलाई बलियो बनाउँछ र सामूहिक उन्नतिमा मद्दत पुर्‍याउँछ।<br><br>
+
+सहकारीले समुदायमा सकारात्मक प्रभाव पुर्‍याउँछ। यसले गरिबी निवारण, रोजगार सृजना र सामाजिक विकासमा ठूलो योगदान पुर्‍याउँछ। सहकारी संस्थाले सदस्यहरूलाई आत्मनिर्भर बन्न प्रोत्साहित गर्छ र सामाजिक न्यायको मार्ग खोल्छ। पाठले सहकारीको महत्व केवल आर्थिक क्षेत्रमा सीमित नभई सामाजिक र सांस्कृतिक क्षेत्रमा पनि रहेको देखाएको छ। यसले समाजमा समानता र सहकार्यको भावना जगाउँछ।<br><br>
+
+अन्ततः, “सहकारी” पाठले सहकारी संस्थाको महत्व, कार्यशैली र त्यसले ल्याउने लाभहरूलाई जीवन्त तरिकाले प्रस्तुत गरेको छ। यसले हामीलाई सहकार्य र एकताको मूल्य सिकाउँछ। सहकारी संस्थाले मात्र सदस्यहरूको व्यक्तिगत विकास नभई समाजको समग्र प्रगति सम्भव हुन्छ भन्ने कुरा यसले स्पष्ट गर्छ। सहकारी भावना विकास गरेर हामी सबैले सामाजिक र आर्थिक रूपले सशक्त बन्न सक्छौं भन्ने सन्देश यो पाठले दिएको छ।<br><br>
+
+
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">अर्थ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सोद्देश्य</td><td class="py-2 px-4 border-b border-gray-700">निश्चित उद्देश्यका साथ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">समन्वय</td><td class="py-2 px-4 border-b border-gray-700">एकभन्दा बढी कुराको मेल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उदात्त</td><td class="py-2 px-4 border-b border-gray-700">महान्</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उपादेयता</td><td class="py-2 px-4 border-b border-gray-700">उपयोगिता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्वावलम्बी</td><td class="py-2 px-4 border-b border-gray-700">आत्मनिर्भर</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्वायत्तता</td><td class="py-2 px-4 border-b border-gray-700">स्वाधीनता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">बोनस</td><td class="py-2 px-4 border-b border-gray-700">लाभांश</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आधिपत्य</td><td class="py-2 px-4 border-b border-gray-700">स्वामित्व</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उर्वरा</td><td class="py-2 px-4 border-b border-gray-700">धेरै उब्जनी हुने, उब्जाउ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अनुपम</td><td class="py-2 px-4 border-b border-gray-700">अतुलनीय</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) कुनै जाति वा समुदायको प्रगतिको सम्पूर्ण प्रतिबिम्ब</strong><br>सभ्यता</p>
+                            <p><strong>(ख) उद्योग, व्यापार आदि कुनै व्यवसायमा लगानी गरिएको निरन्तर मुनाफा दिइरहने मूल धन</strong><br>सावाँ</p>
+                            <p><strong>(ग) साझा ब्यापारमा लगाइएका सम्पत्तिको हिस्सा</strong><br>सेयर</p>
+                            <p><strong>(घ) भइपरी आउने कामकाजका लागि राखिएको सञ्चित धनमाल</strong><br>जगेडा</p>
+                            <p><strong>(ङ) कुनै विषयलाई ब्यवस्थित रुपमा गर्न, गराउन बनेको सरकारी नियम</strong><br>ऐन</p>
+                            <p><strong>(च) ऐन, विधान आदिको एक अंश</strong><br>दफा</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>३. दिइएका शब्दको विपरीतार्थक शब्द लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p>उदय : अस्त</p>
+                            <p>उन्नति : पतन</p>
+                            <p>सुखी : दुखी</p>
+                            <p>खुला : बन्द</p>
+                            <p>संयोग : विफलता / विपरित घटना</p>
+                            <p>स्वायत्तता : अधीनता</p>
+                            <p>लाभ : घाटा</p>
+                            <p>विगत : वर्तमान / भविष्य</p>
+                            <p>विकास : अविकास / पतन</p>
+                            <p>नाफा : घाटा</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>४. दिइएका टुक्काको अर्थ पहिल्याई तिनलाई वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>१. हात छाड्नु</strong><br>अर्थ: कुनै काम वा जिम्मेवारीबाट हट्नु वा त्याग्नु।<br><span class="text-justify">वाक्य: उसले पढाइमा ध्यान नदिई हात छाड्यो।</span></p>
+                            <p><strong>२. सातो जानु</strong><br>अर्थ: दाँतको खाना बिथोलिनु, नशा लाग्नु वा प्रभाव पर्ने।<br><span class="text-justify">वाक्य: धेरै खाना खाँदा सातो जान सक्छ।</span></p>
+                            <p><strong>३. घुँडा टेक्नु</strong><br>अर्थ: हार मानेर वा थकाएर झुक्नु।<br><span class="text-justify">वाक्य: लगातार परिश्रमपछि पनि सफलता नपाउँदा घुँडा टेकेको जस्तो महसुस भयो।</span></p>
+                            <p><strong>४. टाउकामा टेक्नु</strong><br>अर्थ: असफल हुनु वा कुनै प्रयास बिफल हुनु।<br><span class="text-justify">वाक्य: उसको योजना सबै टाउकामा टेकेको छ।</span></p>
+                            <p><strong>५. कुलेलम ठोक्नु</strong><br>अर्थ: जोडले प्रहार गर्नु।<br><span class="text-justify">वाक्य: खेलमा उसले कुलेलम ठोकेर बललाई डगमगाइदियो।</span></p>
+                            <p><strong>६. खुट्टा तान्नु</strong><br>अर्थ: भाग्नु वा फरार हुनु।<br><span class="text-justify">वाक्य: प्रहरी देखेर चोरले खुट्टा ताने।</span></p>
+                            <p><strong>७. हात थाप्नु</strong><br>अर्थ: कुनै कुरामा हतास हुनु वा हार मान्नु।<br><span class="text-justify">वाक्य: धेरै प्रयास गरे पनि नतिजा नआएपछि उसले हात थाप्यो।</span></p>
+                            <p><strong>८. ज्यान दिनु</strong><br>अर्थ: ठूलो बलिदान गर्नु वा जीवन गुमाउनु।<br><span class="text-justify">वाक्य: देशको रक्षा गर्न सैनिकहरूले ज्यान दिन तयार छन्।</span></p>
+                            <p><strong>९. तालुमा आलु फल्नु</strong><br>अर्थ: अत्यन्तै अल्छी हुनु।<br><span class="text-justify">वाक्य: उसलाई काम गर्न मन छैन, पूरै तालुमा आलु फलिसकेको छ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>५. दिइएका पारिभाषिक शब्दलाई शब्दकोशीय अनुक्रममा मिलाउनुहोस् र शब्दकोशको सहायता लिई तिनको अर्थ पनि लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>अग्रिम</strong><br>अर्थ: पहिल्यै दिइएको रकम वा पहिले गरिने कार्य।</p>
+                            <p><strong>अधिकृत</strong><br>अर्थ: अधिकारप्राप्त व्यक्ति; कुनै पद वा कार्यका लागि औपचारिक रूपमा चयन गरिएको व्यक्ति।</p>
+                            <p><strong>अन्तःशुल्क</strong><br>अर्थ: भित्र पठाइएको वा भित्र पठाउने वस्तुहरूको लागि तिर्ने शुल्क।</p>
+                            <p><strong>अब्बल</strong><br>अर्थ: उत्कृष्ट, सबैभन्दा माथि वा सबैभन्दा राम्रो।</p>
+                            <p><strong>आयब्यय</strong><br>अर्थ: आम्दानी र खर्च; वित्तीय क्रियाकलाप।</p>
+                            <p><strong>आरक्ष</strong><br>अर्थ: रक्षा, सुरक्षा।</p>
+                            <p><strong>ऐलानी</strong><br>अर्थ: सार्वजनिक घोषणा, सूचना।</p>
+                            <p><strong>कार्यवाहक</strong><br>अर्थ: जिम्मेवारी वा काम सञ्चालन गर्ने व्यक्ति।</p>
+                            <p><strong>कित्त्ता</strong><br>अर्थ: जग्गाको सानो भाग वा हिस्सा।</p>
+                            <p><strong>कुत</strong><br>अर्थ: पाप, दोष।</p>
+                            <p><strong>गण</strong><br>अर्थ: समूह, संख्या, वर्ग।</p>
+                            <p><strong>चहार</strong><br>अर्थ: आवश्यकताको मात्रा।</p>
+                            <p><strong>दोयम</strong><br>अर्थ: दोस्रो।</p>
+                            <p><strong>पर्ती</strong><br>अर्थ: कागज, पन्ना; कुनै लेखा वा अभिलेखमा राखिने दस्तावेज।</p>
+                            <p><strong>मोट्ठ</strong><br>अर्थ: ठूलो, भारी।</p>
+                            <p><strong>सिम</strong><br>अर्थ: सीमा, सिमा रेखा।</p>
+                            <p><strong>सुकुम्बासी</strong><br>अर्थ: घरविहीन, बसोबास गर्ने स्थान नभएको व्यक्ति।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>२. सहकारी प्रबन्ध पढी दिइएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) सहकारी भनेको के हो ?</strong><br><span class="text-justify">सहकारी भनेको आर्थिक र सामाजिक हितका लागि मानिसहरूले मिलेर बनाएको संस्था हो।</span></p>
+                            <p><strong>(ख) आधुनिक सहकारीको अवधारणा कुन देशबाट आएको मानिन्छ ?</strong><br><span class="text-justify">आधुनिक सहकारीको अवधारणा ब्रिटेनबाट आएको मानिन्छ।</span></p>
+                            <p><strong>(ग) नेपाली संस्कृतिको मुख्य आधार के हो ?</strong><br><span class="text-justify">नेपाली संस्कृतिको मुख्य आधार **सहिष्णुता, मेलमिलाप र विविधता** हो।</span></p>
+                            <p><strong>(घ) सहकारीका निर्देशक सिद्धान्त के के हुन् ?</strong><br><span class="text-justify">सहकारीका निर्देशक सिद्धान्तहरू यसप्रकार छन्:</span></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>स्वैच्छिक र खुला सदस्यता – सबैलाई बिना भेदभाव सदस्य बन्न पाउने अधिकार।</li>
+                                <li>सदस्यहरूको आर्थिक सहभागीता – सदस्यहरूले आर्थिक रूपमा योगदान र लाभमा हिस्सा लिने।</li>
+                                <li>स्वशासन र लोकतन्त्र – सदस्यहरूले सहकारी संस्था आफैँ चलाउने।</li>
+                                <li>शिक्षा, तालिम र सूचना – सदस्य र समुदायलाई सहकारीबारे जागरुक बनाउने।</li>
+                                <li>सहकार्य – सहकारीबीच सहकार्य गरेर बलियो बनाउने।</li>
+                                <li>समुदायमा प्रतिबद्धता – समुदायको विकासमा योगदान गर्ने।</li>
+                            </ul>
+                            <p class="text-justify">यी सिद्धान्तले सहकारीलाई सफल र सुदृढ बनाउँछन्।</p>
+                            <p><strong>(ङ) सहकारीको मुख्य नाराको आशय के हो ?</strong><br><span class="text-justify">सहकारीको मुख्य नारा "सबैका लागि सहकार्य, सबैको लागि समृद्धि" हो। यसको आशय हो—सबै मानिसले मिलेर सहकार्य गर्दा सबैको जीवन समृद्ध र राम्रो हुन्छ।</span></p>
+                            <p><strong>(च) ‘सहकारी’ प्रबन्धको पहिलो र दोस्रो अनुच्छेदको सार भन्नुहोस् ।</strong><br><span class="text-justify">‘सहकारी’ प्रबन्धको पहिलो र दोस्रो अनुच्छेदको सार यसप्रकार छ:</span></p>
+                            <p class="ml-4 text-left-align">पहिलो अनुच्छेद:<br><span class="text-justify">सहकारी भनेको मानिसहरूले आफ्नो आर्थिक र सामाजिक समस्या समाधान गर्न मिलेर बनाएको संस्था हो। यसले सदस्यहरूको भलाइका लागि सहकार्य र सहयोग गर्ने कार्य गर्छ।</span></p>
+                            <p class="ml-4 text-left-align">दोस्रो अनुच्छेद:<br><span class="text-justify">सहकारीले सदस्यहरूको आवश्यकता पूरा गर्न र उनीहरूको जीवन स्तर सुधार गर्न वित्तीय सहायता र सेवा प्रदान गर्छ। यसले आर्थिक रुपमा कमजोर वर्गलाई आत्मनिर्भर बनाउने लक्ष्य राख्छ।</span></p>
+                            <p><strong>(छ) सहकारी किन आवश्यक छ ?</strong><br><span class="text-justify">सहकारी आवश्यक हुनुका धेरै कारणहरू छन्। पहिलो, सहकारीले सदस्यहरूको आर्थिक समस्या समाधान गर्न सहयोग गर्छ। विशेष गरी साना किसान, मजदूर र कमजोर वर्गका मानिसहरूले आफ्नो पूँजी नहुँदा सहज रूपमा व्यवसाय गर्न सक्दैनन्। यस्तो अवस्थामा सहकारीले सँगै मिलेर बचत गर्ने र आवश्यक परेको बेला ऋण दिने व्यवस्था गरेर उनीहरूलाई आर्थिक रूपमा सक्षम बनाउँछ।</span></p>
+                            <p class="text-justify">दोस्रो, सहकारीले सदस्यहरूलाई आत्मनिर्भर बनाउँछ। जब मानिसहरू आपसमा सहकार्य गर्छन् र स्रोत साझा गर्छन्, तब उनीहरूको व्यक्तिगत र सामूहिक विकास हुन्छ। यसले सदस्यहरूको जीवनस्तर सुधार गर्दछ र उनीहरूलाई आर्थिक रुपमा बलियो बनाउँछ। साथै, सहकारीले सामाजिक एकता पनि बढाउँछ जसले समुदायमा मेलमिलाप र सहकार्यको भावना बढाउँछ।</p>
+                            <p class="text-justify">यसरी, सहकारीले न केवल आर्थिक फाइदा पुर्‍याउँछ, तर सामाजिक विकास र समृद्धिमा पनि ठूलो योगदान पुर्‍याउँछ। त्यसैले सहकारी संस्था अहिलेको समयमा अझ आवश्यक र महत्वपूर्ण बनिसकेको छ।</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>३. नेपालमा सहकारी स्थापनाका मुख्य उद्देश्य बताउनुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">नेपालमा सहकारी स्थापनाका मुख्य उद्देश्यहरू धेरै छन्। पहिलो उद्देश्य आर्थिक सहयोग र विकास हो। सहकारीले सदस्यहरूलाई बचत गर्न प्रोत्साहित गर्छ र आवश्यक परेको बेला ऋण सुविधा उपलब्ध गराएर उनीहरूको आर्थिक समस्या समाधान गर्न सहयोग पुर्‍याउँछ। यसले सदस्यहरूको आर्थिक स्थिति सुधार्न ठूलो मद्दत पुर्‍याउँछ।</p>
+                        <p class="ml-4 text-justify">दोश्रो, सहकारीले साना किसान, मजदूर र गरीब वर्गलाई आत्मनिर्भर बनाउने लक्ष्य राख्छ। आर्थिक रूपमा कमजोर मानिसहरूलाई सहकारी मार्फत सहज रूपमा पूँजी उपलब्ध गराइ उनीहरूलाई स्वरोजगार र आर्थिक रुपमा सशक्त बनाउने काम हुन्छ। यसले गरिबी हटाउन र समान अवसर दिन ठूलो भूमिका खेल्छ।</p>
+                        <p class="ml-4 text-justify">साथै, सहकारीले सदस्यहरूबीच सहकार्य र सामाजिक सद्भाव बढाउँछ। मानिसहरू मिलेर काम गर्दा आपसी समझदारी र एकता बढ्छ जसले समुदायलाई मजबुत बनाउँछ। यसका साथै, स्रोत र साधनहरूको साझा व्यवस्थापन गरेर उत्पादन र सेवा क्षेत्रमा सुधार ल्याउने काम पनि सहकारीले गर्छ।</p>
+                        <p class="ml-4 text-justify">अन्ततः, सहकारीले सदस्यहरूको जीवनस्तर सुधार्नका लागि आवश्यक सेवा र सुविधा उपलब्ध गराउँछ र उनीहरूलाई सहकारीका सिद्धान्त तथा आर्थिक विषयमा शिक्षा र जागरूकता पनि प्रदान गर्दछ। यी सबै उद्देश्यले नेपालमा सहकारी संस्थाहरूको स्थापना र विकासलाई सफल बनाएको छ।</p>
+
+                        <p class="text-left-align mt-4"><strong>४. संयुक्त राष्ट्रसङ्घले संसारका सबै देशलाई सहकारीको स्थापना र सञ्चालन गर्न दिएको सुझावबारे आफ्ना धारणा व्यक्त गर्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">संयुक्त राष्ट्रसङ्घले सहकारी संस्थाहरूलाई विश्वभरिका विकास र आर्थिक समृद्धिका लागि अत्यन्त महत्वपूर्ण मान्दछ। यसले सबै देशहरूलाई सहकारीको स्थापना र सञ्चालन गर्न सुझाव दिएको छ, जसको मुख्य उद्देश्य गरिबी घटाउनु, आर्थिक समानता बढाउनु र समुदायलाई सशक्त बनाउनु हो। सहकारी मार्फत मानिसहरूले आपसमा सहकार्य गरी आफ्ना आर्थिक तथा सामाजिक समस्याहरू समाधान गर्न सक्छन् भने सामाजिक मेलमिलाप पनि बढ्छ।</p>
+                        <p class="ml-4 text-justify">संयुक्त राष्ट्रसङ्घको धारणा अनुसार, सहकारी संस्थाहरूले समावेशी विकासमा योगदान पुर्‍याउँछन् जसले सबै वर्गका मानिसहरूलाई लाभ पुग्ने सुनिश्चित गर्दछ। यसले आर्थिक शक्ति एकातिर केन्द्रित नबनाई समाजभरि वितरण गर्न मद्दत गर्छ। साथै, सहकारीले सदस्यहरूको आत्मनिर्भरता बढाउँछ र दीगो विकासका लागि आधार तयार पार्दछ।</p>
+                        <p class="ml-4 text-justify">मेरो विचारमा, संयुक्त राष्ट्रसङ्घको यो सुझाव विश्वका विभिन्न देशहरूका लागि अत्यन्त उपयोगी र समयसापेक्ष छ। सहकारी संस्थाहरूले मात्र आर्थिक विकास नभई सामाजिक सद्भाव र समानताको प्रवर्द्धन पनि गर्न सक्छन्। यसले गरिबी र बेरोजगारी जस्ता समस्याहरूलाई कम गर्न सक्ने प्रभावकारी माध्यम बन्न सक्छ। त्यसैले विश्वभर सहकारीको स्थापना र सञ्चालनलाई प्राथमिकतामा राख्नु आवश्यक छ।</p>
+
+                        <p class="text-left-align mt-4"><strong>५. दिइएको प्रबन्धांश पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) नेपाललाई कसरी आत्मनिर्भर बनाउन सकिन्छ ?</strong><br><span class="text-justify">नेपाललाई आत्मनिर्भर बनाउन सहकारी संस्थाहरूले ठूलो भूमिका खेल्न सक्छन्। सहकारीमार्फत साना किसान, मजदूर र आर्थिक रूपमा कमजोर वर्गलाई सहजीकरण गरी उनीहरूलाई आर्थिक स्रोत र पूँजी उपलब्ध गराउन सकिन्छ। जब मानिसहरूले आपसमा मिलेर सहकार्य गर्छन्, तब उनीहरूको उत्पादन क्षमता बढ्छ र व्यापार विस्तार हुन्छ, जसले आर्थिक विकासमा मद्दत गर्दछ।</span></p>
+                            <p class="text-justify">सहकारीले सदस्यहरूलाई बचत गर्न र आवश्यक पर्दा सस्तो व्याजमा ऋण दिन्छ, जसले उनीहरूलाई आत्मनिर्भर बन्न उत्प्रेरित गर्छ। साथै, सहकारीले सदस्यहरूलाई व्यवसायिक तालिम र शिक्षा पनि प्रदान गर्छ जसले उनीहरूको सीप र क्षमता वृद्धि गर्छ। यसरी, सहकारी संस्थाहरूले नेपालका स्थानीय तहमा आर्थिक विकास र सामाजिक प्रगतिको बाटो खुलाउने काम गर्छन्।</p>
+                            <p class="text-justify">त्यसैले, नेपालको दीगो विकास र आत्मनिर्भरता सुनिश्चित गर्न सहकारी संस्थाहरूलाई प्रभावकारी बनाउनु र विस्तार गर्नु अत्यन्त आवश्यक छ। यसले मात्र सबै वर्गका मानिसहरूलाई समान अवसर प्रदान गरी समृद्ध नेपालको आधार तयार पार्न सक्छ।</p>
+                            <p><strong>(ख) नेपालका घरेलु उत्पादनलाई ब्यवस्थापन गरी बजारीकरण गर्न कस्ता उपाय अवलम्बन गर्नुपर्ला ?</strong><br><span class="text-justify">नेपालका घरेलु उत्पादनलाई व्यवस्थापन गरी बजारीकरण गर्न विभिन्न उपायहरू अवलम्बन गर्नुपर्छ। पहिलो र सबैभन्दा महत्वपूर्ण उपाय सहकारी संस्थाहरूको विकास र सशक्तिकरण हो। साना किसान र उत्पादकहरूलाई सहकारी मार्फत संगठनमा ल्याएर उनीहरूको उत्पादनलाई एकत्रित गरी ठूलो बजारसम्म पुर्‍याउन सकिन्छ। यसले उत्पादनको गुणस्तर सुधार गर्न र विक्रि प्रक्रियालाई सजिलो बनाउन मद्दत गर्छ।</span></p>
+                            <p class="text-justify">त्यसपछि, उत्पादकहरूलाई आधुनिक कृषि प्रविधि र उत्पादनका नयाँ तरिकाहरूमा तालिम र शिक्षा दिन आवश्यक छ। यसले उत्पादनको मात्रा र गुणस्तर दुवै बढाउन मद्दत पुर्‍याउँछ र प्रतिस्पर्धात्मक बजारमा टिक्न सहयोग गर्छ। साथै, उत्पादनको प्रचार-प्रसारका लागि सञ्चार माध्यम र विज्ञापनको प्रयोग गर्नुपर्छ जसले उपभोक्ताको ध्यान घरेलु उत्पादनतर्फ आकृष्ट गर्छ।</p>
+                            <p class="text-justify">सस्तो ऋण र वित्तीय सहयोग पनि एक महत्वपूर्ण उपाय हो। साना किसान र स्थानीय उद्यमीहरूलाई कम ब्याजदरमा ऋण उपलब्ध गराउँदा उनीहरूले उत्पादन बढाउन र नयाँ व्यवसाय सुरु गर्न सक्ने वातावरण तयार हुन्छ। साथै, सरकारले अनुदान, प्रोत्साहन र संरक्षण सम्बन्धी नीति ल्याएर घरेलु उत्पादनलाई संरक्षण र प्रवर्द्धन गर्नुपर्ने हुन्छ।</p>
+                            <p class="text-justify">अन्ततः, बजारको स्थिरता र विश्वसनीयता सुनिश्चित गर्न बजार अनुगमन र प्रवर्धन गर्न आवश्यक छ। यसरी व्यवस्थापन र बजारीकरणका यी उपायहरू अपनाउँदा नेपालका घरेलु उत्पादनहरूले विश्वस्तरीय बजारमा प्रतिस्पर्धा गर्न सक्नेछन् र आर्थिक समृद्धिमा ठूलो योगदान पुर्‍याउन सक्छन्।</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>६. दिइएको प्रबन्धांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) स्वदेशमै रोजगारी सिर्जना गर्न के गर्नु उपयुक्त हुन्छ ?</strong><br><span class="text-justify">स्वदेशमै रोजगारी सिर्जना गर्न सहकारी संस्थाहरूको भूमिका अत्यन्त महत्वपूर्ण हुन्छ। सहकारी संस्थाहरूले साना किसान, युवाहरू, महिला समूह र आर्थिक रूपमा कमजोर वर्गलाई संगठित गरेर उनीहरूलाई आपसी सहयोग र सहकार्यको माध्यमबाट स्वरोजगारका अवसरहरू सिर्जना गर्न मद्दत गर्छन्। जब मानिसहरूले सहकारीको माध्यमबाट बचत गर्ने र आवश्यक पर्दा सस्तो व्याजदरमा ऋण पाउने वातावरण तयार हुन्छ, तब उनीहरू आफ्नै व्यवसाय सञ्चालन गर्ने, कृषि उत्पादन बढाउने, साना उद्योग खोल्ने र सेवा क्षेत्रमा लाग्ने अवसर पाउँछन्। यसरी सहकारी संस्थाहरूले स्वदेशमै रोजगारीका नयाँ ढोका खोल्छन् र विदेश पलायनलाई कम गर्छन्।</span></p>
+                            <p class="text-justify">सहकारीहरूले सदस्यहरूलाई व्यवसाय सञ्चालनका लागि आवश्यक तालिम र सीप विकासको अवसर पनि प्रदान गर्छन्। यसले उनीहरूलाई दक्ष बनाउँछ र नयाँ उद्यम सुरु गर्ने आत्मविश्वास दिन्छ। तालिम र शिक्षा प्राप्त गरेपछि सदस्यहरू आफैंले आफ्ना साना व्यवसायहरू सफलतापूर्वक चलाउन सक्छन्, जसले समग्रमा रोजगारीको स्तर बढाउँछ। साथै, सहकारी संस्थाहरूले स्थानीय उत्पादनलाई व्यवस्थित रूपमा बजारसम्म पुर्‍याउन सहयोग गर्छन् जसले आर्थिक क्रियाकलापलाई थप बलियो बनाउँछ र रोजगारीका अवसरहरू थप सिर्जना हुन्छन्।</p>
+                            <p class="text-justify">त्यसैले, स्वदेशमै रोजगारी सिर्जना गर्न सहकारी संस्थाहरूलाई मजबुत बनाउन र विस्तार गर्न आवश्यक छ। सरकार र सम्बन्धित निकायहरूले सहकारीलाई प्रवद्र्धन गर्ने नीति ल्याउनुपर्छ, आवश्यक प्रविधि र स्रोतसाधन उपलब्ध गराउनुपर्छ र सहकारीमार्फत आर्थिक गतिविधिलाई प्रभावकारी बनाउन सहयोग पुर्‍याउनुपर्छ। यसरी मात्र नेपालले दीगो विकासको मार्गमा अघि बढ्न सक्छ र सबै वर्गका मानिसलाई रोजगारीका अवसर प्रदान गरी समृद्धि हासिल गर्न सक्छ।</p>
+                            <p><strong>(ख) नेपाललाई कसरी संसारकै समुन्नत र सुखी मुलुक बनाउन सकिन्छ ?</strong><br><span class="text-justify">कक्षा १२ को नेपाली पुस्तकको ११औँ अध्याय ‘सहकार’ को सन्दर्भमा हेर्दा, नेपाललाई संसारकै समुन्नत र सुखी मुलुक बनाउन सहकार्य, आत्मनिर्भरता, र सामूहिक प्रयासलाई आधार मान्नुपर्छ। यस प्रबन्धले देखाएको छ कि जब मानिसहरू आपसमा मिलेर, सहयोग र विश्वासका साथ, एउटै उद्देश्यका लागि काम गर्छन्, तब व्यक्तिगत मात्र नभई सामूहिक समृद्धि सम्भव हुन्छ। यही भावना राष्ट्र निर्माणको आधार बन्न सक्छ।</span></p>
+                            <p class="text-justify">सहकारी संस्थाहरूको माध्यमबाट नेपालमा आर्थिक, सामाजिक, र सांस्कृतिक विकास गर्न सकिन्छ। सहकारीले ग्रामीण क्षेत्रमा रोजगार सिर्जना, उत्पादन विस्तार, तथा आर्थिक रूपान्तरणमा महत्वपूर्ण भूमिका खेल्न सक्छ। जब साना किसान, मजदूर, युवा, र महिलाहरू सहकारीमा आबद्ध हुन्छन्, उनीहरू आत्मनिर्भर बन्ने मौका पाउँछन्। यसले उनीहरूलाई आत्मबल दिने मात्र होइन, राष्ट्रको समग्र विकासमा पनि योगदान पुर्‍याउँछ।</p>
+                            <p class="text-justify">सहकारीको सिद्धान्तअनुसार, शिक्षा, तालिम र सूचना प्रदान गरेर नागरिकहरूलाई जानकार बनाइन्छ, जसले दीर्घकालीन सोच, जिम्मेवारीको भावना, र नेतृत्व क्षमताको विकास गर्छ। यस्तो जनशक्ति राष्ट्र निर्माणका लागि अपरिहार्य हुन्छ। सहकार्यको माध्यमबाट समानता, सहभागिता र न्यायपूर्ण वितरण सुनिश्चित हुन सक्छ, जसले समाजमा सद्भाव र स्थायित्व ल्याउँछ।</p>
+                            <p class="text-justify">त्यसैले, ‘सहकार’ प्रबन्धले दिएको सन्देश अनुसार, यदि हामी सबैले आपसी विश्वास, पारदर्शिता, र उत्तरदायित्वका साथ सहकार्य गर्न सक्यौँ भने, नेपाललाई संसारकै समुन्नत र सुखी मुलुक बनाउन सकिन्छ। सहकारी चेतना र अभ्यास राष्ट्र विकासको सबल आधार बन्न सक्छ।</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>७. समीक्षात्मक उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) सहकारीले नेपालको विकासमा कसरी सहयोग पुऱ्याएको छ ?</strong><br><span class="text-justify">सहकारीले नेपालको विकासमा धेरै महत्वपूर्ण योगदान पुर्‍याएको छ। यसले विशेषगरी ग्रामीण क्षेत्रका साना किसान, गरिब, महिला, मजदूर र आर्थिक रूपमा पछाडि परेका वर्गलाई संगठित गरेर उनीहरूलाई आर्थिक रूपमा सक्षम बनाउने काम गरेको छ। सहकारीले उनीहरूलाई बचत गर्न प्रोत्साहन गर्छ, सस्तो ऋण सुविधा दिन्छ र उत्पादनमूलक कार्यमा सहभागी गराउँछ, जसले आत्मनिर्भरता र आर्थिक समृद्धिमा टेवा पुर्‍याउँछ।</span></p>
+                            <p class="text-justify">सहकारी संस्थाहरूले कृषि, पशुपालन, साना उद्योग, सीपमूलक तालिम, तथा सेवामूलक व्यवसायहरू सञ्चालन गरेर स्थानीय स्तरमै रोजगारका अवसर सिर्जना गरेका छन्। यसले गाउँगाउँमा आर्थिक गतिविधि बढाएको छ र जनताको जीवनस्तर सुधार गरेको छ। साथै, सहकारीहरूले शिक्षा, स्वास्थ्य, स्वच्छता, र सामाजिक चेतनामा पनि योगदान दिएका छन्।</p>
+                            <p class="text-justify">सहकारी प्रणालीले समानता, पारदर्शिता र सहभागिताको आधारमा काम गर्छ, जसले लोकतान्त्रिक अभ्यासलाई पनि सशक्त बनाउँछ। यसले समुदायमा मेलमिलाप, सहकार्य र सामाजिक एकता बढाउने काम गर्छ। यसरी सहकारी संस्थाहरू नेपालमा आर्थिक विकास, सामाजिक समृद्धि र स्थायित्व कायम गर्न सहयोग पुर्‍याउने बलियो माध्यम बनेका छन्।</p>
+                            <p><strong>(ख) ‘सहकारीमा एक एक थोपा जम्मा गरी गाग्रो भर्ने सुविधा छ’ विवेचना गर्नुहोस् ।</strong><br><span class="text-justify">‘सहकारीमा एक एक थोपा जम्मा गरी गाग्रो भर्ने सुविधा छ’ भन्ने भनाइले सहकारी संस्थाको मौलिक प्रकृति, सिद्धान्त, र सामूहिक प्रयासबाट प्राप्त हुने सफलताको गहिरो अर्थ बोकेको छ। यसले देखाउँछ कि सहकारी संस्था साना साना योगदानहरूलाई एकत्रित गरेर ठूलो उपलब्धिमा रूपान्तरण गर्ने माध्यम हो। समाजमा रहेका सामान्य मानिसहरूले आ–आफ्नो सीप, समय, श्रम, र पूँजीको थोरै–थोरै भाग सहकारीमा लगानी गर्दा त्यो एक ठुलो शक्ति बनिन्छ, जसले आर्थिक, सामाजिक, र सांस्कृतिक परिवर्तन ल्याउन सक्छ।</span></p>
+                            <p class="text-justify">एक व्यक्तिको प्रयास सधैं सीमित हुन्छ, उसले चाहे जति मेहनत गरे पनि ठूलो स्तरको परिवर्तन ल्याउन कठिन हुन्छ। तर जब सयौं व्यक्तिहरूले आ–आफ्नो सानो प्रयास सहकारीमार्फत साझा लक्ष्यका लागि लगाउँछन्, तब त्यो प्रयास एक शक्तिशाली संरचनामा रूपान्तरण हुन्छ। यही सोचले “थोपा–थोपा पानीले गाग्रो भरिन्छ” भन्ने नेपाली उखानसँग पनि मिल्दोजुल्दो अर्थ दिन्छ। सहकारीमा सदस्यहरूले सानो–सानो रकम बचत गर्छन्, त्यो बचतलाई समुचित व्यवस्थापन गरेर ऋण, सेवा, वा उत्पादनमा लगानी गरिन्छ। यसले न केवल व्यक्तिगत लाभ दिन्छ, तर सामूहिक जीवनस्तर सुधारमा पनि योगदान पुर्‍याउँछ।</p>
+                            <p class="text-justify">सहकारीको अर्को विशेषता भनेको सबै सदस्यबीच समान हक, समान उत्तरदायित्व, र समान लाभको भावना हो। सहकारीमा कोही धनी वा गरिब भनेर छुट्टिने हुँदैन। जोसुकै होस्, उसले आ–आफ्नो योगदान अनुसार संस्थामा स्थान पाउँछ। यस्तो सहकार्यको भावना नै सहकारीको मूल शक्ति हो, जसले समाजमा सामाजिक समानता, आर्थिक न्याय र आपसी मेलमिलापको वातावरण बनाउँछ।</p>
+                            <p class="text-justify">यसैले ‘सहकारीमा एक एक थोपा जम्मा गरी गाग्रो भर्ने सुविधा छ’ भन्ने भनाइले सहकारी संस्थाको सामूहिक प्रयास, समान सहभागिता र साझा लाभको महत्व दर्शाउँछ। यो भनाइले जनताको सानो योगदानलाई पनि मूल्यवान् ठान्ने र त्यही साना प्रयासबाट ठूलो परिवर्तन सम्भव छ भन्ने सन्देश दिन्छ। सहकारी संस्थाहरूलाई बलियो, पारदर्शी, र जिम्मेवार बनाएर नेपालको आर्थिक समृद्धि र सामाजिक स्थायित्वमा महत्वपूर्ण टेवा दिन सकिन्छ। यही सामूहिक सोच र भावना अपनाएर नेपाललाई आत्मनिर्भर, समुन्नत र सुखी राष्ट्र बनाउने मार्ग प्रशस्त गर्न सकिन्छ।</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>८. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) समालोचनाको मुख्य कार्य के हो ?</strong><br><span class="text-justify">समालोचनाको मुख्य कार्य कुनै पनि साहित्यिक कृतिको गुण र दोषको निरुपण गरी उक्त कृतिको व्याख्या र मूल्याङ्कन गर्नु हो ।</span></p>
+                            <p><strong>(ख) ‘सृष्टि’ र ‘दृष्टि’ शब्दले के के बुझाएका छन् ?</strong><br><span class="text-justify">‘सृष्टि’ शब्दले सिर्जनालाई र ‘दृष्टि’ शब्दले सिर्जनालाई हेर्ने कामलाई बुझाएका छन् ।</span></p>
+                            <p><strong>(ग) पाश्चात्य साहित्यका प्रथम सिर्जनात्मक र समालोचनात्मक कृति कुन कुन हुन् ?</strong><br><span class="text-justify">पाश्चात्य साहित्यका प्रथम सिर्जनात्मक कृति ‘इलियड’ र ‘ओडिसी’ अनि समालोचनात्मक कृति ‘काव्यशास्त्र’ हुन् ।</span></p>
+                            <p><strong>(घ) ‘कवि भानुभक्ताचार्यको जीवन चरित्र’ जीवनीपरक कृतिलाई किन नेपाली साहित्यको प्रथम कृति मानिन्छ ?</strong><br><span class="text-justify">‘कवि भानुभक्ताचार्यको जीवन चरित्र’ जीवनीपरक कृतिलाई जीवनीपरक भए पनि प्रस्तुत कृतिमा कवि भानुभक्त र उनको काव्य ‘रामायण’ का बारेमा केही विवेचनात्मक दृष्टि प्रस्तुत भएकाले नेपाली साहित्यको प्रथम कृति मानिन्छ ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>९. दिइएको अनुच्छेद पढी चारओटा बुँदा टिप्नुहोस् र एक तृतीयांशमा सार लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>बुँदाहरू :</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>जिज्ञासा वृत्तिको विकास गर्नु र त्यसमा उत्तम संस्कारको स्थापना गर्नु नै शिक्षाको उपयोगिता भएको,</li>
+                                <li>सकारात्मक परिवर्तनका लागि शिक्षा हाम्रो धर्म र संस्कृतिको अनुकूल हुनुपर्ने,</li>
+                                <li>कर्तव्यप्रधान जीवनदृष्टिको स्थापनाबाट नै समाज प्रदूषणमुक्त बन्ने,</li>
+                                <li>संस्कृतिमूलक शिक्षाबाट नै कर्तव्यप्रधान जीवनदृष्टि स्थापना भई मानव असल र सफल हुने ।</li>
+                            </ul>
+                            <p><strong>सारांश :</strong><br><strong>शिक्षाको उपयोगिता</strong></p>
+                            <p class="text-justify">जिज्ञासा वृत्तिको विकास र उत्तम संस्कारको स्थापना गर्नु नै शिक्षाको उपयोगिता रहेको हुन्छ । सकारात्मक परिवर्तनका लागि शिक्षा हाम्रो धर्म, संस्कृतिको अनुकूल हुनुपर्छ । विद्यार्थीले अतिरिक्त समाजबाट सिक्ने भएकाले प्रदूषणमुक्त समाज निर्माण गर्नुपर्छ । कर्तव्यप्रधान जीवनदृष्टिको स्थापनाबाट नै समाज प्रदूषणमुक्त बन्दछ । संस्कृतिमूलक शिक्षाबाट नै कर्तव्यप्रधान जीवनदृष्टि स्थापना हुनुका साथै असल र सफल मानव हुन सकिन्छ ।</p>
+                            <p>अनुच्छेदमा भएको शब्दसङ्ख्या : १५१</p>
+                            <p>एक तृतीयांशमा हुने शब्दसङ्ख्या : ५०</p>
+                            <p>सारांशमा भएको शब्दसङ्ख्या : ५२</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>२. उदाहरणमा दिइए झैँ तलका सामान्य पदक्रमका वाक्यलाई विशिष्ट पदक्रममा परिवर्तन गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p>बिहान सबेरै कविर उठ्छ । ऊ नित्यकर्म गर्छ । ऊ आफ्ना भाइबहिनीलाई उठाउँछ । उसकी आमाले उनीहरू सबैलाई चियाखाजा दिनुहुन्छ । ऊ किताबकापी बोकेर विद्यालय जान्छ । ऊ साथीहरूसित मिलेर विद्यालयमा पढ्छ । ऊ गृहकार्य गर्छ । ऊ भाइबहिनीलाई पढाउँछ । ऊ फुर्सदको समयमा पुस्तकालय जान्छ ।</p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>४. तलको अनुच्छेदमा प्रयुक्त लेख्य चिह्न टिप्नुहोस् र तिनको नाम पनि भन्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <ul class="list-disc list-inside ml-4">
+                                <li>अल्पविराम ( , )</li>
+                                <li>पूर्णविराम ( । )</li>
+                                <li>प्रश्नवाचक चिह्न ( ? )</li>
+                                <li>दोहोरो उद्धरण चिह्न ( ” ” )</li>
+                                <li>एकोहोरो उद्धरण चिह्न ( ‘ ‘ )</li>
+                                <li>विस्मयादिबोधक चिह्न ( ! )</li>
+                            </ul>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>५. उपयुक्त लेख्य चिह्न प्रयोग गरी तलको अनुच्छेदको पुनर्लेखन गर्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">छिरिङ हरेक दिन नियमित रूपमा कुनै न कुनै नयाँ पुस्तक पढ्ने गर्थे । उनले कथा, कविता, उपन्यास र यात्रा सस्मरण विधाका धेरै किताब पढिसकेका थिए । ‘मुनामदन’ पढ्दा उनी निकै भावुक बनेका थिए । पढ्दाखेरि केही कुरा नबुझ्दा उनी हजुरआमासँग जान्थे र किताब देखाउँदै भन्थे, “हजुरआमा यसको अर्थ के हो ?” किताब देख्नेबित्तिकै हजुरआमा भन्नुहुन्थ्यो, “ओहो ! तिमीले यो के ल्यायौ ?” हजुरआमालाई भने काला अक्षर भैंसी बराबर थिए । यसैले हजुरआमाले सम्झाएको भावमा उनलाई भन्नुहुन्थ्यो, “मैले तिमीहरूको जस्तो बेलामा विद्यालय जान पाइनँ । यसैले मलाई केही आउँदैन । तिमीहरू त धेरै भाग्यमानी छौ । सानैदेखि विद्यालय जान पाएका छौ, आमाबुबासित सोध्न पाएका छौ, त्यसैले भरे आमा आएपछि सोध न ।” यसो भने पनि उनी हजुरआमाका कुरा बारम्बार सुनिरहन्थे । आगो ताप्नु मुढाको, कुरा सुन्नु बुढाको भने झैँ छिरिङ हजुरआमाको अनुभवपूर्ण कुराबाट प्रत्येक दिन केही न केही नयाँ कुरा सिकिरहेका हुन्थे ।</p>
+
+                        <p class="text-left-align mt-4"><strong>७. शुद्ध बनाई लेख्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">सहकारी लोकतान्त्रिक संस्था हुन् । सहकारीका सदस्य आफ्नो संस्थाको नीति तय गर्न र निर्णय गर्नमा सक्रिय रूपमा सहभागी हुन्छन् ।</p>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-9" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Sahakari Notes
+        function toggleSahakariSummary() {
+            const summaryText = document.getElementById('sahakariSummaryText');
+            const toggleBtn = document.getElementById('toggleSahakariSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

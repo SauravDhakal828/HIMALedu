@@ -1,0 +1,487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Civil Peace Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Civil Peace Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">Civil Peace Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" class="hidden content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "Civil Peace" tells the story of Jonathan Iwegbu, a Nigerian man who, along with his family,
+                        survives the Nigerian Civil War. Despite losing much, Jonathan maintains an optimistic and resilient spirit.
+                        He recovers his bicycle, which he uses as a taxi, and his family finds ways to earn money.
+                        His most prized possession is an "egg-rasher" (ex-gratia payment) of twenty pounds from the government.
+                        One night, a group of armed robbers demands his money. Jonathan, surprisingly calm,
+                        gives them the money, believing that nothing is truly lost if one has life.
+                        He reflects on the concept of "civil peace" – the peace that comes after a war, which is still fraught with challenges but offers hope for rebuilding.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Understanding the Text</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. Why did Jonathan think of himself as ‘extraordinarily lucky’?</span><br>
+                        Jonathan thought of himself as ‘extraordinarily lucky’ because despite the horrors of the Nigerian Civil War, he, his wife, and his children survived unharmed. Moreover, he still had his house, his bike, and some money, which many others had lost during the war. His family’s survival and the small possessions he still had made him feel blessed in a time of destruction and chaos.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. What are the ‘five blessings’ for which Jonathan is grateful?</span><br>
+                        Jonathan’s ‘five blessings’ were:
+                        <ul class="list-disc list-inside ml-5">
+                            <li>His head (meaning his life and health)</li>
+                            <li>His wife Maria’s head (her life and health)</li>
+                            <li>The heads of their three children (their health and survival)</li>
+                        </ul>
+                        These blessings signify the importance of life and family to Jonathan above all material possessions.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. Why did Jonathan mistrust the officer who wanted to take his bicycle? What does this tell you about the situation in Nigeria?</span><br>
+                        Jonathan mistrusted the officer because the officer’s sudden demand for his bicycle felt like an abuse of power. During that time in Nigeria, people often faced exploitation and corruption from officials, especially in the aftermath of the war. Jonathan’s suspicion shows the general atmosphere of mistrust, lawlessness, and fear of authority figures who sometimes acted unjustly.
+                    </p>
+                    <p>
+                        <span class="font-bold">d. What visitors might be at the door? Are Jonathan and his wife completely surprised? Explain.</span><br>
+                        The visitors at the door were thieves who came to rob Jonathan’s house. Jonathan and his wife were not completely surprised because after the war, the society was unstable, and crime was common. They were cautious and aware of the possibility of danger, but Jonathan’s calm and composed reaction showed his resilience and hope despite the situation.
+                    </p>
+                    <p>
+                        <span class="font-bold">e. Why does no one in the neighborhood respond when the thieves pound on Jonathan’s door? Why do the thieves call for the police?</span><br>
+                        No one in the neighborhood responds when the thieves pound on Jonathan’s door because everyone was afraid of the thieves and possibly of violent consequences. People were scared and did not want to get involved. The thieves call for the police to give an impression of authority and legality, hoping this would intimidate Jonathan into cooperating without resistance.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference to the Context</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. What does Jonathan mean by his expression “Nothing puzzles God”? What does this expression reveal about his character? Explain by citing details from the story.</span><br>
+                        When Jonathan says, “Nothing puzzles God,” he means that God has complete understanding and control over everything that happens in life, no matter how confusing or difficult the situation may seem to people. Even when humans face hardships, suffer losses, or experience chaos, Jonathan believes that God sees the bigger picture and knows the reason behind all events. This expression reveals Jonathan’s strong faith and deep religious belief, which help him to remain calm, hopeful, and optimistic in the face of adversity.
+                        <br><br>
+                        Throughout the story, despite the devastation caused by the Nigerian Civil War, Jonathan remains grateful and hopeful. Instead of feeling sorry for himself or getting angry about what he has lost, he counts his blessings — his family, his house, and a small amount of money — and thanks God for his survival. His positive outlook and trust in God’s plan motivate him to work hard and rebuild his life peacefully. This shows that Jonathan is a resilient and practical person who chooses faith and gratitude over despair and bitterness. His faith acts as a source of strength and stability, guiding him through the difficult post-war period with patience and courage.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. How does Jonathan change as he experiences the conflicts in his life? Explain.</span><br>
+                        Jonathan undergoes a transformation that highlights his resilience, optimism, and practical attitude toward life’s challenges. At the beginning of the story, despite the harsh realities of the Nigerian Civil War and its aftermath, Jonathan remains remarkably positive. He doesn’t dwell on the destruction or losses but instead focuses on what he still has — his family, his home, and a little money. This initial outlook shows his strong faith and gratitude.
+                        <br><br>
+                        As Jonathan faces conflicts, such as the threat from thieves and the corrupt officer demanding his bicycle, he remains calm and composed. These experiences do not break his spirit; rather, they reinforce his practical approach to problems. Instead of reacting with fear or anger, Jonathan deals with difficulties calmly, using his intelligence and faith to protect what is important to him.
+                        <br><br>
+                        By the end of the story, Jonathan has become a symbol of hope and survival. His ability to stay optimistic and to rebuild his life after war demonstrates his inner strength. The conflicts shape him into a determined and hardworking man who trusts in God’s plan and believes that hard work and patience will lead to a better future. Thus, Jonathan’s character evolves from simply surviving to actively rebuilding and thriving despite adversity.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. Read the extract and answer:</span><br>
+                        “To God who made me; if you come inside and find one hundred pounds, take it and shoot me and shoot my wife and children. I swear to God. The only money I have in this life is this twenty pounds egg-rasher they gave me today …”
+                        <br><br>
+                        <span class="font-bold">i. Who is the speaker?</span><br>
+                        The speaker is Jonathan Iwegbu, the main character of the story.
+                        <br><br>
+                        <span class="font-bold">ii. Who is the speaker talking to?</span><br>
+                        Jonathan is talking to the thieves who have come to his house to rob him.
+                        <br><br>
+                        <span class="font-bold">iii. Who does “they” refer to?</span><br>
+                        “They” refers to the government or the relief authorities who gave Jonathan the twenty pounds egg-rasher (a kind of relief payment or compensation) for surviving the war.
+                    </p>
+                    <p>
+                        <span class="font-bold">d. Nigerian English has words like soja ‘soldier’ and katakata ‘confusion’, ‘trouble’ derived apparently from English words but transformed by native languages’ phonologies. What does the author’s use of dialect here add to the story?</span><br>
+                        The author’s use of Nigerian English and local dialect words like soja and katakata adds authenticity and cultural richness to the story. By including these words, Chinua Achebe captures the true voice and everyday speech of the Nigerian people, making the characters and setting more realistic and relatable. It helps readers understand the local context, showing how language adapts and changes in different cultures.
+                        <br><br>
+                        This use of dialect also strengthens the connection between the story and its Nigerian roots. It emphasizes the cultural identity of the characters and the environment they live in, reflecting their experiences and worldview. Additionally, these familiar words give the story a natural and informal tone, which makes the narrative more engaging and vivid. The dialect reveals the resilience and resourcefulness of the people in a post-war society as they carry on with their lives despite hardships.
+                        <br><br>
+                        Overall, Achebe’s use of dialect enriches the story by bringing out the local flavor, making it culturally specific and true to life.
+                    </p>
+                    <p>
+                        <span class="font-bold">e. Why do you think the thieves who come to rob Jonathan speak English with a heavier African accent than Jonathan does?</span><br>
+                        The thieves speak English with a heavier African accent than Jonathan because their backgrounds, education, and social status are likely quite different. Jonathan, as a hardworking man who managed to keep his family and some possessions during the war, probably had more access to education and lived in a relatively more stable environment. This would have exposed him to a more polished or less heavily accented form of English, possibly influenced by urban life or schooling.
+                        <br><br>
+                        On the other hand, the thieves may come from poorer, rural, or less privileged areas where English is spoken less formally or less fluently. Their heavier accent reflects their limited education and different social environment. This contrast in language and accent emphasizes the social and economic divisions in post-war Nigerian society, where some people like Jonathan are able to rebuild and maintain their lives, while others, like the thieves, resort to crime due to poverty or lack of opportunities.
+                        <br><br>
+                        Moreover, the difference in accent helps the reader immediately distinguish between the two groups—Jonathan as a respectable, hopeful man with faith in a better future, and the thieves as desperate or morally compromised individuals. It also highlights how language can reflect a person’s background, status, and even intentions within the story.
+                    </p>
+                    <p>
+                        <span class="font-bold">f. The title of the story "Civil Peace" itself is ironical as there is little to differentiate ‘civil peace’ from ‘civil war’. Do you think that the title of this story is appropriate, or would “Civil War” have been a better title? Explain.</span><br>
+                        The title "Civil Peace" is deeply ironic and yet very appropriate. While the story is set after the Nigerian Civil War, the “peace” experienced by the people is fragile and uncertain. The line between peace and conflict is blurred because the society is still filled with fear, insecurity, corruption, and violence, as shown by the thieves and the corrupt officer. The characters live in a world where the war may have officially ended, but the struggles and dangers continue, making the peace incomplete and precarious.
+                        <br><br>
+                        If the story had been titled “Civil War,” it would focus only on the conflict itself and ignore the complex aftermath—the difficulties of rebuilding, surviving, and maintaining hope in the face of ongoing social problems. The current title, “Civil Peace,” captures the tension between the end of war and the persistence of hardship. It highlights the irony that even in peace, life is not entirely safe or easy, but people like Jonathan still find reasons to be hopeful and grateful.
+                        <br><br>
+                        Thus, the title “Civil Peace” is more meaningful because it reflects the story’s central theme: the struggle for normalcy and optimism in a post-war world where peace is imperfect and fragile.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference Beyond the Text</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. How would you describe the civil peace in Nigeria?</span><br>
+                        The civil peace in Nigeria, as depicted in Chinua Achebe’s story, is fragile and unstable. Although the Nigerian Civil War has officially ended, the country is still grappling with the aftermath of violence, destruction, and social disruption. The “peace” that people experience is not a full restoration of safety and order, but rather a tense and uneasy calm. Many people, like Jonathan and his family, are trying to rebuild their lives and homes, but they face ongoing challenges such as poverty, insecurity, and corruption.
+                        <br><br>
+                        The presence of thieves who boldly come to rob Jonathan’s house, and the corrupt behavior of officials who try to exploit him, illustrate that law and order are weak and that crime and injustice are still widespread. The neighbors’ silence when Jonathan is threatened shows a community living in fear rather than confidence in peace and justice. This kind of peace is marked by mistrust and the lingering scars of war, making daily life difficult and uncertain.
+                        <br><br>
+                        Despite these problems, the story also shows resilience and hope. People like Jonathan maintain a positive attitude and work hard to improve their situation. They celebrate small blessings and have faith that better days will come. So, the civil peace in Nigeria is a mixture of hardship and hope — a peace that is imperfect but still worth striving for.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. What kind of attitude towards life do you think you would have if your situation was similar to that of Jonathan’s?</span><br>
+                        If my situation were similar to Jonathan's, my attitude toward life would likely be a mix of cautious optimism and a strong focus on resourcefulness. I would be incredibly grateful for the small victories, like finding my bicycle or my family's survival, and I would prioritize the safety and well-being of my loved ones above all else. However, I would also be constantly aware of the fragility of my circumstances and the potential for things to go wrong. The experience would probably teach me to be incredibly resilient, to find value in things beyond material possessions, and to never take peace and stability for granted.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. Draw the character sketch of Jonathan Iwegbu</span><br>
+                        Jonathan Iwegbu is a man defined by his remarkable resilience and unwavering optimism in the face of immense adversity. Having survived the devastating Nigerian Civil War, he has lost his home and much of his property, yet he refuses to be defeated. Instead of dwelling on his losses, he focuses on what he has: his life, his wife, and his three children. This pragmatic and positive outlook is his greatest strength. He is a resourceful individual who quickly finds a way to earn a living with his salvaged bicycle, which he considers a "miracle." His constant refrain, "Nothing puzzles God," is a testament to his deep-seated faith and his belief that, no matter how dire the circumstances, there is always hope.
+                        <br><br>
+                        Jonathan is also a hard-working and dedicated family man. His primary motivation is the well-being of his wife and children, for whom he works tirelessly to rebuild a semblance of a normal life. He establishes a small bar, and he and his wife collaborate to run a business selling food and palm-wine. He is not afraid of hard labor and he takes pride in his ability to provide for his family, seeing their survival and their ability to earn a living as a far greater reward than any material possession. His actions throughout the story consistently demonstrate his commitment to his family's security and future.
+                        <br><br>
+                        Finally, Jonathan's character is marked by a deep sense of philosophical acceptance and a clear understanding of his post-war reality. This is most evident in his reaction to the robbery. When a gang of thieves takes his hard-earned "egg-rasher," he doesn't react with anger or despair. Instead, he accepts the loss with a profound sense of stoicism. His concluding statement, "Civil Peace is all I want. My property is nothing to me," encapsulates his mature and realistic perspective. He recognizes that peace, safety, and life itself are far more precious than money or possessions. This final act of acceptance solidifies him as a character who has found a way to not just survive, but to truly live, with a sense of inner peace that no thief can ever take away.
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.classList.add('hidden');
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

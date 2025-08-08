@@ -1,0 +1,466 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Soft Storm Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Soft Storm Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">5. Soft Storm Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Soft Storm” by Derek Walcott is a beautifully crafted poem that captures the quiet and subtle intensity of a natural storm. Unlike typical storms that are violent and destructive, this poem presents a storm that is gentle yet powerful in its own way. Through rich imagery and vivid descriptions, Walcott explores the interplay between nature’s calmness and its latent strength, inviting readers to appreciate the delicate balance of forces in the environment.<br><br>
+
+The poem begins by describing the storm as soft and subtle, using words that evoke a sense of gentleness rather than aggression. This soft storm does not roar or rage loudly but moves quietly, almost like a whisper. Walcott’s choice of language reflects the understated power of nature, showing that even calmness can carry energy and influence. This portrayal challenges common perceptions of storms and emphasizes the varied moods of the natural world.<br><br>
+
+As the poem progresses, the imagery becomes more vivid, painting pictures of the storm’s effect on the surroundings. The trees sway gently, leaves flutter, and the air is filled with a soft rustling sound. The storm, though not violent, creates a dynamic and lively atmosphere, showing that nature’s power is not always about noise and destruction. Walcott highlights the beauty in this quiet motion, encouraging readers to notice the smaller, often overlooked details of the natural world.<br><br>
+
+The poem also touches upon the theme of change and transformation. The soft storm symbolizes a gentle shift, a moment of transition in the environment. This movement suggests that change can be calm and natural rather than abrupt and harsh. Walcott’s depiction of the storm as a soft, transformative force invites reflection on how subtle changes in life and nature can have profound effects.<br><br>
+
+In the concluding lines, the poem suggests a harmony between the storm and its surroundings. The storm does not dominate or destroy but becomes a part of the landscape’s rhythm. This integration conveys a message about coexistence and balance in nature. The poem leaves readers with a sense of peace and appreciation for the quiet powers that shape our world.<br><br>
+
+In conclusion, “Soft Storm” is a lyrical and thoughtful poem that celebrates the gentle yet potent forces of nature. Derek Walcott’s use of soft, evocative imagery invites readers to reconsider their ideas about strength and power, recognizing that sometimes, subtlety can be just as impactful as force. The poem is a tribute to the quiet beauty and transformative energy present in the natural world.<br><br>
+                    </p>
+                    
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. When does the speaker grow soft? Enlist the occasions when he grows soft.</span><br>
+                    The speaker grows soft when he feels compassion and sorrow about the suffering and turmoil around him. Specifically, he grows soft:
+                    <ul>
+                        <li>When he hears the tumult of the earth.</li>
+                        <li>When the sky looks like crocuses blooming.</li>
+                        <li>When the moon skids down.</li>
+                        <li>When the moon sings of lampposts and gutters in the seamless city.</li>
+                    </ul>
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What do you understand by ‘this seamless city’?</span><br>
+                    ‘This seamless city’ refers to a city that appears to be smooth and without disruptions or boundaries. It symbolizes a place free from visible conflicts or breaks, representing freedom and fluidity in human life and choices.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Describe the poor children portrayed in the poem.</span><br>
+                    The poor children in the poem are homeless and hungry, found crying under a tree in the streets of Thamel. They represent the neglected and suffering section of society, emphasizing poverty and despair amid the city’s hustle.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. What do you understand by ‘the unwedded gardens of history’?</span><br>
+                    ‘The unwedded gardens of history’ symbolize the neglected culture and history of the Kathmandu Valley. It suggests that the rich heritage has been left unprotected and ignored for a long time.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. Why was the forlorn child wailing?</span><br>
+                    The forlorn child was wailing because he was searching for his mother amidst the violent and troubled history, symbolizing loss, separation, and the harsh realities of life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. What do you understand about ‘soft storm’?</span><br>
+                    ‘Soft storm’ is a paradoxical expression where ‘storm’ typically means violence or turmoil, but ‘soft’ suggests gentleness. In the poem, it represents the speaker’s inner emotional disturbance—a storm of feelings that is painful yet not destructive.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. Why does the speaker call our time ‘mad time’?</span><br>
+                    The speaker calls it ‘mad time’ because he sees the world filled with chaos, destruction, and irrational behavior. People behave selfishly, unlawfully, and forget humanity and compassion, leading to a society full of disorder and confusion.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">h. What does the speaker want to do in “hard times”?</span><br>
+                    In hard times, the speaker wishes to “melt like a rainbow,” which means he wants to remain gentle, hopeful, and beautiful despite the harsh and difficult circumstances.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context:</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. The poet uses the word ‘soft’ with the words like ‘storm’ and ‘gale’, which generally refer to disorder and violence. What effect does the poet achieve through the use of such anomalous expressions?</span><br>
+                    The use of the word ‘soft’ with words like ‘storm’ and ‘gale’ is an example of an anomalous or paradoxical expression because ‘storm’ and ‘gale’ usually suggest harshness, violence, and chaos, while ‘soft’ implies gentleness and calmness. By combining these contradictory ideas, the poet creates a powerful effect that reflects the complex emotions inside the speaker.
+                    <br><br>
+                    This paradoxical use helps to express the speaker’s inner turmoil and emotional disturbance that is intense but not outwardly destructive. It conveys a feeling of sadness and compassion that quietly affects the speaker rather than causing outward violence. The ‘soft storm’ represents the subtle, gentle, yet deeply unsettling feelings that arise when the speaker witnesses the sufferings and chaos around him. Through this unusual pairing, the poet also captures the contradictions of modern life — the coexistence of beauty and pain, calm and chaos, compassion and cruelty. It makes the reader think more deeply about the nature of emotions and the quiet struggles people face in turbulent times.
+                    <br><br>
+                    In short, the anomalous expression emphasizes the speaker’s psychological state and helps convey the poem’s theme of emotional sensitivity amid societal disorder.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What is the speaker’s attitude towards the time he describes in the poem?</span><br>
+                    The speaker’s attitude towards the time he describes in the poem is one of deep concern and sadness. He refers to it as a “mad time,” indicating that the era is filled with chaos, irrationality, and disorder. The speaker observes many unnatural and disturbing phenomena around him, such as stones growing on flowers and rhododendrons blooming in winter, which symbolize the confusion and disruption of natural and social order. This “madness” is reflected in people’s behavior as well — selfishness, greed, lawlessness, and a disregard for human values have become widespread. The speaker feels disturbed by the collapse of moral standards and the loss of mutual respect and compassion among people. This critical view shows that he is deeply troubled by the state of society and its direction.
+                    <br><br>
+                    Furthermore, the speaker’s attitude is not just one of criticism but also of sorrow and empathy. While he is aware of the corruption and disorder, he also feels a compassionate sadness for the victims of these “hard times.” His emotions are complex, as he struggles to reconcile the beauty of life with the harsh realities around him. The phrase “soft storm” itself reflects this inner turmoil — a gentle but persistent feeling of unrest and pain. Thus, the speaker’s attitude combines a critical awareness of societal madness with a sensitive emotional response to the suffering and confusion that define his time.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What is the speaker like? Is he a rebel? Why? Why not?</span><br>
+                    The speaker in the poem “Soft Storm” is a sensitive and compassionate observer of the world around him. He is deeply disturbed by the chaos, violence, and injustice he witnesses in society. Rather than remaining indifferent, he feels the pain and suffering of others, especially the poor and the marginalized. His emotional softness, symbolized by the “soft storm,” reflects his inner turmoil and compassion. He is thoughtful and reflective, trying to make sense of the “mad time” in which he lives. The speaker’s sensitivity shows his humane nature and a desire for understanding and change.
+                    <br><br>
+                    In some ways, the speaker can be seen as a rebel, though his rebellion is subtle and indirect. He challenges the disorder and selfishness of modern society by expressing his sorrow and disapproval through poetry. He does not openly fight or protest but uses his words to highlight the problems and the loss of humanity he perceives. This quiet resistance against corruption, cruelty, and indifference is a form of rebellion rooted in empathy and moral concern. However, since he does not take aggressive or overt actions, his rebellion remains internal and poetic rather than active or revolutionary.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. Explain the stanza below in your own words:</span><br>
+                    I became soft<br>
+                    when I saw<br>
+                    a blood-stained shirt<br>
+                    speaking in the earth’s ears<br>
+                    with bruised human lips<br>
+                    in the far corner<br>
+                    under the moon<br>
+                    of history and dreams<br>
+                    playing hide and seek<br>
+                    in open museums<br>
+                    of human times.
+                    <br><br>
+                    In this stanza, the speaker reveals how he became emotionally soft and compassionate when he witnessed a blood-stained shirt lying on the ground. The shirt, marked by blood, seems to silently communicate its pain and suffering to the earth, almost as if it could tell a story of violence and human cruelty. The reference to “bruised human lips” suggests the presence of a wounded or suffering person connected to the shirt, symbolizing the harsh realities and scars left by conflict or hardship. This powerful image evokes a sense of helplessness and sorrow, showing how deeply the speaker is affected by what he sees.
+                    <br><br>
+                    The setting of the scene is described as being “under the moon of history and dreams,” which means the pain and suffering are not isolated incidents but are part of a larger, ongoing historical context. The moon symbolizes time and memory, shining its light on the past and present, where history and human aspirations coexist. The phrase “playing hide and seek in open museums of human times” suggests that these memories and stories of human experiences — both joyful and tragic — are exposed for everyone to witness, like exhibits in a museum. This highlights the contrast between the beauty of dreams and the harshness of reality. Overall, the stanza conveys the speaker’s deep empathy and sorrow, showing how the suffering of others touches him profoundly and makes him feel vulnerable and tender inside.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

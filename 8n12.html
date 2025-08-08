@@ -1,0 +1,785 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>मातृत्व Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for मातृत्व Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">८. मातृत्व Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleMatritvaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleMatritvaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="matritvaSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                     “मातृत्व” पाठले आमा हुने अनुभव र त्यसबाट प्राप्त हुने भावनात्मक, सामाजिक तथा आध्यात्मिक महत्त्वलाई अत्यन्त मार्मिक तरिकाले प्रस्तुत गरेको छ। मातृत्व केवल शारीरिक अवस्था मात्र नभएर आत्माको विशिष्ट अनुभूति हो, जसले जीवनलाई नयाँ अर्थ र उद्देश्य दिन्छ। यस पाठमा आमाले आफ्नो सन्तानप्रति राख्ने माया, करुणा र समर्पणलाई सबैभन्दा ठूलो शक्ति र मूल्यको रूपमा देखाइएको छ। मातृत्वले महिलाको जीवनमा गहिरो परिवर्तन ल्याउँछ र उनको अस्तित्वलाई पूर्णता प्रदान गर्छ।<br><br>
+
+पाठमा आमाको भावनात्मक यात्रा र सन्तानसँगको सम्बन्धलाई विस्तारमा वर्णन गरिएको छ। आमाले आफ्ना सन्तानलाई पल्लवित गर्न र राम्रो मान्छे बनाउन आफ्नो सम्पूर्ण शक्ति र माया समर्पित गर्छिन्। उनको स्नेहपूर्ण हेरचाह, शिक्षा र अनुशासनले सन्तानको जीवनमा स्थायी छाप छोड्छ। मातृत्वले आमा र बच्चाबीचको अनौठो बन्धनलाई उजागर गर्छ, जसले जीवनका हरेक चुनौतीलाई पार गर्न मद्दत गर्छ। आमाको माया जीवनभरिका सबै दुःख–सुखलाई सहज बनाउने अमूल्य निधि हो।<br><br>
+
+यस पाठले मातृत्वसँग सम्बन्धित सामाजिक र सांस्कृतिक पक्षलाई पनि स्पर्श गरेको छ। हाम्रो समाजमा मातृत्वलाई अत्यन्त सम्मान र उच्च स्थान दिइन्छ। आमा मात्र परिवारको केन्द्र नभई सामाजिक संरचनाको पनि आधारशिला हुन्। मातृत्वले परिवारमा प्रेम, सद्भाव र संस्कारहरूको स्थापनामा महत्वपूर्ण भूमिका खेल्छ। आमाको समर्पण र बलिदानले परिवारलाई मजबुत बनाउँछ र समाजको विकासमा योगदान पुर्‍याउँछ। यसले मातृत्वलाई जीवनका विभिन्न आयामहरूमा विस्तृत रूपमा व्याख्या गर्दछ।<br><br>
+
+पाठले मातृत्वको आध्यात्मिक पक्षलाई पनि महत्व दिएको छ। आमाले आफ्नो सन्तानलाई जीवनका शिक्षाहरू मात्र दिन्छिन् भने होइन, जीवन जीउनका मूल्य र धर्म पनि सिकाउँछिन्। मातृत्वले महिलामा दया, करुणा र सहिष्णुताको विकास गर्छ। यसले मातृभावलाई मानव जीवनका सबै सम्बन्धहरूको आधारको रूपमा प्रस्तुत गर्छ। मातृत्वलाई केवल जैविक प्रक्रिया नभई जीवनको आध्यात्मिक र मानवीय विकासको आधारका रूपमा पनि हेरिन्छ।<br><br>
+
+अन्ततः, “मातृत्व” पाठले मातृत्वको महत्व, माया र समर्पणलाई अत्यन्त गहिरो र जीवन्त तरिकाले चित्रण गरेको छ। यसले आमाको ममतामयी भावनालाई सम्मान गर्न र त्यसबाट सिक्न पाठकलाई प्रेरित गर्छ। मातृत्वले जीवनलाई पूर्णता दिने एउटा अद्भुत र अनमोल उपहार हो भन्ने कुरा यसले सम्झाउँछ। यसरी, यो पाठले आमाको प्रेम, त्याग र बलिदानको अमूल्य भूमिका उजागर गर्दै जीवनका सबै पक्षहरूलाई सम्मान गर्ने दृष्टिकोण प्रदान गरेको छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>सर्वस्व : सारा सम्पत्ति</p>
+                            <p>अप्रत्याशित : आकस्मिक</p>
+                            <p>ग्लानी : पछुतो</p>
+                            <p>नैराश्य : निराशा</p>
+                            <p>सङ्कीर्ण : सङ्कुचित</p>
+                            <p>मृगतृष्णा : जलभ्रम</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) धाक र तडकभडकले पूर्ण – रोबिलो</p>
+                            <p>(ख) गतिहीन – शान्त</p>
+                            <p>(ग) जितको आनन्द – विजयोल्लास</p>
+                            <p>(घ) रातो र निलो मिसिएको, भन्टा रङको – बैजनी</p>
+                            <p>(ङ)पग्लेको चट्टान, जमिनभित्रको अग्नि क्रियाशील भई रॉकोसहित धुवाँ, तातो खरानी, पग्लेका धातु आदि ओकल्ने अवस्था – ज्वालामुखी</p>
+                        </div>
+                        <p class="text-left-align"><strong>३. पाठमा प्रयुक्त पाँचओटा अनुकरणात्मक शब्द टिप्नुहोस् र तिनलाई वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>लल्याकलुलुक</strong></p>
+                            <p class="text-justify">बिहानैदेखि आकाशमा लल्याकलुलुक बादल देखिन थालेका थिए।</p>
+                            <p><strong>झलझली</strong></p>
+                            <p class="text-justify">राति आकाशमा झलझली बिजुली चम्कियो।</p>
+                            <p><strong>लुरुलुरु</strong></p>
+                            <p class="text-justify">पानीको धारामा लुरुलुरु आवाज आइरहेको थियो।</p>
+                            <p><strong>ढ्याङढ्याङ</strong></p>
+                            <p class="text-justify">भारी वर्षाका कारण ढ्याङढ्याङ पानी परेको थियो।</p>
+                            <p><strong>तप तप</strong></p>
+                            <p class="text-justify">गर्मीमा सूर्य तप तप चम्किरहेको थियो।</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएका टुक्काको प्रयोग गरी एक अनुच्छेद लेख्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">सफलता पाउनका लागि हामीले **कम्मर कसी** मेहनत गर्नु पर्छ। **मन फुकाएर** इमानदारीपूर्वक काम गर्दा मात्र देश र परिवारको **नाक राखिन्छ**। तर, कहिलेकाहीँ मानिसहरूले छिटो फल नपाएर **नाक काट्ने** काम पनि गर्छन् जसले आफ्नो र आफ्नो खानदानको सम्मान घटाउँछ। यदि हामी समाजका नियमको उल्लंघन गर्‍यौं भने **डाँडो काट्नुपर्ने** अवस्था आउन सक्छ। अरूको **कुरा काटी** आफ्नै समय खेर फाल्नु भन्दा आफ्नै काममा ध्यान दिनु नै राम्रो हुन्छ।</p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. ‘मातृत्व’ कथा पढी यसका आदि, मध्य र अन्त्यका मुख्य मुख्य घटना भन्नुहोस् ।</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>आदि (सुरुवात):</strong></p>
+                            <p class="text-justify">कथाको सुरुवातमा मुख्य पात्रले मातृत्वको महत्व र माया अनुभव गर्ने प्रक्रिया आरम्भ गर्छ। आमा बन्ने भावना र त्यसका जिम्मेवारीहरूको चिन्ता देखिन्छ। यस भागमा मातृत्वसँग सम्बन्धित भावनात्मक र सामाजिक पक्षहरूको परिचय हुन्छ।</p>
+                            <p><strong>मध्य (बीचको भाग):</strong></p>
+                            <p class="text-justify">मध्य भागमा मुख्य पात्रले आफ्ना सन्तानको पालनपोषणमा अनुभव गरिने चुनौतीहरू र तिनीहरूप्रतिको ममताको गहिराइलाई देखाइन्छ। मातृत्वले दिने सुख-दुख, संघर्ष र त्यागहरूको कथा विस्तार हुन्छ। यस क्रममा परिवार र समाजले मातृत्वमा दिने सम्मान र दबाव पनि चित्रित हुन्छ।</p>
+                            <p><strong>अन्त्य (अन्त्य):</strong></p>
+                            <p class="text-justify">कथाको अन्त्यमा मातृत्वको सच्चा मूल्य, ममताको अपार शक्ति र त्यसले जीवनलाई दिएको नयाँ अर्थ प्रस्तुत हुन्छ। कुनै चुनौती वा समस्या समाधान हुँदै मातृत्वको पूर्ण अनुभूति गरिन्छ। यसले पाठकलाई मातृत्वको महत्त्व बुझाउन सफल हुन्छ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. कथा पढी दिइएका प्रश्नको उत्तर भन्नुहोस्</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) ममता झ्यालमा बसेर कसको प्रतीक्षा गर्दै थिइन् ?</strong><br><span class="text-justify">‘मातृत्व’ कथामा ममता झ्यालमा बसेर आफ्ना सन्तानको प्रतीक्षा गर्दै थिइन्। उनी आफ्ना छोराछोरीको सुरक्षाको चिन्ता गर्दै धैर्यपूर्वक फर्किने आशामा थिए। ममताको यो प्रतीक्षा मातृत्वको ममतामय भावनालाई दर्शाउँछ।</span></p>
+                            <p><strong>(ख) ममता र सुबोध नजिकिनुको कारण के हो ?</strong><br><span class="text-justify">ममता र सुबोध नजिकिनुको कारण उनीहरूबीचको गहिरो समझदारी र आपसी सम्मान हो। दुवैजनाले परिवार र जीवनका चुनौतीहरू सामना गर्दा एकअर्कालाई सहारा र साथ दिएका थिए। यसले उनीहरूको सम्बन्धलाई अझ प्रगाढ बनाएको थियो।</span></p>
+                            <p><strong>(ग) ममताको कुन बानी सुबोधलाई मन परेको थिएन?</strong><br><span class="text-justify">ममताको झुक्याउने र बहानाबाजी गर्ने बानी सुबोधलाई मन परेको थिएन। सुबोध उनलाई इमानदार र स्पष्ट कुरा गर्न चाहन्थ्यो, तर ममताले कहिलेकाहीं झुक्याउने प्रवृत्ति देखाउँथिन् जसले सुबोधलाई नापसन्द थियो।</span></p>
+                            <p><strong>(घ) सुबोधको कुन बानी ममतालाई मन परेको थिएन ?</strong><br><span class="text-justify">सुबोधको कठोर र गम्भीर स्वभाव ममतालाई मन परेको थिएन। सुबोधले कहिलेकाहीं आफ्ना कुरामा कटु र सिधा हुनुहुन्थ्यो जसले ममतालाई दुखाउन र दु:खी बनाउने गर्थ्यो।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>३. ‘मातृत्व’ कथा पढ्नुहोस् र दिइएका घटनालाई क्रम मिलाई लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) एउटा शनिबार सदा झैँ ममताले झ्यालमा बसेर सुबोधको प्रतीक्षा गर्नु</p>
+                            <p>(ख) छोराले सुबोध दिनदिनै आएको नरुचाएपछि ममताले सुबोधले सबैलाई माया गर्ने गरेको बताउनु</p>
+                            <p>(ग) हवाईजहाज दुर्घटनाबाट पति गुमाएकी ममताले आफ्ना दुई छोराछोरीका साथ एकल जीवन बिताउनु</p>
+                            <p>(घ) पतिको साथी सुबोधले ममतालाई सान्त्वना दिनु</p>
+                            <p>(ङ) सुबोध र ममताले एकअर्कालाई मन पराउन थाल्नु</p>
+                            <p>(च) सुरुका दिनमा ममता र सुबोध दुबै एकअर्काको इच्छाअनुरूप चल्नु</p>
+                            <p>(छ) ममतालाई आफ्नी बनाएर सुबोधले छोराछोरीलाई गाली गर्ने र हप्काउने गर्नु</p>
+                            <p>(ज) सुबोधले छोराछोरीप्रति गर्ने व्यवहारका कारण ममता आहत बन्नु</p>
+                            <p>(झ) ममतालाई मातृत्वबोधले सताउनु</p>
+                            <p>(ञ) सुबोधसँग रहँदा सुन्दर र सुखी परिवार नहुने सोचेर सुबोधलाई परित्याग गर्नु</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर भन्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) ममता किन जीवनसाथीको खोजीमा थिइन् ?</strong><br><span class="text-justify">ममता जीवनसाथीको खोजीमा थिइन् किनभने उनलाई आफ्नो जीवनमा सहारा र समझदारीपूर्ण साथीको आवश्यकता थियो। उनी एक्लोपनबाट मुक्त भएर सुखी परिवार बनाउन चाहन्थिन् र जससँग मिलेर जीवनका समस्या सँगै सामना गर्न सकून् भन्ने सोचमा थिइन्।</span></p>
+                            <p><strong>(ख) ममताले कस्तो प्रेम चाहेकी थिइन् ?</strong><br><span class="text-justify">ममताले साँचो, माया र विश्वासपूर्ण प्रेम चाहेकी थिइन्। उनले यस्तो प्रेम चाहन्थिन् जहाँ उनीलाई इमानदारि र सम्मानका साथ माया गरियोस् र जहाँ दुईजनाबीच समझदारी र साथ होस्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) ममताको मन किन हलुङ्गो भयो ?</strong><br><span class="text-justify">ममताको मन हलुङ्गो हुनुको कारण उनका जीवनका अपेक्षा र चाहनाहरू पुरा नभएको थियो। उनी साँचो प्रेम र समझदारीको खोजीमा थिइन्, तर जीवनसाथी सुबोधसँगको सम्बन्धमा केही समस्याले उनको मनमा निराशा र पीडा ल्याएको थियो। ममता आफ्नो भावनात्मक जरूरतलाई पूरा हुन नपाएकोले धेरै पटक मन खिन्न र बोझिला महसुस गर्थिन्। उनी आफ्नो जीवनमा खुशी र शान्तिको आशा लिएर अघि बढ्न चाहन्थिन्, तर उनको मनमा अनिश्चय र दुःखले भारीपन उत्पन्न गरेको थियो। यसैले उनको मन हलुङ्गो भयो।</span></p>
+                            <p><strong>(ख) ममता र सुबोधका बिच मनमुटाउ हुनुको कारण के हो ?</strong><br><span class="text-justify">ममता र सुबोधबीच मनमुटाउनु हुनुको मुख्य कारण उनीहरूका बीचको आपसी समझदारी र संवादको अभाव थियो। सुबोधको कठोर र गम्भीर स्वभावले कहिलेकाहीं ममतालाई दुखाउँथ्यो भने, ममताको कहिलेकाहीं झुक्याउने र बहानाबाजी गर्ने बानीले सुबोधलाई असन्तुष्ट बनाउँथ्यो। यिनै साना साना कुराले उनीहरूबीच मतभेद र मनमुटाव बढ्न पुगेको थियो। साथै, दुवैजनाले आफ्नो भावना र आवश्यकतालाई स्पष्ट रूपमा व्यक्त गर्न नसक्नु र एकअर्कामा विश्वास घट्नु पनि मनमुटावको ठूलो कारण थियो।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>६. व्याख्या गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) नीरस जिन्दगीलाई रसाउन मायाको सङ्लो नदी चाहिन्छ । छहारीदार ओत चाहिन्छ । जिन्दगी हाँसो रोदन, दु:ख पीडा, कथा व्यथाले भरिएको सामूहिक भेल हो । आपत्, सुख र दुःख सबैलाई पर्छ ।</strong><br><span class="text-justify">भागिरथी श्रेष्ठद्वारा रचित यस विचारले जीवनको वास्तविकता र त्यसमा मायाको अतुलनीय महत्त्वलाई स्पष्ट रूपमा प्रस्तुत गर्दछ। जीवन जहिले पनि सुखद र रमाइलो हुँदैन, कतिपय समयहरूमा नीरस, एकरस र थाक लाग्दो हुन्छ। यस्तो जीवनलाई रसाउन र जीवनलाई पूर्ण र अर्थपूर्ण बनाउन माया र सम्बन्धहरूको आवश्यकता हुन्छ भन्ने कुरा उनले आफ्नो भनाइमार्फत व्यक्त गरेकी छिन्। माया, जसलाई उनी ‘सङ्लो नदी’ को रूपमा व्याख्या गर्छिन्, जीवनलाई ताजा र सजीव बनाउने स्रोत हो। साथै, ‘छहारीदार ओत’ अर्थात् साथ र सहाराले जीवनका कठिनाइहरूमा शान्ति र बलियोपन ल्याउँछ। लेखिकाले जीवनलाई एक सामूहिक अनुभवको रूपमा वर्णन गरेकी छन् जहाँ हाँसो, रोदन, दुःख, पीडा, कथा र व्यथा सबै मिसिएका हुन्छन्। मानिसहरू जीवनमा अनेकौं प्रकारका आपत्कालीन परिस्थिति र सुख-दुःखको सामना गर्छन्। यी अनुभवहरू कहिलेकाहीं जीवनलाई बोझिलो बनाउने गर्छन् भने कहिलेकाहीं जीवनलाई अझ गहिरो र अर्थपूर्ण बनाउने काम गर्छन्। जीवनका यी विविध पक्षहरूलाई स्वीकार्न र सामना गर्न हामीलाई माया र सहाराको अत्यन्त जरुरी भूमिका हुन्छ। यसरी, भागिरथी श्रेष्ठले जीवनका कठिनाइहरू र संघर्षहरूलाई सजिलै सामना गर्नका लागि माया र सहाराको भूमिका अत्यन्त महत्वपूर्ण भएको देखाएकी छिन्। मायाले मात्र हामीलाई आपत्कालीन परिस्थितिहरूमा हिम्मत र आशा दिन सक्छ। माया र साथले नीरस जीवनमा रस ल्याउँछ, मनलाई उर्जा र शान्ति प्रदान गर्छ। जीवनलाई प्रेम र सहकार्यले मात्रै पूर्णता र सौन्दर्य मिल्छ भन्ने सन्देश यस कथनले दिन्छ। मानव जीवनको यथार्थ र भावनात्मक गहिराई बुझ्न यस कथनले ठूलो योगदान पुर्‍याएको छ।</span></p>
+                            <p><strong>(ख) मेरा छोराछोरी मेरा लागि चन्द्र र सूर्य हुन् ।</strong><br><span class="text-justify">लेखक (यहाँ तपाईं चाहनुहुन्छ भने कुनै नेपाली साहित्यकार वा अभिभावकलाई नाम दिन सक्नुहुन्छ) जीवन र परिवारप्रति गहिरो ममता राख्ने व्यक्ति हुन्। उनी बालबालिका र अभिभावकबीचको सम्बन्धलाई विशेष महत्व दिन्छन् र यस सम्बन्धलाई जीवनको आधारभूत शक्ति मान्छन्। “मेरा छोराछोरी मेरा लागि चन्द्र र सूर्य हुन्” भन्ने उक्तिले अभिभावकको हृदयमा रहेको अनन्त ममता र आदरको भाव प्रकट गर्दछ। चन्द्रमा र सूर्य प्रकृतिका दुई प्रमुख प्रकाश स्रोत हुन् जसले पृथ्वीलाई उज्यालो, ताप र जीवन प्रदान गर्छन्। यसैगरी, छोराछोरीले अभिभावकको जीवनमा उज्यालोपना ल्याउँछन् र उनीहरूको अस्तित्वले जीवनलाई पूर्णता र आशा दिन्छ। छोराछोरी अभिभावकका लागि मात्र होइन, परिवार र समाजका लागि पनि प्रेरणाको स्रोत हुन्। उनीहरूको सफलता, खुशी र समृद्धिले अभिभावकको सपना पूरा गर्ने साधन बन्ने गर्दछ। यसले देखाउँछ कि बच्चाहरू जीवनका प्रमुख ऊर्जा हुन् जसले अभिभावकलाई अगाडि बढ्न, संघर्ष गर्न र खुशी बनाउन प्रेरित गर्छन्। यस भावनाले पारिवारिक सम्बन्धमा गहिरो प्रेम र ममताको महत्त्वलाई उजागर गर्दछ। बच्चाहरूलाई चन्द्र र सूर्य भनेर हेर्दा, अभिभावकले उनीहरूलाई केवल आफ्नो जिम्मेवारीका रूपमा मात्र नभई जीवनको अमूल्य धन र प्रकाशको रूपमा स्वीकार गर्छन्। यो दृष्टिकोणले परिवारको एकतालाई बलियो बनाउँछ र सम्बन्धलाई अझ गहिरो बनाउँछ। यसैले, “मेरा छोराछोरी मेरा लागि चन्द्र र सूर्य हुन्” भन्ने उक्तिले जीवनको सबैभन्दा मूल्यवान् सम्बन्ध र ममताको अनमोल महत्वलाई प्रकट गरेको छ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>७. ममताले सुबोधलाई परित्याग गरेर छोराछोरीसँग नै सम्पूर्ण जीवन बिताउने भनी गरेको निर्णय तपाईंलाई कस्तो लाग्यो, कथाका आधारमा विश्लेषण गर्नुहोस् ।</strong><br><span class="text-justify">‘मातृत्व’ कथाकी भागिरथी श्रेष्ठले परिवार र नारी जीवनका गहिरा भावना मार्मिक तरिकाले प्रस्तुत गरेकी छिन्। उनको लेखनमा मातृत्वको महत्त्व, नारीको संघर्ष र त्यागलाई विशेष स्थान दिइएको छ। यस कथामा उनले मातृत्वको सशक्त पक्षलाई उजागर गर्दै, एक आमाको ममतामय भावनालाई निकै संवेदनशील तरिकाले चित्रण गरेकी छिन्। कथाले नारीको मनोवैज्ञानिक र सामाजिक द्वन्द्वलाई पनि राम्ररी प्रस्तुत गरेको छ, जसले पाठकलाई गहिरो सोच्न बाध्य पार्छ। ममताले सुबोधलाई परित्याग गरेर छोराछोरीसँगै जीवन बिताउने निर्णय साहसिक र गहिरो मातृत्व भावना बोकेको छ। सुबोधसँगको मनमुटाव, विश्वासको कमी र असहजतालाई पार गर्दै उनले आफ्नो जीवनको प्राथमिकता आफ्ना छोराछोरीलाई दिएको देखिन्छ। उनी आफ्ना सन्तानको भलाइ र भविष्यलाई सबैभन्दा महत्वपूर्ण ठानेकी छन् र त्यसका लागि आफूलाई बलिदान गर्न पनि तयार छिन्। यस्तो निर्णयले मातृत्वको निस्वार्थ प्रेम, बलिदान र जिम्मेवारीको पक्षलाई झल्काउँछ। ममता आफूले चाहेको परिवार र सम्बन्ध नपाएको भए पनि छोराछोरीको माया र जिम्मेवारीबाट कहिल्यै टाढा भएनिन्। उनी आफ्नो परिवारलाई सुखी बनाउन र छोराछोरीको भलोको लागि सबै कुरा गर्ने महिलाको उत्कृष्ट उदाहरण हुन्। कथाको सन्दर्भमा ममताको निर्णयले नारीको आत्मसम्मान, मातृत्वको शक्ति र पारिवारिक प्रेमलाई दर्शाउँछ। यसले पाठकलाई जीवनका कठिनाइहरूमा पनि ममताको महत्व र परिवारप्रतिको जिम्मेवारीलाई पुनः मूल्याङ्कन गर्न प्रेरित गर्छ। ममताको यो निर्णय केवल व्यक्तिगत भावना मात्र नभई सामाजिक र सांस्कृतिक सन्देश पनि हो, जसले परिवार र मातृत्वको महत्त्वलाई जीवन्त बनाउँछ। यसले नारीलाई आफ्नो अधिकार र कर्तव्यबीचको सन्तुलन खोज्न उत्प्रेरित गर्छ र मातृत्वलाई जीवनको केन्द्र मान्ने संस्कारलाई अझ मजबुत बनाउँछ।</span></p>
+                        <p class="text-left-align"><strong>८. समीक्षात्मक उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>क) ‘जननी स्वर्गभन्दा पनि महान् हुन्छिन्’ यस भनाइलाई मातृत्व कथाका आधारमा पुष्टि गर्नुहोस् ।</strong><br><span class="text-justify">‘मातृत्व’ कथाकी लेखिका भागिरथी श्रेष्ठले मातृत्व र परिवारप्रतिको गहिरो ममतालाई निकै मार्मिक र प्रभावकारी तरिकाले प्रस्तुत गरेकी छिन्। उनले आमाको भावना, त्याग र प्रेमलाई कथाको मुख्य विषय बनाएर नारीको आत्मबल र मातृत्वको महत्त्व उजागर गरेकी छिन्। कथामा ममता पात्र मार्फत उनले आमाको निस्वार्थ माया र परिवारप्रतिको समर्पणलाई जीवन्त बनाएकी छिन्। कथामा ममता आफ्नो छोराछोरीको सुख, भलो र भविष्यका लागि आफ्ना व्यक्तिगत दुःख, पीडा र मनमुटाव भुलेर सधैं उनीहरूको पक्षमा उभिन्छिन्। उनले आफ्नो जीवनलाई छोराछोरीको हितमा समर्पित गरेकी छिन् र कहिल्यै आफ्नो ममता र जिम्मेवारीबाट पछि हटिनन्। यस्तो ममता र बलिदानले आमालाई केवल घरको मात्र होइन, जीवनको सबैभन्दा ठूलो नायक बनाउँछ। यसरी ‘मातृत्व’ कथाले देखाउँछ कि जननी अर्थात् आमा स्वर्गभन्दा पनि महान् हुन्छिन्। आमाले दिने माया, संरक्षण र त्यागको शक्ति अतुलनीय हुन्छ र त्यसैले उनलाई स्वर्गीयभन्दा माथिल्लो स्थान दिन सकिन्छ। कथाले आमाको गहिरो ममतालाई उजागर गर्दै जननीको सम्मान र महत्त्वलाई बलियो बनाउन ठूलो भूमिका खेलेको छ।</span></p>
+                            <p><strong>ख) ममता पात्रमा मानसिक द्वन्द्व आउनुका कारणहरू के के हुन् ?</strong><br><span class="text-justify">‘मातृत्व’ कथाकी लेखिका भागिरथी श्रेष्ठले नारी जीवनका जटिल मनोवैज्ञानिक पक्ष र मातृत्वको महत्त्वलाई सजीव रूपमा प्रस्तुत गरेकी छिन्। उनले कथामा नारीको संघर्ष, ममता र आत्मसमर्पणलाई गहिराइका साथ उजागर गरेकी छन्। ममता पात्रमार्फत उनले नारीभित्रका भावनात्मक द्वन्द्वहरूलाई प्रभावकारी रूपमा चित्रण गरेकी छिन्। ममता पात्रमा देखिएको मानसिक द्वन्द्वका मुख्य कारणहरू विभिन्न पक्षबाट उत्पन्न हुन्छन्। पहिलो, उनको वैवाहिक जीवनमा सुबोधसँगको असहज सम्बन्ध र मनमुटावले उनलाई गहिरो तनावमा राखेको छ। सुबोधको कठोर र गम्भीर स्वभावले ममताको मनमा निरन्तर द्विविधा र पीडा सिर्जना गरेको छ। यस्ता परिस्थितिले उनलाई आफूलाई असहाय र असन्तुष्ट महसुस गराउँछ। दोस्रो, ममताको मातृत्व जिम्मेवारी र आफ्नो व्यक्तिगत मनोस्थिति बीचको द्वन्द्व पनि उनको मानसिक अवस्थालाई झन् जटिल बनाउँछ। छोराछोरीप्रति रहेको ममताले उनलाई हरेक चुनौती सहन प्रेरित गर्छ भने आफ्ना व्यक्तिगत पीडा र निराशाले मनमा द्विविधा ल्याउँछ। उनी आफूलाई सम्हाल्न चाहन्छिन्, तर जीवनका कठिनाइहरूले उनलाई बारम्बार संघर्षमा पार्छ। तेस्रो, सामाजिक र पारिवारिक दबाबले पनि ममतामा मानसिक द्वन्द्व थप बढाएको छ। उनी आफ्नो जीवनलाई नयाँ दिशा दिन चाहन्छिन्, तर पारिवारिक अपेक्षा र सामाजिक सीमाले उनलाई रोकिरहेको महसुस गर्छिन्। यस्तो दबाब र एक्लोपनले उनको मनमा द्विविधा उत्पन्न गराउँछ, जसले उनको मनोवैज्ञानिक स्थिति अझ पेचिलो बनाउँछ। यी सबै कारणहरूले गर्दा ममता पात्रमा गहिरो मानसिक द्वन्द्व देखा परेको छ, जुन कथाको भावनात्मक गहिराई र पात्रको जटिलता प्रस्तुत गर्न महत्वपूर्ण भूमिका खेलेको छ। भागिरथी श्रेष्ठले यस द्वन्द्वलाई अत्यन्तै संवेदनशील तरिकाले लेखेर नारी मनोविज्ञानको वास्तविकता पाठकसामु ल्याएकी छिन्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>१०. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) आयुर्वेदका आठ अङ्ग के के हुन् ?</strong><br>आयुर्वेदका आठ अङ्ग कायचिकित्सा, शल्य तन्त्र, शालाक्य तन्त्र, भूतविद्या, कौमारभृत्य, अगद तन्त्र, रसायन तन्त्र र बाजीकरण तन्त्र हुन् ।</p>
+                            <p><strong>(ख) कायचिकित्सा र शल्य तन्त्रमा कुन कुन रोगको उपचार पद्धति प्रस्तुत गरिएको छ ?</strong><br>कायचिकित्सामा शारीरिक रोग र शल्य तन्त्रमा चिरफार गर्नुपर्ने रोगको उपचार पद्धति प्रस्तुत गरिएको छ ।</p>
+                            <p><strong>(ग) शरीरमा रोगको प्रवेश हुनुको कारण के हो ?</strong><br>शरीरमा रोगको प्रवेश हुनुको कारण वात, पित्त र कफ यी त्रिदोषको असन्तुलन हुनु हो ।</p>
+                            <p><strong>(घ) आयुर्वेदले जीवनमा पूर्णायु जिउन के गर्नुपर्ने सुझाव दिएको छ ?</strong><br>आयुर्वेदले जीवनमा पूर्णायु जिउन उचित आहार, उपयुक्त जीवनशैली र उपलब्ध स्थानीय जडीबुटीको सेवन गर्नुपर्ने सुझाव दिएको छ ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका अनुच्छेदबाट समस्त शब्द टिप्नुहोस् र तिनको विग्रह गर्नुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">समस्त शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">विग्रह</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">जीवनरूख</td><td class="py-2 px-4 border-b border-gray-700">जीवनरूपि रूख</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">छोराछोरी</td><td class="py-2 px-4 border-b border-gray-700">छोरा र छोरी</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">हाँगाबिगाँ</td><td class="py-2 px-4 border-b border-gray-700">हाँगा र बिगाँ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दाजुभाइ</td><td class="py-2 px-4 border-b border-gray-700">दाजु र भाइ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दिदीबहिनी</td><td class="py-2 px-4 border-b border-gray-700">दिदी र बहिनी</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाइटीका</td><td class="py-2 px-4 border-b border-gray-700">भाइलाई टीका</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">यमयमुना</td><td class="py-2 px-4 border-b border-gray-700">यम र यमुना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">काककुकुर</td><td class="py-2 px-4 border-b border-gray-700">काक र कुकुर</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">गाइगोरू</td><td class="py-2 px-4 border-b border-gray-700">गाइ र गोरू</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">धनधान्य</td><td class="py-2 px-4 border-b border-gray-700">धन र धान्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाइतिहार</td><td class="py-2 px-4 border-b border-gray-700">भाइको तिहार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नुहाइधुवाइ</td><td class="py-2 px-4 border-b border-gray-700">नुहाइ र धुवाइ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाइपूजा</td><td class="py-2 px-4 border-b border-gray-700">भाइको पूजा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दहीअक्षता</td><td class="py-2 px-4 border-b border-gray-700">दहीमा अक्षता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">जौतिल</td><td class="py-2 px-4 border-b border-gray-700">जौ र तिल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पञ्चामृत</td><td class="py-2 px-4 border-b border-gray-700">पाँच अमृतको समूह</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">फूलमाला</td><td class="py-2 px-4 border-b border-gray-700">फूलको माला</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सगरमाथा</td><td class="py-2 px-4 border-b border-gray-700">सगर हुने माथ छ जसको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">लम्बोदर</td><td class="py-2 px-4 border-b border-gray-700">लामो उदर छ जसको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पीताम्बर</td><td class="py-2 px-4 border-b border-gray-700">पीत अम्बर छ जसको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वायुपुत्र</td><td class="py-2 px-4 border-b border-gray-700">वायुको पुत्र</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सप्तरङ्गी</td><td class="py-2 px-4 border-b border-gray-700">सात रङ छ जसमा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पानबुट्टे</td><td class="py-2 px-4 border-b border-gray-700">पानको जस्तो बुट्टा भएको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">हरपरीक्षा</td><td class="py-2 px-4 border-b border-gray-700">हरेक परीक्षा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रगतिशिखर</td><td class="py-2 px-4 border-b border-gray-700">प्रगतिको शिखर</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सयपत्री</td><td class="py-2 px-4 border-b border-gray-700">सय पत्र छन् जसमा</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align"><strong>२. दिइएका अनुच्छेदबाट द्विरुक्त शब्द टिप्नुहोस् र तिनको निर्माण प्रक्रिया देखाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">द्विरुक्त शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">निर्माण प्रक्रिया</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">ढ्याङढ्याङ</td><td class="py-2 px-4 border-b border-gray-700">ढ्याङ + ढ्याङ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नपराई नपराई</td><td class="py-2 px-4 border-b border-gray-700">नपराई + नपराई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">चटक चटक</td><td class="py-2 px-4 border-b border-gray-700">चटक + चटक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">लहलह</td><td class="py-2 px-4 border-b border-gray-700">लहर + लहर</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">छनछन</td><td class="py-2 px-4 border-b border-gray-700">छन + छन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आआफ्नो</td><td class="py-2 px-4 border-b border-gray-700">आफ्नो + आफ्नो</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आपसआपस</td><td class="py-2 px-4 border-b border-gray-700">आपस + आपस</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">झैँझगडा</td><td class="py-2 px-4 border-b border-gray-700">झगडा + झगडा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वेलावेला</td><td class="py-2 px-4 border-b border-gray-700">वेला + वेला</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आपत्विपत्</td><td class="py-2 px-4 border-b border-gray-700">आपत्त् + विपत्</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align"><strong>३. दिइएका द्विरुक्त शब्दको निर्माण प्रक्रिया देखाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">द्विरुक्त शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">निर्माण प्रक्रिया</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आआफ्नो</td><td class="py-2 px-4 border-b border-gray-700">आफ्नो + आफ्नो</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">मरमसला</td><td class="py-2 px-4 border-b border-gray-700">मसला + मसला</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">झैँझगडा</td><td class="py-2 px-4 border-b border-gray-700">झगडा + झगडा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">खरखजाना</td><td class="py-2 px-4 border-b border-gray-700">खजाना + खजाना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">गरगहना</td><td class="py-2 px-4 border-b border-gray-700">गहना + गहना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">किताबसिताब</td><td class="py-2 px-4 border-b border-gray-700">किताब + किताब</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">ऍचोपँचो</td><td class="py-2 px-4 border-b border-gray-700">पँचो + पैंचो</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">तात्तातो</td><td class="py-2 px-4 border-b border-gray-700">तातो + तातो</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">नामयोगी</h4>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. दिइएका वाक्यमा नामयोगी पहिचान गरी लेख्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) उनीहरूसित बन्दुक छ । - <strong>सित</strong></li>
+                                    <li>ख) छानामाथि घिरौँला छ । - <strong>माथि</strong></li>
+                                    <li>ग) रमेश घाटतर्फ लाग्यो । - <strong>तर्फ</strong></li>
+                                    <li>घ) रुखबाट पात झर्‍यो । - <strong>बाट</strong></li>
+                                    <li>ङ) ऊवाहेक कोही बोलेनन् । - <strong>वाहेक</strong></li>
+                                    <li>च) जीवनभरि सुख पाइएन । - <strong>भरि</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएको जीवनीको अंशबाट दशओटा नामयोगी टिप्नुहोस् ।</strong>
+                                <p class="ml-4">अनुसार, सम्म, बाट, सँग, पछि, बाहिर, सहित, प्रति, माथि, पट्टी ।</p>
+                            </li>
+                            <li><strong>३. `योगमाया´ पाठबाट दशओटा नामयोगी टिपी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>सम्म</strong> : मेरो घरबाट विद्यालयसम्म पुग्न एक घण्टा पैदल हिँड्नुपर्छ ।</li>
+                                    <li><strong>बाट</strong> : रुखबाट पात तल खस्यो ।</li>
+                                    <li><strong>सित</strong> : रामले पैसा नभएर आफ्नो साथीसित सापटी माग्यो ।</li>
+                                    <li><strong>सँग</strong> : हामी आफ्नो हकमा लड्दा कोहीसँग पनि डराउनु हुँदैन ।</li>
+                                    <li><strong>वाहेक</strong> : सीतावाहेक कोही बोलेनन् ।</li>
+                                    <li><strong>भरि</strong> : आज रातभरि पानी पर्‍यो ।</li>
+                                    <li><strong>तर्फ</strong> : हरि साथीको घरतर्फ लाग्यो ।</li>
+                                    <li><strong>माथि</strong> : टेबलमाथि किताब छ ।</li>
+                                    <li><strong>समेत</strong> : घरबाट आमासँग बहिनी समेत पोखरा आएकी रहिछिन् ।</li>
+                                    <li><strong>अनुसार</strong> : तिमी मैले भनेअनुसार काम गर ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">क्रियायोगी</h4>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. दिइएका क्रियायोगी पहिचान गरी लेख्नुहोस् ।</strong>
+                                <p class="ml-4">हिजो, पारि, भर्खर, त्यता, ढिलो, ज्यादै, बिस्तारै, डराइ-डराइ-कन, पढ्न आदि ।</p>
+                            </li>
+                            <li><strong>२. दिइएको अनुच्छेदबाट बाह्रओटा क्रियायोगी टिप्नुहोस् ।</strong>
+                                <p class="ml-4">अस्ति, निकै, ढिलो, घर, गल्लीमा, यत्रतत्र, राति, अबेर, लडखडाउँदै, त्यहाँ, ज्यादै, राम्ररी ।</p>
+                            </li>
+                            <li><strong>३. पाठमा प्रयुक्त दसओटा क्रियायोगी टिपी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>घरमै</strong> : योगमाया मानसिक र शारीरिक यातना सहँदै १४ वर्षसम्म घरमै बसिन् ।</li>
+                                    <li><strong>माइत</strong> : सासू र नन्दको यातना सहन नसकेपछि योगमाया माइत गएकी थिइन् ।</li>
+                                    <li><strong>पलाउन</strong> : योगमायामा बिस्तारै विद्रोहको चेतना पलाउन थाल्यो ।</li>
+                                    <li><strong>पुगेर</strong> : योगमाया आसाम पुगेर एक्लो महसुस गरिन् ।</li>
+                                    <li><strong>फर्काउन</strong> : योगमायालाई आफ्नै घर फर्काउन प्रयत्न गरियो ।</li>
+                                    <li><strong>नपाउँदै</strong> : योगमाया पति भनेर चिन्न नपाउँदै विधवा भइन् ।</li>
+                                    <li><strong>गर्न</strong> : योगमायाले नयाँ समाजको निर्माण गर्न धेरै तपस्या गरेकी थिइन् ।</li>
+                                    <li><strong>खुलेरै</strong> : चन्द्रशमशेरको दासप्रथा उन्मुलनको घोषणालाई योगमायाले खुलेरै प्रशंसा गरिन् ।</li>
+                                    <li><strong>बिस्तारै</strong> : योगमायाले बिस्तारै विद्रोहको आवाज उठाउन थालिन् ।</li>
+                                    <li><strong>जमिनमा</strong> : उफ्रौलीटारमा रहेको फराकिलो जमिनमा योगमाया सरिन् ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">संयोजक</h4>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. दिइएका वाक्य पढी संयोजक पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>र</strong></li>
+                                    <li>ख) <strong>तापनि</strong></li>
+                                    <li>ग) <strong>एवम्</strong></li>
+                                    <li>घ) <strong>वा</strong></li>
+                                    <li>ङ) <strong>अनि</strong></li>
+                                    <li>च) <strong>तर</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. योगमाया पाठबाट दशओटा संयोजक टिपोट गर्नुहोस् :</strong>
+                                <p class="ml-4">र, तथा, त्यसैले, तर, भन्ने, पनि, भनी, तथापि, अनि, जहाँ-त्यहीँ ।</p>
+                            </li>
+                            <li><strong>३. दिइएका संयोजक राखी वाक्य बनाउनुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>नत्र</strong> : तिमी पढ्न जाने भए जाऊ नत्र म बुबालाई भनिदिन्छु ।</li>
+                                    <li><strong>किन्तु</strong> : देश विकासका लागि असल नेता हुनुपर्छ किन्तु देशमा असल नेताको अभाव देखिन्छ ।</li>
+                                    <li><strong>यद्यपि</strong> : यद्यपि मेरो घर घोराही होइन, तर म त्यहीँ बस्ने गर्छु ।</li>
+                                    <li><strong>पनि</strong> : म पनि तिमीसँग खेल्न जान्छु ।</li>
+                                    <li><strong>किनभने</strong> : राम आज पढ्न गएको छैन किनभने ऊ बिरामी छ ।</li>
+                                    <li><strong>कि...कि</strong> : कि काम गर कि राम्रोसँग पढ ।</li>
+                                    <li><strong>तथापि</strong> : राम विदेश जान्छु भन्थ्यो तथापि व्यवसाय गरेर बसेछ ।</li>
+                                    <li><strong>न...न</strong> : न तिमी राम्रोसँग पढ्छौ न व्यवसाय गर्छौ ।</li>
+                                    <li><strong>भन्ने</strong> : पढेर जागिर नै गर्नुपर्छ भन्ने सोचाइ गलत हो ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>४. किन्तु, त्यसैले, जब...तब, किनभने, जहाँ...त्यहाँ प्रयोग गरी आफ्ना परिवारका बारेमा एक अनुच्छेद लेख्नुहोस् ।</strong>
+                                <p class="ml-4 text-justify">म परिवारको पहिलो सदस्य हुँ किन्तु मैले पारिवारिक दायित्व अझै पनि बोध गर्न सकेको छैन । मेरो बुबा जागिरे हुनुहुन्छ त्यसैले मलाई आर्थिक समस्या पनि परेको छैन । जब बाबा अफिसबाट घर फर्किनुहुन्छ तब सधैँ फलफूल किनेर ल्याउनुहुन्छ । हामी शनिबार घुम्न जान्छौँ किनभने बाबाको अफिस छुट्टी हुन्छ । हामी जहाँ घुम्न जान्छौँ त्यहाँ मैले कुनै न कुनै सामान किनेकै हुन्छु ।</p>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">विस्मयादिबोधक</h4>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. दिइएका वाक्य पढी विस्मयादिबोधक पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>आहा!</strong></li>
+                                    <li>ख) <strong>हरे!</strong></li>
+                                    <li>ग) <strong>छ्या!</strong></li>
+                                    <li>घ) <strong>आत्था!</strong></li>
+                                    <li>ङ) <strong>स्याबास!</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएका खाली ठाउँमा मिल्ने विस्मयादिबोधक राखी वाक्य पूरा गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>उफ्!</strong> कस्तो गर्मी ।</li>
+                                    <li>ख) <strong>धिक्कार!</strong> तिम्रो यो जिन्दगीलाई ।</li>
+                                    <li>ग) <strong>आहा!</strong> कति सुन्दर अक्षर ।</li>
+                                    <li>घ) <strong>आत्थु!</strong> कति चिसो हावा ।</li>
+                                    <li>ङ) <strong>छि:!</strong> कस्तो दुर्गन्धित कोठा ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>३. दिइएका विस्मयादिबोधक राखी वाक्य बनाउनुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>आम्मा!</strong> धन्नै लडेको ।</li>
+                                    <li>ख) <strong>स्याबास!</strong> तिमीले राम्रो काम गर्‍यौ ।</li>
+                                    <li>ग) <strong>आब्बुइ!</strong> कति ठूलो सर्प ।</li>
+                                    <li>घ) <strong>छिछि!</strong> कति फोहोर कोठा ।</li>
+                                    <li>ङ) <strong>ऐया!</strong> कस्तो पेट दुख्यो ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">निपात</h4>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. दिइएका वाक्य पढी निपात पहिचान गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>पो</strong></li>
+                                    <li>ख) <strong>त</strong></li>
+                                    <li>ग) <strong>रे</strong></li>
+                                    <li>घ) <strong>लौ</strong></li>
+                                    <li>ङ) <strong>क्यार</strong></li>
+                                </ul>
+                            </li>
+                            <li><strong>२. दिइएको खाली ठाउँमा मिल्ने निपात राखी वाक्य पूरा गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>खै</strong>, मलाई केही थाहा छैन ।</li>
+                                    <li>ख) <strong>ल</strong>, आजलाई बिदा ।</li>
+                                    <li>ग) ऊ <strong>त</strong> आजै आउँछ ।</li>
+                                    <li>घ) ऊ डाक्टर <strong>नै</strong> हुन चाहन्छ ।</li>
+                                    <li>ङ) तँलाई <strong>पो</strong> केही चाहिँदैन ।</li>
+                                    <li>च) तिमी <strong>पनि</strong> हिजो आयौ <strong>र</strong> ?</li>
+                                    <li>छ) उनीहरू सहरमै बस्छन् <strong>रे</strong> ।</li>
+                                </ul>
+                            </li>
+                            <li><strong>३. दिइएका निपातहरूलाई अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li><strong>रे</strong> : तिम्रो त आजकल अनलाइनबाट पढाइ हुन्छ रे ।</li>
+                                    <li><strong>क्यारे</strong> : भाइ त आज खेल्न जान्न क्यारे ।</li>
+                                    <li><strong>है</strong> : नानू चाँडै घर जाऊ है ।</li>
+                                    <li><strong>अरे</strong> : श्याम त विदेश गयो अरे ।</li>
+                                    <li><strong>नि</strong> : म पनि तिमीसँग जान्छु नि ।</li>
+                                    <li><strong>पो</strong> : तिमीलाई पो केही चाहिँदैन ।</li>
+                                    <li><strong>ज्यादै</strong> : आज म ज्यादै खुसी छु ।</li>
+                                    <li><strong>ला</strong> : ला, भात बसाएर बाहिर आएको भित्र भात त डढेछ ।</li>
+                                    <li><strong>खै</strong> : खै, मैले राखेको सामान कता छ ।</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">पदवर्गसम्बन्धि थप अभ्यास</h3>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>१. रेखाङ्कन गरिएका पदहरूको पदवर्ग पहिचान गरी लेख्नुहोस् ।</strong>
+                                <ul class="list-disc list-inside ml-4">
+                                    <li>क) <strong>स्याबास</strong> : विस्मयादिबोधक<br><strong>नै</strong> : निपात<br><strong>भन्ने</strong> : संयोजक<br><strong>विश्वास</strong> : नाम<br><strong>त्यो</strong> : विशेषण<br><strong>झलझली</strong> : क्रियायोगी</li>
+                                    <li>ख) <strong>तिर</strong> : नामयोगी<br><strong>फर्केर</strong> : क्रियायोगी<br><strong>सक्छ</strong> : क्रियापद<br><strong>अरू</strong> : सर्वनाम<br><strong>अनौठो</strong> : विशेषण<br><strong>र</strong> : संयोजक</li>
+                                    <li>ग) <strong>प्रचुर</strong> : विशेषण<br><strong>तापनि</strong> : संयोजक<br><strong>यिन</strong> : सर्वनाम<br><strong>सम्म</strong> : नामयोगी<br><strong>राम्ररी</strong> : क्रियायोगी<br><strong>शङ्का</strong> : नाम</li>
+                                    <li>घ) <strong>गरिबको</strong> : विशेषण<br><strong>माथि</strong> : नामयोगी<br><strong>सुन्दर</strong> : विशेषण<br><strong>किनभने</strong> : संयोजक<br><strong>सँग</strong> : नामयोगी</li>
+                                    <li>ङ) <strong>बाटोभरि</strong> : क्रियायोगी<br><strong>सामल</strong> : नाम<br><strong>अनि</strong> : संयोजक<br><strong>आइपुगेर</strong> : क्रियायोगी<br><strong>हामी</strong> : सर्वनाम<br><strong>कहाँ</strong> : क्रियायोगी<br><strong>भाग्यो</strong> : क्रियापद</li>
+                                    <li>च) <strong>अग्ला</strong> : विशेषण<br><strong>कलकल</strong> : क्रियायोगी<br><strong>सँग</strong> : नामयोगी<br><strong>सबै</strong> : विशेषण<br><strong>पर्यटक</strong> : नाम<br><strong>स्वागत</strong> : नाम<br><strong>र</strong> : संयोजक</li>
+                                    <li>छ ) <strong>अरू</strong> : सर्वनाम<br><strong>सर्वथा</strong> : क्रियायोगी<br><strong>हुन्छ</strong> : क्रियापद<br><strong>तर</strong> : संयोजक<br><strong>पूर्वक</strong> : नामयोगी<br><strong>यो</strong> : विशेषण<br><strong>यिनी</strong> : सर्वनाम</li>
+                                    <li>ज ) <strong>आहा</strong> : विस्मयादिबोधक<br><strong>यहाँ</strong> : क्रियायोगी<br><strong>असाध्यै</strong> : क्रियायोगी<br><strong>सुनाउनुभयो</strong> : क्रियापद<br><strong>भनेर</strong> : संयोजक<br><strong>उन</strong> : सर्वनाम</li>
+                                </ul>
+                            </li>
+                        </ul>
+
+                        <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">रूपायन</h3>
+                        <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                            <li><strong>२. दिइएको अनुच्छेदलाई स्त्रीलिङ्गमा परिवर्तन गर्नुहोस् :</strong>
+                                <p class="ml-4 text-justify">उत्तर: भान्जी बजार गइन् । उनले त्यहाँ साथीहरूलाई भेटिन् । साथीहरूसँग धेरै बेरसम्म कुराकानी गरिन् । कुराकानीकै क्रममा उनले समय बितेको पत्तै पाइनन् । उनी हतार हतार किनमेल गरेर घर फर्किन् ।</p>
+                            </li>
+                            <li><strong>३. दिइएको अनुच्छेदलाई तृतीय पुरुषमा परिवर्तन गर्नुहोस् :</strong>
+                                <p class="ml-4 text-justify">उत्तर: उनी समयमै विद्यालय पुग्यो । विद्यालयमा पुगेर उसले सबै सामानको निरीक्षण गर्‍यो । त्यसपछि शिक्षकको निर्देशनअनुसार उसले परियोजना कार्य गर्न थाल्यो । यस क्रममा उसले नयाँ नयाँ वैज्ञानिक तथ्यहरू फेला पार्‍यो ।</p>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Matritva Notes
+        function toggleMatritvaSummary() {
+            const summaryText = document.getElementById('matritvaSummaryText');
+            const toggleBtn = document.getElementById('toggleMatritvaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

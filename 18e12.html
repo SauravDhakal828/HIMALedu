@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Matter of Husbands Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Matter of Husbands Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">1. A Matter of Husbands Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “A Matter of Husbands” is a witty one-act play that explores the themes of trust, deception, and the power of performance. Set in a theatrical context, the play revolves around a confrontation between two women — a young, emotional wife and a famous, confident actress — over the suspected infidelity of the wife’s husband. Through clever dialogue and dramatic irony, the play reveals how appearances can be deceptive, especially when actors are involved.<br><br>
+
+The play begins with the young woman visiting the actress in her dressing room. She accuses the actress of seducing her husband, claiming that he has been behaving strangely and that she found a bouquet that suggests romantic involvement. The young wife is visibly distressed and confused, convinced that her marriage is falling apart because of the actress’s charm and influence. This scene immediately introduces the central conflict and sets up the dramatic tension.<br><br>
+
+The actress, however, responds with calmness and sophistication. She denies any romantic involvement with the husband and instead explains that he is likely pretending to be in love with her to rekindle his wife’s affection. According to the actress, men sometimes use such tactics to make their wives jealous and more attentive. She claims that the husband asked her to play along with this act just to provoke a reaction. Her explanation is smooth, logical, and presented so convincingly that the young wife begins to believe her.<br><br>
+
+As the conversation unfolds, the young wife’s anger softens. She starts to doubt her own suspicions and feels foolish for confronting the actress so aggressively. The actress maintains her graceful composure and assures the wife that her husband loves her dearly and was merely trying to win back her attention. By the end of the play, the young woman is reassured and prepares to return to her husband, her jealousy seemingly resolved.<br><br>
+
+However, the real twist occurs in the final moments. As the young woman leaves, satisfied and relieved, the actress quickly calls offstage for her assistant to return “Mr. Della’s” bouquet — the same man the wife had accused her of seeing. This clever ending reveals that the actress may actually be guilty after all. Her calm explanation was possibly a deceptive performance, showing her skill in manipulation and leaving the audience questioning what is real and what is simply part of the act.<br><br>
+
+In conclusion, “A Matter of Husbands” is a brilliant exploration of illusion versus reality. Ferenc Molnár uses the setting of the theater as a metaphor for life itself, where people often wear masks and perform roles. The play leaves the audience with an ambiguous ending and an important lesson: not everything is as it seems, and even the most convincing truth may be a well-acted lie.<br><br>
+                    </p>
+                    
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What favour does Earnest Young Woman ask from The Famous Actress?</span><br>
+                    The Earnest Young Woman asks the Famous Actress to return her husband to her. She loves her husband deeply and pleads with the Actress to stop interfering in their marriage and give her husband back.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What, according to The Earnest Young Woman, are the indications that her husband has fallen in love with Famous Actress?</span><br>
+                    According to the Earnest Young Woman, the signs that her husband has fallen in love with the Famous Actress include the flowers he sends to the Actress, his sudden change in behavior, and the way he spends more time with the Actress rather than with his wife. These actions show that his affection has shifted from his wife to the Actress.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Is Earnest Young Woman convinced by the argument of Famous Actress? How?</span><br>
+                    No, the Earnest Young Woman is not convinced by the Famous Actress's arguments. The Actress tries to explain or justify her relationship with the husband, but the Young Woman remains firm in her love for her husband and insists on having him back, showing her emotional strength and determination.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Where is the Earnest Young Woman’s husband hiding himself as they are talking about him?</span><br>
+                    The husband is hiding in the wardrobe while the Earnest Young Woman and the Famous Actress are talking about him. This hiding creates a comic effect and adds suspense to the play.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. When do you feel that Famous Actress is really good at acting?</span><br>
+                    The Famous Actress shows she is really good at acting when she cleverly manages to manipulate the situation and the emotions of the Earnest Young Woman. Her ability to present herself convincingly and maintain composure even when confronted proves her skill in acting.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. How do we come to know that Famous Actress and the husband of Earnest Young Woman are in love?</span><br>
+                    We come to know that the Famous Actress and the husband are in love through their secret meetings, the husband's affection shown through gifts like flowers, and their behavior that indicates emotional intimacy. Their love is also implied by the husband's attempt to hide and the Actress's calm control over the situation.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">g. Write down the plot of the play in a paragraph.</span><br>
+                    Plot:
+                    The play A Matter of Husbands revolves around an earnest young woman who comes to a famous actress pleading for the return of her husband, who has fallen in love with the actress. The young woman is heartbroken but determined to get her husband back. As they talk, the husband secretly hides in a wardrobe, creating a comic and tense situation. The actress, confident in her charm and acting skills, tries to justify her relationship with the husband. Ultimately, the play explores themes of love, jealousy, and the complexities of relationships, all with a humorous undertone.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Sketch the character of Famous Actress.</span><br>
+                    The Famous Actress is a confident, charming, and clever woman who commands attention wherever she goes. She is accustomed to the spotlight and knows how to use her wit and acting skills to influence people around her. Throughout the play, she remains composed and self-assured, even when confronted by the Earnest Young Woman, who pleads for her husband’s return.
+                    <br><br>
+                    The Actress is skilled in manipulation, using her talents not only on stage but also in real life to maintain control of the situation. She speaks with poise and persuasiveness, showing that she is experienced in dealing with complicated emotional scenarios. Despite her glamorous and sophisticated exterior, there is a subtle hint of vulnerability when it comes to her relationship with the husband, suggesting that her feelings for him might be genuine.
+                    <br><br>
+                    Her character is complex: while she is involved in an affair with the young woman’s husband, she does not appear cruel or malicious. Instead, she is portrayed as a strong woman caught in a love triangle, using her acting prowess to navigate the conflict. Ultimately, the Famous Actress represents the themes of allure, power, and the nuanced nature of love and relationships
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Shed light on the difference between an ordinary woman and an actress.</span><br>
+                    In A Matter of Husbands, the difference between an ordinary woman and an actress is emphasized through their behavior, attitude, and approach to emotions and situations.
+                    <br><br>
+                    Ordinary Woman:
+                    An ordinary woman, like the Earnest Young Woman in the play, is sincere, straightforward, and emotionally genuine. She expresses her feelings honestly and openly, especially when it comes to love and relationships. The ordinary woman tends to be vulnerable and deeply affected by personal matters such as her husband’s affection and loyalty. She values sincerity and is less likely to hide her emotions or manipulate situations to her advantage.
+                    <br><br>
+                    Actress:
+                    An actress, on the other hand, is trained to perform, hide her true emotions, and portray different roles convincingly. She has the ability to mask her feelings and manipulate situations through her charm and acting skills. The Famous Actress in the play uses her talent to control the conversation and maintain her hold over the husband. Unlike the ordinary woman, the actress is more calculating, poised, and can separate her personal feelings from the role she plays, both on stage and in real life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. According to Famous Actress, men associated with theatre use the theatre actresses to make their estranged wives jealous so as to woo them back. Do you agree with her argument? Why? Why not?</span><br>
+                    According to the Famous Actress, men associated with the theatre often use actresses to make their estranged wives jealous so that they can win them back. She suggests that these men do not always have genuine feelings for the actresses but treat them as tools or pawns in their attempts to regain the love and attention of their wives. In some cases, this may hold true because jealousy can be a strong emotion that pushes a person to realize what they are losing and motivates them to work on the relationship. By showing interest in someone else, men might hope to remind their wives of their importance and encourage them to reconcile. This argument points to the complicated and sometimes manipulative nature of human relationships, where feelings are not always straightforward.
+                    <br><br>
+                    However, I do not fully agree with the Famous Actress’s argument because it oversimplifies relationships and unfairly stereotypes theatre actresses. Not every relationship involving an actress is a ploy or game. True love and affection can develop naturally between two people, regardless of their professions or backgrounds. Reducing these relationships to mere tactics overlooks the depth of human emotions and the individuality of the people involved. Furthermore, this idea ignores the possibility that the actress herself may have genuine feelings for the man. Relationships are complex and multi-dimensional, and while jealousy might sometimes play a role, it cannot explain or justify all romantic relationships.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. How does Famous Actress make a fool of Earnest Young Woman?</span><br>
+                    The Famous Actress makes a fool of the Earnest Young Woman through her clever manipulation and superior acting skills. When the Earnest Young Woman arrives, desperate and emotional, pleading for the return of her husband, the Actress listens patiently but uses the opportunity to confuse and mislead her. She speaks in a calm and confident manner, twisting the facts and using ambiguous language to make the Young Woman doubt her own understanding of the situation. The Actress’s ability to act convincingly in real life, not just on stage, allows her to control the conversation and maintain an upper hand over the young woman.
+                    <br><br>
+                    Furthermore, the Actress hides the Earnest Young Woman’s husband in a wardrobe while the two women talk, keeping him physically close but out of sight. This clever trick adds to the Young Woman’s frustration and helplessness because she does not realize that her husband is actually nearby. The Actress’s composed and poised behavior, combined with her strategic hiding of the husband, makes the Young Woman seem naive and powerless in the situation. Through these tactics, the Famous Actress manages to outwit the earnest woman, making her look foolish and exposing the vulnerability of her desperate love.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. The conversation between the two women takes place on the stage of the theatre. What role does the theatre house as a part of setting play in A Matter of Husbands?</span><br>
+                    The theatre as a setting plays a crucial and symbolic role in A Matter of Husbands. The fact that the entire conversation between the Earnest Young Woman and the Famous Actress takes place on the stage of a theatre is very important because a theatre is traditionally a place of acting, pretending, and performance. This setting creates a backdrop where the boundaries between reality and illusion become blurred. The characters are not only performing their emotions through dialogue but also, in a way, “acting” their roles in real life. The Famous Actress, in particular, uses this setting to her advantage by applying her acting skills to manipulate and deceive the Earnest Young Woman, highlighting the theme of appearance versus reality.
+                    <br><br>
+                    Additionally, the theatre setting adds a layer of dramatic irony and humor to the play. The audience is aware that while the two women are arguing and revealing their emotions on the stage, the husband—who is the center of their conflict—is hiding in the wardrobe right there on the same stage, completely unseen by both women. This situation enhances the comic effect of the play and emphasizes the contrast between what is seen and what is hidden, a key theme in the story. The theatre setting also symbolizes the idea that life itself can be like a stage where people put on masks, play roles, and sometimes hide their true intentions and feelings. Thus, the theatre house as the setting deepens the play’s exploration of love, jealousy, deception, and the performative nature of human relationships.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">f. What do you think about the ending of the play?</span><br>
+                    The ending of A Matter of Husbands is both surprising and humorous, which makes it memorable and effective. When the husband, who has been hiding in the wardrobe throughout the conversation, finally comes out, it creates a comic twist that highlights the absurdity and confusion in the love triangle. This unexpected moment brings together all the tensions and misunderstandings in a light-hearted way, making the play entertaining without turning too serious or tragic.
+                    <br><br>
+                    At the same time, the ending also reflects the themes of deception and performance that run throughout the play. The husband’s hiding symbolizes the hidden truths and secrets in relationships, while the way the two women react shows their emotional vulnerabilities. Overall, the ending leaves the audience with a sense of irony and humor, encouraging them to think about the complexities of love and jealousy without taking the situation too seriously. It’s a clever conclusion that suits the play’s tone perfectly.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference beyond the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Write a paragraph describing your favourite actor/actress.</span><br>
+                    My favourite actress is Meryl Streep, who is widely regarded as one of the greatest actresses of all time. What makes her stand out is her extraordinary talent to adapt to any role, bringing depth and authenticity to every character she portrays. Whether she plays a strong-willed woman, a vulnerable mother, or a historical figure, Meryl Streep’s performances feel incredibly real and heartfelt. She has an amazing ability to express a wide range of emotions with subtlety and grace, captivating audiences worldwide. Beyond her acting skills, she is known for her professionalism and dedication to her craft, often spending months preparing for a single role to ensure she delivers the best performance possible. Moreover, Meryl Streep is admired not just for her work on screen but also for her commitment to social causes, using her platform to speak out on issues like gender equality and environmental protection. Her long and successful career, filled with numerous awards and accolades, serves as an inspiration to many aspiring actors and actresses. For me personally, Meryl Streep represents what it means to be passionate, hardworking, and genuine, and watching her performances motivates me to appreciate the art of acting even more.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='english12.html'">
+                    Back to English 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

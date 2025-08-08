@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Who are you, little i? Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+
+        /* Styling for the question/answer sections */
+        .qa-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+        .qa-section h3 {
+            margin-bottom: 1rem;
+        }
+        .qa-section p, .qa-section li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+        .qa-section ul {
+            list-style-type: disc; /* Default disc for themes */
+            padding-left: 1.5rem;
+        }
+        .qa-section li {
+            margin-bottom: 1rem; /* Space between list items */
+        }
+        .qa-section li strong {
+            display: block; /* Question on its own line */
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Who are you, little i? Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">Who are you, little i? Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" style="display: none;">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Who are you, little i?” is a short but profound poem written by the American poet E. E. Cummings, known for his unique style and deep reflections on life, childhood, and nature. In this poem, the poet quietly reflects on a moment of memory, where the adult speaker connects with his younger self. Through only a few lines, the poet manages to create a rich emotional atmosphere, blending memory, innocence, and wonder.<br><br>
+
+The poem opens with a direct question: “who are you, little i / (five or six years old)”, which immediately sets a reflective and nostalgic tone. The speaker seems to be addressing his younger self, remembering what it felt like to be a child. The use of “little i” (with a lowercase 'i') is intentional—it shows the innocence, humility, and smallness of a child. E. E. Cummings often played with punctuation and capitalization to create deeper meaning, and here, the lowercase ‘i’ emphasizes the purity and simplicity of the child in contrast to the complex adult self.<br><br>
+
+As the poem continues, the speaker describes the child looking out of a window “at some / high or deep / beautiful thing.” This moment of looking out at the evening sky captures the child's sense of awe and wonder. The time is “just as the sun is going,” suggesting the end of the day, which symbolically may also represent the end of childhood or the passage of time. The natural imagery is calm, peaceful, and filled with beauty. It reminds the reader of how children view the world with fresh eyes and open hearts, noticing small moments that adults often overlook.<br><br>
+
+The adult speaker, now distant from that childhood experience, looks back with tenderness and admiration. By asking “who are you,” he seems almost surprised at how distant his childhood self has become, as if that part of him is now a stranger. Yet, there’s also a quiet joy in remembering that he once saw the world so purely. The final line, “(and feeling: if day / has to become night / this is a beautiful way)”, is a soft acceptance of change. It reflects the wisdom of childhood, which can find beauty even in the sadness of things ending.<br><br>
+
+Through this memory, the poet shows that the innocent child still lives inside the adult, even if he rarely emerges. The speaker reconnects with that inner child and finds comfort in the memory. It’s a gentle reminder that while life changes and people grow older, the essence of who we were as children—curious, gentle, and full of wonder—never truly leaves us.<br><br>
+
+In conclusion, “Who are you, little i?” is a quiet and emotionally rich poem that encourages readers to pause and remember their childhood selves. It suggests that beauty lies in small, simple moments, and that even as we grow older, it’s important to hold onto that innocent way of seeing the world. Through its soft tone and thoughtful structure, E. E. Cummings leaves us with a message about time, memory, and inner peace that stays with us long after reading.<br><br>
+                    </p>
+                </div>
+
+                <!-- Understanding the Text Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text:</h3>
+                    <ul class="list-disc list-inside text-lg brighter-gradient-text space-y-2 mb-4">
+                        <li class="text-justify"><strong>a. Who can be the speaker of this poem?</strong>
+                            The speaker of the poem is the poet himself, Edward Thomas. He speaks in the first person and reflects on his childhood experience. The poem shows the poet remembering and observing his younger self, the “little i,” which represents the child within him.
+                        </li>
+                        <li class="text-justify"><strong>b. What is “little i” doing?</strong>
+                            The “little i” is looking out of the window at the beautiful sunset and the golden light of the evening. He is quietly watching the changing colors of the sky and the peaceful scene outside. This shows the child’s deep appreciation and wonder for nature.
+                        </li>
+                        <li class="text-justify"><strong>c. What can be the relationship between “little i” and the speaker of the poem?</strong>
+                            The “little i” is the speaker’s younger self. The relationship is that of a grown-up poet remembering his childhood innocence and sensitivity. The speaker looks back with fondness and admiration toward the “little i,” representing his own childhood memories.
+                        </li>
+                        <li class="text-justify"><strong>d. What is the speaker remembering from his childhood days in the poem?</strong>
+                            The speaker is remembering the quiet moments from his childhood when he used to watch the sunset from the window. He recalls how deeply he felt connected to the natural beauty around him and how small and innocent he was. The poem captures the speaker’s nostalgic feelings about the simplicity and wonder of childhood.
+                        </li>
+                        <li class="text-justify"><strong>e. What attitude does the speaker seem to have toward the child in the poem?</strong>
+                            The speaker shows a gentle, caring, and affectionate attitude toward the “little i.” He seems to admire the child’s innocence, curiosity, and peacefulness. There is a sense of tenderness and respect for the purity and sensitivity of childhood that the speaker remembers with warmth.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference to the Context Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context:</h3>
+                    <ul class="list-disc list-inside text-lg brighter-gradient-text space-y-2 mb-4">
+                        <li class="text-justify"><strong>a. Why do you think Cummings has placed a semicolon between the words window and at?</strong>
+                            E.E. Cummings often experimented with punctuation to create unique effects in his poetry. The semicolon between "window" and "at" serves to pause the reader longer than a comma would, but not as final as a full stop. This pause draws attention to the act of looking out of the window, emphasizing the quiet moment of observation and reflection.
+                            <br><br>
+                            The semicolon also connects two closely related ideas: the “window” as a place and “at the gold light,” what the little i is looking at. This way, Cummings links the setting (the window) with the object of attention (the sunset’s golden light) but keeps them distinct to highlight the peaceful stillness and focused observation of the child.
+                            <br><br>
+                            In short, the semicolon helps create a calm, thoughtful rhythm and makes the reader slow down to appreciate the moment the child is experiencing.
+                        </li>
+                        <li class="text-justify"><strong>b. If the speaker is the child grown up, why does he ask, “who are you”?</strong>
+                            Although the speaker is the grown-up version of the child, he asks, “Who are you?” because the child he once was now seems somewhat distant and unfamiliar. As people grow older, their thoughts, feelings, and experiences change, and the innocent, curious child they once were can feel like a different person altogether. This question shows the speaker’s attempt to reconnect with that young, small, and pure part of himself—one that is full of wonder and simplicity. By asking “Who are you?” the speaker reveals how memories of childhood can sometimes feel mysterious or hard to recognize clearly, even though they are a part of who we are.
+                            <br><br>
+                            Moreover, this question expresses the speaker’s gentle curiosity and surprise as he recalls his past. It is as if the grown-up poet is meeting the “little i” again, trying to understand what made him think and feel in that special way. The question also highlights the idea that our identity changes over time, and looking back at our childhood can bring feelings of both closeness and separation. Through this, the poem explores the universal experience of reflecting on our past selves, appreciating where we came from, and wondering about the journey that shaped us into who we are today.
+                        </li>
+                        <li class="text-justify"><strong>c. In this poem, an adult reflects on the childhood experience. Based on that, what might be the theme of the lines: “(and feeling: that if day / has to become night / this is a beautiful way)”?</strong>
+                            The lines “(and feeling: that if day / has to become night / this is a beautiful way)” reflect the theme of finding beauty and acceptance in change and transition. The adult speaker, reflecting on his childhood experience, shows a gentle appreciation for the natural process of day turning into night. Even though change often brings uncertainty or sadness, the speaker sees this particular transformation as peaceful and beautiful. It suggests an attitude of embracing life’s inevitable changes with calmness and wonder rather than fear or resistance.
+                            <br><br>
+                            These lines also highlight a deeper theme of nostalgia and the innocence of childhood perception. The child’s view of the sunset—the ending of the day—is full of awe and positivity, teaching the adult a lesson about appreciating moments as they are. It suggests that even endings, like nightfall, can be beautiful and meaningful. Overall, the theme encourages us to see the world with fresh eyes and to accept life’s cycles with grace and hope.
+                        </li>
+                        <li class="text-justify"><strong>d. What is the rhyme scheme used in the poem?</strong>
+                            The poem “Little i” by Edward Thomas does not follow a regular rhyme scheme, meaning there is no consistent pattern of rhyming words at the end of lines. Instead, the poem is written in free verse, which allows the poet to focus more on the natural flow of thoughts and feelings rather than on formal structure. This absence of a fixed rhyme scheme gives the poem a gentle, conversational tone that suits the reflective and innocent perspective of the child. The irregular rhythm mirrors how memories and observations come to the speaker in a calm, unforced way.
+                            <br><br>
+                            Using free verse also helps to emphasize the personal and intimate nature of the poem. Since the poem is about a quiet, tender moment from childhood, the lack of strict rhyme makes it feel more natural and sincere. The style allows the speaker to express his nostalgia without the pressure of fitting into a rigid poetic form. This creates a soft, flowing rhythm that invites the reader to experience the simplicity and beauty of the moment alongside the speaker, deepening the emotional connection with the poem’s theme of childhood wonder and reflection.
+                        </li>
+                        <li class="text-justify"><strong>e. Explain the pun in “little i” that is related to what he is doing.</strong>
+                            The pun in “little i” plays on the idea of the lowercase letter “i” and the child himself. The poet uses the small letter “i” to represent the child’s humble, tiny, and innocent self. This pun is connected to what the child is doing—looking out the window at the sunset—because just as the letter “i” is small and simple, the child is small in the vast world and quietly observing something much bigger than himself. The lowercase “i” also reflects the child’s modesty and vulnerability in the face of nature’s grandeur.
+                            <br><br>
+                            Additionally, the pun highlights the contrast between the smallness of the child and the vast beauty of the world he is witnessing. While the child may seem insignificant, his act of watching the sunset shows a deep awareness and appreciation of life’s beauty. So, the “little i” is both a symbol of the child’s size and a clever way to express how something small can hold great meaning and wonder. This pun adds a layer of meaning to the poem by linking language, identity, and perception.
+                        </li>
+                        <li class="text-justify"><strong>f. How does Cummings’s use of lowercase letters affect your understanding of the poem? Explain.</strong>
+                            E.E. Cummings’s use of lowercase letters, especially the small “i,” immediately draws attention to the childlike innocence and humility in the poem. By writing “little i” in lowercase instead of the usual uppercase “I,” Cummings emphasizes the smallness and modesty of the child speaker. This stylistic choice makes the child seem gentle, vulnerable, and unassuming, which fits perfectly with the theme of quiet observation and wonder at the natural world. It also reflects how the child sees himself as a tiny part of something much larger.
+                            <br><br>
+                            Moreover, the lowercase letters create a unique visual effect that slows the reader down and encourages a more thoughtful reading. It challenges the usual way we think about identity and self-importance, suggesting that greatness or significance does not always come from being big or loud but can come from quiet, humble awareness. This unconventional style helps deepen the emotional connection to the poem’s themes of innocence, simplicity, and appreciation of life’s small moments.
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference Beyond the Text Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text:</h3>
+                    <ul class="list-disc list-inside text-lg brighter-gradient-text space-y-2 mb-4">
+                        <li class="text-justify"><strong>a. How does nature inspire the speaker in “who are you, little i”? Explain.</strong>
+                            Nature inspires the speaker deeply by offering a peaceful and beautiful scene that captures the child’s attention and imagination. The speaker recalls how the “little i” — the child — is quietly watching the golden light of the sunset through the window. This natural moment fills the child with a sense of wonder and calm, showing how nature can awaken feelings of beauty, awe, and reflection. The changing light from day to night symbolizes the gentle transitions in life, and nature’s beauty helps the speaker appreciate these changes with acceptance and gratitude.
+                            <br><br>
+                            Furthermore, nature serves as a bridge between the speaker’s past and present selves. The quiet observation of the sunset connects the grown-up speaker to his childhood innocence and sensitivity, reminding him of a time when he felt deeply connected to the world around him. Through this connection, nature inspires the speaker to value simple moments and to see the world with fresh, appreciative eyes. It highlights how nature can be a source of comfort, inspiration, and insight throughout life
+                        </li>
+                        <li class="text-justify"><strong>b. Recall a childhood moment when you felt closely connected with nature. Describe the time and place as well as your feelings and thoughts about it.</strong>
+                            When I was a child, one of my most memorable moments with nature happened during a summer evening at my grandparents’ house in the countryside. I remember sitting on the porch, watching the sun slowly set behind the hills. The sky turned into beautiful shades of orange, pink, and purple, and the air was cool and fresh with the scent of flowers and grass. In that quiet moment, I felt peaceful and completely connected to the world around me, as if time had slowed down just for me to enjoy the beauty of nature.
+                            <br><br>
+                            As I watched the sunset, I felt a mix of happiness and calmness. It made me think about how small I was compared to the vastness of the sky and the earth, but at the same time, I felt part of something much bigger and wonderful. This moment taught me to appreciate simple things and to find joy in observing nature. It was a feeling of wonder and gratitude that stayed with me and continues to inspire me whenever I need peace or clarity.
+                        </li>
+                        <li class="text-justify"><strong>c. Interpret the poem in any way you like.</strong>
+                            The poem “who are you, little i” can be interpreted as a reflection on the innocence and wonder of childhood, seen through the eyes of a grown-up looking back. The “little i” represents the child’s smallness and humility, quietly observing the world with fresh eyes full of curiosity and awe. The poem captures a peaceful moment where the child watches the sunset, symbolizing the natural cycles of life and the beauty found in change. It suggests that even as we grow and face the complexities of life, there is something pure and precious in the way children experience the world that is worth remembering and cherishing.
+                            <br><br>
+                            Another way to see the poem is as an exploration of identity and memory. The speaker, who is the adult version of the child, questions and tries to reconnect with his younger self, highlighting the distance time creates between who we once were and who we have become. This questioning expresses a universal human experience—trying to understand our past and how it shapes us. The poem invites readers to appreciate both the innocence of youth and the reflective wisdom of adulthood, showing that both perspectives are valuable in understanding life’s meaning.
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="mt-6 text-lg brighter-gradient-text text-justify">
+                    Stay tuned for more in-depth analysis and discussion questions!
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Check current display style
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block'; // Show the content
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.style.display = 'none'; // Hide the content
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

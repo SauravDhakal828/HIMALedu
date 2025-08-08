@@ -1,0 +1,816 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>गाउँको माया Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Justified text alignment for content text */
+        .content-justified p,
+        .content-justified ul,
+        .content-justified ol {
+            text-align: justify;
+        }
+        .content-justified .ml-5 { /* Adjusting for existing left margin on sub-items */
+            margin-left: 1.25rem; /* Keep original left margin */
+            margin-right: 0; /* Remove right margin */
+            text-align: justify;
+        }
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            color: #e0e0ff; /* Light lavender for table text */
+        }
+        th, td {
+            border: 1px solid rgba(255, 255, 255, 0.2); /* Lighter border for dark theme */
+            padding: 0.75rem;
+            text-align: left;
+        }
+        th {
+            background-color: rgba(251, 194, 235, 0.1); /* Subtle pinkish-purple header */
+            font-weight: 600;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for गाउँको माया Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">२. गाउँको माया Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto content-justified">
+                <button id="toggleSummaryButton" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMERY
+                </button>
+
+                <div id="summaryContent" class="hidden">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">सारांश:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "गाउँको माया" नेपाली साहित्यको एक मार्मिक र यथार्थपरक कथा हो, जसले गाउँले जीवनको अनुपम सुन्दरता, सादगी, र मानिसहरूका बीचको गहिरो आत्मीय सम्बन्धलाई जीवन्त रूपमा प्रस्तुत गर्दछ। यो कथाले ग्रामीण परिवेशको शान्त वातावरण, हरियाली, स्वच्छ हावापानी र प्राकृतिक सौन्दर्यको चित्रण गर्दै पाठकलाई गाउँको मौलिकतामा डुबाउँछ।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        कथाले गाउँलेहरूका बीचको निस्वार्थ सहयोग, आपसी सद्भाव, र दुःख-सुखमा एकअर्कालाई साथ दिने मानवीय सम्बन्धको महत्त्वलाई विशेष जोड दिन्छ। शहरी जीवनको व्यस्तता र भौतिकवादी दौडधुपभन्दा फरक, गाउँमा पाइने भावनात्मक सम्बन्ध र सामुदायिक भावनालाई यसले उच्च मूल्याङ्कन गर्दछ।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        तर, कथाले शहरीकरण र आधुनिकताको बढ्दो प्रभावका कारण गाउँको मौलिकता कसरी बिस्तारै हराउँदै गइरहेको छ भन्ने चिन्ता पनि व्यक्त गर्दछ। गाउँबाट शहरतर्फको बसाइँसराइले ग्रामीण जीवनमा पारेका सामाजिक, आर्थिक र सांस्कृतिक प्रभावहरूलाई पनि यसले सूक्ष्म रूपमा केलाउँछ। यसले परम्परागत मूल्यमान्यता, रीतिरिवाज र संस्कृतिको संरक्षणको आवश्यकतामाथि प्रकाश पार्दै, आधुनिकताको नाममा आफ्नो जरा बिर्सनु हुँदैन भन्ने सन्देश दिन्छ।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "गाउँको माया" ले विशेषगरी गाउँबाट टाढा भएका मानिसहरूलाई आफ्नो जन्मभूमि, बाल्यकालका सम्झनाहरू र गाउँप्रतिको अगाध प्रेम (नोस्टाल्जिया) लाई पुनर्जीवित गर्दछ। यसले पाठकहरूलाई गाउँले जीवनको सादगी र मानवीय सम्बन्धको गहिराइको बारेमा सोच्न प्रेरित गर्दछ, र आधुनिकताको दौडमा हामीले गुमाउँदै गएका मूल्यवान पक्षहरूको सम्झना दिलाउँछ। समग्रमा, यो कथाले गाउँको महत्त्व, त्यसको संरक्षणको आवश्यकता र मानवीय सम्बन्धको दिगोपनमाथि विचार गर्न उत्प्रेरित गर्दछ।
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">शब्दभण्डार (Vocabulary)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् ।</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>क) कोला = खेतको गरो</li>
+                        <li>ख) आर्द्र = नरम ; रसिलो</li>
+                        <li>ग) क्रीतदास = पैसा दिएर दास बनाएको</li>
+                        <li>घ) ओरहा = पूर्ण नपाकेको मकै, गहुँलाई पोलेर तयार पारेको खानेकुरा</li>
+                        <li>ङ) ठालु = गाउँबस्तीमा आफ्नो हैकम जमाउने मान्छे</li>
+                    </ul>
+
+                    <p>
+                        <strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोजेर लेख्नुहोस् ।</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li><strong>क)</strong> स्वतन्त्र = <strong>उन्मुक्त</strong></li>
+                        <li><strong>ख)</strong> कपडाको भकुन्डो = <strong>गिर</strong></li>
+                        <li><strong>ग)</strong> अड्काउ = <strong>अल्झो</strong></li>
+                        <li><strong>घ)</strong> भिन्न हुनाको अभाव = <strong>पृथक्ताबोध</strong></li>
+                        <li><strong>ङ)</strong> अर्काको काम गरिदिएबापत पाइने परिश्रमिक = <strong>वनी</strong></li>
+                        <li><strong>च)</strong> इज्जत = <strong>अभिमान</strong></li>
+                    </ul>
+
+                    <p>
+                        <strong>३. दिइएका शब्दहरुको अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> नौटङ्की: विक्रेताको नौटङ्कीले ग्राहकहरूलाई आकर्षित गर्‍यो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> रिहर्सल: नाटकको अन्तिम रिहर्सल आज साँझ हुनेछ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग)</strong> हुटहुटी: लामो समयपछि घर फर्कन पाउँदा उसलाई हुटहुटी लागेको थियो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ)</strong> आली: किसानहरू खेतको आलीमा बसेर गफ गर्दै थिए।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ङ)</strong> अन्तराल: वर्षाको छोटो अन्तरालपछि घाम लाग्यो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>च)</strong> कृपापात्र: राजाको कृपापात्र बन्न धेरैले प्रयास गरे।
+                    </p>
+                    <p class="ml-5">
+                        <strong>छ)</strong> नासो: यो पुर्खाले छोडेको अमूल्य नासो हो, यसलाई जोगाउनुपर्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ज)</strong> रण: सत्य र झुटबीचको रण सधैँ चलिरहन्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>झ)</strong> मानसपट: उसको मानसपटमा बाल्यकालका रमाइला दिनहरू घुमिरहेका थिए।
+                    </p>
+
+                    <p>
+                        <strong>४. दिइएका टुक्काहरुको प्रयोग गरी एउटा अनुच्छेद तयार पार्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        परिछन, बुधना, वखतवहादुर र कृष्ण मिल्ने गाउँका साथी हुन्‌ । परिछन अर्काको घरमा हली बसेको छ। भोलि यस कार्यको बिँडो परिछनको छोरोले थाम्छ । परिछनले आफ्नो पाखुरी वजारेकै भरमा मालिकलाई खुसी बनाएको छ । आफ्ना गरिब साथीहरूको परिश्रम मेहेनत देखेर कृ्‌ष्णजी लाजले पानी पानी भएको थियो । जमिनदारहरूले गरिव जनतालाई केही क्रण दिएर उनीहरूलाई जीवनभर आफ्नो बसमा पार्थे । अर्काको घरमा बसेर काम गर्ने भए पनि परिछन, बुधना, रामदरस, कृष्ण साथीहरूसँग हातेमालो गर्थे ।
+                    </p>
+
+                    <p>
+                        <strong>५. कक्षामा छलफल गरेर माथिका बाहेक अरु प्रचलित दशवटा टुक्का खोजेर लेख्नुहोस् ।</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>नाक काट्नु</li>
+                        <li>खुट्टा तान्नु</li>
+                        <li>कानमा तेल हाल्नु</li>
+                        <li>रातो मुख लगाउनु</li>
+                        <li>कन्सिरी तात्नु</li>
+                        <li>श्रीगणेश गर्नु</li>
+                        <li>हावा लाग्नु</li>
+                        <li>सुइँको पाउनु</li>
+                        <li>टाउको खानु</li>
+                        <li>आलु खानु</li>
+                    </ul>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">बोध र अभिव्यक्ति (Comprehension and Expression)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. `गाउँको माया´ कथा पढी दिइएका प्रश्नहरुको उत्तर दिनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> यस कथामा कतिओटा अनुच्छेद छन् ?<br>
+                        यस कथामा १४ ओटा अनुच्छेद छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> सातौं अनुच्छेदमा कतिओटा वाक्य छन् ?<br>
+                        सातौं अनुच्छेदमा २ ओटा वाक्य छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग)</strong> कृष्णको प्रवेश कुन अनुच्छेदमा भएको छ ?<br>
+                        कृष्णको प्रवेश तेस्रो अनुच्छेदमा भएको छ ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ)</strong> `म´ पात्र किन गाउँ गएको हो ?<br>
+                        गाउँको मायाले गर्दा म पात्रा गाउँ गएको हो ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ङ)</strong> कथामा आदि, मध्यम र अन्त्यका मुख्य मुख्य घटना टिपोट गर्नुहोस् ।
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li><strong>आदि भाग:</strong></li>
+                        <ul class="list-circle list-inside ml-5">
+                            <li>दुई वर्षदेखि आफ्नो गाउँ ज्ञान चाहेका कृ्‌ष्ण यसपटक गाउँ गएका छन्‌ ।</li>
+                            <li>गाउँको मायाले र त्यहांको वातावरणले उनलाई धेरै नै तानेको थियो ।</li>
+                            <li>आफ्ना धेरै साथीहरू गाउँमा गरिवीका कारण अर्काको घरमा हली वसेर जिविकोपार्जन गरिरहेका छन्‌ ।</li>
+                            <li>कृष्णले राम्रो पढाइका कारण उ सहर गएर पढ्न पाएको छ ।</li>
+                        </ul>
+                        <li><strong>मध्य भाग:</strong></li>
+                        <ul class="list-circle list-inside ml-5">
+                            <li>कृष्णको घर आउँदा वाटामा आफ्नो पुरानो साथी परिछनसँग भेट हुन्छ ।</li>
+                            <li>परिछन गरिब भएकै कारण अर्काको घरमा काम गरेर जिविको पार्जन गर्छन्‌ ।</li>
+                            <li>आफूले काम गरेको पारिश्रमिक वढाउनुपन्यो भनी मालिकविर्द्ध आवाज उठाउंदा मालिकहरूले उनीहरूलाई नै फुटाएर पारिश्रमिक नवढाएकोमा अत्यन्तै दु:खी भएका छन्‌ ।</li>
+                        </ul>
+                        <li><strong>अन्त्य भाग:</strong></li>
+                        <ul class="list-circle list-inside ml-5">
+                            <li>यसरी मालिकहरूले गरिवलाई गरेको थिचोमिचो विरुद्ध संधै लाडरहने कुरा परिल्लनले कृष्णलाई सुनाए ।</li>
+                            <li>यस्तो अन्याय अत्याचार सहेर पनि परिछन जस्ता मानिस त्यसको विरुद्धमा लडिरहेछन्‌ ।</li>
+                            <li>आफ्नो गाउँमा भएको अन्याय, अत्याचार, शोषण, गरिवीलाई समेटेर एउटा नाटक लेख्न परिछनले कृष्णलाई अनुरोध गरेका छन्‌ ।</li>
+                            <li>यसरी धेरैबेर आफ्नो पुरानो साथीसंग गफ गरेर कृष्ण आफ्नो घरतर्फ लागेका छन्‌ ।</li>
+                        </ul>
+                    </ul>
+
+                    <p>
+                        <strong>२. गाउँको माया कथाका आधारमा दिइएका घटनाक्रमलाई क्रमबद्ध रुपमा लेख्नुहोस् ।</strong>
+                    </p>
+                    <ul class="list-decimal list-inside ml-5">
+                        <li>`म´ पात्र करिब दुई वर्षपछि आफ्नो गाउँले जीवनका अनेक घटना सम्झिदै गाउँतिर फर्किनु,</li>
+                        <li>परिछनले जयरामजीकी भनी बोलाएको आवाजले `म´ पात्र झस्किनु,</li>
+                        <li>परिछनसँग गाउँका अनेक दुखसुखका कुराकानी गर्नु,</li>
+                        <li>परिछन खोला छेउको कुवामा पानी लिन जानु र `म´ पात्रले खोलाका राम्रा नराम्रा पक्षमा सोच्नु,</li>
+                        <li>पानी लिएपछि परिछनले गाउँका ठालुका कारण गाउँमा तीन पाटी भएको कुरा सुनाउनु,</li>
+                        <li>तिमी गाउँमै भए ठालुहरुले यसरी सताउन नसक्ने कुरा परिछनले `म´ पात्रलाई बताउनु,</li>
+                        <li>`म´ पात्राले तिमीहरुकै कारणले गाउँ प्रगतिको पथमा छ भन्दै राम्रो कामको श्रेय परिछनलाई दिएर सम्मान प्रकट गर्नु,</li>
+                        <li>महावीरजीको झन्डा मेलामा गाउँकै घटनाहरु राखेर परिछनले `म´ पात्रलाई नाटक लेख्न अनुरोध गर्नु,</li>
+                        <li>गाउँमा टेक्न नपाउँदै एउटा गहन जिम्मेवारी पाएको कुरा सोच्दै `म´ पात्र घरतिर लाग्नु ।</li>
+                    </ul>
+
+                    <p>
+                        <strong>३. गाउँको माया काथाका संवादका क्रममा अन्य भाषाबाट आएका केही वाक्यहरु पनि छन् । छलफल गरि ती वाक्यहरुको अर्थ पत्ता लगाउनु होस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> “जब उतर गए रण पे तो पिछे हटना क्योँ ?”<br>
+                        <strong>अर्थ:</strong> कुनै कामको थालनी गरिसकेपछि पूरा नगरी पछाडि हट्नु हुन्न ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> “ह गोलो , फुर्ती से चाल बढाके ।”<br>
+                        <strong>अर्थ:</strong> श्रमरत हुदाँ फुर्तीले पाइला अगाडि बढाउनुपर्छ ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग)</strong> “गाई चारवाहा टुअर-टापर, भैँस चारवाह चोर । बाकरी चारवाह छिनर-छानर, ताके चार ओर।”<br>
+                        <strong>अर्थ:</strong> गाई भैंसी वा बाख्रा चराउँदा नै किन नहोस् सधै चनाखो भई चारैतिर हेर्नुपर्छ ।
+                    </p>
+
+                    <p>
+                        <strong>४. “जमाना थियो….उनीहरुसँग मिसिन्थेँ “काथांश पढी सोधिएका प्रश्नहरुको सङ्क्षिप्त उत्तर दिनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> `म´ पात्रलाई पढाउनुपर्छ भनी उत्साह भर्ने को थिए ?<br>
+                        `म´ पात्रलाई पढाउनुपर्छ भनी उत्साह भर्ने गाउँका साहुमहाजन र अग्रजहरू थिए, जसले गाउँमा शिक्षाको महत्त्व बुझेका थिए।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> परिछनको नियति कसरी पुस्तान्तरण भएको हो ?<br>
+                        परिछनको नियति पुस्तान्तरण हुनुमा गाउँको गरिबी, शिक्षाको अभाव र सामन्ती शोषण प्रमुख कारण हुन्। पुस्तौंदेखि उनीहरू जमिनदारको अधीनमा काम गर्न बाध्य छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग)</strong> यस अनुच्छेदमा प्रयुक्त लोकगीतको अंशले दिने विचारप्रति आफ्नो धारणा व्यक्त गर्नुहोस् ।<br>
+                        यस लोकगीतको अंशले ग्रामीण जीवनको यथार्थलाई चित्रण गर्दछ, जहाँ गोठालाहरूले आफ्नो पशुधनको सुरक्षाका लागि सधैँ चनाखो रहनुपर्छ भन्ने सन्देश दिन्छ। यसले ग्रामीण जीवनको संघर्ष र सावधानीलाई झल्काउँछ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ)</strong> `म´ पात्रले परिछन लगायतका बालदौंतरीसँग सम्बन्ध सुधार्न के के गर्यो होला ?<br>
+                        `म´ पात्रले परिछन लगागतका बालदौंतरीसँग सम्बन्ध सुधार्न उनीहरूसँगै गाउँका खेलहरू खेल्ने, दुःख-सुख बाँड्ने र उनीहरूको जीवनशैलीमा घुलमिल हुने प्रयास गर्‍यो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ङ)</strong> यस अनुच्छेदको मुख्य सन्देश के हो ?<br>
+                        यस अनुच्छेदको मुख्य सन्देश बाल्यकालका सम्बन्धहरूको महत्त्व, ग्रामीण जीवनको सादगी र गरिबीले कसरी मानिसको नियतिलाई प्रभावित गर्छ भन्ने हो।
+                    </p>
+
+                    <p>
+                        <strong>५. दिइएको कथांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> खोलाले रुवायो भन्ने कुरा मात्र गर्दा कसरी अन्याय हुन्छ ?<br>
+                        खोलाले रुवायो भन्ने कुरा मात्र गर्दा खोलाप्रति अन्याय हुन्छ किनभने खोला ग्रामीण जीवनको अभिन्न अंग हो र यसले गाउँलेहरूलाई जीवनका लागि आवश्यक पानीको मुख्य स्रोत प्रदान गर्दछ। खोलाको पानीले खेतबारीमा सिँचाइ पुर्‍याउँछ, जसले गर्दा अन्न उत्पादन सम्भव हुन्छ। यसका साथै, गाईवस्तुलाई पानी खुवाउन, सरसफाइ गर्न र दैनिक घरायसी कामहरूका लागि पनि खोलाको पानी अपरिहार्य हुन्छ। कहिलेकाहीँ बाढीजस्ता प्राकृतिक विपत्तिले खोलाले क्षति पुर्‍याए पनि, यसको समग्र योगदान र फाइदाहरू धेरै ठूला हुन्छन्। खोलाबिना ग्रामीण जीवनको कल्पना गर्न सकिँदैन, त्यसैले यसको नकारात्मक पक्षलाई मात्र हेरेर 'रुवायो' भन्नु खोलाले पुर्‍याएको अथाह सेवालाई बेवास्ता गर्नु हो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> `म´ पात्रका खोलासँगका बालअनुभुति कस्ता छन् ?<br>
+                        `म´ पात्रका खोलासँगका बालअनुभूतिहरू अत्यन्तै रमाइला, जीवन्त र अविस्मरणीय छन्। बाल्यकालमा उसले खोलामा साथीहरूसँग पौडी खेलेको, माछा मारेको र पानीमा छप्ल्याङ-छप्ल्याङ गर्दै रमाएको सम्झन्छ। खोलाको किनारमा बसेर बाढीको उर्लँदो भेल हेर्दै आनन्द लिएको र कहिलेकाहीँ गाईवस्तुको पुच्छर समातेर खोला तरेको अनुभव पनि उसको मानसपटलमा ताजै छ। यी अनुभवहरूले `म´ पात्रको बाल्यकाल खोलासँग कति नजिक थियो र खोलाले उसको जीवनमा कस्तो गहिरो प्रभाव पारेको थियो भन्ने कुरा स्पष्ट पार्दछ। खोला उसका लागि केवल पानीको स्रोत मात्र नभई, बाल्यकालका अनगिन्ती खुसी र स्वतन्त्रताको प्रतीक पनि थियो।
+                    </p>
+
+                    <p>
+                        <strong>६. दिइएको कथांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> कृष्णलाई सबैले किन सम्मान गरेका हुने ?<br>
+                        कृष्णलाई गाउँका सबैले सम्मान गर्नुका पछाडि धेरै कारणहरू छन्। पहिलो, उनी शिक्षित छन् र सहरमा पढेर पनि आफ्नो गाउँ र गाउँलेहरूप्रति गहिरो माया राख्छन्। उनको शिक्षाले उनलाई दूरदर्शी र विवेकशील बनाएको छ, जसले गर्दा उनी गाउँका समस्याहरूलाई राम्ररी बुझ्न सक्छन्। दोस्रो, उनीमा कुनै घमण्ड छैन; उनी सबै गाउँलेहरूसँग समान व्यवहार गर्छन्, चाहे त्यो गरिब होस् वा धनी। तेस्रो, उनको सकारात्मक सोच र समाजप्रतिको समर्पणले गाउँलेहरूलाई सधैँ प्रेरित गर्छ। उनी गाउँको विकास र गरिब वर्गको उत्थानका लागि चिन्तित छन् र यसका लागि आफूबाट सक्दो सहयोग गर्न तयार देखिन्छन्। यी सबै सद्गुणहरूका कारण गाउँलेहरूले कृष्णलाई केवल एक व्यक्ति नभई, गाउँको इज्जत र अभिमानका रूपमा हेर्छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> पढेलेखेका मान्छेले गाउँ छोड्यो भने गाउँमा कस्तो असर पर्छ ?<br>
+                        पढेलेखेका मान्छेले गाउँ छोडेर सहर वा विदेश पलायन हुँदा ग्रामीण समाजमा गम्भीर र बहुआयामिक नकारात्मक असरहरू पर्छन्। सबैभन्दा पहिले, गाउँमा शिक्षा र चेतनाको अभाव हुन्छ, जसले गर्दा अन्धविश्वास र परम्परावादी सोचले जरो गाड्न सक्छ। दोस्रो, गाउँको विकास प्रक्रिया अवरुद्ध हुन्छ किनभने शिक्षित युवाहरू नै विकासका लागि नयाँ विचार र नेतृत्व प्रदान गर्न सक्ने क्षमता राख्छन्। उनीहरूको अनुपस्थितिमा गाउँका ठालु र अशिक्षित धनी वर्गले एकलौटी रजाइँ गर्न सक्छन्, जसले गर्दा गरिब र विपन्न वर्गमाथि शोषण र दमन बढ्छ। तेस्रो, गाउँको सामाजिक सद्भाव र एकतामा कमी आउँछ किनभने शिक्षित व्यक्तिहरूले विभिन्न वर्ग र समुदायबीच पुलको काम गर्न सक्छन्। अन्ततः, गाउँको मौलिकता र संस्कृति हराउँदै जान्छ, किनकि नयाँ पुस्तालाई आफ्नो परम्परा र इतिहासबारे सिकाउने र जोगाउने जिम्मेवारी शिक्षित वर्गकै काँधमा हुन्छ। यसरी पढेलेखेका मान्छेको पलायनले गाउँलाई दिगो विकास र समृद्धिको बाटोबाट विचलित गराउँछ।
+                    </p>
+
+                    <p>
+                        <strong>७. व्याख्या गर्नुहोस् :</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> हाम्रा गाउँमा पनि साच्चैका मान्छेहरु रहेछन् जो जीवनलाई बुझ्दै छन् ।<br>
+                        प्रस्तुत भनाइ 'गाउँको माया' कथाको मुख्य पात्र कृष्णको आत्मगत विचार हो, जुन उनले लामो समयपछि आफ्नो गाउँ फर्कँदा महसुस गर्छन्। यसले ग्रामीण समाजमा आएको सकारात्मक परिवर्तन र जनचेतनाको स्तरमा भएको वृद्धिलाई सङ्केत गर्छ। पहिले गाउँका मानिसहरू भाग्यवादी, अशिक्षित र शोषणमा परेका थिए भन्ने उनको बुझाइ थियो। तर, अहिले उनले देखेका छन् कि गाउँलेहरूले आफ्नो अधिकार, कर्तव्य र जीवनको यथार्थलाई गहिरो रूपमा बुझ्न थालेका छन्। उनीहरू अन्यायको विरुद्धमा आवाज उठाउन थालेका छन् र आफ्नो भविष्यका लागि सचेत बनेका छन्। यो भनाइले ग्रामीण समुदायको आत्मबल र परिवर्तन ल्याउने क्षमतामाथि कृष्णको विश्वासलाई उजागर गर्दछ। यसले गाउँ अब केवल परम्परागत जीवनशैलीमा मात्र सीमित छैन, बरु आधुनिकता र चेतनाको नयाँ यात्रामा अघि बढिरहेको छ भन्ने आशावादी सन्देश पनि दिन्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> तिम्रो पाखुरीले खोलाको धारलाई फर्काउँछ भने गाउँको इज्जत माथी नउठाउला त ?<br>
+                        यो भनाइ 'गाउँको माया' कथामा कृष्णले सहायक पात्र परिछनलाई सम्बोधन गर्दै भनेका हुन्। यसले ग्रामीण समुदायका किसान र मजदुरहरूको शारीरिक श्रम, कठोर परिश्रम र अदम्य शक्तिको महत्त्वलाई प्रतीकात्मक रूपमा दर्शाउँछ। कृष्णले परिछनलाई सम्झाउँछन् कि जसरी किसानको बलियो पाखुरीले खोलाको तीव्र धारलाई मोड्न वा नियन्त्रण गर्न सक्छ, त्यसरी नै उनीहरूको सामूहिक शक्ति र एकताले गाउँमा व्याप्त सामाजिक अन्याय, शोषण र गरिबीलाई हटाउन सक्छ। यो कथनले ग्रामीण समुदायको आत्मबललाई जगाउने प्रयास गर्दछ। यसले उनीहरूलाई आफ्नो वास्तविक क्षमता र शक्तिलाई चिन्न, संगठित हुन र आफ्नो गाउँको इज्जत, सम्मान र विकासका लागि अघि बढ्न प्रेरित गर्दछ। यो भनाइले श्रमको गरिमा र सामूहिक प्रयासबाट ठूला परिवर्तनहरू सम्भव छन् भन्ने गहिरो सन्देश बोकेको छ।
+                    </p>
+
+                    <p>
+                        <strong>८. समीक्षात्मक उत्तर दिनुहोस् :</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> `गाउँको माया´ कथामा कस्तो समाजको चित्रण गरिएको छ ?<br>
+                        सामाजिक यथार्थवादी कथाकार इस्मालीद्वारा लेखिएको ‘गाउँको माया’ कथामा वर्गीय समाजको चित्रण गरिएको छ । समाजमा एउटा वर्ग जमिनदार सम्पन्न छ भने अर्को वर्ग गरिब, अर्काको घरमा हली बसेर वा वनी गरेर खाने परिछन जस्ता विपन्न छन्‌ । सम्पन्न वर्गले विपन्न वर्गलाई सदा अन्याय, अत्याचार, शोषण गरिरहन्छ । विपन्न वर्ग आफ्नो वर्गको हक हितमा लडिरहेको छ। विपन्न वर्ग एकत्रित भई सम्पन्न वर्गको विरोध गरेको सम्पन्न वर्गले मन पराउँदैन । सम्पन्न वर्ग विपन्न वर्गलाई ‘फुटाउ र राज गर’ भन्ने सिद्धान्तमा लागेको छ तर विपन्न वर्ग आपनो ज्याला, बनी बढाउन प्रयासरत छन्‌ । तसर्थ यस कथामा समाजको वर्गीय द्वन्द्वको चित्रण गरिएको छ ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> गाउँको माया कथाका आधारमा दिइएको पात्रहरुको चरेचित्रण गर्नुहोस् ।
+                    </p>
+                    <p class="ml-5">
+                        अ) <strong>कृष्ण:</strong><br>
+                        कृष्ण 'गाउँको माया' कथाको मुख्य पात्र हुन्। उनी शिक्षित, प्रगतिशील र गाउँप्रतिको गहिरो माया बोकेका व्यक्ति हुन्। सहरमा पढेलेखेको भए पनि उनीमा कुनै घमण्ड छैन र गाउँलेहरूको दुःख-पीडालाई गहिरो रूपमा बुझ्छन्। उनी समाजमा समानता र न्याय स्थापित होस् भन्ने चाहन्छन् र गाउँका गरिब वर्गको उत्थानका लागि संघर्ष गर्नुपर्छ भन्ने मान्यता राख्छन्। कृष्णको भूमिका कथामा सुरुदेखि अन्तिमसम्म गाउँको परिवर्तनका लागि प्रेरणाको स्रोतका रूपमा रहेको छ।
+                    </p>
+                    <p class="ml-5">
+                        ख) <strong>परिछन:</strong><br>
+                        परिछन 'गाउँको माया' कथाको एक महत्त्वपूर्ण सहायक पात्र हुन्। उनी ग्रामीण समाजका गरिब, अशिक्षित तर जुझारु र गतिशील पात्रको प्रतिनिधित्व गर्छन्। उनी जमिनदारहरूको शोषण र अत्याचारबाट मुक्त हुन चाहन्छन् र आफ्नो समुदायको हकहितका लागि निरन्तर संघर्ष गर्छन्। परिछनले आफ्नो वर्गको पीडालाई बुझेका छन् र यसको विरुद्धमा आवाज उठाउन सधैँ तयार रहन्छन्। उनी गाउँमा समानता र न्याय स्थापना होस् भन्ने चाहना राख्छन् र यसका लागि कृष्णजस्ता शिक्षित व्यक्तिको साथ खोज्छन्।
+                    </p>
+
+                    <p>
+                        <strong>९. दिइएको गद्यांश पढी मुख्य मुख्य बुँदाहरू टिप्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> निबन्धकारको मतका आधारमा अनाथालय भएको र नभएको समाजको अन्तर बताउनुहोस् ।<br>
+                        निबन्धकारको मतका आधारमा अनाथालय भएको समाजमा दया, माया, सेवा र सहयोग भावना जाग्दछ भने अनाथालय नभएको समाजमा व्यभिचार, पाप एवं सामाजिक कुकृत्यहरु भएका हुन्छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> हामी अनाथ, गरिब र बिरामीलाई के कसरी सहयोग गर्न सक्छौ ?<br>
+                        हामी अनाथ, गरिब र बिमारीलाई आफुले सकेको चन्दा दिएर लगायत विभिन्न खानेकुराहरु, लत्ताकपडा दिएर सहयोग गर्न सक्छौ ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग)</strong> अनाथालयप्रति तपाईंको धारणा कस्तो छ ?<br>
+                        अनाथ पनि यसै देशका नागरिक भएकाले राज्यले नै उनीहरुको गास, बाँस र कपासको व्यवस्थापनको लागि अनाथालयहरु खोली व्यवस्थित गर्नुपर्छ अनि हामीले पनि सक्दो सहयोग गर्नुपर्छ भन्ने मेरो धारणा छ ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ)</strong> `समाजमा बिगार्नेभन्दा सपार्ने धेरै छन् ´ भन्नुको तात्पर्य के हो ?<br>
+                        `समाजमा बिगार्नेभन्दा सपार्ने धेरै छन् ´ भन्नुको तात्पर्य यस समाजमा नकारात्मक सोच भएका, सामाज बिगार्ने मानिसहरुभन्दा असल, सज्जन, समाजको भलो चिताउने मानिस नै धेरै हुन्छन् हो ।
+                    </p>
+
+                    <p>
+                        <strong>१०. दिइएको अनुच्छेद पढी सारांश लेख्नुहोस् ।</strong><br>
+                        नेपालको जमिन<br>
+                        नेपालमा दुई प्रकारको जमिन ; धान रोपिने खेत र पाखावाली लगाउने बारी छन् । उर्वराशक्तिका आधारमा जमिन अब्बल, दोयम , सीम र चाहार गरी चार प्रकारको छ । सिँचाइको सुविधा र मलिलो भुमि अब्बल, अब्बलभन्दा कमसल दोयम, दोयमभन्दा कमसल सिम र आकाशको भर पर्नुपर्ने जमिन चाहार हो ।<br>
+                        अनुच्छेदको शब्द सङ्ख्या – १३६<br>
+                        एक तृतीयांश शब्द सङ्ख्या – ४५<br>
+                        सारांश शब्द सङ्ख्या – ४५
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">व्याकरण (Grammar)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. रेखाङ्कन गरिएका शब्द मूल वा व्युत्पन्न के हुन् , पहिचान गरेर लेख्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> मूल शब्दहरु<br>
+                        भाइ, हामी, काम, धोखा, चार, धान, फूल
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> व्युत्पन्न शब्दहरु<br>
+                        उथलपुथल(उथल + उथल)<br>
+                        रोपाइँ( रोप् + आइँ)<br>
+                        राम्रै(राम्रो + ऐ)<br>
+                        अगुवा(अगि + उवा)<br>
+                        धनी (धन + ई)<br>
+                        केरकार(केर + कार)<br>
+                        झगडाफसाद(झगडा + फसाद)<br>
+                        एकता(एक + ता)
+                    </p>
+
+                    <p>
+                        <strong>२. दिइएको अनुच्छेदमा मूल र व्युत्पन्न शब्द पहिचान गरी सुची बनाउनु होस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> मूल शब्दहरु<br>
+                        आठ, नौ, वर्ष, उमेर, पुर्खा, काल, पनि, सीप, आफू, गीत
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख)</strong> व्युत्पन्न शब्दहरु<br>
+                        बालक(बाल + क)<br>
+                        लेखपढ(लेख + पढ)<br>
+                        बाल्यकाल(बाल्य + काल)<br>
+                        गाउन(गाउँ + न)<br>
+                        विद्यालय(विद्या + आलय)<br>
+                        परिश्रम(परि+ श्रम)<br>
+                        मिठा(मीठो+ आ)<br>
+                        सङ्गीत(सम् + गीत)
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">शब्दस्रोत (Etymology)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. दिइएको कथांशमा गाढा अक्षरमा लेखिएका शब्दहरु तत्सम, तद्भव र आगन्तुक के हुन् छुट्याउनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>तत्सम शब्दहरु:</strong><br>
+                        पङ्क्ति, आगन्तुक, एक, शान्ति ,भङ्ग
+                    </p>
+                    <p class="ml-5">
+                        <strong>तद्भव शब्दहरु:</strong><br>
+                        आँखा(अक्ष), हात(हस्त), हल्ला(कोलाहल), रिस(रोप)
+                    </p>
+                    <p class="ml-5">
+                        <strong>आगन्तुक शब्दहरु:</strong><br>
+                        अखबार, लिफाफा , कागज, वावा
+                    </p>
+
+                    <p>
+                        <strong>२. दिइएका शब्दहरु ध्यानपुर्वक पढ्नुहोस् र तत्सम, तद्भव र आगन्तुक शब्दहरुको बेग्लाबेग्लै सुची बनाउनु होस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>तत्सम शब्दहरु:</strong><br>
+                        पृथ्वी, अग्नि, वायु, ऋषि, ज्ञान, प्रज्ञा, ऊर्जा , छात्र
+                    </p>
+                    <p class="ml-5">
+                        <strong>तद्भव शब्दहरु:</strong><br>
+                        जेठ(जेष्ठ), साउन(श्रावण), असार(अषाढ), बाटो(वत्र्म), सासू(श्वश्रू), ससुरा(श्वसुर), आगो(अग्नि)
+                    </p>
+                    <p class="ml-5">
+                        <strong>आगन्तुक शब्दहरु:</strong><br>
+                        पसल, पटुवा, ढाट, कदर, ढेवा, जागिर, दिल, हाकिम, पाइप
+                    </p>
+
+                    <p>
+                        <strong>३. दिइएको अनुच्छेदबाट तत्सम शब्द पहिचान गरी सुची बनाउनु होस् ।</strong><br>
+                        अनुभूति, नदी, हृदय, सभ्यता, हिमाल, चित्ताकर्षक, भावनात्मक, जन्मभुमि, रुप, भूमि
+                    </p>
+
+                    <p>
+                        <strong>४. दिइएको अनुच्छेद पढी तद्भव र आगन्तुक शब्द छुट्याएर लेख्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>तद्भव शब्दहरु:</strong><br>
+                        अँध्यारो(अन्धकार), रात(रात्रि), खेत(क्षेत्र), हात(हस्त), बाटो(वत्र्म), काँध(स्कन्ध), गाउँ(ग्राम), मानिस(मानुष), सबै(सर्व) ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>आगन्तुक शब्दहरु:</strong><br>
+                        लालटिन, जर्नेल, साहेब, रेडियो, मोबाइल , लाइट, थर्मस, चिया, सिकार, भेल
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">सङ्केत सुची (Index)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. प्रश्नहरु</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क)</strong> माथिको शब्दकोशका नमुना पानामा दिइएका शब्दहरुले के कस्ता अर्थ दिएका छन् लेख्नुहोस् ।
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li><strong>अँगार:</strong> दाउरा आदि ज्वलनशील वस्तु मिलेर कोइला भइ निभेको तर खरानी नभईसकेको कालो वस्तु, अङ्गगार, अङार ।</li>
+                        <li><strong>अँगेठी:</strong> आगो ताप्नाका निमित्त प्रयोग हुने माटो वा धातुको भाडो ,मकल, अटल, बोर्सी ।</li>
+                        <li><strong>अँगेर:</strong> पोथ्रो होचो हुने, पात रातो रातो तथा सानो र गेडा रातो हुने एक प्रकारको विषालु वनस्पति ।</li>
+                        <li><strong>अँजुली:</strong> दुई उत्ताना हत्केला जोडी औलाहरु केही कुप्र्याएर खिची वा बटुको जस्तो खोपिल्टो परिएको स्थिती ।</li>
+                        <li><strong>अँचेला:</strong> खेतका गराका छेउमा माटो थुपारी बनाइएको आलीको माथिल्लो भाग ।</li>
+                        <li><strong>अँचेटिनु:</strong> च्यापिनु ।</li>
+                        <li><strong>अँगालो:</strong> आत्मियता वा निकटता जनाउन एक अर्काको कँधमा हात राख्ने काम ।</li>
+                    </ul>
+
+                    <p class="ml-5">
+                        <strong>ख)</strong> शब्दकोश हेरी माथिको शब्दकोशको नमुना पानामा छड्के अक्षरमा दिइएका सङ्क्षिप्त शब्दका पूरा रुप लेख्नुहोस् ।
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>निपा : <strong>निपात</strong></li>
+                        <li>ना : <strong>नाम</strong></li>
+                        <li>क. क्रि : <strong>कर्मवाच्य क्रिया</strong></li>
+                        <li>वि : <strong>विशेषण</strong></li>
+                        <li>टु : <strong>टुक्का</strong></li>
+                        <li>स. क्रि : <strong>सकर्मक क्रिया</strong></li>
+                        <li>पे.क्रि : <strong>प्रेरणार्थक क्रिया</strong></li>
+                        <li>पू.स : <strong>पूर्वसर्ग</strong></li>
+                    </ul>
+
+                    <p class="ml-5">
+                        <strong>ग)</strong> शब्दकोश हेरी दिइएका शब्दको अर्थ लेख्नुहोस् ।
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>अकेला = <strong>साथमा कोही नभएको , एक्लो</strong></li>
+                        <li>पिन्चे = <strong>धेरै बेर रुने बानी भएको</strong></li>
+                        <li>एकाघर = <strong>अलग नभएको</strong></li>
+                        <li>जातक = <strong>बालख, शिशु</strong></li>
+                        <li>रोहबर = <strong>देखादेख, भेटघाट</strong></li>
+                        <li>ठाँट = <strong>चकचकी, रवाफ, सान</strong></li>
+                        <li>घडा = <strong>माटाको गाग्रो , घैँटो</strong></li>
+                        <li>चैत्य = <strong>बौद्ध धर्म मान्नेहरुको एक किसिमको मन्दिर</strong></li>
+                        <li>पँधेरो = <strong>पानीको धारो वा कुवा भएको ठाउँ</strong></li>
+                        <li>यथार्थ = <strong>वास्तविक, सत्यमा आधारित</strong></li>
+                    </ul>
+
+                    <p class="ml-5">
+                        <strong>घ)</strong> दिइएका शब्दहरुलाई शब्दकोशको क्रममा लेख्नुहोस् ।
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>अ) <strong>कंश, कपडा, कृष्ण, क्रम, क्षति, मस्त, शारीरिक</strong></li>
+                        <li>आ) <strong>आँधी, आफू, इश्वर, उर्लनु, ऊर्जा, एउटा, ऐश्वर्य</strong></li>
+                        <li>इ) <strong>ज्ञान, तिम्रो, त्रास, मानसिक, मूल, मृत्यु, व्यवहार</strong></li>
+                        <li>ई) <strong>अँध्यारो, अचानो, आँधी, उपकार, उपहार, अपेक्षा, ओठ</strong></li>
+                    </ul>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggleSummaryButton').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summaryContent');
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                this.textContent = 'सारांश लुकाउनुहोस्';
+            } else {
+                summaryContent.classList.add('hidden');
+                this.textContent = 'सारांश हेर्नुहोस्';
+            }
+        });
+    </script>
+</body>
+</html>

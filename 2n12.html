@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>विरहिणी दमयन्ती Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            /* Removed text-align: justify; from here to apply it explicitly where needed */
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for विरहिणी दमयन्ती Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">२. विरहिणी दमयन्ती Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleVirahiniDamayantiSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleVirahiniDamayantiSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="virahiniDamayantiSummaryText" class="text-lg brighter-gradient-text mb-4" style="display: none;">
+                    “विरहिणी दमयन्ती” पाठले प्रेम, विरह र त्यागका ती गहिरा भावनाहरूलाई अत्यन्त मार्मिक र भावुक रूपमा प्रस्तुत गरेको छ। दमयन्ती एक सुन्दरी र प्रेमपूर्ण युवती थिइन् जसले आफ्ना पति नचिकेताप्रति अटूट प्रेम राखिन्। उनीहरूको प्रेम कथा शुद्ध र आदर्शपूर्ण थियो, तर दुर्भाग्यवश नचिकेताको असामयिक मृत्युपछि दमयन्तीको जीवन एकदमै एकान्त र पीडादायक भयो। पाठले दमयन्तीको हृदयको वेदना, शोक र विरहलाई विस्तृत रूपमा चित्रण गरेको छ जसले प्रेम र विरहको मार्मिक अनुभवलाई पाठक समक्ष पुर्‍याउँछ। यसले प्रेममा भएको गहिरो समर्पण र त्यसको क्षतिपूर्ति प्रेमीको अनुपस्थितिमा कसरी मनमोहक तरिका बाट व्यक्त हुन्छ भन्ने कुरा बुझ्न मद्दत गर्छ।<br><br>
+
+पाठमा दमयन्तीको प्रेमको गहिराइ र उनको समर्पणलाई अत्यन्त महत्त्व दिइएको छ। उनले नचिकेतालाई मात्र प्रेम गरिन् भने होइन, आफ्नो सम्पूर्ण जीवन नै उनलाई समर्पित गरिन्। पति हराएपछि उनको संसार सुनसान भयो र उनको मनमा बस्ने सबै आशा, सपना र सुख–दुःखहरू नचिकेताको सम्झनाले बाँधिए। उनको प्रेम यस्तो थियो जुन मृत्युले पनि नष्ट गर्न सकेन। दमयन्तीले आफ्नो जीवनभर विरहिणीको रूपमा बिताइन्, जहाँ उनको भावनात्मक पीडा र अनन्त शोकले उनको व्यक्तित्वलाई अझ गहिरो बनायो। यसले पाठकलाई प्रेमको पवित्रता र त्यागको महत्त्वलाई अझ स्पष्ट रुपमा बुझ्न प्रेरित गर्छ।<br><br>
+
+पाठले दमयन्तीको विरह र पीडामा समेटिएका विभिन्न भावनात्मक अवस्थाहरूलाई समेत गहिरो रूपमा उजागर गरेको छ। प्रेम र विरहको द्वन्द्व, मनको पीडा, शोक र एक्लोपनले उनको जीवनलाई पूर्णरूपले प्रभाव पारेको छ। उनले आफूलाई पर्खन र शान्त बनाउन असम्भव प्रयास गरिन्, तर उनको माया सदैव नचिकेताप्रति बाँधिएको रह्यो। पाठले प्रेमीको मृत्युपछि भोगिने पीडा, बिछोडको वेदना र भावनात्मक तानाबानालाई सुन्दर तरिकाले प्रस्तुत गर्दै मानवीय संवेदनशीलता र मनोवैज्ञानिक अवस्थालाई स्पष्ट बनाएको छ। यसले प्रेम र विरहको स्थिति बुझ्न पाठकलाई भावनात्मक रूपमा सजग बनाउँछ।<br><br>
+
+यस पाठले प्रेममा स्थिरता, समर्पण र धैर्यताको गहिरो सन्देश दिन्छ। दमयन्तीको कथा देखाउँछ कि साँचो प्रेमले दूरी र मृत्यु जस्ता बाधाहरूलाई पनि टाढा पार्न सक्दैन। उनको माया र समर्पण अमर छन्, जसले उनलाई जीवनभर प्रेरित गरिरह्यो। पाठले प्रेम र विरहको द्वन्द्वलाई मनोवैज्ञानिक, सांस्कृतिक र सामाजिक दृष्टिले विश्लेषण गरेको छ। यसले प्रेमका पवित्रता, बल र त्यागका मूल्यहरूलाई जीवन्त रूपमा प्रस्तुत गर्दै पाठकको मनमा प्रेमको पवित्रता र गहिराइको अनुभूति जगाउँछ।<br><br>
+
+अन्ततः, “विरहिणी दमयन्ती” पाठले प्रेम, विरह र त्यागका ती गहिरा र मार्मिक भावनाहरूलाई अत्यन्त सुन्दर र जीवन्त रूपमा प्रस्तुत गरेको छ। यसले प्रेममा स्थिरता, समर्पण र बलिदानको महत्त्वलाई उजागर गर्दै मानवीय संवेदनशीलता र भावनात्मक गहिराइलाई दर्शाउँछ। दमयन्तीको कथा प्रेमका शाश्वत मूल्यहरूलाई जीवन्त बनाउँदै हामीलाई प्रेम, पीडा र त्यागको गहिरो अनुभूति गराउँछ र मानवीय सम्बन्धहरूको अमूल्य महत्वलाई स्मरण गराउँछ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>संयत – मर्यादा वा सीमाभित्र रहेको</p>
+                            <p>धूमिल – स्पष्ट नदेखिने</p>
+                            <p>कर्कोटक – पुराणप्रसिद्ध आठ नागमध्ये एक</p>
+                            <p>कन्दमूल – माटामुनि जराका रूपमा फल्ने डल्लो वा लाम्चो फल</p>
+                            <p>किंकर्तव्यविमूढ – बिलखबन्द, यसो गरूँ कि उसो गरूँ भई जिल्ल परेको</p>
+                            <p>निषाद – एक प्राचीन जाति</p>
+                            <p>वल्कल – रुखको बोक्राद्वारा बनेको पोसाक</p>
+                            <p>सैरन्ध्री – रूपसज्जाको काममा खटिएकी सेविका</p>
+                            <p>शिंशपा – एक जातको रुख, सिसौ</p>
+                            <p>देहयष्टि – लौरो झैँ दुब्लो शरीर</p>
+                            <p>दुकूल – रेसमी पछ्यौरा</p>
+                            <p>सार्थवाह – व्यापारी लस्करको मुखिया</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) आकाशमा उत्तरदेखि दक्षिणसम्म ज्योतिपुञ्जका रूपमा फैलिएका साना साना नक्षत्रको समूह – तारामण्डल</p>
+                            <p>(ख) गाउने र बजाउने कलामा प्रवीण एक देवयोनि – यक्ष वा गन्धर्व</p>
+                            <p>(ग) बस्न र केही राख्न हुने गरी गाराको सट्टा थाम हाली बनाइएको घरको गाराको बाहिरी भाग – पिँढी</p>
+                            <p>(घ) सुसार गर्ने काममा खटिएको – सुसारे</p>
+                            <p>(ङ) जनसाधारणको बसोबास भएको ठाउँ – जनपद</p>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएका टुक्कालाई अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>सुइँकुच्चा ठोक्नु</strong><br><span class="brighter-gradient-text">तिमीले अरूको कुरा नसुनी आफ्नै मनका कुरा मात्र गर्दा साथीहरूले तिमीलाई सधैं सुइँकुच्चा ठोक्नु पर्छ भनेर गुनासो गर्छन्।</span></p>
+                            <p><strong>लम्पसार पर्नु</strong><br><span class="brighter-gradient-text">पढाइमा नजाँदै खेलमैत्री गर्दै गरेपछि उसलाई शिक्षकसँग लम्पसार परेको थियो।</span></p>
+                            <p><strong>आँखा लाग्नु</strong><br><span class="brighter-gradient-text">तिमीले मेरो कुरा नसुनीपढाइमा ध्यान नदिँदा तिम्रो शिक्षकलाई आँखा लाग्यो।</span></p>
+                            <p><strong>मुख फोर्नु</strong><br><span class="brighter-gradient-text">कामले धेरै तनाव भएपछि उसको मुख फोरेर रातभर निद्रा लागेन।</span></p>
+                            <p><strong>तातो लाग्नु</strong><br><span class="brighter-gradient-text">गर्मीको दिनमा घाममा धेरै समय बसेपछि मलाई तातो लाग्यो।</span></p>
+                            <p><strong>तेल लगाउनु</strong><br><span class="brighter-gradient-text">छालामा सुख्खा भएकाले उनले हरेक रात निदाअघि तेल लगाउँछन्।</span></p>
+                            <p><strong>सोत्तर हुनु</strong><br><span class="brighter-gradient-text">तपाईंको समस्या सुनेर मलाई धेरै सोत्तर भयो।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएका शब्दको विपरीत अर्थ दिने शब्द पाठबाट खोजेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>दिन – रात</p>
+                            <p>दुःखी – सुखी</p>
+                            <p>उदाइसकेको – अस्ताइसकेको</p>
+                            <p>पराजय – विजय</p>
+                            <p>विजित – अपराजिता</p>
+                            <p>अपमान – सम्मान</p>
+                            <p>सूर्यास्त – सूर्योदय</p>
+                            <p>देब्रे – दाहिने</p>
+                            <p>वियोग – मिलन</p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएका पारिभाषिक शब्दलाई शब्दकोशीय अनुक्रममा मिलाउनुहोस् र शब्दकोशको सहायता लिई तिनको अर्थ पनि लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>अनुक्रममा मिलाइएको:</p>
+                            <p>अधिकृत, आदेश, टिप्पणी, निलम्बन, परिपत्र, फर्सोट, बढुवा, बेरुजु, भरपाई, राजस्व, सरुवा, स्पष्टीकरण</p>
+                            <p>अर्थहरु :</p>
+                            <div class="ml-4 space-y-2">
+                                <p><strong>अधिकृत</strong><br>राजपत्राङ्कित वा सो सरहको कर्मचारी</p>
+                                <p><strong>आदेश</strong><br>कुनै काम कारबाईका बारेमा मन्त्री वा उच्च अधिकारीबाट दिइने निकासापुकासा वा निर्णयसम्बन्धी आज्ञा</p>
+                                <p><strong>टिप्पणी</strong><br>टीका विशेष कुरा सम्झाउन लेखिने सानो लेख</p>
+                                <p><strong>निलम्बन</strong><br>अधिकार वा दायित्वबाट रोक्का</p>
+                                <p><strong>परिपत्र</strong><br>सूचना</p>
+                                <p><strong>फर्स्योट</strong><br>छिनाफाना</p>
+                                <p><strong>बढुवा</strong><br>पदोन्नती</p>
+                                <p><strong>बेरुजु</strong><br>रुजु गर्दा नमिलेको</p>
+                                <p><strong>भरपाई</strong><br>कसैले अरुबाट कुनै वस्तु बुझी लिएको प्रमाणको रसिद</p>
+                                <p><strong>राजस्व</strong><br>मालपोत, भन्सारमहसुल, विभिन्न कर वा शुल्क आदिका रूपमा राज्यलाई प्राप्त हुने धन</p>
+                                <p><strong>सरुवा</strong><br>सर्ने किसिमको</p>
+                                <p><strong>स्पष्टीकरण</strong><br>छर्लङ्ग नभएका कुरालाई छर्लङ्ग पार्ने काम</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. ‘विरहिणी दमयन्ती’ कथा पढी यसका आदि, मध्य र अन्त्यका मुख्य मुख्य घटना भन्नुहोस् ।</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align">आदि (सुरुवातका घटना):</p>
+                            <p class="brighter-gradient-text">दमयन्ती र उनको श्रीमान् प्रतीकबीच गहिरो प्रेम र मायाको सम्बन्ध थियो। उनीहरू एकअर्काप्रति अत्यन्त वफादार र समर्पित थिए। कथा शुरुमा दमयन्तीको सौन्दर्य, संस्कार र उनको प्रेम कथाको परिचय दिइन्छ।</p>
+                            <p class="text-left-align">मध्य (मध्यका घटना):</p>
+                            <p class="brighter-gradient-text">दमयन्तीको श्रीमान् लामो समयसम्म घर फर्कनुहुन्न र उनको अभावले दमयन्ती अत्यन्त पीडित हुन्छिन्। उनको विरह (अलगाव) बढ्दै जान्छ र उनले श्रीमान् प्रति आफ्नो माया र वफादारी अझ गहिरो अनुभूति गर्न थाल्छिन्। उनले निरन्तर उनको प्रतीक्षा र सम्झना गरिरहन्छिन्।</p>
+                            <p class="text-left-align">अन्त्य (अन्तिम घटना):</p>
+                            <p class="brighter-gradient-text">अन्त्यमा, दमयन्तीको विरह र पीडाले उनलाई अन्ततः अस्वस्थ बनाउँछ र उनको मृत्यु हुन्छ। उनको प्रेम र वफादारीको प्रतीक स्वरूप उनको विरह पीडाले नै उनको जीवन समाप्त हुन्छ। यसरी यो कथा प्रेमको बल र विरहको पीडालाई चित्रण गर्छ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. कथा पढी दिइएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) दमयन्ती जङ्गलमा किन एक्लै हिँडिरहेकी हुन् ?</strong><br><span class="brighter-gradient-text">दमयन्ती जङ्गलमा एक्लै हिँडिरहेकी हुन् किनभने उनलाई आफ्नो श्रीमान् प्रतिक्षा गर्न र उनको सम्झनामा शान्ति खोज्न त्यहाँ जानु परेको हो। जङ्गलको शान्त वातावरणले दमयन्तीलाई आफ्नो मनको पीडा, विरहको दुख र स्मृतिहरूलाई सम्झन सहज बनाउँछ। त्यसैले उनी आफ्नो मनको वेदना कम गर्न र मानसिक शान्तिका लागि जङ्गलमा एक्लै हिँडिरहेकी हुन्।</span></p>
+                            <p class="text-left-align"><strong>(ख) दमयन्तीले यात्रा गरेका मुख्य ठाउँ कुन कुन हुन् ?</strong><br><span class="brighter-gradient-text">दमयन्तीले कथा अनुसार यात्रा गरेका मुख्य ठाउँहरू यस्ता हुन्: आफ्नै घर/गृहस्थी: जहाँ उनी आफ्नो परिवारसँग बस्छिन् र श्रीमान् प्रतीकको पर्खाइमा हुन्छिन्। जङ्गल: जहाँ उनी एक्लै हिंड्छिन् र आफ्नो विरहको पीडा कम गर्न जान्छिन्। पहाड वा टाढा इलाका: जहाँ उनी शान्ति खोज्न र श्रीमान्को सम्झनामा समय बिताउन जान्छिन्। यी ठाउँहरूले दमयन्तीको मानसिक अवस्थालाई र उनको यात्राको भौगोलिक रूपमा प्रतिनिधित्व गर्छन्।</span></p>
+                            <p class="text-left-align"><strong>(ग) जङ्गली हात्तीको आक्रमणबाट बच्न दमयन्ती कसरी सफल भइन् ?</strong><br><span class="brighter-gradient-text">दमयन्ती जङ्गली हात्तीको आक्रमणबाट यसरी बच्न सफल भइन्: जब हात्तीले दमयन्तीमाथि आक्रमण गर्न खोज्यो, उनले धैर्यता र साहस देखाइन्। उनले चिच्याएर आसपासका मानिसहरूको ध्यान ताने र आफ्नो होस र संयम बनाएर हात्तीलाई सामना गरिन्। साथै, हात्तीलाई डराउन र टाढा गर्न उनले आवाज गरिन् र चतुर तरिकाले आफ्नो सुरक्षा गरिन्। यसरी दमयन्तीले धैर्यता र चातुर्यले हात्तीको आक्रमणबाट बचिन्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>३. कथा पढी दिइएका घटनालाई क्रम मिलाई लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) आफ्ना पति नलको खोजीमा दमयन्ती जङ्गलमा एक्लै हिँडिरहनु</p>
+                            <p>(ख) नागपुरुष कर्कोटकले दमयन्तीलाई जबर्जस्ती बोकेर लैजानु</p>
+                            <p>(ग) कर्कोटकले रक्सी खाएर उड्न लागेको मौका छोपी छाप्रामा आगो लगाएर दमयन्ती भाग्न सफल हुनु</p>
+                            <p>(घ) जङ्गलको बिचमा दमयन्तीको सार्थवाह शुचिभद्रसित भेट हुनु</p>
+                            <p>(ङ) शुचिभद्रको सार्थसँगै हिँडेकी दमयन्ती पद्मसौगन्धिक तलाउमा वास बस्नु</p>
+                            <p>(च) जङ्गली हात्तीको कुल्चाइबाट सार्थका धेरै व्यक्तिको ज्यान जानु</p>
+                            <p>(छ) रुख चढ्न सफल दमयन्तीसहित दशबाह जना मात्र हात्तीको कुल्चाइबाट बच्न सफल हुनु</p>
+                            <p>(ज) दमयन्ती चेदी जनपद पुग्नु</p>
+                            <p>(झ) चेदीमा आफ्नै ठुलीआमा सुनन्दाका घरमा पहिचान बदलेर सैरन्ध्रीका रूपमा रही नलसँग मिलनको प्रतीक्षा गर्नु</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. कथामा प्रयुक्त पौराणिक पात्रका नाम भन्नुहोस् र तिनको भूमिका वर्णन गर्नुहोस् ।</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>नल<br>निषधका राजा, दमयन्तीको पति, कथामा प्रत्यक्ष भूमिका नभएको</p>
+                            <p>दमयन्ती<br>रानी, नलकी पत्नी, कथाको मुख्य नारी पात्र, शीर्ष तथा केन्द्रीय भूमिका</p>
+                            <p>पुष्कर<br>नलको भाइ, दमयन्तीको सपनामा आएको</p>
+                            <p>नागयुवक<br>कर्कोटक जातिको नाग, नकारात्मक चरित्रमा देखिएको</p>
+                            <p>शुचिभद्र<br>एक सेठ, सार्थवाह, सहायक भूमिका</p>
+                            <p>सुबाहु<br>चेदीका राजा, सुनन्दाको पति, प्रत्यक्ष भूमिका नभएको</p>
+                            <p>सुनन्दा<br>दमयन्तीकी ठुलीआमा, अन्त्यमा सानो भूमिका ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) ‘मानिसको परिचय शरीरले भन्दा पनि उसको मस्तिष्क र हृदयले दिन्छ’ भन्नुको तात्पर्य के हो ?</strong><br><span class="brighter-gradient-text">“मानिसको परिचय शरीरले भन्दा पनि उसको मस्तिष्क र हृदयले दिन्छ” भन्नुको तात्पर्य हो कि मानिसको बाहिरी रूप भन्दा उसको सोच्ने क्षमता र भावना बढी महत्व राख्छ। कुनै मानिस कस्तो छ भन्ने कुरा उसको शरीरको देखावटले होइन, उसको विचार र भावनाले प्रष्ट हुन्छ। यसले भित्रको सोच र माया नै मानिसको वास्तविक पहिचान हो भन्ने सन्देश दिन्छ।</span></p>
+                            <p class="text-left-align"><strong>(ख) दमयन्तीले आफ्नो रूप किन बदलेकी हुन् ?</strong><br><span class="brighter-gradient-text">दमयन्तीले आफ्नो रूप बदल्नुको मुख्य कारण आफ्नो पीडा र विरहलाई अलि कम गर्न र नयाँ जीवनको शुरुवात गर्ने इच्छा हो। उनको सुन्दरता र पहिचानले उनलाई विरहको पीडामा अझ जोड दिन सक्ने भएकाले, उनले आफूमाथि भएको ध्यान हटाउन र आफैलाई नयाँ रूप दिन खोजेकी हुन्। यसले उनको मानसिक शान्ति खोज्ने प्रयासलाई जनाउँछ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>६. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) माथिको अनुच्छेदमा कस्तो परिवेशको चित्रण गरिएको छ ?</strong><br><span class="brighter-gradient-text">माथिको अनुच्छेदमा भावनात्मक र मानसिक परिवेश को गहिरो चित्रण गरिएको छ। दमयन्तीको मनमा विरहको पीडा र वेदना छाएको छ, जसले उनलाई भौतिक रूपमा मात्र नभई मानसिक रूपमा पनि धेरै थकित बनाएको छ। उनको जीवनमा आएर बसेको यो दु:ख र परिवर्तनको अवस्था एक किसिमको आन्तरिक संघर्ष हो। यस्तो परिवेशमा, उनले आफ्नो पुरानो रूप परिवर्तन गरेर नयाँ जीवन सुरुवात गर्ने प्रयास गरिरहेकी छन्। यो परिवर्तन उनको मनको शान्ति खोज्ने यात्रा हो जहाँ उनी आफ्नो पीडालाई कम गर्न र आफूलाई नयाँ तरिकाले परिभाषित गर्न चाहन्छिन्। यस्तो परिवेशले पाठकलाई दमयन्तीको भावनात्मक अवस्थाबारे गहिरो अनुभूति गराउँछ र उनको मानसिक अवस्थालाई बुझ्न सहयोग पुर्‍याउँछ। समग्रमा, यो परिवेश विरहको पीडा, मानसिक द्वन्द्व र आत्मिक पुनर्निर्माणको संकेत हो।</span></p>
+                            <p class="text-left-align"><strong>(ख) आकाश र दमयन्तीको हृदयका बिच के समानता छ ?</strong><br><span class="brighter-gradient-text">आकाश र दमयन्तीको हृदयबीच धेरै गहिरो र सुन्दर समानता छ। दुवैको मनमा असीम प्रेम, वफादारी र धैर्यता बसेको छ। आकाशले दमयन्तीलाई आफ्नो जीवनको सबैभन्दा महत्वपूर्ण व्यक्ति मान्छ र उनको लागि धेरै पर्खाइ र समर्पण गर्छ। उसले हरेक परिस्थिति सामना गरेर पनि दमयन्तीप्रति आफ्नो माया र विश्वास कायम राख्छ। त्यसैगरी, दमयन्तीको हृदय पनि आकाशप्रति पूर्ण रूपमा समर्पित छ। उनी आफ्नो प्रेमीलाई पाउन धैर्यपूर्वक प्रतीक्षा गर्छिन् र उनको यादमा हर पल बिताउँछिन्। उनको माया केवल बाहिरी रूप वा समयको आधारमा सीमित छैन, बरु त्यो दिगो र गहिरो छ, जसले उनलाई कुनै पनि कठिनाइ सामना गर्न सक्षम बनाउँछ। दुबैको हृदयमा प्रेमले नै जीवनको सबै दुःख र कठिनाइहरू पार गर्ने शक्ति दिएको छ। उनीहरूको माया शारीरिक दूरी, समयको अन्तराल र विभिन्न चुनौतीहरूबाट कमजोर नबन्ने विशेषता राख्छ। यसले आकाश र दमयन्तीको सम्बन्धलाई मात्र होइन, प्रेमको सच्चा र पवित्र स्वरूपलाई पनि उजागर गर्छ। यसरी, आकाश र दमयन्तीको हृदयबीचको समानता प्रेमको स्थिरता, धैर्यता र वफादारीमा आधारित छ, जसले उनीहरूको कथा अमर र प्रेरणादायी बनाउँछ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>७. समीक्षात्मक उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) ‘नारी प्रेम र संघर्षका प्रतिमूर्ति हुन्’ यस भनाइलाई कथाका आधारमा पुष्टि गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘नारी प्रेम र संघर्षका प्रतिमूर्ति हुन्’ भन्ने भनाइ ‘विरहिणी दमयन्ती’ कथाबाट पूर्ण रूपमा पुष्टि हुन्छ। दमयन्तीले आफ्नो जीवनमा प्रेमको गहिरो अनुभूति गरेकी छिन् र आफ्नो श्रीमान् प्रती अथाह माया राख्छिन्। उनको प्रेम केवल सौन्दर्य वा समयसम्म सीमित छैन, बरु त्यो जीवनपर्यन्त टिक्ने, धैर्य र समर्पणपूर्ण प्रेम हो। यसले नारीको माया कति बलियो र निरन्तर हुन सक्ने हो भन्ने देखाउँछ। त्यस्तै, दमयन्तीको कथामा उनको संघर्ष पनि स्पष्ट झल्कन्छ। विरहको पीडाले उनलाई मात्र होइन, उनको जीवनकै सबै आयामलाई प्रभावित बनाउँछ। श्रीमान् नहुँदा, समाजका चुनौतीहरू र मानसिक वेदनाले गर्दा दमयन्तीले धेरै दुःख सहनु पर्छ, तर उनले हार मान्दिनन्। यो निरन्तरको संघर्षले नारीको साहस, धैर्यता र दृढतालाई उजागर गर्छ। यसरी ‘विरहिणी दमयन्ती’ कथामा नारी प्रेम र संघर्षको प्रतीक बनेकी छिन्। उनको प्रेमले नारीको सौन्दर्य मात्र होइन, उनको आत्मबल र साहसलाई पनि प्रतिबिम्बित गर्दछ, जसले नारीलाई जीवनका सबै चुनौतीहरू सामना गर्न सक्षम बनाउँछ।</span></p>
+                            <p class="text-left-align"><strong>(ख) दमयन्तीले आफ्नो जीवनमा आइपरेका समस्याको समाधानका लागि कुन कुन उपाय अवलम्बन गरेकी छन् ?</strong><br><span class="brighter-gradient-text">दमयन्तीले आफ्नो जीवनमा आइपरेका समस्याको समाधानका लागि धेरै उपाय अवलम्बन गरेकी छन्। सबैभन्दा पहिले, उनले आफ्नो विरहको पीडालाई सहन धैर्यता अपनाइन्। प्रेमीको अनुपस्थिति र दु:खद परिस्थितिहरूको बाबजुद पनि उनले निरन्तर आफ्नो प्रेममा अडिग रहिन् र पर्खाइमा धैर्य गरिन्। त्यसपछि, मानसिक शान्ति र सोचलाई स्पष्ट बनाउन उनी एकान्तमा जङ्गलमा समय बिताउने गर्थिन्। जङ्गलको शान्त वातावरणले उनलाई आफ्ना भावनाहरूलाई सम्हाल्न र मनको पीडालाई कम गर्न सहयोग पुर्‍यायो। यसले उनको मानसिक तनाव घटाउन र आफूलाई आत्मसाथ गर्ने अवसर दियो। साथै, दमयन्तीले आफ्नो भित्री शक्ति र आत्मबलमा दृढ विश्वास राखिन्। उनले कुनै पनि कठिनाइलाई पराजयको रूपमा होइन, चुनौतीको रूपमा लिएर त्यसलाई जित्ने प्रयास गरिन्। आफ्नो साहस, धैर्यता र सकारात्मक सोचका कारण उनले जीवनका अनेकौं समस्याबाट जुझ्न सकिन् र अन्ततः आफ्नो प्रेमको मूल्य बुझाउन सफल भइन्। यी उपायहरूले दमयन्तीलाई कठिन समयहरूमा बलियो र अडिग बनायो।</span></p>
+                            <p class="text-left-align"><strong>(ग) आफ्नो दृढ सङ्कल्प पूरा गर्न मानिस जतिसुकै सङ्घर्ष गर्न पनि तयार हुन्छ भन्ने कुरा ‘विरहिणी दमयन्ती’ कथाका आधारमा पुष्टि गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘विरहिणी दमयन्ती’ कथाले देखाउँछ कि मानिस आफ्नो दृढ सङ्कल्प पूरा गर्न जतिसुकै सङ्घर्ष गर्न पनि तयार हुन्छ। दमयन्तीले आफ्नो प्रेमी प्रती अटुट माया र विश्वास राखेकी छिन् र त्यसका लागि जीवनका अनेकौं कठिनाइहरू सहन तयार छिन्। उनका विरहको पीडा, मानसिक पीडा र सामाजिक चुनौतीहरूलाई पनि उनले आफ्नो सङ्कल्पलाई कमजोर बनाउन दिइनन्। कथामा दमयन्तीले आफ्नो श्रीमान् फर्कने आशामा धैर्यपूर्वक प्रतीक्षा गरिन् र निरन्तर आफ्नो प्रेम कायम राखिन्। उनको मनोबल र साहसले उनलाई कुनै पनि बाधा अघि हार मान्न नदियो। जङ्गलमा एक्लै हिंड्नु, विरहको वेदना सहनु र आफूलाई मानसिक रूपमा बलियो बनाउनु उनका सङ्घर्षका उदाहरण हुन्। यसरी, ‘विरहिणी दमयन्ती’ ले देखाउँछ कि मानिसको दृढ सङ्कल्पले कठिन परिस्थितिहरूलाई पनि पार गर्न सक्ने शक्ति दिन्छ। प्रेम र विश्वासका कारण दमयन्तीले आफ्नो जीवनका सबै सङ्घर्षहरू जितिन् र आफ्नो लक्ष्यतर्फ अडिग रहिन्। यो कथाले मानिसको सङ्घर्ष र सफलता बीचको गहिरो सम्बन्धलाई प्रमाणित गर्दछ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>८. तलको अनुछेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) किन मनलाई कल्पनाको कारक मानिएको हो ?</strong><br>उत्तर: संसारको कल्पना गर्ने एक मात्र इन्द्रिय भएकाले मनलाई कल्पनाको कारक मानिएको हो ।</p>
+                            <p><strong>(ख) मन नित्य परिवर्तनशील छ भन्नुको तात्पर्य के हो ?</strong><br>उत्तर: मन नित्य परिवर्तनशील छ भन्नुको तात्पर्य मन कहिल्यै पनि अस्थिर र एकनासको हुदैन हो ।</p>
+                            <p><strong>(ग) आत्मज्ञानीहरूका विचारमा मन र संसारको सम्वन्ध कस्तो छ ?</strong><br>उत्तर: आत्मज्ञानीहरूका विचारमा संसार भएमा मात्र मन हुने र मन भए मात्र संसार हुने भएकाले मन र संसारको सम्बन्ध घनिष्ठ रहेको छ ।</p>
+                            <p><strong>(घ) मनलाई किन सुख र दुःखको कारण भनिएको हो ?</strong><br>उत्तर: मानिसलाई सुख र दुःखको अनुभव गराउने मुख्य कार्य नै मनको भएकाले मनलाई सुख र दुःखको कारण भनिएको हो ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>९. बेरोजगारी समाधानका उपाय शीर्षकमा १५० शब्दसम्मको टिप्पणी लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="brighter-gradient-text">बेरोजगारी समाधानका उपाय</p>
+                            <!-- Content for this section was not provided in the prompt -->
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएको अनुच्छेदमा प्रयुक्त नाम शब्द टिप्नुहोस् :</strong><br><span class="brighter-gradient-text">आर्या, रतिया, निकेश, पेम्बा, साथी, सहयोग, माया, दिन, सुख, दुःख, भावना, मनोरञ्जन, समय, प्रकृति, भलाकुसारी, उद्देश्य, वनभोज आयोजना, विचार, ब्यवस्थापन, निकेश, टोलीनेता, सल्लाह, चामल, दाल, तरकारी, दही, दुध, मासु, मह, पाउरोटी, चिया, योजना, दृश्य, अवलोकन, इच्छा, जमात, बिदाइ, गुच्छा, हुल, भेट, भिड, पर्यटक, गाउँले, कुराकानी, फूल, सल्लाघारी, चरा, गाई, बथान, घुमाइ, सिकाइ, अनुभव ।</span></p>
+                        <p class="text-left-align"><strong>२. पाठको पहिलो अनुच्छेदमा प्रयुक्त चारओटा व्यक्तिवाचक नाम टिप्नुहोस् :</strong><br><span class="brighter-gradient-text">कर्कोटक, निषध, नल, दमयन्ती</span></p>
+                        <p class="text-left-align"><strong>३. तलको अनुच्छेदबाट कर्मको काम गर्ने नाम र भेदक विशेषण टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>कर्मको काम गर्ने नाम : सौरभ, टोलीनेता, अवलोकन, रगत, साथी, प्रशंसा</p>
+                            <p>भेदक विशेषण : सौरभको, गोदावरीका, दृश्यको, आफ्नो, विद्यालयका, उनीहरूको</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएको अनुच्छेदमा प्रयुक्त सर्वनाम र सार्वनामिक विशेषण टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>सर्वनाम : हामी, एकअर्का, जो जो, म, एकआपस, तँ, तिमी, तपाईं र उहाँ, आफैँ, जोसुकै, जेसुकै, कोही, हरेक, जे, आफू अरू</p>
+                            <p>सार्वनामिक विशेषण : जुन, केही, ती</p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएको अनुच्छेदबाट पदवर्ग विचलन भएका र नभएका विशेषण टिपोट गर्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>पदवर्ग विचलन भएका विशेषण : ती, केही, त्यो</p>
+                            <p>पदवर्ग विचलन नभएका विशेषण : एक वृद्ध, एउटा, चम्किलो, सुन्दर, बहुमूल्य</p>
+                        </div>
+                        <p class="text-left-align"><strong>६. दिइएको अनुच्छेदबाट क्रियायोगी पहिचान गरी टिप्नुहोस् :</strong><br><span class="brighter-gradient-text">आउँदा, तत्काल, अहिले, भरे, भोलि, बिस्तारै, कहिल्यै, मात्र, हरबखत, हरपल, हरदिन, हरघडि, आउन, पहिल्याएर अघि</span></p>
+                        <p class="text-left-align"><strong>७. दिइएको अनुच्छेदबाट नामयोगी र संयोजक पहिचान गरी टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>नामयोगी : पिच्छे, नजिकै, सँग, कहाँ, भित्र, भर, पछि, बित्तिकै, पट्टि</p>
+                            <p>संयोजक : पनि, र, जब तब</p>
+                        </div>
+                        <p class="text-left-align"><strong>८. दिइएको अनुच्छेदबाट विस्मयादिबोधक र निपात पहिचान गरी टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>विस्मयादिबोधक : आहा, उः, छ्या, अँ, आबुइ, खै खै, आच्छु, क्याबात</p>
+                            <p>निपात : त, नि</p>
+                        </div>
+                        <p class="text-left-align"><strong>९. पाठको तेस्रो अनुच्छेदमा प्रयुक्त निपात र संयोजक टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>निपात : पनि, नै</p>
+                            <p>संयोजक : र, तैपनि</p>
+                        </div>
+                        <p class="text-left-align"><strong>१०. शुद्ध गरी पुनर्लेखन गर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="brighter-gradient-text">नेपाल बहुभाषिक देश हो । यहाँ विभिन्न भाषा बोलिन्छन् । नेपालको संविधानले नेपालमा बोलिने सबै मातृभाषालाई राष्ट्रभाषा मानेको छ । नेपालमा बसोबास गर्ने प्रत्येक नेपाली समुदायलाई आफ्नो मातृभाषामा पढ्न पाउने, यसको संरक्षण र प्रचारप्रसार गर्न पाउने हक प्रदान गरी सबै भाषालाई समान रूपमा सम्मान गरेको छ । सबै मातृभाषाको संरक्षण र सम्वर्द्धनका लागि भाषाआयोगको गठनको ब्यवस्था पनि गरेको छ र सोहीबमाजिम भाषाआयोगको गठन पनि भैसकेको छ ।</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Virahini Damayanti Notes
+        function toggleVirahiniDamayantiSummary() {
+            const summaryText = document.getElementById('virahiniDamayantiSummaryText');
+            const toggleBtn = document.getElementById('toggleVirahiniDamayantiSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

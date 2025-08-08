@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>My Old Home Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for My Old Home Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">5. My Old Home Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “My Old Home” is a nostalgic poem by Madan Mohan Mishra that reflects the poet’s deep emotions and memories connected to his childhood home. The poem beautifully captures the feelings of longing and attachment that many people experience when they think about the places where they grew up. Through vivid imagery and heartfelt language, Mishra conveys how an old home is more than just a physical structure—it is a treasury of memories, emotions, and identity.<br><br>
+
+The poem begins by describing the old home as a place filled with happiness and innocence. The poet recalls the warmth and comfort that the home once offered him and his family. It was a place where love, laughter, and togetherness thrived. Mishra emphasizes that the old home holds the imprint of past joys and cherished moments that shaped his early life, creating a deep emotional connection between the poet and the house.<br><br>
+
+As the poem progresses, the poet reveals the passage of time and the changes that have occurred. The old home is no longer the lively place it once was; it has become quiet and empty. Despite these changes, the poet’s affection for the home remains strong. He feels a sense of loss but also gratitude for the memories that the house holds. This contrast between the past and the present highlights the bittersweet nature of nostalgia.<br><br>
+
+Mishra also reflects on the idea that an old home is a symbol of identity and belonging. It represents the roots that connect a person to their past, culture, and family history. Even if the physical home changes or disappears, the memories and values associated with it continue to live in the heart. The poet’s reverence for his old home signifies the importance of remembering and honoring one’s heritage.<br><br>
+
+In the concluding lines, the poet expresses a wish to return to the old home and relive the precious moments of his childhood. The poem ends on a hopeful note, emphasizing that although time moves on, the emotional bond with one’s roots remains eternal. Mishra’s words invite readers to cherish their own memories and appreciate the places that have shaped their lives.<br><br>
+
+In conclusion, “My Old Home” is a touching poem that explores themes of memory, identity, and nostalgia. Madan Mohan Mishra’s vivid portrayal of his childhood home reminds us of the enduring impact of our early experiences and the emotional significance of the places we call home. The poem beautifully captures the universal feeling of longing for the past and the comfort of familiar surroundings.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How does the narrator describe his feeling at the arrival of his old home?</span><br>
+                    The narrator experiences a mixture of emotions upon arriving at his old home. Initially, he feels pleasure and happiness as memories of his childhood flood back to him. His hometown, which once appeared lovely with a green sky overhead, filled with vibrant life, now seems completely changed. Instead of the bright and lively scene he remembered, he sees a vast, grey, and gloomy sky, with the surroundings looking deserted and lifeless. The condition of his home is in stark contrast to what it was in his youth, and this change makes him nostalgic as he reflects on how his childhood has been deceived by time.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What were the three kinds of servants in China then? What does it indicate about contemporary Chinese society?</span><br>
+                    In the story, the narrator describes three kinds of servants in contemporary Chinese society: dailies, yearlong servants, and busy-mothers. Dailies, also known as short-timers, worked only for a day or short periods, while yearlong servants worked continuously for a family throughout the year or longer. Busy-mothers were landowners who worked for one family at specific times, such as during festivals or when rent was due. This classification highlights the structured and hierarchical nature of Chinese society at the time, where labor and social roles were divided rigidly. It reflects a system resembling servitude or slavery and shows how social divisions influenced the allocation of work and status.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What makes the narrator nostalgic? What did he do with Runtu in his teenage years?</span><br>
+                    The narrator’s nostalgia is triggered by his mother’s suggestion to meet his childhood friend, Runtu. This brings back memories of his carefree teenage years spent with Runtu. During their youth, they shared many joyful activities such as catching birds by clever tricks and hunting the Zha bird by stabbing it. They also enjoyed collecting colorful shells like reds, blues, and ghost-scarers, and they went out searching for badgers and porcupines. These shared adventures remind the narrator of a simpler, happier time, deepening his feelings of nostalgia.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. How did Runtu hunt a Zha at a young age?</span><br>
+                    Runtu showed remarkable skill even at a young age when he hunted a Zha bird. While standing guard over watermelons, he suddenly attacked the bird with a pointed knife. This quick and unexpected move allowed him to successfully kill the Zha, demonstrating his ability and courage as a young hunter.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. How does the narrator make a humorous picture of Mrs Yang?</span><br>
+                    The narrator creates a humorous image of Mrs. Yang by likening her to a “beancurd beauty” with narrow cheekbones and thin lips. He notes that she powdered her face, but humorously describes her facial features as if measured by two compasses from a geometry box, creating an exaggerated and comical picture. This playful description adds a lighthearted tone to the narrative and shows the narrator’s wit in portraying characters.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. According to the narrator, what were different factors that made Runtu a poor man throughout his life?</span><br>
+                    Runtu’s lifelong poverty is attributed to a variety of interconnected factors. Social obligations and rigid class divisions limited his opportunities and freedom. His economic background was weak, and he faced discrimination during his prime years. Additionally, adverse conditions such as poor harvests, famine, heavy taxes, and exploitation by the gentry worsened his financial situation. The burden of supporting many children also strained his resources. Together, these challenges kept Runtu in a state of persistent poverty throughout his life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. How does the narrator help Runtu before leaving the old home?</span><br>
+                    Before departing from his old home, the narrator offers tangible help to Runtu, who is struggling financially. He gifts Runtu household items such as two large tables, a few candles, an incense burner, and a set of scales. This gesture is a way of easing Runtu’s difficult life and demonstrates the narrator’s kindness and the enduring nature of their friendship, despite the social and economic differences between them.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">h. How does the author differentiate two kinds of idols?</span><br>
+                    The author distinguishes between two types of idols in the story: superstitious idols and hope. Superstitious idols are worshipped for short-term benefits and immediate desires, representing fleeting beliefs that people cling to when they want quick results. In contrast, hope is described as a long-term, enduring faith that sustains people through difficult times. Hope is portrayed as a deeper and more meaningful idol that offers lasting comfort and resilience beyond temporary wishes.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context:</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. While reading the friendship between the narrator and Runtu, Hindu readers remember the friendship between Krishna and Sudama. Which particular description reminds you of the mythological example?</span><br>
+                    While reading about the friendship between the narrator and Runtu, Hindu readers are often reminded of the timeless friendship between Krishna and Sudama, a story well-known from the Mahabharata. Both friendships share striking similarities that highlight the essence of true companionship beyond social and economic boundaries. In the story, Xun, the narrator’s friend, is wealthy, whereas Runtu lives a life of poverty and hardship, just as Krishna was a king and Sudama a poor Brahmin. This contrast in their social status evokes the same feelings of humility and shame experienced by Sudama when he visited Krishna. Similarly, Runtu feels ashamed to meet Xun, believing himself unworthy due to his poverty. Despite these differences, both friendships are marked by genuine affection, respect, and a deep bond that transcends material wealth. This portrayal emphasizes the idea that true friendship is not dependent on riches or status but is grounded in loyalty, kindness, and understanding.
+                    <br><br>
+                    Moreover, the way both stories depict the reunion between the friends further strengthens this connection. Krishna warmly welcomes Sudama with love and generosity, transforming Sudama’s humble hut into a palace and ensuring his happiness. In parallel, Xun shows his care by helping Runtu with household goods and support, trying to ease the difficulties in his friend’s life. These actions highlight the virtue of compassion in friendship and teach a valuable moral lesson—that true friends support each other selflessly, regardless of their social positions. The stories remind readers that wealth cannot break genuine friendships and that a pure heart and mutual respect are the foundations of lasting relationships. This enduring message resonates deeply within the cultural and moral fabric of both stories, making the friendship between Xun and Runtu reminiscent of the legendary bond between Krishna and Sudama.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How does the story support the proposition that the relationships of childhood are innocent, impartial and disinterested?</span><br>
+                    The story My Old Home strongly supports the idea that childhood relationships are innocent, impartial, and disinterested by portraying the pure friendship between Xun and Runtu. As children, they share a bond that is free from the complexities of social class, wealth, or status. Their friendship is based solely on mutual affection and shared experiences, without any expectation of gain or advantage. The story emphasizes how children do not understand or care about societal divisions like rich or poor, upper or lower class. They simply enjoy each other’s company and build genuine connections. This innocence is reflected in the way Xun and Runtu play, hunt, and explore together without any prejudice or concern about their different social standings.
+                    <br><br>
+                    Furthermore, the story illustrates how this pure childhood bond remains unaffected by the passing of time and changing circumstances. Even though Runtu grows poor and struggles in life, and Xun becomes wealthy, their friendship continues to be marked by genuine care and respect. Xun’s willingness to help Runtu by giving him household items before leaving his old home shows the lasting nature of their disinterested friendship. Unlike many adult relationships that may be influenced by selfish motives or social expectations, the friendship in the story remains untainted and sincere, proving that childhood relationships are often the most honest and unconditional kind. This contrast between the simplicity of childhood bonds and the complexities of adult social divisions is a central theme in the story.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. After reading the story, what inferences can you make about the contemporary Chinese economic and social system?</span><br>
+                    After reading My Old Home, several important inferences can be made about the contemporary Chinese economic and social system depicted in the story. The narrative reveals a society deeply divided by class and economic disparity. Agriculture appears to be the primary occupation, but it provides meager income, leaving many, like Runtu, struggling to meet even their basic needs. This agricultural dependence results in widespread poverty and hardship for the lower classes. The story highlights the lack of social mobility, as people born into poverty remain trapped due to economic challenges such as poor harvests, famine, and harsh taxes. These factors keep the majority in a cycle of deprivation, unable to improve their living conditions.
+                    <br><br>
+                    Socially, the story illustrates a rigid hierarchical structure that governs relationships and labor. The classification of servants into dailies, yearlongs, and busy-mothers shows a system where work and social roles are strictly divided based on status. There is a clear division between the rich and the poor, and inter-class relationships are restricted or frowned upon. This rigid social stratification, combined with economic hardships, fosters discrimination and limits opportunities for the lower class. The story’s depiction of these social and economic conditions reflects a narrow-minded and inhumane system that marginalizes the poor, showing a society struggling with inequality, limited progress, and entrenched social boundaries.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. What does the story indicate about the geographical features of the narrator’s hometown?</span><br>
+                    The story My Old Home vividly portrays the geographical features of the narrator’s hometown, contrasting the vibrant landscape of his childhood with the bleakness he encounters upon his return. In his early years, the narrator describes his hometown as a beautiful place under a green, blue-black sky, surrounded by lush greenery and fertile land filled with vegetables and grasses. The environment was lively and full of natural beauty, with birds flying freely around his garden and house. This idyllic setting reflects a close connection between the people and nature, highlighting the simplicity and richness of rural life during that time.
+                    <br><br>
+                    However, when the narrator returns after many years, he finds that the once vibrant landscape has drastically changed. The green sky has turned vast and grey, giving an impression of desolation and gloom. The land appears barren and lifeless, stripped of its former beauty and vitality. This transformation symbolizes not only environmental degradation but also the loss of the warmth and vitality that once defined the narrator’s hometown. The story hints at changes brought by time, possibly due to neglect or unplanned development, which have robbed the area of its natural charm and left it desolate. Through these descriptions, the story reflects on the impact of changing times on both the physical environment and the emotional connection people have with their roots.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

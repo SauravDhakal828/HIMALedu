@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Gift in Wartime Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+
+        /* Styling for the question/answer sections */
+        .qa-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+        .qa-section h3 {
+            margin-bottom: 1rem;
+        }
+        .qa-section p, .qa-section li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+        .qa-section ul {
+            list-style-type: disc; /* Default disc for themes */
+            padding-left: 1.5rem;
+        }
+        .qa-section li {
+            margin-bottom: 1rem; /* Space between list items */
+        }
+        .qa-section li strong {
+            display: block; /* Question on its own line */
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for The Gift in Wartime Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">The Gift in Wartime Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “The Gift in Wartime” is a poignant and emotionally powerful poem by Tran Mong Tu, a Vietnamese poet who writes about the tragedies of war. The poem is a heartfelt monologue by a woman who speaks directly to her beloved who died in war. She expresses the sorrow, loss, and emptiness she feels after losing him. The poem highlights how war destroys not only lives but also hopes, love, and futures. It is a powerful reminder of the emotional cost of conflict, especially from the perspective of those left behind.<br><br>
+
+The speaker begins by listing the gifts she gave to her beloved: roses, a wedding gown, youthful days, and passionate kisses. These symbolize love, dreams, and a life they hoped to share. However, instead of returning love and companionship, her beloved gives her something tragic in return: a military medal and a death notice. These gifts from war are filled with sorrow, not joy. This contrast between what she gave and what she received reflects the painful imbalance of sacrifice and the futility of war.<br><br>
+
+As the poem progresses, the speaker describes visiting her beloved’s grave. She speaks of placing flowers and perfume there, symbolic gestures of love and respect, but also of mourning and grief. She notes that she talks to him, but he can no longer respond. His lips are silent, and his youthful body is cold under the earth. This shows how death cuts off communication and connection, leaving only memories and pain. The mention of his friends—also dead—lying beside him deepens the sense of collective loss.<br><br>
+
+The poem also touches on the dehumanizing nature of war. The speaker says that war took away not just her husband, but her dreams, her womanhood, and the promise of motherhood. She mourns not only for the man she lost but also for the future that was stolen from her. The poem paints war not as heroic but as a cruel force that brings suffering to both soldiers and civilians. Her pain is not just personal—it reflects the pain of countless women who have lost loved ones to war.<br><br>
+
+Towards the end, the speaker bitterly reflects on how war medals and victory celebrations mean nothing compared to the human cost. She would much rather have her beloved back than any recognition of his sacrifice. The poem’s tone is not angry but deeply sorrowful and mournful, full of emotional weight and quiet despair. There is no comfort in his heroism—only the loneliness of a young woman who must live the rest of her life in grief and memory.<br><br>
+
+In conclusion, “The Gift in Wartime” is a powerful anti-war poem that captures the silent suffering of those left behind. Through emotional language, vivid imagery, and heartfelt expression, Tran Mong Tu gives voice to the pain of love interrupted by war. The poem urges readers to see beyond medals and heroism and to understand the real cost of violence—broken hearts, lost futures, and unbearable silence. It is a touching tribute to love and a haunting reflection on what war truly takes from humanity.<br><br>
+                    </p>
+                </div>
+
+                <!-- Understanding the Text Section -->
+                <div class="qa-section fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <ul class="list-none space-y-4">
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>a. Who is the speaker addressing and why can that person not hear or understand what she is saying?</strong>
+                                The speaker is addressing her husband or a loved one who has died in the war. This person cannot hear or understand what she is saying because he is no longer alive. The speaker’s words are directed toward someone who has passed away, making it impossible for him to respond or even listen.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>b. What can you infer about the speaker’s feelings for the person addressed as “you”?</strong>
+                                The speaker’s feelings are full of deep love, affection, and sorrow. She cherishes the memories of the person and feels a profound sense of loss and longing. The way she talks to him, despite his absence, shows her emotional attachment and the pain of separation caused by war.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>c. What is the speaker’s attitude toward war?</strong>
+                                The speaker’s attitude toward war is one of sadness and condemnation. She sees war as a cause of great suffering and loss. The poem conveys how war destroys lives and relationships, leaving behind grief and unanswered questions. The tone suggests that war is tragic and unjust, especially because it takes away loved ones.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>d. In what ways do you think this person’s fate has affected the speaker?</strong>
+                                The person’s fate—dying or being lost in war—has deeply affected the speaker emotionally and mentally. She is left grieving, lonely, and struggling to come to terms with the loss. Her life is overshadowed by sorrow, and she is unable to move on easily. The death has created a void in her life, and she experiences pain, helplessness, and longing.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>e. What does the speaker promise at the end of the poem? Why do you think the speaker does this?</strong>
+                                At the end of the poem, the speaker promises to remember the person and keep their memory alive. She may also promise to live on with dignity or hold onto hope despite the tragedy. This promise is a way of coping with the loss, expressing loyalty, and preserving the emotional bond. It shows her determination not to forget the sacrifice and love shared, and it helps her find meaning amid grief.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference to the Context Section -->
+                <div class="qa-section fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <ul class="list-none space-y-4">
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>a. What is the theme of the poem?</strong>
+                                The main theme of the poem revolves around the harsh realities and emotional costs of war. It shows how war not only destroys lives on the battlefield but also deeply affects those left behind—family members and loved ones who suffer from loss and grief. The poem focuses on the personal tragedy of losing someone dear and the silence that follows when a loved one is no longer there to respond or share in life’s moments. This theme highlights the painful sacrifices made during wartime, emphasizing that war’s consequences go far beyond physical destruction, deeply impacting the hearts and minds of individuals.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                Another important theme is love and remembrance. Despite the physical absence of the loved one, the speaker continues to communicate and hold onto memories, showing how love endures even in the face of death. The poem expresses a longing to keep the memory of the lost person alive, suggesting that remembrance becomes a gift that helps survivors cope with their sorrow. This theme underlines the power of emotional bonds and how they provide comfort and meaning amid the devastation of war, reflecting the hope that love and memory can survive even the darkest times.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>b. What imagery from the poem made the greatest impression on you? Why?</strong>
+                                One of the most striking images in the poem is the contrast between silence and communication—the idea of speaking to someone who cannot hear or respond because they have died. This creates a powerful visual of emptiness and loss, as if the speaker is talking into a void. The silence symbolizes the finality of death caused by war, making the emotional impact of separation even more intense. This imagery impressed me because it highlights how war disrupts normal human connections and leaves behind an unbearable quiet that can never be filled.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                Another vivid image is that of memory as a “gift” that the speaker offers to the lost loved one. This metaphorical image stands out because it transforms grief into something active and hopeful. It suggests that even though the person is physically gone, their presence continues through remembrance. This impression is powerful as it reflects the resilience of love and the human spirit to hold on to those we have lost, turning sorrow into a meaningful act of keeping memories alive despite the tragedy of war.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>c. Which figurative language is used in the poem? Explain with examples.</strong>
+                                The poem uses several types of figurative language to deepen its emotional impact, including metaphor, personification, and symbolism. For example, the speaker refers to memory as a “gift,” which is a metaphor. This suggests that remembering a lost loved one is something valuable and precious, almost like offering a present. It highlights how memory can serve as a way to keep the connection alive despite physical absence. This metaphor gives an abstract feeling—memory—more tangible importance and emotional weight.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                Personification is also present when the speaker seems to talk to the dead as if they could hear and respond. This gives life to an otherwise silent and absent presence, expressing the speaker’s desire to maintain communication. Additionally, the silence and inability to respond symbolize the permanent separation caused by death. These figurative devices together enhance the poem’s themes of loss, love, and remembrance, making the reader feel the depth of the speaker’s grief and hope simultaneously.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>d. What does the speaker “offer” in this poem? What does the person addressed as “you” give in return?</strong>
+                                In the poem, the speaker offers the “gift” of memory to the person addressed as “you.” This gift symbolizes the act of remembering and honoring the lost loved one despite their physical absence. By holding on to memories, the speaker keeps the connection alive and expresses love and devotion that transcends death. The offering of memory is an emotional act, showing how the speaker values the relationship and refuses to let it fade away even in wartime’s harsh circumstances.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                In return, the person addressed, though silent and unable to respond, gives the speaker a sense of presence through those very memories. Although the loved one cannot speak or interact, their life and sacrifice continue to inspire and comfort the speaker. This “gift” in return is intangible but powerful—it is the lasting impact of their love and the memory that remains alive in the speaker’s heart. Together, these exchanged gifts symbolize a bond that endures beyond loss and war, emphasizing themes of remembrance and emotional connection.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>e. An apostrophe is a literary device in which a writer or speaker addresses an absent person or an abstract idea in such a way as if it were present and can understand. Discuss the poem in relation to apostrophe.</strong>
+                                The poem The Gift in Wartime is a clear example of the literary device called apostrophe, where the speaker addresses someone who is absent or cannot respond—in this case, a loved one who has died in the war. Throughout the poem, the speaker talks directly to the deceased person as if they were present and could hear her words. This creates an intimate and emotional conversation that bridges the gap between life and death, emphasizing the speaker’s deep longing and grief. By using apostrophe, the poem brings the absent loved one vividly into the speaker’s thoughts, making the loss feel more immediate and personal to the reader.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                This use of apostrophe also highlights the emotional struggle of the speaker, who seeks to maintain a connection despite the silence of death. It allows the poem to explore themes of memory, love, and mourning in a powerful way. The device creates a dramatic effect by making the absence felt as strongly as a physical presence, showing how war’s impact reaches beyond the battlefield into the hearts of those left behind. Apostrophe thus deepens the emotional resonance of the poem, allowing readers to experience the speaker’s sorrow and hope as if they are part of the conversation.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference Beyond the Text Section -->
+                <div class="qa-section fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <ul class="list-none space-y-4">
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>a. One way to get relief from grief is to write or talk about it. In your opinion, how might the speaker in this poem have benefitted from saying what she did? Explain.</strong>
+                                Expressing grief by speaking or writing about it can be a powerful way to find relief, and the speaker in this poem likely benefits from doing just that. By addressing her lost loved one directly, she is able to give voice to her pain and sorrow, which might otherwise remain bottled up inside. This act of speaking, even if the person cannot hear, helps her process the deep emotions caused by loss and war. It creates a space where she can openly mourn, express love, and confront her feelings, which can provide a sense of comfort and emotional release.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                Furthermore, by putting her thoughts and feelings into words, the speaker preserves the memory of the loved one and maintains an ongoing connection despite their absence. This can lessen the feeling of loneliness and abandonment because it turns silence into dialogue. The poem suggests that talking about grief allows the speaker to keep hope alive and find some peace amid tragedy. In this way, expressing grief becomes both a healing process and a way to honor the sacrifice of the person she lost.
+                            </p>
+                        </li>
+                        <li>
+                            <p class="text-lg brighter-gradient-text text-justify">
+                                <strong>b. Write an essay on the effects of war.</strong>
+                                War has devastating effects on individuals, families, and entire societies. One of the most immediate and visible effects is the loss of human lives. Soldiers and civilians alike suffer death or serious injuries, leaving behind grieving families and shattered communities. Beyond the physical destruction, war causes emotional trauma. People experience fear, anxiety, and sorrow as they witness violence and loss. Families are torn apart, homes are destroyed, and the sense of security vanishes. The poem The Gift in Wartime reflects this emotional cost, showing how the pain of losing a loved one in war lingers long after the fighting ends. The psychological wounds caused by war often last for generations, making recovery difficult.
+                            </p>
+                            <p class="text-lg brighter-gradient-text text-justify mt-2">
+                                In addition to human suffering, war severely disrupts economies and infrastructure. Resources that could have been used for development are diverted to fund military efforts, leaving countries impoverished. Schools, hospitals, and roads are damaged or destroyed, which affects education, health care, and daily life. War also leads to displacement, forcing millions to become refugees or internally displaced people, struggling to find safety and basic necessities. Politically, war can cause instability, power struggles, and long-term conflicts. Overall, war leaves deep scars on the social, economic, and political fabric of societies, showing that its consequences are far-reaching and tragic.
+                            </p>
+                        </li>
+                    </ul>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Check current display style
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block'; // Show the content
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.style.display = 'none'; // Hide the content
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

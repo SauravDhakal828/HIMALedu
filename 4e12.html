@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Treasure in the Forest Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for The Treasure in the Forest Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">4. The Treasure in the Forest Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “The Treasure in the Forest” is a captivating story by Ruskin Bond that combines adventure, curiosity, and a touch of the supernatural. The story follows a young boy named Raj who lives in a village surrounded by dense forests. One day, Raj hears a fascinating tale about a hidden treasure buried deep within the forest, which sparks his imagination and sense of adventure. Filled with excitement, he decides to explore the forest and search for the treasure himself.<br><br>
+
+As Raj ventures into the forest, the story beautifully describes the natural surroundings—the towering trees, the chirping birds, and the mysterious atmosphere that makes the forest both enchanting and intimidating. Ruskin Bond’s vivid descriptions bring the forest to life and create a mood of wonder and suspense. Raj’s journey is not just a physical one but also a journey of discovery, courage, and self-confidence.<br><br>
+
+While searching for the treasure, Raj encounters various challenges such as thick undergrowth, strange sounds, and moments of doubt. Despite these difficulties, his determination remains strong, fueled by the stories he has heard and his own curiosity. Along the way, Raj learns important lessons about patience, perseverance, and respect for nature. His adventure reflects the spirit of childhood wonder and the human desire to explore the unknown.<br><br>
+
+The story reaches a turning point when Raj finally finds the treasure, but it turns out to be something unexpected—a simple chest containing old coins and artifacts rather than riches or gold. This discovery teaches Raj that the real treasure is not material wealth but the experiences, memories, and lessons gained through his adventure. It highlights the idea that sometimes, the journey itself is more valuable than the destination.<br><br>
+
+In the end, Raj returns home with a new understanding of the world and himself. The forest, once mysterious and frightening, becomes a place of beauty and learning. Ruskin Bond’s story celebrates the magic of nature and the power of imagination. It reminds readers that treasures come in many forms and that courage and curiosity can lead to the greatest rewards.<br><br>
+
+In conclusion, “The Treasure in the Forest” is a delightful tale of adventure and discovery that encourages readers to embrace exploration and respect the natural world. Through Raj’s journey, Ruskin Bond conveys timeless messages about bravery, patience, and the true meaning of treasure. The story inspires young readers to find joy in the simple wonders around them.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Describe the expository scene of the story.</span><br>
+                    The story opens with two treasure hunters, Evans and Hooker, approaching a tropical island by canoe. They move through a thick, deep green forest with a sloppy hill nearby and a small river flowing into the sea. The setting is described vividly, creating a mysterious and adventurous atmosphere as they get closer to the island where the treasure is hidden.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What does the map look like and how do Evan and Hooker interpret it?</span><br>
+                    The map is very old, rough, and worn out, with many folds and creases that make it unclear. Evan interprets the twisting lines on the map as a river and the star as the location of the treasure. Hooker focuses on the dotted and straight lines, considering the path to the lagoon shown on the map.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. How did Evan and Hooker know about the treasure?</span><br>
+                    Evans and Hooker learned about the treasure by overhearing a conversation between some Chinese men. They also had a map that showed the location of the buried treasure on the island.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Describe Evan’s dream.</span><br>
+                    During their journey, Evan fell asleep and dreamed about the treasure and a Chinese man named Chang-hi. In his dream, Evan saw three Chinese men sitting around a small fire in the forest, speaking quietly in English. Chang-hi was said to have taken gold from a shipwrecked galleon and hidden it on the island. He wanted help to recover it, but a battle broke out, and Chang-hi was brutally killed. Evan suddenly woke up as if someone was calling him.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. What do the two treasure hunters see when they walk towards the island?</span><br>
+                    As they walked toward the island, Evan and Hooker saw three palm trees, thick bushes, and dim white flowers near the stream’s mouth. They were surprised to find the dead body of the Chinese man, Chang-hi, which added to the eerie and tense atmosphere.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. In what condition did the treasure hunters find the dead man?</span><br>
+                    The dead man was lying in a clear space among the trees with a swollen and purple neck, and his hands and ankles were also swollen. It was clear he had died a violent death.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. How did the treasure hunters try to carry gold ingots to the canoe?</span><br>
+                    They used a coat to carry the gold ingots. Hooker held one end of the coat’s collar in his hand, and Evan held the other end, using the coat as a makeshift stretcher to transport the heavy gold ingots.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">h. How were Evan and Hooker poisoned?</span><br>
+                    Evan and Hooker were poisoned when a slender, two-inch thorn pricked Hooker’s thumb. The poison caused them both to fall to the ground in pain, and they suffered greatly, eventually leading to their death.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How do you know the story is set on a tropical island?</span><br>
+                    The story is clearly set on a tropical island because of several descriptions that point to a warm, lush environment typical of such islands. For example, the characters travel by canoe toward a coral island under the heat of the sun. The story mentions thick, deep green forests, freshwater lakes and streams, salt marshes, mangrove and coastal forests, as well as coral reefs and deep seas around the island. These natural features—like mangroves, mangroves, coral reefs, and tropical plants—are characteristic of tropical island ecosystems. All these details together confirm that the setting is a tropical island.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why do you think Evan and Hooker took such a risk of finding the buried treasure on a desert island?</span><br>
+                    Evan and Hooker took the risk of searching for the buried treasure on a desert island primarily because of their strong greed and desire for wealth. The treasure represented a chance to gain a huge fortune, and this prospect was powerful enough to make them willing to face all kinds of dangers and uncertainties. Despite the island being isolated and potentially hazardous, they saw the risk as an exciting challenge that was worth the possible rewards. The idea of finding millions of dollars’ worth of treasure from a shipwrecked galleon made them overlook the dangers, including the threats to their lives. Their intense craving for money, combined with the thrill of adventure, drove them to take such a bold and risky step. Ultimately, their greed blinded them to the consequences that awaited them on the island.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Do you think the narrator of the story is racist? If yes, what made him feel superior to other races?</span><br>
+                    Yes, the narrator of the story does seem to exhibit racist attitudes. Throughout the narrative, there are subtle but clear indications that the narrator regards the white treasure hunters, Evans and Hooker, as superior to the Chinese man, Chang-hi. For example, the Chinese character is portrayed in a negative and somewhat stereotypical manner, and his death is described brutally, almost as if to emphasize his helplessness compared to the two white men. The story also shows Evans and Hooker as dominant, clever, and entitled to the treasure, while Chang-hi is depicted as secretive and inferior.
+                    <br><br>
+                    The narrator’s language and descriptions reveal a bias that reflects a racial hierarchy, where the white characters are positioned as protagonists and heroes, while the Chinese man is marginalized and victimized. Hooker’s commanding tone toward Evans and the way they dismiss Chang-hi’s claims and efforts further show a sense of racial superiority and entitlement. The fact that the treasure hunters do not hesitate to kill Chang-hi to get the treasure also reflects this dominant attitude.
+                    <br><br>
+                    This superiority complex stems from colonial-era stereotypes and prejudices, where Western characters were often portrayed as superior in intelligence, morality, and strength compared to non-Western or Asian characters. Such biased representation suggests that the narrator harbors racist feelings, consciously or unconsciously, which shape the story’s portrayal of the characters and their interactions.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. What do you think is the moral of the story?</span><br>
+                    The moral of the story “Treasure in the Forest” highlights the destructive nature of greed and the dangers of selfish ambition. Evan and Hooker’s relentless pursuit of the hidden treasure drives them to take extreme risks, including traveling to a dangerous, unknown island and committing violent acts such as the brutal killing of Chang-hi, the Chinese man who originally guarded the treasure. Their obsession with wealth blinds them to the warnings and hazards around them, showing how greed can cloud a person’s judgment and lead them to make harmful choices. The story reveals that when people prioritize money and material gain above everything else, including morality and safety, they often face severe consequences.
+                    <br><br>
+                    Ultimately, the fate of Evan and Hooker serves as a cautionary tale. Despite their efforts to claim the treasure, both men fall victim to the island’s poisonous thorns, which symbolize nature’s way of punishing greed and wrongdoing. Their tragic end teaches readers that greed is a self-destructive force—it not only harms others but can also ruin the greedy themselves. Instead of chasing after riches at any cost, the story encourages people to find contentment with what they have, to act with integrity, and to value life and relationships over material wealth. True happiness and fulfillment come from living wisely and ethically, rather than from reckless pursuit of money and power.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference beyond the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Interpret the story as a mystery story.</span><br>
+                    The story “Treasure in the Forest” can be interpreted as a mystery story because it contains many elements that create suspense and keep the reader guessing. From the beginning, the setting—a thick, dark forest on a remote island—adds an eerie and mysterious atmosphere. The treasure hunters, Evans and Hooker, follow an old, worn-out map whose unclear markings make the journey uncertain and full of surprises. The presence of the dead Chinese man, Chang-hi, and the secret of the hidden treasure add to the intrigue. Throughout the story, there are unexpected twists, such as the violent killing of Chang-hi, the discovery of the treasure, and finally the poisoning of the treasure hunters by the mysterious thorns.
+                    <br><br>
+                    These mysterious events build tension and curiosity as the reader tries to understand what will happen next and who will succeed in finding the treasure. The story does not reveal everything at once; instead, it slowly uncovers details, keeping the readers engaged and eager to find out the outcome. The dangerous surroundings, the secretive characters, and the deadly traps make “Treasure in the Forest” a classic mystery story filled with suspense, secrets, and unexpected endings.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Treasure hunting is a favorable subject of children’s story. Remember a treasure hunting story you read in your childhood and compare and contrast it with ‘The Treasure in the Forest.’</span><br>
+                    Treasure hunting is a popular and exciting subject in children’s stories because it sparks adventure, curiosity, and imagination. One famous treasure hunting story from childhood is “Treasure Island” by Robert Louis Stevenson. Both “The Treasure in the Forest” and “Treasure Island” center around the quest for hidden riches and involve maps, mysterious islands, and dangerous journeys.
+                    <br><br>
+                    In “Treasure Island,” the story follows young Jim Hawkins, who discovers a treasure map and sets out on an adventure filled with pirates, friendship, and bravery. The tone is adventurous and often exciting, with vivid characters like Long John Silver who add charm and complexity to the story. Although there are dangers, the story is suitable for children and has a clear sense of good versus evil, with lessons about courage and loyalty.
+                    <br><br>
+                    In contrast, “The Treasure in the Forest” is darker and more violent. The treasure hunters, Evans and Hooker, are driven by greed and are willing to kill to get the treasure. The story’s tone is more serious and suspenseful, highlighting the dangers and consequences of selfishness. Unlike “Treasure Island,” which ends with hope and survival, “The Treasure in the Forest” ends tragically, with the hunters dying from poisoning.
+                    <br><br>
+                    Overall, while both stories involve treasure hunting and adventure, “Treasure Island” is more suited for children with its adventurous spirit and moral lessons about bravery, whereas “The Treasure in the Forest” serves as a cautionary tale about greed and its destructive effects, with a more mature and dark tone.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

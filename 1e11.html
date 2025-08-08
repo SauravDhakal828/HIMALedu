@@ -1,0 +1,528 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Selfish Giant Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Animation for elements appearing on scroll */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Justified text alignment for content text */
+        .content-justified p,
+        .content-justified ul,
+        .content-justified ol {
+            text-align: justify;
+        }
+        .content-justified .ml-5 { /* Adjusting for existing left margin on sub-items */
+            margin-left: 1.25rem; /* Keep original left margin */
+            margin-right: 0; /* Remove right margin */
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for The Selfish Giant Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">The Selfish Giant</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="toggleSummaryButton" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <div id="summaryContent" class="hidden content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "The Selfish Giant" is a beautiful fairy tale by Oscar Wilde. It tells the story of a giant who owns a lovely garden where children love to play. The garden is filled with soft green grass, beautiful flowers, and twelve peach trees that blossom in spring and bear rich fruit in autumn. Birds sing sweetly in the trees, making the children very happy.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        However, the Giant is very selfish. After a long visit to his friend, the Cornish Ogre, he returns to find the children playing in his garden. Angrily, he drives them away and builds a high wall around his garden, putting up a notice board that reads: "TRESPASSERS WILL BE PROSECUTED." From that moment on, the children have nowhere to play, and they miss the beautiful garden dearly.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        Because of the Giant's selfishness, spring and summer refuse to visit his garden. Instead, it remains in a perpetual state of winter, with snow and frost covering everything. The North Wind, Hail, and Snow dance around, and the only happy creature is the Ogre, who loves the cold. The Giant becomes sad and lonely, wondering why spring never comes to his garden.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        One morning, the Giant wakes to the sound of a linnet singing, and he realizes that spring has finally arrived. He looks out to see that the children have found a small hole in the wall and have crept back into his garden. With their return, the flowers bloom, and the birds sing again. The Giant's heart melts, and he realizes how selfish he has been. He tears down the wall, welcomes the children back, and becomes their loving friend. He even helps a small boy climb a tree, and this boy gives him a kiss.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        As years pass, the Giant grows old and weak. He watches the children play, but the special little boy he once helped never returns. One winter morning, he sees the little boy in a corner of the garden, standing beneath a beautiful white tree. The Giant approaches, overjoyed, but sees wounds on the child's hands and feet. The child reveals that these are the wounds of Love and that he has come to take the Giant to his garden, which is Paradise. The Giant dies peacefully under the tree, covered in white blossoms, signifying his redemption and entry into eternal happiness.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Understanding the Text:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. Where did the children use to play?</span><br>
+                        The children used to play in the Giant’s beautiful garden. It was large, peaceful, and filled with soft green grass, lovely flowers, and peach trees that blossomed in spring and bore fruit in autumn.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. What did the Snow and the Frost do to the garden?</span><br>
+                        The Snow covered the grass with a white blanket, and the Frost painted the trees silver. They made the garden cold and lifeless. Since it was always winter there, the birds stopped singing, and the trees forgot to blossom.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. What did the giant hear when he was lying awake in bed?</span><br>
+                        While the Giant was lying awake in bed, he heard a beautiful music—the sweet song of a linnet bird. It was so melodious that he thought it must be the king's musicians passing by. This music brought joy and made him realize that Spring had finally returned to his garden.
+                    </p>
+                    <p>
+                        <span class="font-bold">d. Why do you think spring season never came to the giant’s garden?</span><br>
+                        Spring never came to the Giant’s garden because he had been selfish and had built a high wall to keep the children out. The seasons like Spring and Summer refused to enter a place where there was no joy, laughter, or love. Only Winter stayed there with Snow, Frost, North Wind, and Hail.
+                    </p>
+                    <p>
+                        <span class="font-bold">e. How did the giant realise his mistake?</span><br>
+                        The Giant realized his mistake when he saw that Spring had returned to the garden, but only in the part where a little boy had managed to enter. He understood that his selfishness had kept the children—and the joy of nature—away. Seeing the garden bloom again due to the presence of the children made him feel ashamed, and he decided to knock down the wall and open the garden to them forever.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference to the Context:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p class="text-lg font-semibold brighter-gradient-text mb-4 mt-8">A. Read the extracts given below and answer the questions that follow.</p>
+                    <p>
+                        <span class="font-bold">a. “How happy we were there!” they said to each other.</span><br>
+                        <span class="font-bold">i. Where does ‘there’ refer to?</span><br>
+                        ‘There’ refers to the Giant’s beautiful garden, where the children used to play happily before the Giant built a wall to keep them out.
+                    </p>
+                    <p>
+                        <span class="font-bold">ii. What does ‘they’ refer to?</span><br>
+                        ‘They’ refers to the children who used to play in the Giant’s garden.
+                    </p>
+                    <p>
+                        <span class="font-bold">iii. Why are they saying so?</span><br>
+                        They are saying this because they are remembering the joyful times they spent playing in the garden. Now that the Giant has stopped them from entering, they miss those happy moments and feel sad about not being able to play there anymore.
+                    </p>
+                    <p class="text-lg font-semibold brighter-gradient-text mb-4 mt-8">b. “I have many beautiful flowers,” he said; “but the children are the most beautiful flowers of all.”</p>
+                    <p>
+                        <span class="font-bold">i. Who is the speaker?</span><br>
+                        The speaker is the Selfish Giant.
+                    </p>
+                    <p>
+                        <span class="font-bold">ii. Who is he speaking to?</span><br>
+                        He is speaking to himself, realizing this truth after observing the joy and beauty the children bring to his garden.
+                    </p>
+                    <p>
+                        <span class="font-bold">iii. Who are ‘the children’ that the speaker is referring to?</span><br>
+                        ‘The children’ are the same children who used to play in the Giant’s garden before he drove them away by building a wall.
+                    </p>
+                    <p>
+                        <span class="font-bold">iv. Why is the speaker saying that ‘the children are the most beautiful flowers of all’?</span><br>
+                        The Giant says this because he realizes that the true beauty and joy in his garden came from the presence of the children, not just the trees or flowers. Their laughter, innocence, and happiness brought life to the garden. He understands that emotional warmth and human connection are more precious than any physical beauty.
+                    </p>
+                    <p class="text-lg font-semibold brighter-gradient-text mb-4 mt-8">c. “You let me play once in your garden, today you shall come with me to my garden, which is Paradise,”</p>
+                    <p>
+                        <span class="font-bold">Question: What is the coincidence of this event? Describe it in relation to this fairy story.</span><br>
+                        This statement is made by the little child who appears at the end of the story. The coincidence in this event lies in the unexpected and mysterious reappearance of the same child whom the Giant had once helped by lifting him up into a tree. After that day, the child had disappeared, and the Giant longed to see him again.
+                        <br><br>
+                        One day, when the Giant is old and feeble, he sees the child again, standing under a tree covered in blossoms. The child bears wounds on his hands and feet, which symbolize Christ-like imagery. When the Giant asks who hurt him, the child doesn't answer but offers to take the Giant with him to his own garden — Paradise — as a reward for the Giant’s act of kindness.
+                        <br><br>
+                        In the context of this fairy tale, this event represents spiritual redemption and the reward of selflessness. The Giant, who was once selfish, had changed into a kind and generous soul by letting the children play freely in his garden. As a result, he is blessed at the end of his life and taken to heaven (Paradise) by the divine child. This reflects the moral that love, kindness, and selflessness are the true paths to peace and salvation.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">B. The story makes use of personification as one of the main figures of speech.</h3>
+                <p class="text-lg brighter-gradient-text mb-2 content-justified">
+                    <span class="font-bold">Cite three examples of personification from the story.</span>
+                </p>
+                <ul class="list-disc list-inside ml-5 text-lg brighter-gradient-text mb-4 content-justified">
+                    <li><span class="font-bold">"The Snow covered up the grass with her great white cloak, and the Frost painted all the trees silver."</span><br>
+                        Personification: Snow and Frost are given human-like actions—covering with a cloak and painting, as if they were people.</li>
+                    <li><span class="font-bold">"The only people who were pleased were the Snow and the Frost."</span><br>
+                        Personification: Snow and Frost are described as if they have feelings and can be pleased, which only humans can do.</li>
+                    <li><span class="font-bold">"Spring has forgotten this garden," they cried.</span><br>
+                        Personification: Spring is treated like a living being capable of forgetting, which is a human ability.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">C. This story can be read as a fairy story, where the children, the seasons, the tree, the corner of the garden, the snow, the wind and the frost are all used as symbolism.</h3>
+                <p class="text-lg brighter-gradient-text mb-2 content-justified">
+                    <span class="font-bold">Question: Interpret those symbols.</span>
+                </p>
+                <ul class="list-disc list-inside ml-5 text-lg brighter-gradient-text mb-4 content-justified">
+                    <li><span class="font-bold">The Children:</span> Symbol of: Innocence, joy, and purity<br>
+                        The children represent innocent happiness and love. Their presence brings life and beauty to the garden. They also symbolize the divine or spiritual presence—especially the little boy, who is often interpreted as a Christ-like figure.</li>
+                    <li><span class="font-bold">The Seasons:</span> Symbol of: Emotional and spiritual states<br>
+                        Spring and Summer symbolize love, kindness, and spiritual awakening.<br>
+                        Autumn represents maturity and preparation for change.<br>
+                        Winter reflects selfishness, emotional coldness, and isolation. The garden stays in Winter when the Giant is selfish.</li>
+                    <li><span class="font-bold">The Garden:</span> Symbol of: The heart or soul of the Giant (or a person)<br>
+                        The garden reflects the inner state of the Giant. When he is selfish, the garden is barren and cold. When he opens his heart to the children, the garden blooms again, representing spiritual rebirth and happiness.</li>
+                    <li><span class="font-bold">The Corner of the Garden (where it was still Winter):</span> Symbol of: Unresolved guilt, lack of love, or the need for compassion<br>
+                        This corner stays in Winter because the little child is too small to climb the tree—symbolizing that true compassion requires action. When the Giant helps the child, Spring comes even to that spot.</li>
+                    <li><span class="font-bold">The Snow, Wind, Frost, and Hail:</span> Symbol of: Emotional emptiness and punishment for selfishness<br>
+                        These forces of nature personify the harsh consequences of isolation and greed. They take over the garden when the Giant shuts out the children and love.</li>
+                    <li><span class="font-bold">The Tree (the one the little boy wanted to climb):</span> Symbol of: Growth, divine connection, or sacrifice<br>
+                        The tree represents a bridge between the child (symbol of divinity) and the earthly world. When the Giant helps the child climb the tree, he is symbolically reaching toward grace and redemption.</li>
+                    <li><span class="font-bold">The Little Boy (with wounds on his hands and feet):</span> Symbol of: Jesus Christ or divine love<br>
+                        This child appears both as a symbol of innocence and later as a spiritual or heavenly being. His wounds resemble the crucifixion wounds, linking him to Christian symbolism. He rewards the Giant for his kindness by inviting him to Paradise.</li>
+                </ul>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">D. Which figure of speech is used for ‘winter, frost, snow, north wind, hail and little child’? Who is the little child compared to?</h3>
+                <p class="text-lg brighter-gradient-text mb-4 content-justified">
+                    The figure of speech used for winter, frost, snow, north wind, hail, and the little child in The Selfish Giant is **personification**, as these natural elements are given human qualities and emotions, such as being able to stay, cover, paint, or feel pleased. The little child is symbolically compared to **Jesus Christ** because of the wounds on his hands and feet, which resemble Christ’s crucifixion wounds. This comparison highlights the child as a figure of divine love, sacrifice, and redemption, emphasizing the story’s deeper spiritual meaning about kindness and forgiveness.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference Beyond Text:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. What is the main theme of the story?</span><br>
+                        The main theme of The Selfish Giant by Oscar Wilde is the importance of **selflessness, love, and the possibility of redemption through kindness**. The story shows how selfishness and isolation can lead to unhappiness and stagnation, as seen when the Giant builds a wall around his beautiful garden to keep the children out, causing the garden to fall into eternal winter. This reflects how closing oneself off from love and companionship can make life cold and joyless. However, when the Giant realizes his mistake and lets the children back in, the garden blooms again, symbolizing the renewal that comes from generosity and openness. The children represent innocence, joy, and divine love, and the Giant’s change of heart reflects a spiritual awakening. The story also has a Christian undertone, especially with the little child symbolizing Christ, suggesting that acts of kindness and love lead to spiritual salvation. Ultimately, Wilde’s tale teaches that true happiness comes not from possession or control but from sharing, caring, and opening one’s heart to others, which brings both personal and spiritual transformation.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. Does God punish those who are cruel to children and very selfish?</span><br>
+                        In The Selfish Giant, the story suggests that cruelty and selfishness lead to **natural consequences** rather than direct punishment from God. When the Giant refuses to let the children play in his garden, the garden is covered in eternal winter—symbolizing loneliness, sadness, and a lack of joy. This can be seen as a kind of punishment or consequence for his selfishness. However, the story also emphasizes **forgiveness and redemption**. When the Giant changes his ways and welcomes the children, the garden blooms again, showing that kindness can heal and bring back happiness. So, rather than focusing on punishment, the story highlights that selfishness causes suffering, but love and generosity bring reward and spiritual peace. It reflects the idea that God’s justice is merciful and encourages people to change and be kind.
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggleSummaryButton').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summaryContent');
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.classList.add('hidden');
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>
+
+

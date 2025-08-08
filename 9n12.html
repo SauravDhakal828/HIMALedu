@@ -1,0 +1,617 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>गोर्खे Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for गोर्खे Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">९. गोर्खे Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleGorkheSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleGorkheSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="gorkheSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                     गोर्खे शब्द सुनिने बित्तिकै बहादुरी, साहस र समर्पणको सम्झना आउँछ। यो पाठले गोर्खाली सैनिकहरूको अद्भुत वीरता र बलिदानलाई जीवन्त रुपमा प्रस्तुत गरेको छ। गोर्खेहरू नेपाली पहाडी क्षेत्रका साधारण मानिस हुन्, तर उनीहरूको मन, हिम्मत र साहस भने असाधारण छ। संसारभरका थुप्रै देशहरूले गोर्खे सैनिकहरूलाई आफ्नो सेनामा राखेर सम्मान गरेका छन्। उनीहरूले युद्धक्षेत्रमा मात्र होइन, सामाजिक जीवनमा पनि अनुशासन र कर्तव्यपरायणताको उदाहरण प्रस्तुत गरेका छन्। पाठले गोर्खेहरूको यस्तो चरित्र र जीवन दर्शनलाई पाठक सामु उजागर गर्दै हाम्रो देशको गौरवका रूपमा प्रस्तुत गरेको छ।<br><br>
+
+गोर्खेहरूको जीवनशैली निकै कठोर र अनुशासित हुन्छ। उनीहरू प्रायः पहाडी र दुर्गम क्षेत्रका मानिस हुन् जसले कठिन भौगोलिक परिस्थितिहरूमा जीवन बिताएका छन्। गोर्खेहरूले आफूलाई सँधै भौतिक र मानसिक रूपमा तयार राख्न प्रशिक्षण गर्छन्। उनीहरूको दिनचर्या निकै कडा हुन्छ र परिश्रमको मात्रा उच्च हुन्छ। यसले उनीहरूलाई कठिन परिस्थिति र चुनौतीहरू सामना गर्न सक्षम बनाउँछ। पाठले गोर्खेहरूको यस्तो अनुशासन र दृढतालाई जीवनका अन्य पक्षहरूमा पनि लागू गर्न सिकाउँछ, जसले मानिसलाई सफल र दृढ बनाउँछ।<br><br>
+
+गोर्खेहरूले युद्धमा देखाउने साहस र समर्पण विश्वभर प्रसिद्ध छ। उनीहरूको युद्धकला र रणनीति अत्यन्तै प्रभावशाली हुन्छ। गोर्खेहरूको छुरा र ढाल युद्धको प्रतीक हुन् जसले युद्धक्षेत्रमा उनको वीरता देखाउँछन्। पाठमा गोर्खेहरूको बलिदान, साहस र कर्तव्यपरायणता विशेष रूपमा उठाइएका छन्। उनीहरूले आफ्नो देशको रक्षा गर्न कहिल्यै पछि हटेका छैनन्। यो पाठले गोर्खेहरूको वीरता मात्र नभएर उनीहरूको सहिष्णुता, सद्भाव र मानवता पनि दर्शाएको छ, जसले उनीहरूको बहुआयामिक चरित्रलाई प्रष्ट पार्छ।<br><br>
+
+गोर्खेहरूको योगदान नेपालको मात्र नभई विश्वका विभिन्न देशहरूमा पनि प्रशंसनीय छ। उनीहरूले विभिन्न राष्ट्रहरूका सेनामा सेवा गरेर शान्ति स्थापना र सुरक्षा प्रवर्धनमा महत्वपूर्ण भूमिका खेलेका छन्। पाठले गोर्खेहरूको यस्तो बहुमुखी योगदानलाई राष्ट्रिय गर्वका रूपमा चित्रण गरेको छ। यसले युवाहरूलाई पनि देशप्रेम, कर्तव्यपरायणता र अनुशासनका मूल्य सिकाउँछ। गोर्खेहरूको इतिहास र जीवनशैलीले हामीलाई आफ्नो पहिचान र संस्कृतिप्रति गर्व गर्न उत्प्रेरित गर्छ।<br><br>
+
+अन्ततः, “गोर्खे” पाठले गोर्खाली सैनिकहरूको साहस, समर्पण र अनुशासनलाई जीवन्त र मार्मिक रूपमा प्रस्तुत गरेको छ। यसले देशप्रेम र वीरताको महत्त्वलाई पाठकसम्म पुर्‍याउँछ। गोर्खेहरूले देखाएको त्याग र वीरता सदैव प्रेरणादायी रहनेछ। पाठले हामीलाई सिकाउँछ कि कठिनाइ र चुनौतीहरूले कहिल्यै पनि हाम्रो मनोबल घटाउन सक्दैनन्। गोर्खेहरूको साहस, जीवनशैली र कर्तव्यपरायणता सबैलाई अगाडि बढ्न र आफ्नो देशप्रति निष्ठा राख्न प्रेरित गर्छ। उनीहरूको गाथा हाम्रो राष्ट्रिय गौरव हो र भविष्यका पुस्ताहरूका लागि उदाहरण बन्नेछ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">अर्थ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रविधिज्ञ</td><td class="py-2 px-4 border-b border-gray-700">विज्ञान, कला, शिल्प, प्रयोग आदिसम्बन्धी ज्ञान भएको व्यक्ति</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाइरस</td><td class="py-2 px-4 border-b border-gray-700">कम्प्युटरको कार्यक्षमतालाई कमजोर पार्ने वा अवरुद्ध गर्ने प्रोग्राम, रोग सार्ने जीवाणु</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नामोनिसान</td><td class="py-2 px-4 border-b border-gray-700">नाम र त्यसलाई जनाउने लक्षण वा चिह्न</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सङ्क्रमण</td><td class="py-2 px-4 border-b border-gray-700">एक वस्तुबाट अर्को वस्तुमा फिंजिनु</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अत्यधिक</td><td class="py-2 px-4 border-b border-gray-700">एकदमै धेरै</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सान्त्वना</td><td class="py-2 px-4 border-b border-gray-700">आश्वासन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">महाविकराल</td><td class="py-2 px-4 border-b border-gray-700">अत्यन्त डरलाग्दो</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दाह्रा</td><td class="py-2 px-4 border-b border-gray-700">मुखभित्र लामाछोटा भएर उम्रिएका र नमिलेका दाँत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भावभङ्गी</td><td class="py-2 px-4 border-b border-gray-700">मनका भाव ब्यक्त गर्ने शारीरिक चेष्टा वा मुद्रा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परीक्षण</td><td class="py-2 px-4 border-b border-gray-700">रोग लागेको छ कि छैन भनी जाँच गर्ने काम</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विलक्षण</td><td class="py-2 px-4 border-b border-gray-700">सामान्यभन्दा भिन्न खालको अचम्मको</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>२. दिइएका अर्थ दिने शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) मन बहलाउन वा समय काट्नका निम्ति कुनै पनि मनोरञ्क काम कुरा वा खेलमा तल्लीन भएको – क्रिडामग्न</p>
+                            <p>(ख) कुनै काम गर्दा अनुभव तथा प्रयोगका आधारमा अंगालिने खास विधि वा प्रक्रिया – परीक्षण, चेकजाँच</p>
+                            <p>(ग) कम्प्युटरमा कृत्रिम फोल्डर बनाउने र सक्कली फोल्डरलाई लुकाइदिने भाइरस – ब्रोन्टक भाइरस</p>
+                            <p>(घ) कम्प्युटर खुल्नेबित्तिकै याममा गएर बस्ने र विन्डोज खुल्न थालेपछि पछाडि फर्काइदिने भाइरस – बुट सेक्टर भाइरस</p>
+                            <p>(ङ) मेमोरीमा रहेका एक्सटेन्सन फाइललाई बिगार्ने भाइरस – मेमोरी भाइरस</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>३. दिइएका टुक्काको अर्थ पहिल्याउनुहोस् र वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>१. इन्तु न चिन्तु हुनु :</strong></p>
+                            <p class="text-justify">अर्थ: कुनै कुरामा पूर्ण ध्यान नदिनु, बेपरवाह हुनु।<br>वाक्य: उसले पढाइमा इन्तु न चिन्तु भएर परीक्षामा राम्रो गर्न सकेन।</p>
+                            <p><strong>२. दाँत गाड्नु :</strong></p>
+                            <p class="text-justify">अर्थ: निकै दुखी हुनु वा कष्ट सहनु।<br>वाक्य: उसले आफ्नो अपमान सहेर दाँत गाड्नुपर्ने अवस्था आयो।</p>
+                            <p><strong>३. टाप कस्नु :</strong></p>
+                            <p class="text-justify">अर्थ: साहस गर्नु, कुनै काममा दृढ संकल्प गर्नु।<br>वाक्य: कठिन परिस्थितिमा पनि उनले टाप कस्दै काम गर्न थालिन्।</p>
+                            <p><strong>४. ढड्रङ्ग लड्नु :</strong></p>
+                            <p class="text-justify">अर्थ: अचानक झर्को वा ठेस पुग्नु।<br>वाक्य: सडकमा घाम परेको बेला ढड्रङ्ग लडेर उसले हात भाँच्यो।</p>
+                            <p><strong>५. टाउको खानु :</strong></p>
+                            <p class="text-justify">अर्थ: धेरै चिन्ता गर्नु, आत्महत्या गर्नु। (सामान्यतया चिन्ताको अर्थमा)<br>वाक्य: उसले परीक्षामा असफल भएपछि धेरै टाउको खायो।</p>
+                            <p><strong>६. सुइँकुच्चा ठोक्नु :</strong></p>
+                            <p class="text-justify">अर्थ: एउटा कार्यमा असफल हुनु।<br>वाक्य: नया योजना सुइँकुच्चा ठोक्दा कम्पनीलाई ठूलो नोक्सान भयो।</p>
+                            <p><strong>७. बाटो हेर्नु :</strong></p>
+                            <p class="text-justify">अर्थ: कुनै समस्या समाधानको उपाय खोज्नु।<br>वाक्य: समस्याबाट बच्न उसले बाटो हेर्न थाल्यो।</p>
+                            <p><strong>८. काँध हाल्नु :</strong></p>
+                            <p class="text-justify">अर्थ: सहयोग वा जिम्मेवारी लिनु।<br>वाक्य: साथीहरूले समस्या समाधानमा काँध हालेर मद्दत गरे।</p>
+                            <p><strong>९. तातो लाग्नु :</strong></p>
+                            <p class="text-justify">अर्थ: रिस उठ्नु, क्रोधित हुनु।<br>वाक्य: उसले झूट सुनेर तुरुन्तै तातो लाग्यो।</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>४. दिइएका उखानको प्रयोग गरी एक अनुच्छेद लेख्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">**ओरालो लागेको मृगलाई बाच्छाले पनि खेद्छ** भनेझै दशा लागि आर्थिक रूपमा टाट पल्टेका मानिसलाई सामान्य अवस्थाका मानिसले पनि हेप्ने गर्दछन् । कोरोनाका कारण यस्ता वेक्तीको जीवनमा झन् दु:ख कस्ट निम्तिएको छ । इन्टरनेट नभएकाहरूलाई अनलाइन कक्षा **आकाशको फल, आँखा तरी मर** भनेझैँ भैराखेको छ । नेपाली समाजमा **आलु खाएर पेडाको धाक लगाउने** ठालुहरू प्रशस्तै पाइन्छन् । **अकबरी सुनलाई के लगाउनु र कसी** भनेझै गरिबका छोराछोरी पनि अकबरी सुन झै हुन्छन् । बाल्यकाल देखि नै दु:ख कस्ट सहेर हुर्कने उनीहरुले पछि गएर सफल जीवन जिउन सक्छन् ।</p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. ‘गोर्खे’ कथा पढी यसको पहिलो र अन्तिम अनुच्छेदका घटना भन्नुहोस् ।</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p class="text-justify">**पहिलो अनुच्छेद:** कथाको सुरुवातमा कम्प्युटर प्रविधिज्ञ पेशलको परिचय दिइएको छ। उसलाई आफ्नो काममा नयाँपन ल्याउने र केही गरेर देखाउने विचार मनमा आउँछ। यो अनुच्छेदले पेशलको सीप र उसको नयाँ आविष्कारप्रतिको उत्सुकतालाई चित्रण गर्छ।</p>
+                            <p class="text-justify">**अन्तिम अनुच्छेद:** कथाको अन्त्यमा कम्प्युटर मर्मत भएपछि गोर्खे एन्टिभाइरसले आफ्नो काम सफलतापूर्वक सम्पन्न गरी 'गुड लक' भन्दै बिदा लिन्छ। कम्प्युटरले सही किसिमले काम गर्न थाल्छ र पेशलको आविष्कारको सफलता देखाइन्छ। यसले प्रविधि र मानवीय सिर्जनशीलताको विजयलाई दर्शाउँछ।</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>२. ‘गोर्खे’ कथा पढी दिइएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) पेशल कसरी जीवन निर्वाह गर्छ ?</strong><br><span class="text-justify">पेशल आफ्नो सीप र मेहनतबाट कम्प्युटर मर्मतसम्बन्धी काम गरेर आम्दानी गरी जीवन निर्वाह गर्छ।</span></p>
+                            <p><strong>(ख) सतपालले पेशललाई किन आफ्नो घरमा आउन अनुरोध गरेको हो ?</strong><br><span class="text-justify">सतपालले पेशललाई आफ्नो घरमा आउन अनुरोध गरेको हो ताकि पेशलले उसको कम्प्युटरमा आएको समस्या समाधान गरिदिन सकून्।</span></p>
+                            <p><strong>(ग) पेशलले सतपालको कम्प्युटरलाई कसरी मर्मत गयो ?</strong><br><span class="text-justify">पेशलले आफ्नो सीप र अनुभव प्रयोग गरेर सतपालको कम्प्युटरमा भएको भाइरसको समस्या पहिचान गरी, गोर्खे एन्टिभाइरस इन्स्टल गरेर त्यसलाई ठीक गरेर मर्मत ग¥यो।</span></p>
+                            <p><strong>(घ) कम्प्युटरको डाइलग बक्समा देखा परेको गोर्खे एन्टिभाइरस कस्तो पहिरनमा थियो ?</strong><br><span class="text-justify">कम्प्युटरको डाइलग बक्समा देखा परेको गोर्खे एन्टिभाइरस सफा र व्यवस्थित गोर्खे पहिरनमा थियो।</span></p>
+                            <p><strong>(ङ) ब्रोन्टक भाइरसले कम्प्युटरलाई कसरी बिगार्छ ?</strong><br><span class="text-justify">ब्रोन्टक भाइरसले कम्प्युटरको कृत्रिम फोल्डर बनाउँछ र सक्कली फोल्डरलाई लुकाइदिन्छ, जसले गर्दा कम्प्युटरको काममा अवरोध पुर्‍याउँछ।</span></p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>३. कम्प्युटरलाई सुरक्षित राख्न वा भाइरसमुक्त बनाउन त्यसमा एन्टिभाइरस इन्स्टल गर्नुपरे झैँ मानिसलाई भाइरसको सङ्क्रमण हुन नदिन र सङ्क्रमित भइसकेको अवस्थामा त्यसबाट मुक्त बनाउन के गर्नुपर्ला, छलफल गरी उत्तर दिनुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">कम्प्युटरलाई भाइरसमुक्त राख्न एन्टिभाइरस सफ्टवेयर इन्स्टल गर्नुपर्छ। यसले भाइरस, मालवेयर, र हानिकारक प्रोग्रामहरूबाट कम्प्युटरलाई बचाउँछ। नियमित रूपमा सफ्टवेयर अपडेट गर्नु पनि आवश्यक हुन्छ ताकि नयाँ भाइरसहरूबाट पनि सुरक्षा मिलोस्। यसबाहेक अनजान स्रोतबाट आएको फाइल डाउनलोड नगर्नु, सुरक्षित वेबसाइटहरू प्रयोग गर्नु र अनावश्यक प्रोग्राम नचलाउनु पनि कम्प्युटरलाई सुरक्षित राख्न मद्दत गर्छ।</p>
+                        <p class="ml-4 text-justify">मानिसलाई भाइरसको सङ्क्रमण हुन नदिन पनि कम्प्युटरलाई जस्तै सावधानी अपनाउनुपर्छ। हात धुने, सफा ठाउँमा बस्ने, र मास्क लगाउने जस्ता सुरक्षात्मक उपायहरू अपनाउनुपर्छ। त्यस्तै, भिडभाडबाट टाढा बस्नु, सामाजिक दूरी कायम गर्नु र ताजा र पोषिलो खाना खानु आवश्यक छ। यसले मानिसको रोगप्रतिरोधात्मक क्षमता बढाउँछ र भाइरसको सङ्क्रमण कम गर्छ।</p>
+                        <p class="ml-4 text-justify">यदि मानिस सङ्क्रमित भइसकेको छ भने तुरुन्तै डाक्टरको सल्लाह अनुसार उपचार सुरु गर्नुपर्छ। घरमै अलग रहनु, आराम गर्नु र दिइएका औषधि नियमित सेवन गर्नु जरुरी छ। सङ्क्रमण अरूमा नफैलियोस भनेर हात धुने, खोक्दा मुख छोप्ने र सरसफाइमा ध्यान दिनुपर्ने हुन्छ।</p>
+                        <p class="ml-4 text-justify">यसरी, कम्प्युटरलाई सुरक्षित राख्न एन्टिभाइरस जस्तै मानिसलाई पनि भाइरसबाट बच्न र सङ्क्रमित भए उपचार गर्न सावधानी अपनाउनु पर्दछ। दुवै अवस्थामा सचेत रहँदा मात्र स्वस्थ र सुरक्षित रहन सकिन्छ।</p>
+
+                        <p class="text-left-align mt-4"><strong>४. ‘गोर्खे’ कथा पढी दिइएका घटनालाई क्रम मिलाई लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>(क) कम्प्युटर प्रविधिज्ञ पेशललाई केही नयाँ काम गरुँ भन्ने विचार मनमा आउनु</p>
+                            <p>(ख) पेशलले गोर्खे नामक एन्टिभाइरस बनाउनु</p>
+                            <p>(ग) सतपालले पेशललाई कम्प्युटर बनाइदिन अनुरोध गर्नु</p>
+                            <p>(घ) पेशल कम्प्युटर मर्मत गर्न सतपालको घर जानु</p>
+                            <p>(ङ) सामान्य चेकजाँचपछि पेशलले कम्प्युटर भाइरसले ग्रस्त भएको बताउनु</p>
+                            <p>(च) पेशलले आफैले बनाएको एन्टिभाइरस गोर्खेको सिडी निकालेर कम्प्युटरमा इन्स्टल गर्नु</p>
+                            <p>(छ) पाँच मिनेटमा इन्स्टल भएको एन्टिभाइरस गोर्खेले आफ्नो काम गर्न थाल्नु</p>
+                            <p>(ज) एन्टिभाइरस गोर्खेले कम्प्युटर स्क्यान गर्दा पाँच थरीका भाइरस भेट्नु र भाइरस सङ्क्रमित केही फाइललाई मर्मत गर्नु</p>
+                            <p>(झ) भाइरस सङ्क्रमणबाट मर्मत हुन नसकेका फाइल र फोल्डरलाई एन्टिभाइरस गोर्खेले प्रविधिज्ञलाई डिलिट गर्न सुझाव</p>
+                            <p>(ञ) बुट सेक्टर नामको भाइरसबाट पराजित हुन खोज्दा एन्टिभाइरसले प्रविधिज्ञलाई अपडेट गर्न अनुरोध गर्नु</p>
+                            <p>(ट) अपडेट पूरा भएपछि प्रविधिज्ञलाई कम्प्युटर स्क्यान गर्न अनुरोध गर्नु</p>
+                            <p>(ठ) स्क्यान गरेर सबै भाइरसलाई हटाइसकेपछि गुड लक’ भन्ने सङ्केतमा बुढीऔँला देखाउँदै एन्टिभाइरस बिदा हुनु</p>
+                            <p>(ड) मर्मतपछि कम्प्युटरले सही किसिमले काम गर्न थाल्नु</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>५. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) ‘भाइरसलाई उठाएर खरानीको घेराभित्र थेचायो’ भन्नुको तात्पर्य के हो ?</strong><br><span class="text-justify">‘भाइरसलाई उठाएर खरानीको घेराभित्र थेचायो’ भन्नुको तात्पर्य हो — भाइरसलाई पूर्ण रूपमा नियन्त्रणमा लिएर नष्ट गरियो अथवा त्यसलाई फैलिन नदिइयो। यसले भाइरसलाई दबाएर उसको प्रभावलाई कम गर्ने वा समाप्त गर्ने अर्थ व्यक्त गर्छ। सरल भाषामा भन्नुपर्दा, भाइरसलाई जकडेर कुनै स्थानमा सीमित गरियो र त्यसबाट बच्न सक्ने बाटो बन्द गरियो भन्ने बुझिन्छ।</span></p>
+                            <p><strong>(ख) गोर्खेले कम्प्युटरलाई भाइरस मुक्त बनाउनका लागि गरेका क्रियाकलाप के के हुन् ?</strong><br><span class="text-justify">गोर्खेले कम्प्युटरलाई भाइरस मुक्त बनाउनका लागि विभिन्न सावधानीपूर्ण क्रियाकलापहरू गरेका छन्। पहिलो, उसले कम्प्युटरमा विश्वासिलो र प्रभावकारी एन्टिभाइरस सफ्टवेयर इन्स्टल गर्‍यो जसले भाइरस पत्ता लगाउन र हटाउन मद्दत गर्‍यो। दोस्रो, उसले कम्प्युटरमा नयाँ नयाँ फाइल डाउनलोड गर्दा र अनजान स्रोतबाट आएको सफ्टवेयर प्रयोग गर्दा सतर्क रह्यो ताकि भाइरस नआओस्। तेस्रो, गोर्खेले आफ्नो कम्प्युटरलाई नियमित रूपमा स्क्यान गर्‍यो र एन्टिभाइरसलाई अपडेट गर्दै राख्यो ताकि नयाँ भाइरसबाट पनि सुरक्षा मिलोस्। यसरी गोर्खेले समय समयमा सफ्टवेयर अपडेट, स्क्यानिङ, र सावधानी अपनाएर आफ्नो कम्प्युटरलाई भाइरसबाट बचायो र भाइरसमुक्त बनाए।</span></p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>६. दिइएको कथांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) एन्टिभाइरस गोर्खे र भाइरसले एकअर्का माथि विजय प्राप्त गर्न के के गरेका छन् ?</strong><br><span class="text-justify">एन्टिभाइरस र भाइरसबीचको द्वन्द्व निरन्तर चलिरहेको छ जहाँ दुबैले एकअर्कामाथि विजय प्राप्त गर्न विभिन्न रणनीति अपनाउँछन्। भाइरसहरूले कम्प्युटरमा प्रवेश गर्न नयाँ-नयाँ तरिका खोज्छन् र आफुलाई छुपाउनका लागि आफ्नो संरचना परिवर्तन गरेर एन्टिभाइरसले पत्ता लगाउन कठिन बनाउँछन्। यस्तै, भाइरसहरूले कम्प्युटर प्रणालीमा फैलेर हानिकारक कामहरू गर्छन् जसले प्रणालीलाई कमजोर पार्छ, जस्तै फाइलहरू नष्ट पार्नु, डाटा चोरी गर्नु वा प्रणाली सुस्त बनाउनु। यसको सामना गर्नका लागि एन्टिभाइरस सफ्टवेयरहरूले आफ्नो डेटाबेस नियमित रूपमा अपडेट गरेर नयाँ भाइरसहरू चिन्न र तुरुन्तै नष्ट गर्न सक्षम हुन्छन्। साथै, एन्टिभाइरसले भाइरसका गतिविधिहरूलाई पहिचान गरी रोक्नका लागि नयाँ सुरक्षा उपायहरू थप्ने काम निरन्तर गर्छ भने भाइरसहरू पनि ती उपायलाई छल्नका लागि थप जटिल र छिपेका तरिकाहरू अपनाउँछन्। यस प्रकारको द्वन्द्वले कम्प्युटर सुरक्षा प्रविधिमा निरन्तर सुधार र नवीनता ल्याउँछ, जसले प्रयोगकर्तालाई सुरक्षित कम्प्युटर वातावरण प्रदान गर्न मद्दत गर्दछ।</span></p>
+                            <p><strong>(ख) अन्य भाइरस नामको तेस्रो भाइरसले गर्ने गतिविधि र कम्प्युटरलाई पुयाउनें असर के के हुन् ?</strong><br><span class="text-justify">तेस्रो भाइरसले कम्प्युटरमा विभिन्न किसिमका हानिकारक गतिविधिहरू गर्छ जसले कम्प्युटरको समग्र कार्यक्षमता र सुरक्षामा गम्भीर असर पुर्‍याउँछ। यस भाइरसले पहिलो चरणमा कम्प्युटरका महत्त्वपूर्ण फाइलहरूलाई नष्ट गर्ने वा भ्रष्ट बनाउने काम गर्न सक्छ, जसले डाटा हराउने जोखिम बढाउँछ। यस्तो अवस्थामा प्रयोगकर्ताले आफ्नो आवश्यक फाइलहरू गुमाउन सक्छन् र काममा ठूलो बाधा आउन सक्छ। साथै, यस भाइरसले कम्प्युटरको प्रोसेसर र मेमोरीलाई अत्यधिक उपयोग गरेर सिस्टमलाई सुस्त बनाउँछ, जसले गर्दा कम्प्युटर सामान्य भन्दा धेरै ढिलो चल्न थाल्छ र कहिलेकाहीँ क्र्यास वा फ्रीज पनि हुन सक्छ। त्यसैगरी, तेस्रो भाइरसले कम्प्युटरको सुरक्षा प्रणालीहरूलाई कमजोर पार्छ, जसले गर्दा अन्य हानिकारक प्रोग्रामहरू वा मालवेयर सजिलै प्रवेश गर्न र फैलन पाउँछन्। यसले प्रयोगकर्ताको गोपनीय जानकारी, जस्तै पासवर्ड, बैंकिङ विवरण, वा अन्य संवेदनशील डाटाहरू चोरी हुन सक्ने खतरा बढाउँछ। भाइरसले नेटवर्क मार्फत अन्य कम्प्युटरहरूमा पनि फैलिन सक्छ, जसले सम्पूर्ण नेटवर्कलाई जोखिममा पार्न सक्छ। त्यसैले, तेस्रो भाइरसले कम्प्युटरलाई केवल सुस्त बनाउने मात्र होइन, डाटा नष्ट गर्ने, सुरक्षा जोखिम बढाउने र काम गर्ने वातावरणलाई पूर्णरूपले असुरक्षित बनाउने काम गर्छ। यसबाट बच्नका लागि नियमित रूपमा एन्टिभाइरस अपडेट गर्न, अनजान स्रोतबाट फाइल डाउनलोड नगर्न र सतर्क रहनु अत्यन्त आवश्यक हुन्छ। कुल मिलाएर, यस प्रकारको भाइरसले प्रयोगकर्ताको व्यक्तिगत र व्यावसायिक जीवनमा गहिरो नकारात्मक प्रभाव पार्न सक्छ।</span></p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>७. कथाकारले कम्प्युटर स्क्यानसम्बन्धी विषयवस्तुको प्रस्तुतिका लागि अवलम्बन गरेको कथाशैली तपाईंलाई कस्तो लाग्यो, कथात्मक सन्दर्भका आधारमा विश्लेषण गर्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">कथाकार बखतबहादुर थापाले कम्प्युटर स्क्यानसम्बन्धी विषयवस्तुको प्रस्तुतिका लागि अत्यन्त प्रभावशाली र सहज कथाशैली अपनाएका छन्। उनको लेखनमा प्राविधिक विषयलाई सरल भाषामा प्रस्तुत गर्ने क्षमता स्पष्ट देखिन्छ जसले सामान्य पाठकलाई पनि जटिल प्रविधि बुझ्न सजिलो बनाउँछ। थापाले कथा लेख्दा प्राविधिक ज्ञानलाई मात्र केन्द्रित नगरी मानव व्यवहार, भावना र सम्बन्धहरूलाई पनि जोड दिएका छन् जसले विषयवस्तुलाई जीवन्तता प्रदान गरेको छ। यसले पाठकलाई विषयमा रुचि जाग्ने मात्र होइन, त्यस विषयलाई दैनिक जीवनसँग जोडेर बुझ्न सक्ने अवसर पनि दिन्छ। उनको कथाशैलीमा प्रवाह र सरलता छ जसले पाठकलाई बोर हुन नदिइ कथा सँगै विषयवस्तुमा पनि केन्द्रित गराउँछ।</p>
+                        <p class="ml-4 text-justify">कथामा थापाले पात्रहरूको संवाद, क्रियाकलाप र मनोविज्ञानलाई राम्रोसँग बुनेका छन् जसले कम्प्युटर स्क्यान गर्ने प्रक्रियालाई प्रभावकारी र बुझ्न सजिलो बनाएको छ। पात्रहरूको व्यवहार र प्रतिक्रिया मार्फत प्राविधिक कार्यहरूको जटिलता स्पष्ट हुँदै जान्छ र त्यसलाई सामान्य पाठकका लागि पनि बुझ्न मिल्ने गरी व्यक्त गरिएको छ। कथा मार्फत कम्प्युटरमा भाइरस कसरी पत्ता लगाउने र मर्मत गर्ने प्रक्रिया प्रस्तुत गर्दा पात्रहरूको मनोविज्ञान र तिनीहरूबीचको संवादले विषयवस्तुमा प्राण फुक्छ। यसले विषयलाई केवल प्राविधिक ज्ञानको सीमामा राख्नुको साटो त्यसको मानवीय पक्षलाई पनि उजागर गरेको छ, जसले कथा अझ आकर्षक र प्रभावकारी बनेको छ।</p>
+                        <p class="ml-4 text-justify">अन्ततः, बखतबहादुर थापाको कथाशैलीले प्राविधिक विषयलाई बुझ्न सहज, रोचक र सजीव बनाउने काम गरेको छ। उनले भाषा र शैलीमा सरलता अपनाउँदै पनि विषयवस्तुको गम्भीरता र महत्वलाई छुट्याउन सकेका छन्। यो शैलीले पाठकलाई केवल ज्ञान प्रदान गर्नुको साटो उनीहरूलाई कथा मार्फत सिकाउने र सोच्न उत्प्रेरित गर्ने काम गर्दछ। यसरी थापाले प्रविधि सम्बन्धी जटिल विषयलाई कथा भन्नेको रूप दिन सफल भएका छन्, जसले पाठकलाई सिकाइमा रमाइलोपना र प्रभावकारिता दुवै प्रदान गर्दछ। यस प्रकारको कथात्मक प्रस्तुतीकरणले शिक्षालाई मात्र नभई प्रविधि बुझ्न पनि सहज र मनमोहक बनाउँछ।</p>
+
+                        <p class="text-left-align mt-4"><strong>८. कथामा पेशल र सतपालमध्ये कसको मुख्य भूमिका रहेको छ, तर्कसहित आफ्नो प्रतिक्रिया व्यक्त गर्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">कथाकार बखतबहादुर थापा नेपाली साहित्यमा प्रविधि र समसामयिक विषयवस्तुलाई कथा माध्यममार्फत प्रस्तुत गर्ने कुशल स्रष्टा हुन्। उनले आफ्नो कथाहरूमा मानवीय संवेदना र प्रविधिको समिश्रण गरी पाठकलाई रोचक ढंगले जानकारीमूलक सन्देश दिन सफल भएका छन्। "गोर्खे" कथामार्फत उनले कम्प्युटर भाइरस र एन्टिभाइरसको विषयलाई जीवन्त रूपमा चित्रण गरेका छन्। यस कथामा प्रस्तुत दुई पात्र — पेशल र सतपाल — दुवै महत्वपूर्ण छन्, तर कथाको मूल प्रवाह र केन्द्रबिन्दुमा पेशलको भूमिका प्रमुख देखिन्छ।</p>
+                        <p class="ml-4 text-justify">पेशल एक प्राविधिक व्यक्ति हो जसले सतपालको कम्प्युटरमा देखिएको समस्या समाधान गर्न प्रमुख भूमिका खेलेको छ। कथा उसको सीप, व्यवहार, र कार्यदक्षता वरिपरि घुमेको छ। उसले भाइरस सङ्क्रमित कम्प्युटर स्क्यान गरी, आवश्यक उपाय अपनाई, कम्प्युटरलाई सुरक्षित बनाउने काम गरेको छ। यिनै गतिविधिहरूको वर्णन र प्रस्तुतिले कथा अघि बढेको छ। त्यसैले कथाको मुख्य सन्देश, उद्देश्य र प्रवाह पेशलको भूमिकासँग प्रत्यक्ष रूपमा जोडिएको छ।</p>
+                        <p class="ml-4 text-justify">सतपालले पनि कथामा उल्लेखनीय भूमिका निर्वाह गरेको छ। उसले पेशललाई आफ्नो घरमा निम्तो दिनु, समस्या सुनाउनु र वातावरण तयार पार्नुजस्ता सहायक कामहरू गर्छ। यद्यपि, उसका कामहरू पेशलको गतिविधिलाई सहयोग पुर्‍याउने खालका छन्, कथा सञ्चालनको दृष्टिकोणले उसको भूमिका गौण छ। त्यसैले तर्कका आधारमा भन्नुपर्दा, कथाको मूल विषयवस्तु चलाउने, पाठकको ध्यान केन्द्रित गराउने र सन्देश दिनेमूलक कार्यमा प्रमुख भूमिका पेशलको नै रहेको स्पष्ट हुन्छ।</p>
+
+                        <p class="text-left-align mt-4"><strong>९. समीक्षात्मक उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) ‘मानिस सिर्जनशील प्राणी हो । यस भनाइलाई कथाका आधारमा पुष्टि गर्नुहोस् :</strong><br><span class="text-justify">कथाकार बखतबहादुर थापा नेपाली साहित्यमा प्रविधि, यथार्थ र मानवीय अनुभूतिलाई जोडेर लेख्ने सशक्त स्रष्टा हुन्। उनले कथामार्फत केवल मनोरञ्जन प्रदान गर्ने नभई सामाजिक र प्राविधिक चेतना फैलाउने काम पनि गरेका छन्। “गोर्खे” कथामा उनले कम्प्युटरमा देखा पर्ने भाइरस, त्यसको असर, र समाधान प्रस्तुत गर्दै प्रविधिमा समेत मानवीय सिर्जनशीलता कसरी काम गर्छ भन्ने कुरा प्रभावशाली ढंगले देखाएका छन्। कथा पढ्दा स्पष्ट हुन्छ कि मानिस केवल ज्ञानमात्र होइन, सिर्जनशीलता प्रयोग गरेर समस्याको समाधान निकाल्ने अद्वितीय क्षमता राख्ने प्राणी हो। कथाको मुख्य पात्र पेशलले देखाएको व्यवहार, उसले अपनाएको उपाय र काम गर्ने तरिकाले मानिसको सिर्जनशीलता स्पष्ट रूपमा देखिन्छ। उसले कम्प्युटरमा देखिएको भाइरसको समस्या समाधान गर्न केवल सीप होइन, आफ्नै तरिकाले सोच्ने, समस्या विश्लेषण गर्ने र उपाय अपनाउने क्षमता देखाएको छ। यिनै कार्यहरू सिर्जनशील सोचका उत्कृष्ट उदाहरण हुन्। सामान्य व्यक्तिले बुझ्न नसकेको प्रविधिगत समस्यालाई उसले सजिलै बुझी समाधान गर्नु, र अन्ततः कम्प्युटरलाई सुरक्षित बनाउनु उसले सिर्जनशील ढंगले ज्ञान प्रयोग गरेको प्रमाण हो। यस कथाका माध्यमबाट लेखकले ‘मानिस सिर्जनशील प्राणी हो’ भन्ने भनाइलाई पूर्ण रूपमा पुष्टि गरेका छन्। मानिसले समस्या देखेपछि केवल डराउने होइन, सोच्ने, बुझ्ने र समाधान निकाल्ने प्रयास गर्छ। यही क्षमताका कारण उसले विज्ञान, प्रविधि, चिकित्सा, साहित्य, र अन्य क्षेत्रमा लगातार प्रगति गरिरहेको छ। गोर्खे कथामा देखिएको पात्रको सिर्जनात्मक कार्यशैलीले हामीलाई सिकाउँछ कि मानिसले आफ्नो सोच, ज्ञान र अनुभवको संयोजन गरेर कुनै पनि चुनौतीको समाधान निकाल्न सक्छ, र यही उसको सर्वश्रेष्ठ विशेषता हो।</span></p>
+                            <p><strong>(ख) कम्प्युटरलाई भाइरसमुक्त बनाउनका लागि प्रविधिज्ञ पेशल र एन्टिभाइरस गोर्खेले गरेका काम के के हुन् ?</strong><br><span class="text-justify">कथाकार बखतबहादुर थापा नेपाली साहित्यमा प्रविधि, समाज र जीवनका विविध पाटोलाई कथा माध्यममार्फत सजीव रूपमा प्रस्तुत गर्न सिपालु लेखक हुन्। उनले “गोर्खे” कथामार्फत कम्प्युटरको भाइरस समस्या र त्यसको समाधानलाई सिर्जनात्मक र प्रतीकात्मक ढंगले प्रस्तुत गरेका छन्। कथामा उनले प्रविधिज्ञ पेशल र एन्टिभाइरस गोर्खे नामक पात्रमार्फत प्रविधिमा देखिने समस्याको समाधान गर्ने मानवीय प्रयास र डिजिटल प्रणालीको समन्वयलाई चित्रण गरेका छन्। कथामा प्रविधिज्ञ पेशलले कम्प्युटरमा देखिएको समस्या समाधान गर्न सक्रिय भूमिका निर्वाह गर्छ। उसले सतपालको कम्प्युटरमा समस्या देखेपछि सबैभन्दा पहिला त्यसको जाँच–पड़ताल गर्छ। स्क्यानिङ प्रक्रियामार्फत उसले भाइरस कहाँ कहाँ फैलिएको छ भनेर पत्ता लगाउँछ र त्यसको बारेमा जानकारी दिन्छ। पेशलको यो विश्लेषणात्मक क्षमता र प्रविधिप्रति गहिरो समझदारीले कथा अघि बढ्छ र समाधानको बाटो खुल्छ। एन्टिभाइरस गोर्खे कथामा प्रतीकात्मक रूपमा देखा पर्छ, जो नेपाली गोरखा शैलीको साहसी र बहादुर पात्रका रूपमा प्रस्तुत गरिएको छ। गोर्खे कम्प्युटरमा देखिएको भाइरस — विशेषगरी ब्रोन्टक भाइरस — सँग जुझ्छ, उसलाई नियन्त्रणमा लिन्छ र ‘खरानीको घेराभित्र थेच्ने’ काम गर्छ, जसको अर्थ भाइरसलाई पूर्ण रूपमा नष्ट गर्नु हो। यसरी पेशलको प्रविधिक ज्ञान र गोर्खेको सुरक्षा क्षमताले मिलेर कम्प्युटरलाई भाइरसमुक्त बनाउने कार्य सफलतापूर्वक सम्पन्न हुन्छ। कथा यहींबाट स्पष्ट सन्देश दिन्छ कि मानिसको सिर्जनशीलता र प्रविधिको सदुपयोगले कुनै पनि समस्या समाधान गर्न सकिन्छ।</span></p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>१०. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) कथा भनेको के हो ?</strong><br>कथा भनेको जीवनको एउटा महत्त्वपूर्ण अंशलाई समेट्ने विशिष्ट घटनाको सिलसिलेवार प्रस्तुति हो ।</p>
+                            <p><strong>(ख) कथामा कति किसिमका पात्र हुन्छन् ।</strong><br>कथामा मानवीय र मानवेत्तर गरी दुई किसिमका पात्रहरू हुन्छन् ।</p>
+                            <p><strong>(ग) प्रथम पुरुष दृष्टिबिन्दु भएका कथामा कस्ता पदको प्रयोग गरिएको हुन्छ ?</strong><br>प्रथम पुरुष दृष्टिबिन्दु भएका कथामा ‘म’ र ‘हामी’ जस्ता पदको प्रयोग गरिएको हुन्छ ।</p>
+                            <p><strong>(घ) कथाका तत्त्व के के हुन् ?</strong><br>कथाका तत्त्व कथानक पात्र, परिवेश, दृष्टिबिन्दु भाषाशैली र सारवस्तु हुन् ।</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>११. दिइएको अनुच्छेद पढी चारओटा बुँदा टिप्नुहोस् र एक तृतीयांशमा सार लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>बुँदाहरु:</strong></p>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>जीवनमा सफल हुन असफलतालाई पनि स्वीकार गर्नुपर्ने,</li>
+                                <li>निरन्तरको साधना र सुझबुझको विकास असफलताबाटै हुनु,</li>
+                                <li>सेठ गोडिन सयौं पुस्तकहरूको असफलता पछि अठार पटक विश्वकै सर्वोत्कृष्ट लेखक बनेका,</li>
+                                <li>थोमस एल्भा एडिसनले हजारौँ पटक असफल हुँदा पनि हार नमानि विद्युतीय चिमको आविष्कार गरेका ।</li>
+                            </ul>
+                            <p class="mt-2"><strong>सारांश:</strong></p>
+                            <p class="text-justify">**असफलता नै सफलताको प्रेरक**</p>
+                            <p class="text-justify">जीवनमा सफल हुनका लागि असफलतालाई पनि स्वीकार गर्न सक्नुपर्छ । सफल जीवनका लागि चाहिने निरन्तरको साधना र सुझबुझको विकास असफलताबाट नै हुन्छ । सेठ गोडिन, सयौं पुस्तकहरू प्रकाशन गर्दा पनि असफल भएपनि उनको निरन्तर साधना र सुझबुझसहित क्रियाशील कारण अठार पटकसम्म विश्वकै सर्वोत्कृष्ट लेखक बन्न सफल भएका थिए । हजारौँ पटक असफल हुँदा पनि हार नमानेका महान् वैज्ञानिक थोमस एल्भा एडिसन विद्युतीय चिमको आविष्कार गर्न सफल भएका थिए । तसर्थ असफलता नै सफलताको प्रेरक भएकाले कहिल्यै हिम्मत हार्नु हुँदैन ।</p>
+                            <p class="text-xs text-gray-400">अनुच्छेदमा भएको शब्दसङ्ख्या : २२८</p>
+                            <p class="text-xs text-gray-400">एक तृतीयांशमा हुनु पर्ने शब्दसङ्ख्या : ७६</p>
+                            <p class="text-xs text-gray-400">एक तृतीयांशमा भएको शब्दसङ्ख्या : ७५</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएको अनुच्छेदमा प्रयुक्त प्रत्येक कारकका एक एकओटा उदाहरण टिप्नुहोस् र ती कारकलाई सङ्केत गर्ने विभक्ति पनि टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उदाहरण</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">कारक</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">विभक्ति</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सबैले</td><td class="py-2 px-4 border-b border-gray-700">सबै – कर्ता</td><td class="py-2 px-4 border-b border-gray-700">ले – प्रथमा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सदस्यलाई</td><td class="py-2 px-4 border-b border-gray-700">सदस्य – कर्म</td><td class="py-2 px-4 border-b border-gray-700">लाई – द्वितीया</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">हातले</td><td class="py-2 px-4 border-b border-gray-700">हात – करण</td><td class="py-2 px-4 border-b border-gray-700">ले – तृतीया</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अरुलाई</td><td class="py-2 px-4 border-b border-gray-700">अरू – सम्प्रदान</td><td class="py-2 px-4 border-b border-gray-700">लाई – चतुर्थी</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">रूखबाट</td><td class="py-2 px-4 border-b border-gray-700">रूख – अपादान</td><td class="py-2 px-4 border-b border-gray-700">बाट – पञ्चमी</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कापीमा</td><td class="py-2 px-4 border-b border-gray-700">कापी – अधिकरण</td><td class="py-2 px-4 border-b border-gray-700">मा – सप्तमी</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>२. तल तालिकामा दिइएका वाक्यमा कारकका सरल र तिर्यक् रूप उदाहरणका रुपमा गाढा अक्षरमा दिइँएका छन् । मूल पाठबाट कारकका सरल र तिर्यक् रुपका अन्य पाँच पाँचओटा उदाहरण टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">कारकका सरल रूप</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">कारकका तिर्यक रूप</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पेशल कम्प्युटर प्रविधिज्ञ हो ।</td><td class="py-2 px-4 border-b border-gray-700">उसलाई केही गरेर देखाऊँ भन्ने लाग्यो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाइरस भनेको सानो प्रोग्राम हो ।</td><td class="py-2 px-4 border-b border-gray-700">यसले कम्प्युटर प्रयोगकर्तालाई सबैभन्दा बढी दुःख दिन्छ ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">एक दिन सतपाल आएर भन्यो, “पेशल भाइ ! मेरो कम्प्युटर बनाइदिनुपयो ।”</td><td class="py-2 px-4 border-b border-gray-700">सतपालले पेशललाई आउनुहोस् भन्ने सङ्केत गरे ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">ती कम्प्युटर भएको कोठामा पुगे ।</td><td class="py-2 px-4 border-b border-gray-700">ती कम्प्युटर भएको कोठामा पुगे ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पेशलले कम्प्युटर एन्टिभाइरस सिडी झिके ।</td><td class="py-2 px-4 border-b border-gray-700">उसले काँधको झोला निकालेर भुइँमा राख्यो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">एउटा डाइलग बक्स खुल्यो ।</td><td class="py-2 px-4 border-b border-gray-700">अर्कोतिरबाट कम्प्युटर तान्यो र त्यसबाट हार्डडिस्क निकाल्यो ।</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>४. पाठको पहिलो अनुच्छेद पढी कर्ता, कर्म र सम्प्रदान कारक जनाउने पद टिप्नुहोस् ।</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>कर्ता कारक :</strong> पेशल, उस, यस</p>
+                            <p><strong>कर्म कारक :</strong> एन्टिभाइरस, प्रयोगकर्ता</p>
+                            <p><strong>सम्प्रदान कारक :</strong> त्यसका निम्ति</p>
+                        </div>
+                        <p class="text-left-align mt-4"><strong>५. उपयुक्त विभक्तिको प्रयोग गरी खाली ठाउँ भर्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">हर्कमान बिहान पाँच बजे उठ्यो । उसले बहिनी**लाई** पनि उठायो । उसले आफ्नै हात**ले** चिया पकाएर बहिनी**लाई** दियो । बहिनीले पनि दाइले पकाएको चिया मिठो मानेर खाई । हर्कमानले झोला**बाट** किताब झिक्यो । ऊ आफूले गृहकार्य गर्न थाल्यो । उसले बहिनी**लाई** पनि गृहकार्य गर्न भन्यो । उसले बहिनी**लाई** नआएको कुरा सिकाइदियो । बहिनीले पनि दाइले सिकाइदिएपछि आफ्नो सबै गृहकार्य पूरा गरी । यसपछि भाइबहिनी दुवै जना भान्सा**मा** गए । उनीहरूले आमा**लाई** काममा सघाए । उनीहरूले सघाएपछि आमा पनि धेरै खुसी हुनुभयो । आमाले दुवै जना**लाई** थाल**मा** खाना पस्किदिनुभयो । सुकुल**माथि** बसी दुवै जनाले मिठो मानेर खाना खाए । दुवै जनाले झोला**मा** किताब र कापी राखे । आमाको अनुमति लिएर उनीहरू घर**बाट** विद्यालय प्रस्थान गरे ।</p>
+                        <p class="text-left-align mt-4"><strong>७. दिइएको अनुच्छेद शुद्ध गरी पुनर्लेखन गर्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">समाज विकासका क्रममा मानिसले प्रगति त गर्यो तर ऊ शान्त भएर बस्न सकेको चाहिँ छैन । समाजमा सामूहिक भावनाको साटो व्यक्तिवादी सोच हाबी भैरहेको छ । कवि लेखनाथले भने जस्तै ‘म खाऊँ, मै लाऊँ, सुखसयल वा मोज म गरुँ, म बाचूँ, मै नाचूँ, अरू सब मरुन् दुर्बलहरू’ भन्ने विचारले समाज ग्रस्त छ । यो मानवले लिने इच्छा होइन । यस्तो नकारात्मक सोचलाई परित्याग गरेर सकारात्मक सोचका साथ आफ्नो कर्तव्य पालन गर्ने हो भने मानिसको प्रगति हुनुको साथै उसले जीवनमा सुखशान्ति पनि प्राप्त गर्छ ।</p>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Gorkhe Notes
+        function toggleGorkheSummary() {
+            const summaryText = document.getElementById('gorkheSummaryText');
+            const toggleBtn = document.getElementById('toggleGorkheSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

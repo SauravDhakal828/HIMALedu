@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>An Astrologer's Day Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.0g/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for An Astrologer's Day Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">An Astrologer's Day Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" class="hidden content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        **Click the "CLICK HERE FOR SUMMARY" button above to toggle this summary's visibility.**
+                        <br><br>
+                        The story revolves around a self-proclaimed astrologer who sets up his business under a tamarind tree in a bustling marketplace.
+                        He has no real astrological knowledge but relies on his shrewd observations, quick wit, and a good understanding of human psychology to make a living.
+                        One evening, as he is about to pack up, a stranger approaches him. The astrologer recognizes the man as Guru Nayak, a person he had attempted to murder years ago.
+                        Guru Nayak is searching for the man who tried to kill him. The astrologer, fearing exposure, cleverly uses his "powers" to warn Guru Nayak against traveling south and reveals details about his past, including the attack, without admitting his own involvement.
+                        He convinces Guru Nayak that his attacker is dead and advises him to return home, promising prosperity.
+                        Relieved and safe, the astrologer returns home, confesses his past to his wife, and feels a great burden lifted from his conscience.
+                    </p>
+                </div>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How does the astrologer’s appearance help him attract customers? How does he help the customers satisfy their needs?</span><br>
+                    The astrologer’s saffron turban and confident look attract customers, and he uses clever guesses to satisfy their worries.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How do you characterize the astrologer’s attitude toward the stranger?</span><br>
+                    He is cautious but confident, staying calm and witty while talking to the stranger.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What details does the astrologer give the stranger about his past?</span><br>
+                    He tells the stranger he knows about his past crime of attempted murder, surprising him with this secret.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why does he advise the stranger to go home immediately?</span><br>
+                    He advises the stranger to leave immediately to avoid danger and protect both of them.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. What is your reaction to the conversation between the astrologer and his wife?</span><br>
+                    The conversation shows the astrologer’s humble background and human side, revealing his hopes and fears.
+                </p>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. In this story, what details contributed to your feelings of suspense and surprise? Explain.</span><br>
+                    In the story, several details build a strong sense of suspense. The stranger’s unexpected arrival and his intense, secretive behavior immediately create tension. The astrologer’s calm but alert responses hint that something important is at stake. The fact that the astrologer seems to know more about the stranger than he lets on adds mystery. The quiet setting of the night and the astrologer’s confident yet cautious attitude keep the reader wondering what will happen next.
+                    <br><br>
+                    The biggest surprise comes when the astrologer reveals that he once escaped an attempt on his life by the very stranger he is now talking to. This unexpected confession changes the story’s direction and raises the stakes dramatically. It shocks both the stranger and the reader, making the story thrilling. The astrologer’s cleverness and courage in handling the dangerous situation add to the impact of the surprise and keep the reader engaged until the very end.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. “All right. I will speak. But will you give me a rupee if what I say is convincing? Otherwise I will not open my mouth, and you may do what you like.”</span><br>
+                    <span class="font-bold">i. Who is the speaker?</span><br>
+                    The speaker is the stranger who comes to the astrologer. He is cautious and wants to ensure that his words will be valued before revealing anything.
+                    <br><br>
+                    <span class="font-bold">ii. Who is he speaking to?</span><br>
+                    He is speaking to the astrologer, the man who reads people’s futures and claims to know secrets about their lives.
+                    <br><br>
+                    <span class="font-bold">iii. What does the expression ‘open my mouth’ mean?</span><br>
+                    The expression ‘open my mouth’ means to start speaking or to reveal the information he is keeping secret.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What details and techniques does the author use to describe the astrologer?</span><br>
+                    The author uses vivid physical descriptions to paint a clear picture of the astrologer. The saffron turban he wears is a significant detail, symbolizing spirituality and giving him a striking, holy appearance that naturally draws people’s attention. His sharp, bright eyes are described as having a prophetic glow, which makes him seem wise and almost supernatural. These physical traits help create an image of a confident and knowledgeable man, encouraging people to believe in his powers.
+                    <br><br>
+                    Besides appearance, the author uses the astrologer’s speech and behavior to deepen his character. Through the astrologer’s calm, witty, and sometimes bold dialogue, readers see his intelligence and street-smart nature. He carefully listens, analyzes people’s reactions, and cleverly provides answers that satisfy his customers. The author also shows the astrologer’s resourcefulness when he confronts the stranger, revealing his courage and quick thinking. By combining detailed physical description, expressive dialogue, and revealing actions, the author creates a multi-dimensional character who is both intriguing and believable.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. What is ironic about Guru Nayak’s meeting with the astrologer?</span><br>
+                    The meeting between Guru Nayak and the astrologer is deeply ironic because Guru Nayak unknowingly visits the very man he once tried to kill. In the past, Guru Nayak attempted to murder the astrologer, but the astrologer escaped and started a new life. Now, without realizing it, Guru Nayak seeks guidance and advice from the astrologer, who holds all the knowledge of his past actions. This situation is full of dramatic irony because the reader knows the true identities and history of both characters, while Guru Nayak remains unaware for most of their interaction.
+                    <br><br>
+                    Additionally, the astrologer, who was once the victim of Guru Nayak’s violence, now has control over him by using his knowledge and wit. Instead of seeking revenge through force, the astrologer uses intelligence to turn the tables and maintain power. This reversal of roles—where the victim gains power over the attacker in a peaceful but clever way—adds a strong element of situational irony to the story. It highlights how fate and circumstances can bring unexpected twists to human relationships.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. How does the astrologer’s manner of dress suit his character?</span><br>
+                    The astrologer’s manner of dress is very carefully chosen to match his character and profession. He wears a saffron-colored turban, which is traditionally associated with spirituality, holiness, and wisdom in Indian culture. This turban immediately gives him an aura of mysticism and respectability, making people believe that he has special knowledge and divine insight. This helps him attract customers who are looking for answers and guidance, as they naturally trust someone who looks the part of a wise and holy man.
+                    <br><br>
+                    In addition to the turban, the astrologer’s overall neat and confident appearance reinforces his image as a knowledgeable and trustworthy person. His dress helps him maintain an air of authority and professionalism, which is important since he relies on this image to convince others of his powers. Even though he is not truly a learned astrologer, his well-chosen attire allows him to create a successful illusion, blending appearance with clever behavior to establish his credibility. This careful attention to dress supports both his public persona and his ability to survive and thrive in a challenging environment.
+                </p>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What does the astrologer’s popularity tell you about the people of the town?</span><br>
+                    The astrologer’s popularity reveals a lot about the mindset and culture of the people living in the town. It shows that they are deeply interested in knowing their future and often feel uncertain or anxious about what lies ahead. Many people face problems related to money, relationships, and family, and they turn to astrology as a way to find answers and hope. This reliance on the astrologer suggests that the townspeople seek comfort in predictions to cope with their worries and fears.
+                    <br><br>
+                    Moreover, the townspeople’s trust in the astrologer indicates that traditional beliefs and superstitions hold a strong place in their lives. They are willing to believe in supernatural powers and fate, showing how cultural and religious influences shape their behavior. The astrologer’s success reflects the human desire for guidance and reassurance during difficult or confusing times, highlighting how people often look for meaning beyond what they can see or control
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why do most people want to know their future? Do you think astrologers can really help them know their future?</span><br>
+                    Most people want to know their future because the future is uncertain and unpredictable, which often causes anxiety and fear. By seeking knowledge about what might happen, they hope to gain some control over their lives and be better prepared for challenges or opportunities. Knowing the future can bring comfort, hope, and a sense of security, especially when people face important decisions related to love, career, health, or family. It helps them feel less helpless and more confident about moving forward.
+                    <br><br>
+                    As for whether astrologers can really predict the future, opinions vary. Many people believe astrology provides valuable insights and guidance, helping them understand themselves and their circumstances better. However, scientifically, there is no concrete evidence that astrologers can accurately foresee specific future events. Often, astrologers use general statements and careful observation to offer advice that seems convincing. Therefore, while astrologers may provide emotional support and direction, it is important for individuals to use their own judgment and efforts to shape their future rather than relying entirely on predictions.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">c. Is astrology a good practice of fortune telling or just blind faith? Give reasons.</span><br>
+                    Astrology can be seen both ways depending on one’s perspective. Some people consider it a meaningful practice because it offers insights into personality traits, relationships, and possible life events based on the positions of stars and planets. For them, astrology provides comfort, guidance, and a way to reflect on life’s challenges, helping them make decisions with more confidence.
+                    <br><br>
+                    On the other hand, astrology can also be seen as blind faith because it lacks scientific proof and often relies on vague or general statements that could apply to anyone. Many critics argue that believing blindly in astrology can prevent people from taking responsibility for their actions and making practical decisions. Therefore, while astrology might offer emotional support, it should not replace critical thinking and personal effort in shaping one’s life.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Toggle the 'hidden' class which Tailwind uses for display: none
+            summaryContent.classList.toggle('hidden');
+            if (summaryContent.classList.contains('hidden')) {
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            } else {
+                this.textContent = 'HIDE SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>
