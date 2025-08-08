@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>All the World's a Stage Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+
+        /* Styling for the question/answer sections */
+        .qa-section {
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid rgba(255, 255, 255, 0.1); /* Subtle separator */
+        }
+        .qa-section h3 {
+            margin-bottom: 1rem;
+        }
+        .qa-section p, .qa-section li {
+            margin-bottom: 0.75rem;
+            line-height: 1.7;
+        }
+        .qa-section ul {
+            list-style-type: decimal; /* Numbered list for questions */
+            padding-left: 1.5rem;
+        }
+        .qa-section li {
+            margin-bottom: 1rem; /* Space between list items */
+        }
+        .qa-section li strong {
+            display: block; /* Question on its own line */
+            margin-bottom: 0.5rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for All the World's a Stage Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">All the World's a Stage Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" style="display: none;" class="content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “All the World’s a Stage” is a remarkable poetic monologue taken from Shakespeare’s play As You Like It. In this speech, spoken by the character Jaques, life is compared to a grand stage drama where every human being is merely an actor who appears for a short time, plays his roles, and then exits. This metaphor suggests that life is temporary and prewritten, and no one has control over the roles they are given. From the moment a person is born until the time they die, they move through a series of defined phases, acting in ways that reflect their age, responsibilities, and physical condition.<br><br>
+
+Shakespeare divides human life into seven distinct stages, each with its unique characteristics and emotional tone. The journey begins with infancy, where a baby is completely dependent on others. The infant cries, drools, and vomits in the arms of a nurse, unaware of the world around him. This stage represents total helplessness. After this, the child grows into the second stage—the schoolboy. Here, the boy is unwilling to attend school, carrying his bag and dragging his feet slowly, “creeping like a snail.” This stage shows the early struggle between duty and personal comfort that begins in childhood.<br><br>
+
+The third stage is the lover, where the person becomes emotional and romantic. Shakespeare portrays the lover as someone who sighs deeply and writes sad songs about unreturned love. This phase of life is marked by strong feelings, dreams, and a sense of idealism. Next comes the soldier, the fourth stage. Here, the man is aggressive, full of ambition and honor, quick to argue, and ready to fight for reputation. He seeks short-lived glory and shows a readiness to face danger. This stage reflects the peak of energy, pride, and ambition in a person’s life.<br><br>
+
+The fifth stage is the justice, where the man has grown mature and wise. He has gained experience and takes on a responsible role in society. This man speaks wisely, appears respectable, and often judges right and wrong. He has learned from past mistakes and tries to maintain fairness and order. However, the sixth stage brings decline. The man becomes old and weak, with thin legs, weak voice, glasses on his nose, and loose trousers. Shakespeare humorously refers to him as a “lean and slipper’d pantaloon,” a reference to a silly old man in traditional theater. He loses the sharpness of mind and body that once defined him.<br><br>
+
+Finally, the seventh and last stage is described as “second childishness and mere oblivion.” In this final act of life, the man loses his senses—sight, taste, hearing, memory—and becomes completely dependent once again, like an infant. He is physically and mentally worn out, waiting only for death, which is the final exit from the world’s stage. The poem ends here, with a powerful reminder that no matter who we are—rich or poor, wise or foolish—we all follow this same path from birth to death.<br><br>
+
+In this monologue, Shakespeare reflects on the inevitability of aging and death, showing how life moves in a circle—from helpless infancy to helpless old age. Through the metaphor of the stage, he reminds us that we are performers in a play, living out a script we didn’t write and cannot avoid. The poem presents a realistic and slightly melancholic view of life, urging us to understand the temporary nature of all things, including youth, love, power, and wisdom. Shakespeare’s timeless lines leave us thinking deeply about the meaning of existence and the fleeting nature of human life.<br><br>
+                    </p>
+                </div>
+
+                <!-- Understanding the Text Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text">Understanding the Text</h3>
+                    <ul class="text-lg brighter-gradient-text">
+                        <li>
+                            <strong>a. Why does the poet compare the world with a stage?</strong>
+                            <p class="text-justify">The poet compares the world to a stage to show that life is like a play where people act in different roles at different times. Just like actors perform on stage, people go through various phases in life and play different parts.</p>
+                        </li>
+                        <li>
+                            <strong>b. What is the first stage in a human’s life? In what sense can it be a troubling stage?</strong>
+                            <p class="text-justify">The first stage is childhood, when a baby is helpless and depends completely on others. It can be troubling because the baby cries a lot and needs constant care.</p>
+                        </li>
+                        <li>
+                            <strong>c. Describe the second stage of life based on the poem.</strong>
+                            <p class="text-justify">The second stage is the schoolboy, who is unhappy and unwilling to go to school. This stage shows the discomfort and struggles children face in adapting to school life.</p>
+                        </li>
+                        <li>
+                            <strong>d. Why is the last stage called second childhood?</strong>
+                            <p class="text-justify">The last stage is called second childhood because an old person becomes weak, dependent, and forgetful, just like a baby who needs care.</p>
+                        </li>
+                        <li>
+                            <strong>e. In what sense are we the players in the world stage?</strong>
+                            <p class="text-justify">We are players on the world stage because we go through different roles and experiences in life, just like actors in a play. When our part ends, we leave the stage.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference to the Context Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text">Reference to the Context</h3>
+                    <ul class="text-lg brighter-gradient-text">
+                        <li>
+                            <strong>a. Explain the following lines:</strong>
+                            <p><strong>All the world’s a stage,</strong></p>
+                            <p><strong>And all the men and women merely players</strong></p>
+                            <p class="text-justify">In these famous lines, William Shakespeare uses a metaphor to compare the world to a stage and all human beings to actors or players. He suggests that life is like a grand drama where every person enters (is born), performs different roles through various stages of life, and eventually exits (dies). People do not have complete control over their roles, just like actors follow a script. The phrase "merely players" shows that our actions and behaviors are part of a larger performance, and no one stays on the stage forever. This idea highlights the temporary nature of life and the universal journey of all human beings through different phases of existence.</p>
+                        </li>
+                        <li>
+                            <strong>b. Explain the following lines briefly:</strong>
+                            <p><strong>They have their exits and their entrances;</strong></p>
+                            <p><strong>And one man in his time plays many parts,</strong></p>
+                            <p class="text-justify">In these lines, Shakespeare extends the metaphor of life as a theatrical play. "Exits and entrances" symbolize birth and death—people are born into the world (enter the stage), live their lives, and eventually die (exit the stage). This comparison shows that life is like a performance with a beginning and an end for every individual. Just as actors do not stay on stage forever, people too come and go in the journey of life.</p>
+                            <p class="text-justify">The second line, "And one man in his time plays many parts," means that a single person takes on many roles throughout their lifetime. From childhood to old age, a person behaves and acts differently according to the stage of life they are in—like a student in youth, a lover in early adulthood, a worker or soldier in middle age, and finally, a dependent elder. Shakespeare highlights the idea that human life is a series of changes, and each phase is like a part in a play, with its own duties, emotions, and expressions.</p>
+                        </li>
+                        <li>
+                            <strong>c. Read the given lines and answer:</strong>
+                            <p><strong>Then the whining schoolboy, with his satchel</strong></p>
+                            <p><strong>And shining morning face, creeping like snail</strong></p>
+                            <p><strong>Unwillingly to school.</strong></p>
+                            <p class="text-justify"><strong>i. Which stage of life is being referred to here by the poet?</strong></p>
+                            <p class="text-justify">The poet is referring to the second stage of life—childhood or the school-going stage.</p>
+                            <p class="text-justify"><strong>ii. Which figure of speech has been employed in the second line?</strong></p>
+                            <p class="text-justify">The figure of speech used in the second line is a simile, where the boy is compared to a snail using the word "like."</p>
+                            <p class="text-justify"><strong>iii. Who is compared to the snail?</strong></p>
+                            <p class="text-justify">The schoolboy is compared to the snail, highlighting his slow and unwilling movement towards school.</p>
+                            <p class="text-justify"><strong>iv. Does the boy go to school willingly?</strong></p>
+                            <p class="text-justify">No, the boy goes to school unwillingly. The poet describes him as whining and creeping slowly, showing reluctance.</p>
+                        </li>
+                        <li>
+                            <strong>d. Simile and metaphor are the two major poetic devices used in this poem. Explain citing examples of each.</strong>
+                            <p class="text-justify">In the poem All the World’s a Stage, Shakespeare skillfully uses both metaphor and simile to convey the idea that life is like a theatrical performance. One of the most powerful metaphors appears in the opening line: "All the world’s a stage, and all the men and women merely players." Here, the poet compares the world to a stage and human beings to actors. This metaphor suggests that life is temporary and that people come and go, performing different roles just like actors in a play. It sets the tone for the entire poem, where each phase of human life is presented as a distinct "role" in this grand drama of existence.</p>
+                            <p class="text-justify">Shakespeare also uses similes to create strong images and emotions. A notable example is: "Creeping like snail unwillingly to school." In this line, the schoolboy is compared to a snail using the word "like." This simile emphasizes the child’s slow and reluctant movement towards school, showing his lack of enthusiasm. By using such comparisons, Shakespeare helps the reader clearly visualize the character's behavior and feelings. These poetic devices—metaphor and simile—not only enrich the imagery of the poem but also deepen its meaning, making the stages of life more relatable and vivid.</p>
+                        </li>
+                        <li>
+                            <strong>e. Which style does the poet use to express his emotions about how he thinks that the world is a stage and all the people living in it are mere players?</strong>
+                            <p class="text-justify">William Shakespeare uses a dramatic, metaphorical, and reflective style to express his thoughts about life in the poem All the World’s a Stage. He begins with a powerful metaphor, comparing the world to a stage and human beings to actors who play different roles throughout their lives. This extended metaphor sets the tone of the poem and helps the poet present human life as a performance made up of different acts or stages. The style is not emotional or personal, but rather philosophical and general, as if the poet is observing the human experience from a distance and analyzing its meaning.</p>
+                            <p class="text-justify">Through this style, Shakespeare divides life into seven stages—infancy, schoolboy, lover, soldier, justice, old age, and second childishness—each described with vivid imagery and poetic devices such as simile and metaphor. His reflective style encourages readers to think deeply about how temporary and changing life is. By using theatrical language and structure, Shakespeare adds drama and seriousness to his message. This style not only makes the poem memorable but also helps convey the universal truth that all humans are performers in the grand play of life, with a beginning, a middle, and an inevitable end.</p>
+                        </li>
+                        <li>
+                            <strong>f. What is the theme of this poem?</strong>
+                            <p class="text-justify">The central theme of All the World’s a Stage is the stages of human life and the inevitability of change and death. Shakespeare explores the idea that life is like a theatrical play in which every person plays multiple roles from birth until death. The poem highlights how people move through different phases—childhood, youth, adulthood, and old age—each with its own behaviors, emotions, and challenges. This theme reflects the transient and cyclical nature of life, showing that nothing is permanent.</p>
+                            <p class="text-justify">Another important aspect of the theme is the idea of human beings as actors, which suggests that life is a series of performances where we all play parts assigned to us by nature or society. This metaphor reminds us that life is structured and temporary, and that everyone must eventually exit the stage, symbolizing death. Ultimately, the poem encourages reflection on the passage of time and the shared human experience of growth, change, and mortality.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <!-- Reference Beyond the Text Section -->
+                <div class="qa-section">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text">Reference Beyond the Text</h3>
+                    <ul class="text-lg brighter-gradient-text">
+                        <li>
+                            <strong>a. Describe the various stages of human life picturised in the poem "All the world’s a stage."</strong>
+                            <p class="text-justify">In the poem All the World’s a Stage, Shakespeare describes human life as a journey through seven distinct stages, each representing a different phase with unique characteristics. The first stage is the infant, who is helpless, crying, and dependent on a nurse for care. The second stage is the schoolboy, who carries a satchel and has a “shining morning face,” but goes to school reluctantly, creeping like a snail. The third stage is the lover, full of emotional passion, writing poems and sighing deeply over his beloved. This stage highlights the intensity of youthful feelings and romantic love.</p>
+                            <p class="text-justify">The fourth stage is the soldier, who is brave and ambitious, eager to gain honor and reputation even at great personal risk. The fifth stage is the justice, a wise and mature person who has gained respect and authority in society, known for fairness and good judgment. The sixth stage is old age, where physical strength diminishes, and the person becomes more serious, reflective, and sometimes grumpy. Finally, the seventh stage is the second childhood, where the old man becomes weak and dependent again, losing his faculties like a child. This final stage brings the life cycle full circle, emphasizing the transient, cyclical nature of human existence.</p>
+                        </li>
+                        <li>
+                            <strong>b. Is Shakespeare’s comparison of human life with a drama stage apt? How?</strong>
+                            <p class="text-justify">Yes, Shakespeare’s comparison of human life to a drama stage is very apt because it effectively captures the idea that life is a series of roles and phases that everyone experiences. Just like actors on a stage, people enter life, play different parts during various stages—such as childhood, youth, adulthood, and old age—and eventually leave the stage when their life ends. This metaphor helps us understand that life is temporary and that everyone’s time “on stage” is limited.</p>
+                            <p class="text-justify">Moreover, the comparison shows how people behave differently in each stage, just as actors take on different characters and roles in a play. We all go through changes in our personality, duties, and emotions as we age. The idea of “players” also suggests that while we perform these roles, much of life is like a scripted play, governed by natural laws and social expectations. This makes the metaphor powerful and meaningful, helping readers reflect on the universal journey of life.</p>
+                        </li>
+                    </ul>
+                </div>
+
+                <p class="mt-6 text-lg brighter-gradient-text">
+                    Stay tuned for more in-depth analysis and discussion questions!
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Check current display style
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block'; // Show the content
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.style.display = 'none'; // Hide the content
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

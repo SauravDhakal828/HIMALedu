@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>त्यो फेरि फर्कला ? Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching 2n11.html */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for त्यो फेरि फर्कला ? Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">६. त्यो फेरि फर्कला ? Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleTyoPheriFarkalaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleTyoPheriFarkalaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="tyoPheriFarkalaSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    
+                    यो पाठले विगतका दुःखद समयहरू, संघर्ष र पीडाका घटनाहरूलाई सम्झाउँदै त्यस्ता कठिन दिनहरू फेरि कहिल्यै फर्किने छैनन् भन्ने आशा व्यक्त गर्दछ। लेखकले विगतमा भएका कठिनाइ, अन्याय, निराशा र अन्धकारपूर्ण परिस्थितिहरूलाई उजागर गरेर त्यसबाट पाठकमा संवेदना जागृत गर्न खोजेका छन्। उनले भनेका छन् कि जीवनमा कहिलेकाहीं यस्ता असहज र दुःखद पलहरू आउने गर्छन्, तर तिनीहरूलाई बिर्सेर मात्र होइन, तिनबाट सिकेर अगाडि बढ्नुपर्छ। विगतका ती भयानक घटना दोहोरिन नदिन सबैको साझा प्रयास आवश्यक छ भन्ने कुरा यस पाठमा जोड दिइएको छ।<br><br>
+
+लेखकले विगतको यथार्थलाई मात्र बयान गरेनन्, तर भविष्यप्रति आशावाद र विश्वासको संदेश पनि दिएका छन्। उनले भन्छन् कि कुनै पनि असफलता र अँध्यारो काल स्थायी हुँदैन। कठिन परिस्थिति आए पनि त्यसबाट उठेर फेरि उज्यालो दिनहरू आउनेछन्। यसरी आशा र धैर्यता लिएर जीवनलाई सामना गर्नुपर्ने बताइएको छ। विगतका गल्ती र पीडालाई स्मरण गरेर भविष्य सुधार्न हामी सबै जिम्मेवार छौँ, जसले गर्दा दोहोरिने त्रासदीलाई रोक्न सकिन्छ।<br><br>
+
+पाठले पाठकलाई सहिष्णुता, धैर्यता र सकारात्मक सोच विकास गर्न प्रेरित गर्छ। जीवनका उतार–चढावहरूलाई स्वीकार्न सिकाउन यो पाठले महत्त्वपूर्ण भूमिका खेल्दछ। विगतका अन्धकारमय दिनहरूलाई स्मरण गर्दै, लेखकले भविष्यप्रतिको जिम्मेवारीलाई पनि जोड दिएका छन्। कठिनाइहरू आए पनि त्यसमा टिक्न सक्नुपर्ने, हार मान्न नहुने, र निरन्तर आशा राख्नुपर्ने सन्देश पाठले दिन्छ। यसले मानिसमा संघर्ष गर्न, समस्या समाधान गर्न र नकारात्मकता माथि विजय पाउन उत्प्रेरित गर्छ।<br><br>
+
+पाठमा भनिएको छ कि जहाँ अँध्यारो छ, त्यहाँ उज्यालो पनि अवश्य आउनेछ। जीवनका सबै कठिनाइ र संकटहरू अस्थायी हुन्छन्। भोलि राम्रो दिनहरू आउँछन् भन्ने विश्वासले मानिसलाई अडिग बनाउँछ। विगतका दुःखहरूलाई स्मरण गरेर मात्र नभएर त्यसबाट सिकेर नै उज्यालो भविष्य निर्माण गर्न सकिन्छ। यो पाठले बताउँछ कि जीवनमा निराशा र पीडा आए पनि त्यसले हाम्रो लक्ष्य र उत्साहलाई कम गर्न पाउनु हुँदैन।<br><br>
+
+अन्ततः, "त्यो फेरि फर्कला?" पाठले भविष्यप्रति सकारात्मक सोच राख्न र कठिनाइलाई जित्न सक्ने क्षमता विकास गर्न सिकाउँछ। यसले विगतका गल्ती, दु:ख र संघर्षलाई सम्झेर त्यसलाई दोहोरिन नदिन हाम्रो सतर्कता र जिम्मेवारीलाई जोड दिन्छ। पाठले जीवनका चुनौतीहरूलाई सामना गर्ने मनोबल र आशावाद प्रदान गर्दछ, जसले गर्दा हामी भविष्यमा अझ बलियो, सक्षम र उज्यालो समाज बनाउन सकौं। यसरी यो पाठले जीवनका कठिन घडीहरूलाई स्वीकार गर्दै पनि ती पलहरू फेरि नआओस् भन्ने प्रेरणा दिन्छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <ul class="brighter-gradient-text space-y-2 mb-4 list-none">
+                        <li><strong>१. तल दिइएका शब्दहरूको विपरीत अर्थसँग जोडा मिलाउनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li>सुदूर = निकट</li>
+                                <li>कृतज्ञता = कृतघ्नता</li>
+                                <li>वेदना = खुसी</li>
+                                <li>प्रदीप्त = अन्धकार</li>
+                                <li>अतीत = भविष्य</li>
+                                <li>मूक = सस्वर</li>
+                                <li>प्रवाह = स्थिर</li>
+                            </ul>
+                        </li>
+                        <li><strong>२. गाढा शब्दको अर्थ पहिचान गरी चिन्ह लगाउनुहोस् ।</strong>
+                            <ul class="ml-4 list-none">
+                                <li>क) निरन्तर</li>
+                                <li>ख) बेवास्ता</li>
+                                <li>ग) असजिलोपन</li>
+                                <li>घ) मन ठेगानमा नभएको अवस्था</li>
+                                <li>ङ) ज्यादै प्रतीक्षा गरिएको</li>
+                                <li>च) सुनसान</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. दिइएका अर्थहरूको पर्यायवाची शब्द पाठबाट खोजेर लेख्नुहोस् ।</strong>
+                            <ul class="ml-4 list-none">
+                                <li>क) असजिलोपन = सङ्कोच</li>
+                                <li>ख) सुक्खा = शुष्क</li>
+                                <li>ग) लजालु = लज्जावन्त</li>
+                                <li>घ) रुवाई = रुदन</li>
+                                <li>ङ) पर्खाइ = प्रतीक्षा</li>
+                                <li>च) धुलोपीठो = चूर्णविचूर्ण</li>
+                                <li>छ) व्यक्त नभएको = अव्यक्त</li>
+                                <li>ज) वज्रभन्दा पनि = बज्रादपि</li>
+                            </ul>
+                        </li>
+                        <li><strong>४. पाठमा रहेको "जाने बखतमा ………… त्यो आएन !" कथांश पढी दिइएका प्रश्नहरूको उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) "ता" प्रत्यय लागेका चारवटा शब्द खोज्नुहोस् ।</strong><br><span class="text-justify">उत्तर: उदासीनता, शून्यता, प्रसन्नता र उत्फुल्लता ।</span></li>
+                                <li><strong>ख) चारवटा उपसर्ग व्युत्पन्न शब्द पहिचान गरी लेख्नुहोस् ।</strong><br><span class="text-justify">उत्तर: दुष्कल्पना, असुविधा, प्रकार र प्रदीप्त ।</span></li>
+                                <li><strong>ग) यस अनुच्छेदमा प्रयुक्त दशवटा तत्सम शब्दहरूको सूची बनाउनुहोस् ।</strong><br><span class="text-justify">उत्तर: यात्री, भयानक, प्रतीक्षा, शून्य, आशा, भावना, दुष्कल्पना, नित्य, प्रकार र प्रदीप्त ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>५. शब्दकोशको सहायता लिई दिइएका शब्दको अर्थ लेख्नुहोस् र वाक्यमा प्रयोग गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>पर्यन्त</strong> : अन्तिम सीमा, हद<br><span class="text-justify">आश्रममा जीवन पर्यन्त सिकाइलाई सीप र ज्ञानका लागि सहयोग कार्यक्रम गरिएको छ ।</span></li>
+                                <li><strong>निस्तब्ध</strong> : सुनसान<br><span class="text-justify">निस्तब्ध अन्धकार वनमा रामले बजाएको भायोलिनको स्वर अलौकिक तवरले गुञ्जन थाल्यो ।</span></li>
+                                <li><strong>उद्विग्न</strong> : आत्तिएको, चिन्तित<br><span class="text-justify">पानीले बाली नाश भएको देखेर बुबा उद्विग्न हुनुभयो ।</span></li>
+                                <li><strong>उल्लास</strong> : आनन्द<br><span class="text-justify">हामी सबै साथीहरू मिलेर घुम्न गएको उल्लास म कहिल्यै भुल्न सक्दिनँ ।</span></li>
+                                <li><strong>क्लान्त</strong> : थाकेको<br><span class="text-justify">आमालाई क्लान्त अवस्थामा देखेर रुन मन लाग्यो ।</span></li>
+                                <li><strong>शिथिल</strong> : थकित<br><span class="text-justify">आज दिनभर बारीमा काम गरेकाले म शिथिल भएको छु ।</span></li>
+                                <li><strong>मधुरिमा</strong> : मिठास<br><span class="text-justify">श्रेयाको गीतको मधुरिमा ले म मन्त्रमुग्ध भएँ ।</span></li>
+                                <li><strong>विशद</strong> : ठूलो, फराकिलो<br><span class="text-justify">रोशनका लागि मेरो मनमा विशद माया र ममता छ ।</span></li>
+                                <li><strong>सामञ्जस्य</strong> : मेलमिलाप<br><span class="text-justify">हामी सबैमा सामञ्जस्य को भावना हुनुपर्छ ।</span></li>
+                                <li><strong>उत्सर्ग</strong> : त्याग<br><span class="text-justify">गरिबीका कारण मैले कतिपय सपनाहरू उत्सर्ग गरेको छु ।</span></li>
+                                <li><strong>अभ्यन्तर</strong> : भित्री मन<br><span class="text-justify">रामले अभ्यन्तर देखि नै सीतालाई प्रेम गर्छु भन्यो ।</span></li>
+                                <li><strong>विलुप्त</strong> : लोप भएको<br><span class="text-justify">दाजु विलुप्त हुनुभएको पनि दश वर्ष हुन लाग्यो ।</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <ul class="brighter-gradient-text space-y-2 mb-4 list-none">
+                        <li><strong>१. "त्यो फेरि फर्केला ?" कथा पढी दिइएका प्रश्नहरूको उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) कथा कति अनुच्छेदमा संरचित छ ?</strong><br><span class="text-justify">उत्तर: कथा ५२ अनुच्छेदमा संरचित छ ।</span></li>
+                                <li><strong>ख) कथाको सबैभन्दा लामो अनुच्छेद कुन हो ?</strong><br><span class="text-justify">उत्तर: कथाको सबैभन्दा लामो अनुच्छेद ३८औँ अनुच्छेद हो ।</span></li>
+                                <li><strong>ग) कथाको कुन अनुच्छेदमा पुग्दा सानी र यात्रीको भेट भएको छ ?</strong><br><span class="text-justify">उत्तर: कथाको ४४औँ अनुच्छेदमा पुग्दा सानी र यात्रीको भेट भएको छ ।</span></li>
+                                <li><strong>घ) संवादको प्रयोग नभएका अनुच्छेदहरू पाठमा कतिओटा छन् ?</strong><br><span class="text-justify">उत्तर: संवादको प्रयोग नभएका अनुच्छेदहरू पाठमा १८ ओटा छन् ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>२. "त्यो फेरि फर्केला ?" कथा पढी दिइएका घटनाक्रम मिलाई लेख्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li>१. एक दिन साँझको समयमा एउटा यात्री आएर यहाँ बास पाइन्छ भनेर सानीलाई सोध्नु,</li>
+                                <li>२. आमाले बास बस्न अनुमति दिनु,</li>
+                                <li>३. आमाको स्वीकृति र यात्री बास बस्ने निश्चित भएपछि सानी खुसी हुनु,</li>
+                                <li>४. यात्रीको बासका लागि सानी सक्रिय भएर लाग्नु र भित्रभित्रै यात्रीप्रति आकर्षित हुनु,</li>
+                                <li>५. यात्री सुतेपछि सानी यात्रीका कल्पनामा डुबुल्की मार्नु,</li>
+                                <li>६. अनायास सानी यात्री सुतेको ठाउँमा पुग्नु र यात्री निश्चिन्त सुतिरहेको हुनु,</li>
+                                <li>७. यात्री बिदा भएर गएपछि प्रत्येक दिन यात्रीलाई सम्झिनु,</li>
+                                <li>८. पन्ध्रौँ दिनसम्म उत्साहपूर्वक रूपमा सानी बस्नु तर यात्री नफर्कनु,</li>
+                                <li>९. समयक्रममा सानीको विवाह हुनु,</li>
+                                <li>१०. सानीकी आमाको स्वर्गबास भएपछि सानी त्यहाँ गएर आमाको पेसा अङ्गालेर बस्नु,</li>
+                                <li>११. एक दिन अचानक त्यहीँ यात्री आएर बास माग्नु,</li>
+                                <li>१२. सानीले जीवनपर्यन्तसम्म पर्खेको यात्रीले कुराकानीको क्रममा तिमी त बुढी भइसकिछ्यौ भन्नु,</li>
+                                <li>१३. आफूले मात्र यात्रीको प्रतीक्षा गरेको तर यात्रीले त्यस्तो कुनै आग्रह, अनुराग नभएको थाहा पाउनु,</li>
+                                <li>१४. बिहान हुनेबित्तिकै पहिलेझैँ यात्री हिँड्नु,</li>
+                                <li>१५. सानीको दीर्घ प्रतीक्षा समाप्त हुनु</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. "विचारधारा अर्कैतिर …………………… ओछ्यानमा लडी ।" कथांश पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) सानी के कारणले निस्तब्ध भइन् ?</strong><br><span class="text-justify">उत्तर: सानीले त्यस यात्रीकी श्रीमती होली भन्ने कुरा सम्झिएर निस्तब्ध भइन् ।</span></li>
+                                <li><strong>ख) यात्री सुतेको देखेपछि सानीलाई कस्तो लाग्यो ?</strong><br><span class="text-justify">उत्तर: यात्री सुतेको देखेपछि सानीलाई यात्रीलाई प्राप्त गर्ने डर युक्त लोभ भयो ।</span></li>
+                                <li><strong>ग) टुकी बालेपछि सानीलाई किन डर लाग्यो ?</strong><br><span class="text-justify">उत्तर: टुकी बालेपछि आमा वा यात्रीले थाहा पाउने हुन् कि भनेर सानीलाई डर लाग्यो ।</span></li>
+                                <li><strong>घ) सानीको मनोदशा कसरी परिवर्तन भएको छ ?</strong><br><span class="text-justify">उत्तर: यात्रीप्रतिको आकर्षण प्रस्तुत गर्न नसके तापनि यात्रीलाई नहेरी नहुने उत्सुकताले सानीको मनोदशा परिवर्तित भएको छ ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>४. दिइएका कथांश पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क)</strong>
+                                    <ul class="ml-4 list-none">
+                                        <li><strong>अ) सानीको प्रतीक्षाले उसको कस्तो मनस्थितिलाई देखाएको छ ?</strong><br><span class="text-justify">उत्तर: सानीको प्रतीक्षाले उसको यौन मनस्थितिलाई देखाएको छ । युवा यात्रीप्रतिको अव्यक्त प्रेमाकर्षणका कारण दमित यौन कुण्ठाको शिकार बनेकी सानीको दमित यौनेच्छालाई उद्घाटन गरी सानीको अवचेतन मनले चेतन मनमा पारेको प्रभावका कारण जीवनमा आएका मनोदशा एवम् विक्षिप्त मानसिक उतारचढावलाई प्रस्तुत गरिएको छ । यसरी यस कथाले सानीको अतृप्त यौनेच्छा, प्रणय, वासना एवम् कुण्ठित, विक्षिप्त, विचलित अतृप्त यौन कुण्ठाले ग्रसित मानसिक उतारचढावको रतिरागयुक्त यौन मनोविज्ञान प्रस्तुत गरेको छ ।</span></li>
+                                        <li><strong>आ) सानीको जीवनमा के कस्ता उतारचढावहरू देखिन्छन् ?</strong><br><span class="text-justify">उत्तर: सानीको जीवनमा धेरै ठूला ठूला मनोवैज्ञानिक उतारचढावहरू देखिन्छन् । विवाह गरेर पोइको घरमा गएपछि पनि सानीले कुनै क्षण त्यो एक रात बास बस्न आएको यात्रीलाई बिर्सन सकेकी छैन । अर्काकी श्रीमती भएपछि पनि त्यो यात्री आउला र आफूलाई लग्ला भन्ने तृष्णारूपी आशाले सानीलाई छाडेको छैन । जसको प्रतीक्षा गरेकी छे उसलाई प्राप्त गर्न सकेकी छैन । यसरी सानीले आफूले सोचे जस्तो जीवन भोग्न पाएकी छैन । अतः सानीको जीवनमा तृष्णा, मोह, आसक्ति, कुण्ठा, छटपटी, बेचैनी, देखावटीपन, तीव्र इच्छा, चाहना, निराशा जस्ता उतारचढावहरू देखिन्छन् ।</span></li>
+                                    </ul>
+                                </li>
+                                <li><strong>ख)</strong>
+                                    <ul class="ml-4 list-none">
+                                        <li><strong>अ) सानीको प्रतीक्षा कसरी समाप्त भयो ?</strong><br><span class="text-justify">उत्तर: आमाको मृत्युपछि माइतमै पुरानै पेसा चलाइ बस्ने क्रममा यात्रीको पुनरागमन हुन्छ तर सानीको एकतर्फी प्रेमासक्ति यात्रीलाई भने आभास समेत हुँदैन । अतः यात्रीले सानीप्रति कुनै प्रेमभाव, आग्रह, अनुराग नराखेको कुरा थाहा पाएपछि सानीको प्रतीक्षा समाप्त भयो ।</span></li>
+                                        <li><strong>आ) यस अनुच्छेदमा सानीको कस्तो मनोविज्ञान प्रस्तुत भएको छ ?</strong><br><span class="text-justify">उत्तर: यस अनुच्छेदमा आफू पहिले जस्तै छु भन्ने मनोविज्ञान सानीमा रहेको छ तर जब यात्रीले तिमी त बुढी भइछ्यौ भन्दा सानी यथार्थमा आएकी छिन् । सानीले आफूलाई सधैँ यौवना नारी नै सम्झिरहने, आफ्नो उमेर पनि कटेको थाहा पाइनन् । अतः आफ्ना सोचाइ, इच्छा, आकाङ्क्षा पूरा नहुँदा सानी शिथिल, क्लान्त, गलेजस्तो, बिरामी भएजस्तो विक्षिप्त मनोविज्ञानको चित्रण गरिएको छ ।</span></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>५. व्याख्या गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) समस्त जगत्‌मा …………………………….. रहन जान्थ्यो ।</strong><br><span class="text-justify">उत्तर: प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तक अन्तर्गत पर्ने ‘त्यो फेरि फर्कला ?’ मनोवैज्ञानिक कथाबाट साभार गरिएको हो । यस कथाका लेखक भवानी भिक्षु हुन् । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । नारीको मनोविज्ञानलाई यस कथाले मार्मिक ढङ्गले प्रस्तुत गरेको छ ।
+                                    नारी जातिलाई ममता, मायाकी खानी मानिन्छ । नारीमा सहनशक्ति पनि ज्यादै हुन्छ । नारीको ममताका कारण एउटा परिवार एउटा सूत्रमा बाँधिन सक्छ, त्यो ममता नहुने हो भने परिवार विखण्डित हुन सक्छ । नारीले संसारमा ममता नबाँडेको भए यो विश्व मरुभूमि जस्तै हुने थियो । जस्तोसुकै दुःख सहेर भए पनि नारीले माया बाँडेकी हुन्छे । आफ्ना सारा इच्छा, आकाङ्क्षा र मनोकामनालाई थाती राखी एउटी नारीले आफ्नो त्याग र उत्सर्ग देखाउन पनि पछि पर्दिनन् । `त्यो फेरि फर्केला?´ कथामा पनि सानीको विवाह भएको छ । घरमा लोग्नेसहित परिवार छ तर पनि उसले त्यो यात्रीलाई पर्खिन छोडेकी छैन । उसले आफ्नो परिवारको सम्पूर्ण जिम्मेवारी पूरा गरेकी छे । घरमा सबैलाई गर्ने माया ममतामा कमी आउन दिएकी छैन । ऊ त्यो एक रात बास बस्न आएको यात्रीलाई पनि त्यति नै माया गर्छे जति घरका उसका अन्य सदस्यहरूलाई गर्छे । तसर्थ सानीको माध्यमबाट कथाकारले समस्त जगत्‌मा नारीकै महान् ममता छरिन नगएको भए यो विशाल विश्व शुष्क रूख झैँ निर्जीव काठ मात्र रहन जान्थ्यो भनेर देखाएका छन् ।</span></li>
+                                <li><strong>ख) प्रेम जीवनको …………………………………… अस्तित्वको विलुप्ति ।</strong><br><span class="text-justify">उत्तर: प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तक अन्तर्गत पर्ने ‘त्यो फेरि फर्कला ?’ मनोवैज्ञानिक कथाबाट साभार गरिएको हो । यस कथाका लेखक भवानी भिक्षु हुन् । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । नारीको मनोविज्ञानलाई यस कथाले मार्मिक ढङ्गले प्रस्तुत गरेको छ ।
+                                    संसार प्रेममा अडिएको छ । प्रेमकै कारण यो संसार यति रमणीय भएको छ । मानिसको जीवनलाई अगाडि बढाउनका लागि सधैँ पवित्र प्रेमको आवश्यकता पर्दछ । सानो हुन्जेलसम्म आमाको पवित्र प्रेमले मानिसलाई जीवन अगाडि बढाउन सहयोग गर्दछ । बढ्दै जाँदा साथीभाइ र समाजको प्रेमले सही गोरेटोमा हिँडाउँछ । जब यौवन अवस्थामा पुग्छ तब उसलाई पति/पत्नीको पवित्र प्रेमको आवश्यकता पर्दछ । यसरी मानव जगत्मा मात्र नभएर यस संसारका हरेक प्राणीलाई प्रेमको आवश्यकता पर्दछ । प्रेमका लागि मानिसले ठूला ठूला त्याग गरेका हुन्छन् । आफूले त्याग गर्दा पनि त्यो प्रेम प्राप्त नभएमा मानिसको आफ्नो अस्तित्व नै विलुप्त हुँदै जान्छ ।
+                                    यस कथामा एक दिन बास बस्न आएको यात्रीलाई प्राप्त गर्ने सानीको उत्कट इच्छा छ । आफ्नो विवाह भएपछि पनि उसैलाई प्रेम गरेकी छे । उसले जीवनको उत्तरार्धसम्म त्यस यात्रीको प्रतीक्षा गरेकी छे तर यात्रीले सानीप्रति कुनै प्रेमभाव, आग्रह, अनुराग नराखेको कुरा थाहा पाएपछि सानीको प्रतीक्षा समाप्त भएको देखाएर कथाकारले प्रेम जीवनको बाटो हो र उत्सर्ग त्यसको अन्तिम लक्ष्य, त्यस लक्ष्यसम्म पुगेपछि पाइन्छ आफ्नो अस्तित्वको विलुप्ति हुन्छ भनेर पुष्टि गरेका छन् ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>७. उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) दिइएका सन्दर्भका आधारमा सानीको चरित्र चित्रण गर्नुहोस् :</strong>
+                                    <ul class="ml-4 list-none">
+                                        <li>(अ) कथागत भूमिका : सानी यस कथाकी प्रमुख नारी पात्र एवम् केन्द्रीय पात्र हो । सम्पूर्ण कथावस्तु सानीको सेरोफेरोमा रचिएको छ । सानीले एक छोरी, बुहारी, पत्नी र प्रेमिका भएर यस कथामा भूमिका निर्वाह गरेकी छे ।</li>
+                                        <li>(आ) पारिवारिक स्थिति : विवाहपूर्व नै माइतमा आमासँगै भट्टी पसल चलाएर बसेकी सानीको पारिवारिक अवस्था निम्नवर्गीय नै देखिन्छ ।</li>
+                                        <li>(इ) शारीरिक स्थिति : भर्खरै यौवनको सिँढीमा उक्लिँदै गरेकी सानीको मनमा नयाँ नयाँ इच्छा र आकाङ्क्षा पलाइरहन्छन् । सानीको वैशालु मनले यात्रीप्रति अनुराग देखाउँदै उसको विचलित मानसिक स्थितिको चित्रण गरिएको छ । पुष्ट शरीर र वाङ्की मिलेको अनुहार भए पनि जीवनको पछिल्लो चरणमा बुढ्यौलीका सङ्केतहरू देखिएका छन् ।</li>
+                                        <li>(ई) मानसिक स्थिति : सानीको मानसिक स्थिति विक्षिप्त छ ।</li>
+                                        <li>(उ) आर्थिक स्थिति : आर्थिक अवस्था कमजोर हुनु, पहाडको विकट स्थानमा सामान्य होटल गरे तापनि होटलमा फाट्टफुट्ट मात्र मानिस आउनाले उसको आर्थिक अवस्था कमजोर देखिएको छ ।</li>
+                                    </ul>
+                                </li>
+                                <li><strong>ख) "त्यो फेरि फर्कला?" कथाले कस्तो मनोविज्ञान प्रस्तुत गरेको छ ?</strong><br><span class="text-justify">उत्तर: "त्यो फेरि फर्कला?" कथा भवानी भिक्षुद्वारा रचिएको यौन मनोवैज्ञानिक कथा हो । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । मानिसको अवचेतन मनमा रहेको इच्छा आकाङ्क्षा कसरी, कुन रूपमा प्रकट हुन्छ भन्ने कुरालाई यहाँ प्रस्तुत गरिएको छ । नारीमनका यौनजन्य क्रियाकलाप स्वस्थ र प्रेममय रूपमा कसरी बाहिर निस्कन्छन् र तिनले उनीहरूलाई कसरी प्रत्यक्ष असर गरेको हुन्छ भन्ने कुरालाई यस कथामा मनोवैज्ञानिक ढङ्गले प्रस्तुत गरिएको छ । यौन आकाङ्क्षाले जीवनमा कस्तो कस्तो इच्छा जागृत हुन्छ र त्यसका लागि मानिसले के कस्तो व्यवहार गर्दछ भन्ने कुरालाई समेत यहाँ चर्चा गरिएको छ । प्रेम एकतर्फी हुँदा पनि समस्या आउँछ भन्ने मनोविज्ञानलाई कथामा सानीका माध्यमबाट प्रस्तुत गरिएको छ । समग्रमा सानीको माध्यमबाट नेपाली नारीहरूको दमित र कुण्ठित मनोविज्ञानको प्रस्तुति यस कथामा पाइन्छ ।</span></li>
+                                <li><strong>ग) "त्यो फेरि फर्कला?"कथामा सामाजिक,आर्थिक र प्राकृतिक परिवेशको चित्रण कसरी गरिएको छ ?</strong><br><span class="text-justify">उत्तर: "त्यो फेरि फर्कला?" भवानी भिक्षुद्वारा लेखिएको एक उत्कृष्ट मनोवैज्ञानिक कथा हो । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । नारीको मनोविज्ञानलाई यस कथाले मार्मिक ढङ्गले प्रस्तुत गरेको छ ।
+                                    यस कथामा सामाजिक, आर्थिक र प्राकृतिक परिवेशको चित्रण गरिएको छ । मधेसबाट यात्रीहरू चितलाङको बाटो हुँदै काठमाडौँ आउने प्रसङ्गको चर्चा गरिएबाट यस कथामा राणाकालीन समाजको सामान्य जनजीवनको चित्रण गरिएको छ । मार्खुको बाटोमा होटेल गरेर बस्ने सानी र उसकी बुढी आमाको माध्यमबाट पहाडी जीवनका कष्टकर अवस्थाहरूको सजीव चित्रण पाइन्छ । वर्गीय विभेदकै कारण नेपाली ग्रामीण समाजमा आर्थिक असमानता रहेको देखिन्छ । धनीहरूले सुविधा सम्पन्न होटलहरू खोले पनि गरिबहरू भट्टी पसल खोली जीवनयापन गर्ने गरेको र त्यसमा पनि एकल महिलाहरूको बाध्यतात्मक अवस्था रहेको पाइन्छ । यस कथामा सामाजिक र आर्थिक रूपमा पछि परेको समाज भए पनि, प्राकृतिक रूपमा सुन्दर रहेको पाइन्छ । स्वच्छ, शान्त, प्रदूषणरहित, हरियालीका साथै सूर्यको सुनौलो किरणले हिमालमा देखिने स्वर्णिम दृश्य, वनपाखा, पखेरा एवम् खोलाहरूको प्राकृतिक सङ्गीतले प्राकृतिक सुन्दरताले भरिपूर्ण मनोरम प्राकृतिक परिवेशको चित्रण गरिएको पाइन्छ । तसर्थ "त्यो फेरि फर्कला?" मा सामाजिक, आर्थिक र प्राकृतिक परिवेशको चित्रणलाई मनोवैज्ञानिक ढङ्गबाट प्रस्तुत गरिएको छ ।</span></li>
+                                <li><strong>घ) "त्यो फेरि फर्कला?" कथाको शीर्षकको सार्थकता पुष्टि गर्नुहोस् ।</strong><br><span class="text-justify">उत्तर: "त्यो फेरि फर्कला?" भवानी भिक्षुद्वारा लेखिएको एक उत्कृष्ट मनोवैज्ञानिक कथा हो । यो कथा कथावस्तुका आधारमा सार्थक छ । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । नारीको मनोविज्ञानलाई यस कथाले मार्मिक ढङ्गले प्रस्तुत गरेको छ ।
+                                    मधेसबाट यात्रीहरू चितलाङको बाटो हुँदै काठमाडौँ आउने प्रसङ्गको चर्चा गरिएबाट यस कथामा राणाकालीन समाजको सामान्य जनजीवनको चित्रण गरिएको छ । मार्खुको बाटोमा होटेल गरेर बस्ने सानी र उसकी बुढी आमाको माध्यमबाट पहाडी जीवनका कष्टकर अवस्थाहरूको सजीव चित्रण पाइन्छ । एक दिन युवा यात्री आफ्नै घरमा बास बस्न आएपछि सानीमा रतिरागयुक्त कामवासना जागृत भई युवाप्रति आसक्तियुक्त अव्यक्त एकतर्फी प्रेम गर्छे जसका कारण उसमा मानसिक विचलन आउँछ । दमित यौन कुण्ठाको शिकार बन्छे । यात्री भोलिपल्ट नै गए पनि उसकै अनन्त प्रतीक्षामा बसिरहन्छे । आफ्नो अमूर्त प्रेमको पात्र यात्री त्यो कहिले फर्कला? भनी उसकै बाटो हेरिरहन्छे । विवाह गरेर पोइको घरमा गएपछि पनि सानीले कुनै क्षण त्यो एक रात बास बस्न आएको यात्रीलाई बिर्सन सकेकी छैन । अर्काकी श्रीमती भए पनि त्यो यात्री आउला र आफूलाई लग्ला भन्ने तृष्णारूपी आशाले सानीलाई छाडेको छैन । मन नलागी नलागी विवाह गर्नु परेको छ । विवाह गरेपछि पनि उसले एउटा यात्रीलाई सदा सम्झिरहेकी हुन्छे । उसको प्रतीक्षाको समाप्तिसँगै कथानक पनि समाप्त भएको छ । यसरी समग्र कथावस्तुको केन्द्रीय मर्मअनुसार कथाको शीर्षक राखिएकाले `त्यो फेरि फर्कला ?´ कथाको शीर्षक सार्थक देखिन्छ ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>८. आफ्नो घरमा बास बस्न आइपुगेको यात्रीका लागि सानीले गरेको दीर्घ प्रतीक्षा तपाईँलाई कस्तो लाग्यो, कथात्मक सन्दर्भका आधारमा विश्लेषण गर्नुहोस् ।</strong><br><span class="text-justify">उत्तर: प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तक अन्तर्गत पर्ने ‘त्यो फेरि फर्कला ?’ मनोवैज्ञानिक कथाबाट साभार गरिएको हो । यस कथाका लेखक भवानी भिक्षु हुन् । यस कथामा कथाकी प्रमुख नारी पात्र सानीको अवचेतन मनको अतृप्त वासना, दमित यौन कुण्ठा, आवेग र संवेगका उतारचढावलाई सुन्दर चित्रण गरिएको छ । नारीको मनोविज्ञानलाई यस कथाले मार्मिक ढङ्गले प्रस्तुत गरेको छ ।
+                            यस कथामा तराईबाट काठमाडौँ आउने क्रममा बीच बाटोमा रहेको चितलाङ नजिकैको मार्खु र त्यहीँ ठाउँमा होटल व्यवसाय गरेर बसेकी सानीका जीवनमा आएको उमेर मिल्दो यात्री र उसले पारेका प्रभावलाई यस कथामा चित्रण गरिएको छ । सानी पहिलो नजरमै युवाप्रति आकर्षित भएकी छे । यात्री भोलिपल्ट नै गए पनि उसकै अनन्त प्रतीक्षामा बसिरहन्छे । आफ्नो अमूर्त प्रेमको पात्र यात्री त्यो कहिले फर्कला? भनी उसकै बाटो हेरिरहन्छे । विवाह गरेर पोइको घरमा गएपछि पनि सानीले कुनै क्षण त्यो एक रात बास बस्न आएको यात्रीलाई बिर्सन सकेकी छैन ।
+                            तसर्थ आफ्नो घरमा बास बस्न आइपुगेको यात्रीका लागि सानीले गरेको दीर्घ प्रतीक्षा मलाई उमेरमा भएको प्रेम जस्तो लाग्यो । यौवनावस्थामा प्रवेश गर्दा भएको प्रेमले जीवनभर प्रभाव पार्छ भन्ने कुरालाई सानीको जीवनबाट पुष्टि हुन्छ ।</span></li>
+                        <li><strong>९. दिइएका अनुच्छेद पढी कुनै चारवटा प्रश्न निर्माण गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li>१) हरियाले हातमा के लिएर उभिरहेको थियो ?</li>
+                                <li>२) सलाम कसलाई छोडेर कहाँ र किन गएको थियो ?</li>
+                                <li>३) बुधन करिस्माको छेउमा गएर के गर्‍यो ?</li>
+                                <li>४) यस अनुच्छेदमा प्रयोग भएका मानव र जनावरको नाम लेख्नुहोस् ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>१०. दिइएको अनुच्छेद पढी अन्त्यमा सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>क) मनोविज्ञान के हो ?</strong><br><span class="text-justify">उत्तर: मनोविज्ञान भन्नाले मनोभाव र मानसिक अध्ययनको विज्ञान हो भन्ने बुझिन्छ ।</span></li>
+                                <li><strong>ख) व्यक्ति कस्तो वातावरण निर्माण गर्न खोज्छ ?</strong><br><span class="text-justify">उत्तर: व्यक्तिले आफ्नो चाहनाअनुसारको वातावरण निर्माण गर्न खोज्छ ।</span></li>
+                                <li><strong>ग) सामाजिक र भौतिक वातावरणले मनोविज्ञानमा कसरी प्रभाव पार्छ ?</strong><br><span class="text-justify">उत्तर: सामाजिक र भौतिक वातावरणले उत्तेजनाको रूपमा काम गर्ने भएकाले यिनले मनोविज्ञानमा प्रभाव पार्छन् ।</span></li>
+                                <li><strong>घ) "संवेग" र "तज्जन्य" शब्दको अर्थ लेख्नुहोस् ।</strong><br><span class="text-justify">उत्तर: संवेग = आवेग<br>तज्जन्य = तत्कालीन</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">व्याकरण</h3>
+                    <ul class="brighter-gradient-text space-y-2 mb-4 list-none">
+                        <li><strong>३. दिइएका शब्दहरू शुद्ध पारी सार्नुहोस् :</strong>
+                            <p class="ml-4 text-justify">तापनि, प्रतीक्षा, सम्मुख, भरिया, सुकुल, क्रीडा, चौथाइ, शृङ्खला, सुदूर, निर्जीव, अभीप्सित, उद्विग्न, अतीत, नैराश्य, समष्टि, नीरव, कष्टप्रद, निस्तब्ध, अविराम, विश्वास, बिहा, चञ्चल, सामञ्जस्य, अङ्ग, चूर्ण, यस्तै, हृदय, क्षीण, प्रत्यक्ष, जिज्ञासा, संस्कृति, भण्डार, दुष्कल्पना, उत्साह, गृहिणी, अनन्तकालीन, वज्रप्रहार, अभ्यन्तर ।</p>
+                        </li>
+                        <li><strong>४. दिइएका शब्दहरू कुन कुन शुद्ध र कुन कुन अशुद्ध छन्, पहिचान गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li><strong>शुद्ध शब्दहरू</strong> :
+                                    <p class="ml-4 text-justify">भाउजू, तनहुँ, कति, कोशी, चरिनङ्ग्रे, शिरीष, क्लिष्ट, राष्ट्रिय, इन्साफ, सङ्घ, सम्बन्ध, क्षत्रिय, कृत्रिम, सन्देश, शुभ ।</p>
+                                </li>
+                                <li><strong>अशुद्ध शब्दहरूको शुद्ध रूप</strong> :
+                                    <p class="ml-4 text-justify">जेठाजु, पुर्बेली, वर्षेनी, उर्दू, हात्ती, जुलुस, विभूति, आशीर्वाद, केन्द्रीय, प्रशंसा, माथि, बाकस, इन्द्रेणी, कीर्तिपुर, विकास, बाधा, बेरुजु, क्षमा, यसरी, कर्तव्य, यस, ऋण, प्रिय, सहिद, लाञ्छना, बृहत्, सभासद् ।</p>
+                                </li>
+                            </ul>
+                        </li>
+                        <li><strong>५. वर्णविन्यास मिलाई पुनर्लेखन गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li>अ) <span class="text-justify">वायुमण्डलको संरचनामा भूमिका निर्वाह गर्ने ग्यासहरूको अनुपातमा फेरबदलले र मूलतः कार्बनडाइअक्साइडको मात्रा बढ्नाले पृथ्वीको तापक्रम बढ्न थालेको छ ।</span></li>
+                                <li>आ) <span class="text-justify">त्यो तृष्णा, त्यो अनन्तकालीन प्रतीक्षा, त्यो दिनहुुँको अभ्यस्त निराशाको धक्का त्यसको सासमा मिसिएको थियो ।</span></li>
+                                <li>इ) <span class="text-justify">यसै प्रकारले नित्य नयाँ नयाँ कल्पनाहरूले त्यसको आशालाई प्रदीप्त तुल्याउँदै दिनहरू बित्दै गए । अन्ततः त्यो चिर अभीप्सित पन्ध्रौँ दिन पनि आयो ।</span></li>
+                            </ul>
+                        </li>
+                        <li><strong>६. पदयोग र पदवियोग मिलाई पुनर्लेखन गर्नुहोस् :</strong>
+                            <ul class="ml-4 list-none">
+                                <li>अ) <span class="text-justify">भरियाले डोकाबाट भाँडाहरू झिकिसकेको थियो । सानीले माथिबाट तुरुन्तै एउटा सानो पित्ले गाग्री ल्याइदिई । त्यो समेत लिएर भरिया खोलातिर गयो ।</span></li>
+                                <li>आ) <span class="text-justify">हुनसक्छ– यतै कतै हलो जोतिरहेको होला अथवा घाँस खुर्किरहेको होला । नभन्दै सिमलको आडबाट परिछन् टुप्लुक्क देखा पर्‍यो, जोत्दाजोत्दैको हलगोरु अड्याएर ऊ हस्याङफस्याङ गर्दै मतिर लम्कँदै थियो ।</span></li>
+                                <li>इ) <span class="text-justify">यात्री चाहिने बिहानै उठेर गइहाल्यो । सानीको आँखामा आइसकेका र छचल्किरहेका मूक मोह र कुन्नी कस्ता अव्यक्त आकाङ्क्षाहरू त्यसलाई निकै टाढासम्म पहाडको टुप्पामा पुर्‍याई फर्के । कुन्नी केले हो त्यसको मन भारी हुँदै आयो । हृदयमा आद्र भावनाहरूमा गह्रुङ्गो प्रवाह बग्न थाल्यो र त्यसको भित्र मनमा लगातार एउटा प्रश्न उम्लन थाल्यो– "त्यो फेरि फर्कला ?"</span></li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Tyo Pheri Farkala Notes
+        function toggleTyoPheriFarkalaSummary() {
+            const summaryText = document.getElementById('tyoPheriFarkalaSummaryText');
+            const toggleBtn = document.getElementById('toggleTyoPheriFarkalaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+    </script>
+</body>
+</html>

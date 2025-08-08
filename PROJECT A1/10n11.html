@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>कृषिशालामा एक दिन Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for कृषिशालामा एक दिन Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">१०. कृषिशालामा एक दिन Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleKrishishalaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleKrishishalaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="krishishalaSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    कृषिशालामा एक दिन” पाठले कृषिक्षेत्रको जीवन र त्यसमा काम गर्ने व्यक्तिहरूको दैनिकीलाई जीवन्त रूपमा चित्रण गरेको छ। यस कथामा कृषिशालामा बित्ने एउटा सामान्य दिनको विवरण छ जसले कृषकको मेहनत, प्रकृति र कृषिसँगको सम्बन्धलाई उजागर गर्दछ। कृषकहरूले कसरी विभिन्न प्रकारका खेतीबारी र जनावरको हेरचाह गर्छन् र प्रकृतिसँग घनिष्ठ सम्बन्ध राख्छन् भन्ने कुरालाई यस पाठले समेटेको छ। यसले कृषक जीवनको सरलता र कठिनाइ दुवै देखाउँछ।<br><br>
+
+पाठमा कृषिशालामा बिहानदेखि बेलुकासम्मका क्रियाकलापहरू बर्णन गरिएको छ। बिहान सूर्योदयसँगै कृषकले जमिन जोत्ने, बीउ रोप्ने, सिँचाइ गर्ने जस्ता काममा जुट्छ। यससँगै पशुपालन, गाईभैँसीको ख्याल राख्ने, दूध निकाल्ने र खेतपातीको हेरचाह गर्ने क्रियाकलापहरू पनि जोडिएका छन्। यी कार्यहरू केवल आर्थिक उपाय मात्र होइन, कृषकको जीवनशैली र संस्कृतिसँग गहिरो सम्बन्धित छन्। यसले कृषकको दिनचर्या कत्तिको व्यस्त र परिश्रमी हुन्छ भन्ने कुरा देखाउँछ।<br><br>
+
+कृषिशालामा काम गर्ने मानिसहरूको सोच, भावना र स्वभाव पनि पाठमा चित्रण गरिएको छ। उनीहरू प्रकृतिसँग मिलेर काम गर्न मन पराउँछन् र त्यसबाट सन्तुष्टि प्राप्त गर्छन्। कठिन मेहनतका बाबजुद पनि उनीहरू प्रकृतिको कदर गर्छन् र धैर्य र आशा राख्छन्। कृषकहरूका लागि खेत र जनावर मात्र जीविकोपार्जनको माध्यम होइन, जीवनसँग जोडिएको एक सम्पूर्ण संसार हो। यसले पाठकलाई कृषक जीवनको महत्त्व बुझ्न र उनीहरूका समस्याप्रति संवेदनशील हुन सिकाउँछ।<br><br>
+
+पाठले कृषकहरूको दैनिक जीवनसँगै कृषि क्षेत्रको महत्वलाई पनि जोड दिएको छ। कृषिले मात्र देशको आर्थिक विकासमा योगदान पुर्‍याउँदैन, यसले खाद्य सुरक्षा, रोजगार र समाजको स्थिरता पनि सुनिश्चित गर्छ। कृषिशालामा बितेको एउटा दिनले देखाउँछ कि कृषकहरूको मेहनतले कसरी हाम्रो भोकमरीलाई दूर राख्छ र समृद्ध समाजको आधार तयार पार्छ। यसले कृषकहरूको सम्मान र प्रशंसा गर्न प्रेरित गर्छ।<br><br>
+
+अन्ततः, “कृषिशालामा एक दिन” पाठले जीवनका सरल, तर महत्वपूर्ण पाटोहरूलाई उजागर गर्दछ। यसले कृषकहरूको दैनिक परिश्रम, प्रकृतिसँगको सम्बन्ध र कृषि क्षेत्रको भूमिकालाई महत्व दिन्छ। यो पाठले हामीलाई प्राकृतिक स्रोतहरूको सदुपयोग गर्न र कृषकहरूको योगदानको कदर गर्न सिकाउँछ। यसरी यो पाठ जीवनका आधारभूत पक्षहरूप्रति सम्मान र जागरूकता जगाउने माध्यम बनेको छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. तल दिइएका अर्थ दिने शब्द पाठबाट खोजेर लेख्नुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>क) सोच्न लायक: मननयोग्य</p>
+                            <p>ख) बालीनाली: कृषिफल</p>
+                            <p>ग) अर्थपूर्ण: सार्थक</p>
+                            <p>घ) पानीमा बसेर जीविका गर्ने प्राणी: जलचर</p>
+                            <p>ङ) विषयुक्त: विषैलो</p>
+                            <p>च) बिउ छरेपछि माटोलाई पातपतिङ्गरले छोप्नु: मलचिंग</p>
+                            <p>छ) एउटै स्थानमा पाँच फरक उचाइ हुने वृक्ष लगाउने: पञ्चवर्गीय ढाँचा</p>
+                        </div>
+                        <p><strong>२. दिइएका शब्दहरुको अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस्:</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>गहुँत</strong><br><span class="text-justify">गाईको गहुँतलाई जैविक खेतीमा कीटनाशक र मलको रूपमा प्रयोग गरिन्छ, जसले माटो र बालीलाई स्वस्थ राख्न मद्दत गर्छ।</span></p>
+                            <p><strong>उर्वर</strong><br><span class="text-justify">नेपालको तराई क्षेत्र कृषि उत्पादनका लागि उर्वर भूमि मानिन्छ, जहाँ प्रशस्त मात्रामा धान र गहुँको खेती गरिन्छ।</span></p>
+                            <p><strong>स्थलचर</strong><br><span class="text-justify">बाघ, गाई, र मानिस जस्ता स्थलचर प्राणीहरूले जमिनमा आफ्नो जीवन निर्वाह गर्छन् र पारिस्थितिक प्रणालीमा महत्त्वपूर्ण भूमिका खेल्छन्।</span></p>
+                            <p><strong>जलप्रबन्धन</strong><br><span class="text-justify">बालीलाई पर्याप्त पानी उपलब्ध गराउनका लागि जलप्रबन्धनको उचित व्यवस्थापन आवश्यक हुन्छ, जसले सिँचाइको समस्या समाधान गर्छ।</span></p>
+                            <p><strong>कृषिविद्</strong><br><span class="text-justify">नयाँ प्रविधि र बालीको बारेमा सल्लाह दिन कृषिविद्हरूले किसानहरूलाई सहयोग गर्छन् ताकि उनीहरूको उत्पादन बढोस्।</span></p>
+                            <p><strong>प्रवर्धन</strong><br><span class="text-justify">सरकारले स्थानीयस्तरमा उत्पादित कृषि वस्तुको प्रवर्धनका लागि विभिन्न योजनाहरू ल्याउनुपर्छ ताकि किसानहरूको आयआर्जन बढोस्।</span></p>
+                            <p><strong>समृद्ध</strong><br><span class="text-justify">गाउँघरमा कृषिमा आधारित उद्योगहरू खोलेर देशलाई समृद्ध बनाउन सकिन्छ, जसले रोजगारीको अवसर पनि सिर्जना गर्छ।</span></p>
+                            <p><strong>अभियन्ता</strong><br><span class="text-justify">वातावरण संरक्षणका अभियन्ताहरूले जैविक खेतीको महत्त्वबारे चेतना फैलाउने काम गरिरहेका छन् र यसका फाइदाबारे मानिसलाई जानकारी दिइरहेका छन्।</span></p>
+                            <p><strong>महत्त्वाकाङ्क्षी</strong><br><span class="text-justify">आफ्नो जीवनमा ठूलो सफलता प्राप्त गर्नका लागि महत्त्वाकाङ्क्षी सोच राख्नु आवश्यक हुन्छ र त्यसका लागि निरन्तर मेहनत गर्नुपर्छ।</span></p>
+                            <p><strong>ज्ञानशाला</strong><br><span class="text-justify">गाउँगाउँमा ज्ञानशाला स्थापना गरी सबै बालबालिकालाई गुणस्तरीय शिक्षा प्रदान गर्नुपर्छ ताकि उनीहरू आफ्नो भविष्य उज्ज्वल बनाउन सकून्।</span></p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. `कृषिशालामा एक दिन´ पाठ पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p><strong>क) संवादमा कतिजना पात्रहरू सहभागी छन्?</strong><br>उत्तर: यो संवादमा गुरु र विद्यार्थीसहित पाँच जना पात्रहरू सहभागी छन्।</p>
+                            <p><strong>ख) सबैभन्दा धेरै पटक प्रश्न गर्ने विद्यार्थी कुन हो?</strong><br>उत्तर: सबैभन्दा धेरै प्रश्न सोध्ने विद्यार्थी गुरुध्वज हो, जसले जिज्ञासापूर्ण तरिकाले विभिन्न प्रश्नहरू सोधेको छ।</p>
+                            <p><strong>ग) यो संवाद कुन स्थानमा गरिएको हो?</strong><br>उत्तर: यो संवाद वनस्पति उद्यान भित्र गरिएको हो, जहाँ विभिन्न प्रकारका बिरुवा र खेतीपातीका नमूनाहरू राखिएका छन्।</p>
+                            <p><strong>घ) कुन पात्रले खाद्यपदार्थलाई औषधि भनेको छ?</strong><br>उत्तर: संवादमा भगतसिंहले खाद्यपदार्थलाई औषधि भनेको छ, जसले स्वस्थकर भोजनको महत्त्वलाई दर्शाउँछ।</p>
+                            <p><strong>ङ) सबैभन्दा छोटो संवाद कसले बोलेको छ?</strong><br>उत्तर: सबैभन्दा छोटो संवाद डोल्मा गुरुमाले बोलेको छ, जसले संक्षेपमा कुरा राखेकी छन्।</p>
+                        </div>
+                        <p><strong>२. दिइएका भनाइहरू कसकसका हुन्, पत्ता लगाउनुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>क) बद्री विश्वकर्माको</p>
+                            <p>ख) रामभरोसको</p>
+                            <p>ग) डोल्मा गुरुमाको</p>
+                            <p>घ) गुरुध्वजको</p>
+                            <p>ङ) भगतसिंहको</p>
+                            <p>च) डोल्मा गुरुमाको</p>
+                        </div>
+                        <p><strong>४. पाठमा रहेको `मैले प्रयोग……..हैन र ?´ संवादांश पढी दिइएका प्रश्नहरूको उत्तर दिनुहोस्:</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) के गर्दा जमिन उर्वर बन्छ?</strong><br><span class="text-justify">उत्तर: जैविक खेतीका लागि घरमै बनाइएको कम्पोस्ट मल र गाईको गहुँतजस्ता प्राकृतिक सामग्रीहरूको प्रयोग गर्दा जमिन उर्वर बन्छ, जसले माटोको गुणस्तर बढाउँछ।</span></p>
+                            <p><strong>ख) पानीको स्रोत विषाक्त हुनाको कारण के हो?</strong><br><span class="text-justify">उत्तर: खेतबारीमा अत्यधिक मात्रामा रासायनिक मल र विषादीको प्रयोग गर्दा त्यसको अवशेष पानीका मुहानहरूमा मिसिन्छ, जसले गर्दा पानीको स्रोत विषाक्त हुन्छ।</span></p>
+                            <p><strong>ग) संवादमा के कर्मलाई अपराध भनिएको छ?</strong><br><span class="text-justify">उत्तर: संवादमा रासायनिक मल तथा विषादीको प्रयोग गरेर खेती गर्नु र प्राणीहरूको जीवन रक्षाको आदर्शलाई भुल्नुलाई अपराध भनिएको छ।</span></p>
+                            <p><strong>घ) प्रकृतिले हामीलाई कसरी सजाय दिइराखेको छ?</strong><br><span class="text-justify">उत्तर: प्रकृतिले हामीलाई विभिन्न किसिमका रोगहरू उब्जाएर सजाय दिइरहेको छ, किनकि हामीले रसायनयुक्त खानेकुराहरू खाएर आफ्नो स्वास्थ्यलाई हानि पुर्याइरहेका छौं।</span></p>
+                        </div>
+                        <p><strong>५. दिइएको संवादांश पढ्नुहोस् र सोधिएका प्रश्नहरूको उत्तर दिनुहोस्:</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) प्राकृतिक खेती गर्दा के फाइदा हुन्छ?</strong><br><span class="text-justify">उत्तर: प्राकृतिक खेती गर्दा किसानले बजारबाट रासायनिक मल र विषादी किन्नुपर्दैन, जसले गर्दा उत्पादन लागत कम हुन्छ। साथै, यसरी उत्पादित स्वस्थकर वस्तुको बजारमा मूल्य धेरै पाइन्छ, जसले किसानको आम्दानी बढ्छ। प्राकृतिक खेतीले माटोको उर्वराशक्ति बढाउनुका साथै वातावरणलाई पनि स्वच्छ राख्छ।</span></p>
+                            <p><strong>ख) "मन परेको काममा कमाइ थोरै भए पनि चित्त बुझ्छ।" यस कथनलाई पुष्टि गर्नुहोस्।</strong><br><span class="text-justify">उत्तर: मानिसको काम गर्ने इच्छा, चाहना र सन्तुष्टिसँग जोडिएको हुन्छ। जब कुनै व्यक्तिले आफूलाई मन परेको काम गर्छ, उसलाई थकानको महसुस कम हुन्छ र ऊ काममा रमाउँछ। यस्तो अवस्थामा उसलाई कमाइभन्दा पनि कामबाट मिल्ने आत्मसन्तुष्टिले ठूलो अर्थ राख्छ। त्यसैले, कमाइ थोरै भए पनि मन परेको काम गर्दा मानिस चित्त बुझाएर खुसीसाथ जीवन बिताउन सक्छ।</span></p>
+                        </div>
+                        <p><strong>६. दिइएको संवादांश पढ्नुहोस् र सोधिएका प्रश्नहरूको उत्तर दिनुहोस्:</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) हाम्रो मौलिक बिउबिजन कसरी जोगाउन सकिन्छ?</strong><br><span class="text-justify">उत्तर: हाम्रो मौलिक बिउबिजन जोगाउन परम्परागत ज्ञान र जैविक विविधताको संरक्षणमा जोड दिनुपर्छ। सरकारले युवा पुस्तालाई कृषि क्षेत्रमा आकर्षित गर्नका लागि सीप र तालिम दिनुपर्छ। मौलिक बिउबिजनबाट उत्पादित वस्तुको बजार व्यवस्थापन गरेर किसानलाई प्रोत्साहन दिँदा मात्र यसको संरक्षण सम्भव हुन्छ।</span></p>
+                            <p><strong>ख) कृषिकर्मलाई सम्मानित कर्मका रूपमा स्थापित गर्न के के गर्नुपर्ला?</strong><br><span class="text-justify">उत्तर: कृषिकर्मलाई सम्मानित बनाउन राज्य र समाज दुवैले पहल गर्नुपर्छ। सरकारले कृषि क्षेत्रको बजेट बढाउनुका साथै किसानको हौसला बढाउन तालिम र अनुदानको व्यवस्था गर्नुपर्छ। कृषि विद्यालय र विश्वविद्यालयहरू खोलेर कृषि शिक्षालाई महत्त्व दिनुपर्छ। साथै, कृषि उपजको उचित बजार र बीमाको व्यवस्था गरेर किसानलाई सुरक्षित महसुस गराउनुपर्छ।</span></p>
+                        </div>
+                        <p><strong>७. उत्तर लेख्नुहोस्:</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) कृषिकर्म किन मानवजातिको अस्तित्वसँग गाँसिएको छ ?</strong><br><span class="text-justify">उत्तर: कृषिकर्म मानवजातिको अस्तित्वसँग गहिरो रूपमा गाँसिएको छ किनभने यसले मानिसको जीवनलाई आधार दिन्छ। मानव सभ्यताको सुरुवातदेखि नै कृषिले मानिसलाई जीवन धान्नका लागि आवश्यक पर्ने अन्न, फलफूल र तरकारीहरू उपलब्ध गराउँदै आएको छ। खेतीपाती नगर्ने हो भने मानिसले खाद्यान्नको अभावमा जीवन धान्न सक्दैन। यसले मानवलाई मात्र नभएर संसारका सबै प्राणीहरूलाई कुनै न कुनै रूपमा जीवन दिन्छ, किनभने धेरैजसो जीवजन्तु पनि बालीनालीमा निर्भर हुन्छन्। जबसम्म वैज्ञानिकहरूले नखाइकन बाँच्न सक्ने प्रविधिको विकास गर्दैनन्, तबसम्म मानवको अस्तित्व र जीवनयापनका लागि कृषिकर्म अनिवार्य रहन्छ। त्यसैले, कृषिकर्मलाई जीवनको मूल आधार मानिन्छ।</span></p>
+                            <p><strong>ख) वनजङ्गल र कृषिको सम्बन्ध कस्तो छ ?</strong><br><span class="text-justify">उत्तर: वनजङ्गल र कृषि एकअर्काका परिपूरक हुन् र यिनीहरूबीचको सम्बन्ध धेरै गहिरो छ। वनजङ्गलका रुखका पातपतिङ्गर र जैविक पदार्थहरू कुहिएर माटोमा मिसिँदा त्यसले कृषि भूमिलाई प्राकृतिक मल प्रदान गर्छ, जसले गर्दा माटोको उर्वराशक्ति बढ्छ। वनले पानीका मुहानहरूलाई संरक्षण गर्छ र वर्षालाई नियमित बनाउँछ, जसले कृषिका लागि सिँचाइमा मद्दत गर्छ। त्यस्तै, वनजङ्गलमा पाइने विभिन्न जडीबुटीहरूबाट कृषि बालीका लागि जैविक औषधिहरू बनाउन सकिन्छ। यसरी, वनले कृषि उत्पादन बढाउन प्रत्यक्ष वा अप्रत्यक्ष रूपमा सहयोग पुर्याउँछ। अर्कोतर्फ, कृषि उत्पादनका अवशेषहरूले पनि वनको माटोलाई पोषण दिन्छन्। त्यसैले, वन र कृषिको सहअस्तित्वले नै प्राकृतिक सन्तुलन कायम राख्न मद्दत गर्छ।</span></p>
+                            <p><strong>ग) जैविक मल र औषधि कसरी बनाउन सकिन्छ ?</strong><br><span class="text-justify">उत्तर: जैविक मल र औषधि घरमै उपलब्ध हुने सामान्य सामग्रीहरूबाट सजिलै बनाउन सकिन्छ। जैविक मल बनाउनका लागि एउटा ठूलो भाँडोमा २०० लिटर पानी, १० लिटर गहुँत, १० किलो गोबर, १ किलो गुँड, १ किलो दालको पिठो र बरपिपलको फेदको माटो मिसाएर राम्रोसँग घोल्नुपर्छ। त्यसपछि यसलाई तीन दिनसम्म ढाकेर राख्नुपर्छ र बिहान-बेलुका लट्ठीले चलाउनुपर्छ। तीन दिनपछि यो मल प्रयोग गर्न तयार हुन्छ। त्यसैगरी, जैविक औषधि बनाउनका लागि गाईवस्तुले नखाने विभिन्न जातका १०-१२ प्रकारका रुखका पातहरू बटुल्नुपर्छ। ती पातहरूलाई गहुँतसँग मिसाएर त्यसमा खुर्सानी, लसुन, बेसार र बोझो जस्ता जडीबुटीहरू थपेर मिसाउनुपर्छ। यसरी तयार पारिएको मिश्रणलाई केही दिनपछि कृषि बालीमा कीटनाशकको रूपमा प्रयोग गर्न सकिन्छ।</span></p>
+                            <p><strong>घ) आच्छादन प्रक्रियाका फाइदाहरू बताउनुहोस् ।</strong><br><span class="text-justify">उत्तर: आच्छादन प्रक्रियाका धेरै महत्त्वपूर्ण फाइदाहरू छन्। यो प्रक्रियाले जमिनमा चिसोपन कायम राख्न मद्दत गर्छ, जसले गर्दा बिरुवाहरूलाई सुख्खा मौसममा पनि पानीको अभाव हुँदैन। आच्छादन गर्दा खेतमा अनावश्यक झारपातहरू उम्रिन पाउँदैनन्, जसले गर्दा किसानको मेहनत र समय दुवै बच्छ। यस प्रक्रियामा प्रयोग गरिएका पातपतिङ्गर र अन्य जैविक वस्तुहरू बिस्तारै कुहिएर माटोलाई प्राकृतिक मल दिन्छन्, जसले गर्दा माटोको उर्वराशक्ति बढ्छ। आच्छादनले रासायनिक मलको प्रयोगलाई पनि कम गर्न मद्दत गर्छ, जसले गर्दा किसानको पैसा बचत हुन्छ र स्वस्थ तथा ताजा खाद्यान्न उत्पादन हुन्छ।</span></p>
+                            <p><strong>ङ) कृषि कर्मका बारेमा तपाईंका विचारहरू प्रस्तुत गर्नुहोस् ।</strong><br><span class="text-justify">उत्तर: कृषिकर्म मानवको जीवन र सभ्यताको मूल आधार हो भन्ने मेरो विचार छ। नेपालजस्तो कृषिप्रधान देशमा जहाँ अधिकांश जनता कृषिमा निर्भर छन्, यसलाई सम्मानित र आकर्षक पेसाको रूपमा स्थापित गर्न जरुरी छ। केवल किसानले मात्र नभई हरेक मानिसले आफ्नो खेतबारीमा कृषि कर्म गरेर आत्मनिर्भर बन्नुपर्छ। यसले व्यक्तिगत स्वास्थ्यमा मात्र नभएर देशको आर्थिक विकासमा पनि ठूलो योगदान पुर्याउँछ। परम्परागत ज्ञान र आधुनिक प्रविधिलाई जोडेर जैविक खेतीलाई प्रोत्साहन दिनुपर्छ ताकि माटो र वातावरण दुवै स्वस्थ रहून्। यसका लागि सरकारले उचित नीति र योजना ल्याउनुका साथै किसानहरूलाई आवश्यक तालिम, अनुदान र बजार व्यवस्थापनमा सहयोग गर्नुपर्छ।</span></p>
+                        </div>
+                        <p><strong>८. समीक्षात्मक उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) दिगो कृषि पद्धतिका लागि के कस्ता कुरामा ध्यान पुर्‍याउनु पर्छ ?</strong><br><span class="text-justify">उत्तर: दिगो कृषि पद्धतिका लागि परम्परागत ज्ञान र आधुनिक प्रविधिको सही संयोजन आवश्यक छ। यसका लागि सरकारले जैविक खेतीलाई प्राथमिकता दिनुपर्छ र किसानलाई यससम्बन्धी तालिम दिनुपर्छ। दिगो कृषिले माटोको उर्वराशक्ति जोगाउने, पानीको सदुपयोग गर्ने, र वातावरणमैत्री खेतीलाई बढावा दिने काम गर्छ। साथै, जैविक विविधताको संरक्षणमा जोड दिई रैथाने बिउबिजनको प्रयोगलाई बढावा दिनुपर्छ। कुनै एक व्यक्तिको प्रयासले मात्र यो सम्भव हुँदैन, त्यसैले कृषि वैज्ञानिक, नीति निर्माता र कृषि अभियन्ताहरू सबै मिलेर काम गर्नुपर्छ। युवा पुस्तालाई कृषि क्षेत्रमा आकर्षित गर्नका लागि कृषि शिक्षालाई महत्त्व दिनुपर्छ र कृषि उत्पादनको उचित बजार व्यवस्थापन गरेर किसानलाई प्रोत्साहन दिनुपर्छ।</span></p>
+                            <p><strong>ख) "वातावरण प्रदूषणको मूल कारण मान्छे नै भएकाले यसको समाधान पनि मानिसले नै गर्नुपर्छ।" संवादात्मक सन्दर्भ समेत ख्याल गरी आफ्ना तर्कहरू प्रस्तुत गर्नुहोस् ।</strong><br><span class="text-justify">उत्तर: यो भनाइ पूर्णतया सही छ। वातावरण प्रदूषणको मूल कारण मानिसका अव्यवस्थित क्रियाकलापहरू नै हुन्। मानिसले आफ्नो स्वार्थपूर्तिका लागि जङ्गल विनाश गर्ने, रासायनिक मल र विषादीको अत्यधिक प्रयोग गर्ने, उद्योगधन्दा र सवारी साधनबाट प्रदूषण फैलाउने, तथा फोहोरमैलाको उचित व्यवस्थापन नगर्दा वातावरण प्रदूषित भएको हो। प्रकृति आफैँमा प्रदूषित हुँदैन, मानिसका क्रियाकलापले मात्र यसमा नकारात्मक असर पर्छ। त्यसैले, यसको समाधानको दायित्व पनि मानिसकै हो। हामीले प्राकृतिक स्रोतको विवेकपूर्ण प्रयोग, जैविक विविधताको संरक्षण र प्रदूषण कम गर्ने उपायहरू अपनाउनुपर्छ। यसका लागि जनचेतना बढाउनुका साथै सरकार र नागरिक दुवैले मिलेर काम गर्नुपर्छ। रुख, बिरुवा लगाउने, पानीका मुहानहरू संरक्षण गर्ने, र सरसफाइमा ध्यान दिने जस्ता कार्यहरूबाट वातावरणको रक्षा गर्न सकिन्छ। त्यसैले, यो समस्या मानिसले नै सिर्जना गरेकाले यसको समाधान पनि मानिसले नै गर्नुपर्छ भन्ने तर्क बलियो छ।</span></p>
+                        </div>
+                        <p><strong>९. दिइएको अनुच्छेद पढी अन्त्यमा सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p>बुँदाहरू</p>
+                            <p>१. विचारहरूमध्ये निर्विचार सबैभन्दा राम्रो विचार हुनु ।</p>
+                            <p>२. निर्विचारको अभ्यासले परमानन्द प्राप्त हुनु ।</p>
+                            <p>३. जरुरतभन्दा बढी विषयमा दिल नलगाई मन खाली राखी प्रशान्तिको अभ्यासले दुःखदायी विचारले गर्ने आक्रमणबाट साधकलाई सुरक्षित राख्नु ।</p>
+                            <p>४. भयानक दुःखको परिस्थितिमा पनि यस्तो साधकले धैर्य नगुमाउनु ।</p>
+                            <p>५. आएका जुनसुकै तत्त्व फर्किएर जानलाई हो तसर्थ दुश्चिन्ताग्रस्त हुनुपर्ने कारण नहुनु ।</p>
+                            <p>सारांश</p>
+                            <p class="text-justify">योग साधना र विचार</p>
+                            <p class="text-justify">विचारहरूमध्ये सबैभन्दा राम्रो विचार निर्विचार हो र यसबाट परमानन्द प्राप्त हुन्छ । अरूभन्दा बढी विषयमा दिल नलगाई मन खाली राखी प्रशान्तिको अभ्यासले दुःखदायी विचारको आक्रमणबाट साधक सुरक्षित हुन्छ । भयानक दुःखको परिस्थितिमा पनि यस्तो साधकले धैर्य गुमाउँदैन । आएका जुनसुकै वैचारिक तत्त्वहरू जानलाई हो, तसर्थ दुश्चिन्ताग्रस्त हुनुपर्ने कारण छैन ।</p>
+                            <p>जम्मा शब्द सङ्ख्या : १४०</p>
+                            <p>सारांश गर्नुपर्ने शब्दसङ्ख्या : ४७</p>
+                            <p>सारांश गरिएको शब्दसङ्ख्या : ४४</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएको गद्यांशमा रेखाङ्कन गरिएका पदावलीलाई एउटै समस्त शब्द बनाई लेख्नुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>भानिज दाइ – भान्दाइ</p>
+                            <p>वाद र विवाद – वादविवाद</p>
+                            <p>प्रत्येक दिन – प्रतिदिन</p>
+                            <p>रोगले ग्रस्त – रोगग्रस्त</p>
+                            <p>लोकको हित – लोकहित</p>
+                            <p>अन्न र जल – अन्नजल</p>
+                            <p>प्रत्येक वर्ष – प्रतिवर्ष</p>
+                            <p>गाउँको पालिका – गाउँपालिका</p>
+                            <p>हिमको आलय – हिमालय</p>
+                            <p>जीवनरूपी गीत – जीवनगीत</p>
+                            <p>कूपको मण्डुक – कूपमण्डुक</p>
+                        </div>
+                        <p><strong>२. दिइएको अनुच्छेदका गाढा शब्दलाई विग्रह गरी देखाउनुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>सान्नानी – सानी र नानी</p>
+                            <p>पूजासामग्री – पूजाका लागि सामग्री</p>
+                            <p>बाटापारि – बाटो पारि</p>
+                            <p>पीताम्बर – पीत छ अम्बर जसको</p>
+                            <p>बाघचाल – बाघको चाल</p>
+                            <p>नियमपूर्वक – नियमका साथ</p>
+                            <p>आजभोलि – आज र भोलि</p>
+                            <p>धर्मकर्म – धर्म र कर्म</p>
+                            <p>चक्रपाणि – चक्र छ पाणिमा जसको</p>
+                            <p>दोधार – दुई धारको अवस्था</p>
+                            <p>चौबन्दी – चार बन्दीको समूह</p>
+                            <p>माखिबुट्टे – माखाको जस्तो बुट्टा भएको</p>
+                            <p>पञ्चामृत – पाँच अमृतको समूह</p>
+                            <p>फूलपाती – फूल र पाती</p>
+                            <p>सयपत्री – सय पत्र छन् जसका</p>
+                            <p>लालुपाते – लाल छ पात जसको</p>
+                            <p>पल्लाघर – पल्लो घर</p>
+                            <p>नीलकण्ठ – नील छ कण्ठ जसको</p>
+                            <p>षड्दर्शन – छ दर्शनको समूह</p>
+                            <p>अष्टाध्यायी – आठ अध्यायहरूको समूह</p>
+                        </div>
+                        <p><strong>३. पाठबाट समस्त शब्द खोज्नुहोस् र ती शब्द कसरी बनेका हुन्, बताउनुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>भाइबहिनी – भाइ र बहिनी (द्वन्द्व समास)</p>
+                            <p>स्नातकोत्तर – स्नातक उत्तर (तत्पुरुष समास)</p>
+                            <p>पढेलेखेको – पढेको र लेखेको (द्वन्द्व समास)</p>
+                            <p>यतातिर – यतातिर (अव्ययीभाव समास)</p>
+                            <p>महत्त्वाकाङ्क्षी – महत्त्वको आकाङ्क्षा भएको (बहुव्रीहि समास)</p>
+                            <p>कृषिकर्म – कृषिको कर्म (तत्पुरुष समास)</p>
+                            <p>फलफूल – फल र फूल (द्वन्द्व समास)</p>
+                            <p>वरपिपल – वर र पिपल (द्वन्द्व समास)</p>
+                            <p>गाईवस्तु – गाई र वस्तु (द्वन्द्व समास)</p>
+                            <p>बोटबिरुवा – बोट र बिरुवा (द्वन्द्व समास)</p>
+                            <p>खेतबारी – खेत र बारी (द्वन्द्व समास)</p>
+                            <p>खाद्यपदार्थ – खाद्य पदार्थ (तत्पुरुष समास)</p>
+                        </div>
+                        <p><strong>४. समस्त शब्द भए विग्रह अनि विग्रहका अवस्थामा भए समस्त शब्द बनाउनुहोस्:</strong></p>
+                        <div class="ml-4">
+                            <p>महाकवि – महान् कवि</p>
+                            <p>बाछिटा – बाङ्गो छिटा</p>
+                            <p>फेदनटुप्पो – न फेद न टुप्पो</p>
+                            <p>नवरस – नौ रसको समूह</p>
+                            <p>दाजुभाइ – दाजु र भाइ</p>
+                            <p>हाडेओखर – हाड जस्तो ओखर</p>
+                            <p>हृष्टपुष्ट – हृष्ट र पुष्ट</p>
+                            <p>ऋणनधन – न ऋण न धन</p>
+                            <p>सप्तमातृका – सात मातृकाको समूह</p>
+                            <p>बाढीपीडित – बाढीले पीडित</p>
+                            <p>चौपाया – चार पाउ भएको</p>
+                            <p>चरिनङ्ग्रे – चराको जस्तो नङ्ग्रा भएको</p>
+                            <p>जुँगामुठा – मुठा जत्रा जुँगा भएको</p>
+                            <p>बोकेदाह्री – बोकाको जस्तो दाह्री छ जसको</p>
+                            <p>चन्द्रबिन्दु – चन्द्र जस्तो बिन्दु</p>
+                            <p>लमकन्ना – लामा कान छन् जसका</p>
+                            <p>कालीमाटी – कालो माटो भएको</p>
+                            <p>लम्बोदर – लम्ब उदर भएको</p>
+                            <p>लामखुट्टे – लामा खुट्टा भएको</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Krishishala Notes
+        function toggleKrishishalaSummary() {
+            const summaryText = document.getElementById('krishishalaSummaryText');
+            const toggleBtn = document.getElementById('toggleKrishishalaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

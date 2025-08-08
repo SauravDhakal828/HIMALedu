@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>संस्कृतिको नयाँ यात्रा Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Styles for summary content toggle */
+        #summary-content {
+            display: none; /* Hidden by default */
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.5s ease-out, opacity 0.5s ease-out;
+            opacity: 0;
+        }
+
+        #summary-content.active {
+            display: block; /* Show when active */
+            max-height: 9999px; /* Dynamically adjust height to content */
+            opacity: 1;
+        }
+
+        #toggle-summary-button {
+            margin-bottom: 1.5rem; /* Space below the button */
+        }
+
+        /* Justified text alignment for content text */
+        .content-justified p,
+        .content-justified ul,
+        .content-justified ol {
+            text-align: justify;
+        }
+        .content-justified .ml-5 { /* Adjusting for existing left margin on sub-items */
+            margin-left: 1.25rem; /* Keep original left margin */
+            margin-right: 0; /* Remove right margin */
+            text-align: justify;
+        }
+
+        /* Table specific styles for dark theme */
+        .content-table {
+            background: transparent; /* Make table background transparent to show content-box background */
+        }
+        .content-table thead {
+            background: linear-gradient(90deg, #4a3a6a, #6a5acd); /* Gradient for table header */
+            color: #e0e0ff; /* Light text for header */
+        }
+        .content-table tbody tr {
+            background-color: transparent; /* Ensure rows are transparent */
+        }
+        .content-table tbody tr.border-b {
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1); /* Lighter border for rows */
+        }
+        .content-table tbody tr:hover {
+            background-color: rgba(255, 255, 255, 0.05); /* Subtle hover effect */
+        }
+        .content-table td {
+            color: #e0e0ff; /* Ensure cell text is bright */
+        }
+        /* Highlight styles for questions */
+        .highlight-question {
+            color: #fde047; /* Bright yellow for main questions */
+            font-weight: 600;
+        }
+        .highlight-sub-question {
+            color: #93c5fd; /* Light blue for sub-questions */
+            font-weight: 500;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for संस्कृतिको नयाँ यात्रा Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">३. संस्कृतिको नयाँ यात्रा Notes</h2>
+            <div class="content-box p-4 sm:p-8 rounded-lg shadow-lg w-full md:max-w-3xl mx-auto animate-on-load delay-1">
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-2 w-full">
+                    VIEW SUMMARY
+                </button>
+
+                <div id="summary-content" class="mt-6 content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">सारांश:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "संस्कृतिको नयाँ यात्रा" नेपाली पाठ्यक्रमको एउटा महत्त्वपूर्ण निबन्ध हो, जसले आधुनिक समयमा संस्कृतिले लिइरहेको नयाँ रूप, यसमा आएका परिवर्तनहरू र भविष्यमा यसको दिशा कस्तो हुन सक्छ भन्ने विषयमा गहिरो चर्चा गर्दछ। यस निबन्धले परम्परागत संस्कृतिलाई कसरी आधुनिकतासँग जोडेर अगाडि बढाउन सकिन्छ भन्ने विषयमा पनि प्रकाश पार्दछ, जसले गर्दा सांस्कृतिक विकास सन्तुलित र प्रगतिशील होस्।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        लेखकले संस्कृतिलाई स्थिर वस्तुको रूपमा नभई गतिशील र निरन्तर विकसित भइरहने प्रक्रियाको रूपमा प्रस्तुत गरेका छन्। भूमण्डलीकरण, प्रविधिको तीव्र विकास, र विभिन्न संस्कृतिहरूबीचको बढ्दो अन्तरक्रियाले नेपाली संस्कृतिमा पारेको बहुआयामिक प्रभावलाई यस निबन्धले सूक्ष्म रूपमा केलाउँछ। यसले कसरी बाह्य प्रभावहरूले हाम्रो जीवनशैली, मूल्यमान्यता, र परम्पराहरूलाई प्रभावित गरिरहेका छन् भन्ने देखाउँछ।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        निबन्धले परम्परागत मूल्यमान्यता र रीतिरिवाजहरूको संरक्षणको महत्त्वमाथि जोड दिन्छ, तर यसको अर्थ परिवर्तनलाई अस्वीकार गर्नु होइन। बरु, यसले नयाँ विचारहरू, अभ्यासहरू र विश्वव्यापी प्रवृत्तिहरूलाई कसरी आफ्नो मौलिक पहिचान नगुमाई आत्मसात् गर्न सकिन्छ भन्नेमा केन्द्रित छ। यसले सांस्कृतिक आदानप्रदानको सकारात्मक पक्षलाई स्वीकार गर्दछ, जसले विभिन्न समुदायहरूलाई एकअर्काबाट सिक्न र समृद्ध हुन मद्दत गर्दछ।
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        यसका साथै, निबन्धले विश्वव्यापीकरणको युगमा आफ्नो मौलिक सांस्कृतिक पहिचानलाई जोगाउने चुनौतीमाथि पनि विचार गर्दछ। यो विदेशी संस्कृतिको अन्धो अनुकरण गर्नुको सट्टा आफ्नोपनलाई जोगाउनुपर्ने आवश्यकतामाथि प्रकाश पार्दछ। लेखकले नयाँ पुस्तालाई सांस्कृतिक विकासको महत्त्वपूर्ण वाहकको रूपमा हेरेका छन् र उनीहरूले कसरी परम्परा र आधुनिकताबीच सन्तुलन कायम गर्दै संस्कृतिलाई अगाडि बढाउन सक्छन् भन्ने विषयमा प्रेरणादायी विचारहरू प्रस्तुत गर्छन्। अन्ततः, "संस्कृतिको नयाँ यात्रा" ले एक सन्तुलित र प्रगतिशील सांस्कृतिक विकासको परिकल्पना गर्दछ, जहाँ परम्परा र आधुनिकता एकसाथ अगाडि बढ्न सक्छन्, जसले गर्दा हाम्रो संस्कृति समयको माग अनुसार अझ समृद्ध र जीवन्त बन्न सकोस्।
+                    </p>
+                </div>
+
+                <!-- New content: शब्दभण्डार and बोध र अभिव्यक्ति -->
+                <div class="mt-8 animate-on-load delay-3">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-6 content-justified">
+                        <p>१. उस्तै अर्थ आउने शब्दहरुको जोडा मिलाउनुहोस् ।</p>
+                        <p class="ml-5">प्रतिष्ठा : इज्जत</p>
+                        <p class="ml-5">एकाकार : एकै किसिमको</p>
+                        <p class="ml-5">उत्पीडन : पीडा दिइएको</p>
+                        <p class="ml-5">विद्रोह : ठूलो विरोध</p>
+                        <p class="ml-5">कार्यान्वयन : विधिपूर्वक व्यवहारमा ल्याउने काम</p>
+                        <p class="ml-5">प्रवाहशील : निरन्तर बगिरहने</p>
+
+                        <p>२. दिइएका अर्थ मिल्ने पदावलीहरु पाठबाट खोजेर लेख्नुहोस् ।</p>
+                        <p class="ml-5">क) जीवनलाई पवित्र पार्ने काम : जीवनबोध</p>
+                        <p class="ml-5">ख) समुद्रको जहाजमा बसेर यात्रा गर्ने : नाविक यात्रा</p>
+                        <p class="ml-5">ग) एउटै मात्र संस्कृति : एकल संस्कृति</p>
+                        <p class="ml-5">घ) यात्रालाई प्रत्येक्ष हेर्ने दर्शक : यात्राको साक्षी</p>
+                        <p class="ml-5">ङ) सांस्कृतिक हिसाबले प्राप्त गर्ने न्याय : साँस्कृतिक न्याय</p>
+                        <p class="ml-5">च) विचलित नहुने यात्रा : अविचलित यात्रा</p>
+                        <p class="ml-5">छ) सबैको हग लाग्ने सन्तति : साझा सन्तति</p>
+
+                        <p>३. शब्दकोश हेरेर दिइएका शब्दहरुको अर्थ लेख्नुहोस् ।</p>
+                        <p class="ml-5">स्मृति:<br>अतीतमा देखेका, सुनेका वा अनुभव गरेका कुराहरूलाई मनमा राख्ने क्षमता; याद।</p>
+                        <p class="ml-5">जिज्ञासा:<br>थाहा पाउन, बुझ्न खोज्ने मनको इच्छा; उत्सुकता।</p>
+                        <p class="ml-5">जीववैज्ञानिक:<br>जीवन र जीवहरूको अध्ययन गर्ने व्यक्ति वा जीवसँग सम्बन्धित।</p>
+                        <p class="ml-5">प्रगति:<br>अगाडि बढ्ने अवस्था वा उन्नति; विकास।</p>
+                        <p class="ml-5">सामेल:<br>साथमा रहने, मिसिने वा भाग लिनेलाई जनाउने शब्द।</p>
+                        <p class="ml-5">दमन:<br>कसैको अधिकार, स्वतन्त्रता वा अभिव्यक्ति रोक्ने, दबाउने कार्य।</p>
+                        <p class="ml-5">मनुष्यत्व:<br>मानव हुनुको स्वभाव, गुण वा स्थिति; मानवता।</p>
+                        <p class="ml-5">दमित:<br>कसैलाई दबाइएको, नियन्त्रण गरिएको वा शक्तिहीन बनाइएको।</p>
+                        <p class="ml-5">बाहिष्कार:<br>कसैलाई समाज, समूह वा समुदायबाट अलग गर्ने वा बहिष्कृत गर्ने कार्य।</p>
+
+                        <p><span class="highlight-question">४. दिइएका शब्दलाई वाक्यमा प्रयोग गर्नुहोस् ।</span></p>
+                        <p class="ml-5">उदात्त<br>उसले आफ्नो उदात्त भावना देखाउँदै गरिबहरूलाई सहयोग गर्‍यो।</p>
+                        <p class="ml-5">अनुभूति<br>त्यो दृश्य हेरेर मलाई आनन्दको गहिरो अनुभूति भयो।</p>
+                        <p class="ml-5">सुनिश्चितता<br>परीक्षा पास हुने कुरामा मलाई पूर्ण सुनिश्चितता छ।</p>
+                        <p class="ml-5">दमक<br>साँझको सूर्यले पहाडहरूमा सुनौलो दमक ल्यायो।</p>
+                        <p class="ml-5">पङ्खफुका<br>झरनामा पानीको पङ्खफुका उडेर छरियो।</p>
+                        <p class="ml-5">निर्मित<br>यो मन्दिर शताब्दीयौंदेखि निर्मित छ।</p>
+                        <p class="ml-5">न्यायपूर्ण<br>शिक्षकले सबै विद्यार्थीलाई न्यायपूर्ण मूल्याङ्कन गरे।</p>
+                        <p class="ml-5">अविचलित<br>कठिनाइहरूका बाबजुद उनले आफ्नो लक्ष्यमा अविचलित रहे।</p>
+
+                        <p><span class="highlight-question">५. दिइएका विषयक्षेत्रका शब्दहरु खोजेर लेख्नुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) नेपाली चाडपर्वहरु</span><br>तिज, दसैं, तिहार, पुर्णिामा, ल्होसार, माघी आदि ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) नेपाली नृत्यहरु</span><br>साकेला, लाखे, देउडा, सोरठी आदि ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) नेपालका भाषाहरु</span><br>नेपाली, मैथिली, भोजपुरी, थारु, कुमाले, माझी, नेवारी आदि ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) नेपालीका पोसाक</span><br>दौरा, सुरुवाल, ढाकाटोपी, चोली, पटुका, धोती आदि ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ङ) नेपाली खानाका स्थानीय परिकार</span><br>दाल, भात, रोटी, तरकारी, अचार, खीर आदि।</p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-6 content-justified">
+                        <p><span class="highlight-question">२. दिइएका प्रश्नहरुको उत्तर दिनुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) माथिको पाठ कति अनुच्छेदमा संरचित छ ?</span><br>माथिको पाठ आठ अनुच्छेदमा संरचित छ ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) पाठको दोस्रो अनुच्छेदमा कुन विषयलाई मुख्य भाव वा विचार बनाइएको छ ?</span><br>पाठको दोस्रो अनुच्छेदमा जीवनयात्राको क्रममा बहुजातीयतामा फक्रेको नेपाली कला र संस्कृतिको विषयलाई मुख्य भाव बनाइएको छ ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) पाठको छैटौं अनुच्छेदमा कस्ता विषय वस्तुलाई प्रस्तुत गरिएको छ ?</span><br>पाठको छैटौं अनुच्छेदमा सांस्कृतिका नाममा आउने विकृतिको अन्त्य हुनुपर्ने कुरालाई प्रस्तुत गरिएको छ ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) निबन्धको पाँचौं अनुच्छेदमा कतिवटा वाक्यहरु छन् ?</span><br>उत्तर निबन्धको पाँचौं अनुच्छेदमा २२ ओटा वाक्यहरु छन् ।</p>
+
+                        <p><span class="highlight-question">३. पाठको अन्तिम अनुच्छेद पढ्नुहोस् र अनुच्छेदका आधारमा पाँचओटा प्रश्न बनाउनुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) विरगंजमा कस्तो खाल्को संसृति पाहिन्छ ?</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) `वसुधैव कुटुम्वकम्´ को अर्थ के हो?</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) निबन्धकारको स्मृतिमा के कुरा ताजै छ ?</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) हामी कस्तो संस्कृति निर्माणको समयमा छौँ ?</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">ङ) नयाँ पुस्ताका निबन्धकारले कस्तो उज्यालो ज्योति देखेकी छन्?</span></p>
+
+                        <p><span class="highlight-question">४. पाठको आधारमा उपयुक्त विकल्प छानी खाली ठाउँ भर्नुहोस् ।</span></p>
+                        <p class="ml-5">(क) जब म यो नै संस्कृति हो भनेर बुझ्न थालेँ, त्यति बेलासम्म र पनि यी पर्व मेरो जीवन र मनोविज्ञानमा सदैव रहिरहेका छन्।</p>
+                        <p class="ml-5">(ख) नेपालको लामो इतिहास र सभ्यताले निर्माण गरेका यी साझा संस्कृति मेरै संस्कृति थिए?</p>
+                        <p class="ml-5">(ग) मनुष्य जीवनको सार्थकता भन्नु नै चेतना हो।</p>
+                        <p class="ml-5">(घ) मैले यस यात्रामा सामेल भएर आवाज दिएँ।</p>
+                        <p class="ml-5">(ङ) मनुष्यको मनुष्यत्व र मानवको मानवता नै सबैभन्दा ठूलो कुरा हो।</p>
+
+                        <p><span class="highlight-question">५. ” जीवन एउटा प्रवाहशील ………तरखरमा थिएँ ” निबन्धांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) जीवनलाई किन यात्रा भनिएको हो ?</span><br>जीवनलाई यात्रा भनिएको छ किनभने यो एक निरन्तर चलिरहेको प्रक्रिया हो। मानिस जन्मिएदेखि मृत्युसम्म विभिन्न चरण, अनुभव, संघर्ष, सफलता र परिवर्तनहरू पार गर्दै अगाडि बढिरहन्छ। जसरी यात्रा सुरु हुन्छ, उकालो ओरालो, मोड, बाधा पार गरेर गन्तव्यतर्फ अघि बढ्छ, त्यसरी नै जीवन पनि एक प्रवाहशील यात्राजस्तै निरन्तर चलिरहन्छ। समयसँगै सोच, व्यवहार, परिस्थिति र मूल्यहरूको परिवर्तनले पनि जीवनलाई यात्रा जस्तै बनाउँछ। यसैले निबन्धकारले जीवनलाई "प्रवाहशील यात्रा" भनेका हुन्।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) अनुच्छेदका आधारमा म पात्रलाई चिनाउनुहोस् ।</span><br>अनुच्छेदका आधारमा “म” पात्र एक संवेदनशील, जिज्ञासु, सचेत र संस्कृतिप्रति चिन्तनशील व्यक्ति हुन्। उनी जीवनका अनुभवहरू, सामाजिक मूल्य र संस्कृतिमा भइरहेको परिवर्तनप्रति सजग छन्। उनले बाल्यकालदेखि देखेका, भोगेका कुराहरूलाई स्मरण गर्दै वर्तमान समाजमा आएको सांस्कृतिक परिवर्तनलाई विश्लेषण गर्ने प्रयास गर्छन्।<br>“म” पात्र परम्परागत संस्कृतिबाट आधुनिकताको यात्रामा रहेको समाजलाई नियालिरहेका छन् र आफू पनि त्यही यात्राको हिस्सा भएको अनुभूति गर्छन्। उनी विचारशील छन्, किनकि जीवनलाई उनी “प्रवाहशील यात्रा” भन्छन् र परिवर्तनलाई गहिरो रूपमा महसुस गर्छन्। यसैले “म” पात्र लेखक आफैं हुन सक्ने सम्भावना पनि देखिन्छ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) नेपाली जीवनलाई किन विविधताको सुन्दर साङ्लो भनिएको हो ?</span><br>नेपाली जीवनलाई विविधताको सुन्दर साङ्लो भनिएको छ किनभने नेपालमा भाषा, जात, धर्म, भेषभूषा, रहनसहन, पर्व–परम्परा, रीतिरिवाज आदिमा अत्यन्त विविधता पाइन्छ। यो साङ्लो (माला) जस्तो हो, जहाँ हरेक मुक्तो (मोती) फरक–फरक भए पनि उनीहरू एकै डोरा (संस्कृति) मा गाँसिएर सुन्दरता प्रस्तुत गर्छन्।<br>नेपाली समाजमा हिमाल, पहाड, तराईका विभिन्न समुदायहरू आ–आफ्नो पहिचान, परम्परा र संस्कृति बोकेर बसेका छन्, तर ती सबै मिलेर एक साझा नेपाली पहिचान निर्माण गर्छन्। यही विविधता भित्रको एकता र सौन्दर्यले नेपाली जीवनलाई "विविधताको सुन्दर साङ्लो" बनाएको हो।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) अनुच्छेदमा नेपालमा रहेका कुन कुन संस्कृति उल्लेखित छन् ?</span><br>अनुच्छेदमा नेपालमा रहेका विभिन्न संस्कृतिहरू मध्ये विशेष रूपमा निम्न संस्कृति र सांस्कृतिक पक्षहरू उल्लेख गरिएका छन्:<br>नेवारी संस्कृति – यसको परिकार, चालचलन, पर्व आदि उल्लेख छन्।<br>थारु संस्कृति – थारुहरूको परम्परागत जीवनशैली र संस्कृति उल्लेख गरिएको छ।<br>हिन्दु र बौद्ध संस्कृति – धार्मिक आस्था र परम्परागत अभ्यासहरू उल्लेख छन्।<br>पर्व संस्कृतिहरू – दशैं, तिहार, तीज, ल्होछार जस्ता पर्वहरूको माध्यमबाट प्रकट हुने संस्कृति।<br>लोक परम्पराहरू – गाउँघरको मौलिक संस्कृति, लोकगीत, लोकनृत्य, परम्परागत लुगा र खानपान।<br>यी सबैले नेपाली समाजमा विद्यमान सांस्कृतिक विविधता, एकता र मौलिकता झल्काउँछन्। लेखकले यिनै संस्कृतिहरूको माध्यमबाट नेपाली संस्कृतिको समृद्धि र परिवर्तनको यात्रालाई चित्रण गरेका छन्।</p>
+
+                        <p><span class="highlight-question">६. दिइएको निबन्धांश पढी सोधिएका प्रश्नहरुको उत्तर लेख्नुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">अ) जीवनमा आलोचनात्मक हुन के गर्नुपर्छ ?</span><br>जीवनमा आलोचनात्मक हुनका लागि व्यक्तिले सजग, सतर्क, चिन्तनशील र विवेकशील हुन आवश्यक छ। आलोचनात्मक बन्नका लागि अन्धअनुसरण नगरी प्रत्येक कुरालाई बुझेपछि मात्र स्वीकार गर्नुपर्ने, त्यसको तर्क, प्रमाण र परिणाम के हुन्छ भन्ने कुरा सोच्नुपर्ने हुन्छ।<br>लेखकका अनुसार, आलोचनात्मक बन्न मानिसले आफ्नो समाज, संस्कृति, परम्परा र विश्वासहरूलाई आत्ममूल्यांकन गर्न सक्नुपर्छ। कसैले भनेको कुरा साँचो हो कि होइन, त्यसभित्र अर्थ के छ, र त्यसले हाम्रो जीवनमा के असर पार्छ भन्ने कुरा सोच्न सक्नुपर्छ।<br>यसले व्यक्तिलाई अन्धविश्वास, रूढिवादिता र गलत धारणाबाट बचाउँछ र सचेत, विवेकी जीवन यापन गर्न मद्दत गर्छ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">आ) निबन्धांशमा कस्तो संस्कृतिको परिकल्पना गरिएको छ ?</span><br>निबन्धांशमा लेखकले समावेशी, विवेकशील, परिवर्तनशील र आलोचनात्मक संस्कृतिको परिकल्पना गरेका छन्। यस्तो संस्कृति जसले पुराना परम्पराहरूलाई आँखाबाट होइन, सोचेर मूल्यांकन गरोस्, र आवश्यकता अनुसार सुधार गर्न सकून्। लेखकले यस्तो संस्कृतिको कल्पना गरेका छन् जसमा पुराना मूल्य र नयाँ विचारबीच सन्तुलन कायम होस्। उनी परम्परा र आधुनिकता दुवैलाई सम्मान गर्न सक्ने संस्कृतिको चाहना गर्छन्, जसले मानिसलाई स्वतन्त्र, चिन्तनशील र विवेकी बनाओस्। यस्तो संस्कृति मात्र नेपाली समाजलाई भविष्यतर्फ डोर्याउन सक्षम हुन्छ भन्ने लेखकको विश्वास देखिन्छ।</p>
+
+                        <p><span class="highlight-question">७. दिइएको निबन्धांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">अ) संस्कृति भनेको के हो ?</span><br>संस्कृति भनेको मानिसको जीवनशैली, चालचलन, बोलचाल, रहनसहन, परम्परा, मूल्य, विश्वास, भाषा, धर्म, र कला–साहित्यजस्ता सम्पूर्ण सामाजिक अभ्यासहरूको समुच्चय हो। यो कुनै एकदिनमा बनिने कुरा होइन, समयक्रममा पुस्तौंदेखि पुस्तामा हस्तान्तरण हुँदै विकसित भएको सामाजिक सम्पदा हो। संस्कृति मानिसको सोच, बानी, व्यवहार, र सम्बन्धको प्रतिविम्ब हो, जसले कुनै समुदायको पहिचान निर्माण गर्छ। लेखकका अनुसार संस्कृति भनेको केवल परम्परा जोगाउने विषय मात्र होइन, यसमा सोच्ने, परिमार्जन गर्ने र समयानुकूल परिवर्तन गर्ने क्षमताको समेत समावेश हुनुपर्छ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">आ) संविधानले सुनिश्चित गरेका सांस्कृतिक विषयहरू के–के हुन् ?</span><br>नेपालको संविधानले विभिन्न सांस्कृतिक अधिकारहरू सुनिश्चित गरेको छ जसले सबै जातजाति, भाषा र संस्कृतिको संरक्षण र प्रवर्द्धन गर्ने अवसर दिन्छ। संविधानले आ–आफ्नो भाषा, लिपि, संस्कृति, धर्म र परम्पराको संरक्षण र विकास गर्न पाउने अधिकार सुनिश्चित गरेको छ। साथै, आफ्नो संस्कृतिमा गर्व गर्न, धार्मिक स्वतन्त्रता पालना गर्न, मौलिक पहिचान जोगाउन तथा सांस्कृतिक विविधतालाई मान्यता दिइएको छ। यसले सबै समुदायलाई समान रूपमा सांस्कृतिक सहभागिता र अभिव्यक्तिको स्वतन्त्रता प्रदान गर्दछ, जुन समावेशी र बहुसांस्कृतिक नेपाली समाजको आधार हो।</p>
+
+                        <p><span class="highlight-question">८. उत्तर लेख्नुहोस्:</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) नेपालमा के कस्ता सांस्कृतिक विविधता छन् ?</span><br>नेपालमा सांस्कृतिक विविधता अत्यन्तै समृद्ध र बहुआयामिक छ। यहाँ विभिन्न जातजाति, भाषा, धर्म, र संस्कृतिका समूहहरू पाइन्छन् जसले देशको सांस्कृतिक छवि रंगीन र जीवन्त बनाएका छन्। हिमाल, पहाड, तराई क्षेत्रमा बस्ने विभिन्न समुदायहरूका फरक–फरक चलन, पर्व, पोशाक, भेषभूषा, खानपान र मौलिक परम्पराहरू छन्। जस्तै नेवारी, थारु, मगर, तामाङ, गुरुङ, लिम्बू, मैथिली, मैथिल आदिले आफ्ना भाषा र संस्कृति बचाएर राखेका छन्। यी सबै विविधताले नेपाललाई बहुसांस्कृतिक र बहुभाषिक मुलुक बनाएको छ।<br>यी सांस्कृतिक विविधताले नेपाली समाजमा सहिष्णुता, एकता र आपसी आदरलाई बढावा दिन्छ। तर यस्ता विविधताले कहिलेकाहीं सामाजिक चुनौतीहरू पनि निम्त्याउन सक्छन्। त्यसैले सबै समुदायले आफ्नो मौलिकता जोगाइराख्दै एकअर्काको संस्कृति बुझ्न र सम्मान गर्न आवश्यक छ। संविधानले पनि सांस्कृतिक विविधताको संरक्षण र प्रवर्द्धनलाई विशेष महत्व दिएको छ। यसरी सांस्कृतिक विविधता नेपाली समाजको ठूलो धन हो, जसलाई सम्मान गरी समृद्ध बनाउनु हाम्रो साझा जिम्मेवारी हो।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) श्रम र संस्कृति कसरी अन्तरसम्बधित हुन्छन् ?</span><br>श्रम र संस्कृति आपसमा गहिरो सम्बन्धित छन् किनभने कुनै पनि संस्कृतिमा काम गर्ने तरिका, श्रमको मूल्य र त्यसलाई दिने सम्मान फरक–फरक हुन्छ। कुनै समाजमा कृषि, वन उपज संकलन, शिल्प, हस्तकला, उद्योगलगायत श्रमका विविध प्रकारहरूले सांस्कृतिक पहिचान निर्धारण गर्छन्। नेपाली समाजमा पनि विभिन्न जातजातिका आफ्ना पारम्परिक पेशा र श्रम सम्बन्धी अभ्यास छन् जसले उनीहरूको सांस्कृतिक विशेषता झल्काउँछ। श्रमले मात्र होइन, श्रममा समावेश सामाजिक नियम, पर्व र परम्पराले पनि संस्कृतिलाई आकार दिन्छ।<br>यसरी श्रम संस्कृतिको अभिन्न अंश हो र कुनै संस्कृतिले श्रमलाई सम्मान गरेन भने त्यो समाज प्रगतिशील हुन सक्दैन। श्रमको सम्मानले व्यक्तिको सामाजिक स्थितिलाई निर्धारण गर्छ र समुदायको आर्थिक–सामाजिक विकासमा योगदान पुर्याउँछ। आधुनिक युगमा परम्परागत श्रम प्रणाली परिवर्तन भइरहे पनि श्रमप्रति सम्मान र त्यसको सांस्कृतिक महत्व जोगाउनु आवश्यक छ, जसले सामाजिक न्याय र समावेशीताको मार्ग खोल्छ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) न्यायपूर्ण संस्कृतिको निर्माण कसरी गर्न सकिन्छ, निबन्धका आधारमा लेख्नुहोस्।</span><br>न्यायपूर्ण संस्कृतिको निर्माणका लागि सबै नागरिकलाई समान अवसर र अधिकार सुनिश्चित गर्नु आवश्यक छ। यसका लागि अन्धविश्वास, रूढिवादिता र भेदभावलाई हटाउनु पर्छ। समाजका सबै वर्ग र समुदायले आपसी सम्मान र सहिष्णुता प्रदर्शन गरी मिलेर काम गर्नुपर्ने हुन्छ। संविधानले पनि समानताको सिद्धान्त राखेर जात, धर्म, भाषा, संस्कृति सबैको संरक्षण र प्रवर्द्धनको व्यवस्था गरेको छ। यसै अनुरूप न्यायपूर्ण संस्कृतिले सबैलाई समेट्ने, भेदभावमुक्त र समावेशी संस्कृतिलाई अघि बढाउँछ।<br>साथै, शिक्षा र चेतनामूलक कार्यक्रमले मानिसमा आलोचनात्मक सोच र विवेक विकास गर्न मद्दत गर्छ, जसले पुराना र गलत संस्कारहरूलाई परिमार्जन गर्ने वातावरण तयार पार्छ। सामाजिक, आर्थिक र सांस्कृतिक पक्षमा न्याय सुनिश्चित गर्ने नीति र व्यवहारले मात्र यस्तो संस्कृति स्थापित हुन्छ। यसरी न्यायपूर्ण संस्कृति बनाउन प्रत्येक व्यक्ति, संस्था र सरकारले मिलेर काम गर्नुपर्छ जसले दीर्घकालीन सामाजिक शान्ति, समृद्धि र सहिष्णुता सुनिश्चित गर्छ।</p>
+
+                        <p><span class="highlight-question">९. व्याख्या गर्नुहोस् :</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) नेपालको लामो इतिहास र सभ्यताको निर्माण गरेका यी साझा संस्कृति मेरै संस्कृति थिए, मेरो देशका सम्पत्ति थिए र मेरा ती सबै मित्रहरु एकै फुलबारीका साझा फुलहरु थिए ।</span><br>लेखकले यस वाक्यमा नेपालको लामो इतिहास र सभ्यताको निर्माण गरेका साझा संस्कृतिहरू आफ्नो व्यक्तिगत पहिचान र आत्मसंग गहिरो रूपमा जोडिएको कुरा व्यक्त गरेका छन्। यी साझा संस्कृति केवल कुनै एक समुदायको होइन, समग्र देशको समृद्ध सांस्कृतिक सम्पदा हुन् जसलाई सबैले आफ्नो मान्नुपर्छ। लेखकले यो कुरा स्पष्ट गरेका छन् कि यी संस्कृति उहाँका आफ्नै संस्कृति हुन्, जसले उनलाई व्यक्तिगत रूपमा गर्वको अनुभूति गराउँछन्। यसले नेपाली नागरिकहरूको सामूहिक पहिचान र सांस्कृतिक एकताको महत्त्वलाई उजागर गर्दछ। साझा संस्कृतिले हाम्रो समाजलाई बलियो बनाउँछ र हाम्रो पहिचानलाई स्थापित गर्छ।<br>त्यसैगरी, लेखकले यी संस्कृतिका विविध पक्षहरूलाई आफ्नो “मित्रहरू” वा “साझा फूलहरू” को रूपमा माया गर्ने भावनासहित प्रस्तुत गरेका छन्। जस्तो कि एउटै फुलबारीमा उगेका विभिन्न प्रकारका फूलहरू एउटै बगैंचाको शोभा बढाउँछन्, त्यसैगरी नेपाली समाजका विभिन्न जातजाति, भाषा र संस्कृतिका समुदायहरू पनि एकअर्कामा एकताको सूत्रले बाँधिएका छन्। यी विविध फूलहरूबीच सहिष्णुता र सम्मानले मात्र हाम्रो साझा पहिचान प्रगाढ हुन्छ र सांस्कृतिक समृद्धि कायम रहन्छ। यो भावनाले नेपाली समाजको बहुसांस्कृतिक सौन्दर्य र सामाजिक एकताको महत्त्वलाई बलियो बनाउँछ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) संस्कृतिका नाममा…………………………………..भेद विकृति हुन् ।</span><br>प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तक अन्तर्गत पर्ने ‘संस्कृतिको नयाँ यात्रा’ नामक निवन्धबाट साभार गरिएको हो । यस निबन्धका लेखक सुधा त्रिपाठी हुन्‌ । उनि सम्पूर्ण नेपालीको मस्तिष्कमा बस्न सफल भएकी छन् | मुख्यत सांस्कृतिक रचना गर्न मन पराउने भगकाले नै धेरै जसो उनका कृतिहरु संस्कृतिसँग मैं सम्बन्धित हुने गर्छन । उनले यस निबन्धमा पनि ‘म’ पात्रको चित्रण गरी मानवीय जीवनलाई सांस्कृतिक यात्रासँग तुलला गरेर नेपालमा विद्यमान संस्कृतिको महत्त्व साथै यसमा रहेका विकृतिलाई हटाउनुपर्छ भन्ने कुरालाई छर्लङ्ग पारेकी छिन् ।<br>माथि दिइएको वाक्यांशले हामीलाई के भन्न खोजेको छ भने जसरी सम्पूर्ण विषयवस्तुको सवल र दुर्बल पक्ष हुन्छ, त्यसरी नै नेपालमा विद्यमान संस्कृतिको पनि केही दुर्बल पक्षहरु रहि आएको पाइन्छ । अहिलेको यो विकसित समयमा आएतापनि संस्कृतिका नाममा गरिने विभेदहरू दुर्गम गाउँमा अझै व्यापक नै छन् | पखपरागत अवधारणालाई अनुशरण गरेकै कारण ती विभेदको अन्त्य भएको छैन । संस्कृतिका नाममा गरिने विभेदले समाजलाई विकृतिको मार्गमा लगिरहेको छ। त्यसैले हामी सम्पूर्ण नेपालीहरु एकिकृत भई त्यस्ता विवेद एवम् विकृतिलाई परै पन्छाएर अघि बढ्नुपर्छ। यसरी ‘म’ पात्रको चित्रण गरेर सांस्कृतिक विवेदलाई अन्त्य गर्ने कुरालाई विस्तृत रूपमा वर्णन गरिएको पाउछ ।</p>
+
+                        <p><span class="highlight-question">१०. समीक्षात्मक उत्तर लेख्नुहोस्:</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) नेपालमा विद्यमान संस्कृतिका सबल र दुर्बल पक्षको चर्चा गर्नुहोस् ।</span><br>नेपालमा विद्यमान संस्कृतिका धेरै सबल पक्षहरू छन् जसले हाम्रो समाजलाई समृद्ध र जीवन्त बनाएका छन्। पहिलो र सबैभन्दा महत्त्वपूर्ण कुरा, नेपाल बहुसांस्कृतिक र बहुभाषिक देश हो जहाँ विभिन्न जातजाति, भाषा, धर्म, र परम्पराहरूको संगम छ। यस विविधताले हाम्रो संस्कृतिलाई धनी बनाएको छ र मानिसहरूबीच सहिष्णुता, एकता र आपसी सम्मानको भावना बढाएको छ। नेपाली संस्कृतिमा पर्वहरू, लोकगीत–नृत्य, परम्परागत कला र हस्तकला, र मौलिक खानपान जस्ता सांस्कृतिक पक्षहरू बलियो छन् जसले हाम्रो पहिचानलाई मजबुत पार्छ। साथै, परम्परागत ज्ञान र धार्मिक आस्थाले समाजमा नैतिकता र जीवन मूल्यमान्यता कायम राख्न मद्दत गर्छन्।<br>तर नेपालमा विद्यमान संस्कृतिका केही दुर्बल पक्षहरू पनि छन् जसले सामाजिक प्रगतिको मार्गमा चुनौती प्रस्तुत गर्छन्। धेरै ठाउँमा अन्धविश्वास, रूढिवादिता र पुरानै सोचमा अड्किनु संस्कृतिको कमजोरी हो जसले व्यक्तिको स्वतन्त्र सोच र सामाजिक विकासलाई अवरुद्ध गर्छ। कतिपय संस्कृतिहरूमा जातीय भेदभाव, लैङ्गिक असमानता र सामाजिक विभाजनले समस्या निम्त्याएको छ। आधुनिक प्रविधि र शिक्षा नपुगेका क्षेत्रहरूमा सांस्कृतिक परिवर्तनसँगै पुराना, सकारात्मक पक्षहरू पनि हराउन सक्ने जोखिम छ। साथै, केही सांस्कृतिक पक्षहरू व्यवसायिकरणको चपेटामा आएर मौलिकता र शुद्धतालाई गुमाउन थालेका छन्। यसैले, संस्कृतिका यी दुर्बल पक्षहरूलाई सचेत र समसामयिक सोचले सुधार गर्न आवश्यक छ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) `सांस्कृतिक रुपमा न्यायपूर्ण समाजले मात्र समतामूलक समाजको निर्माण गर्न सक्छ´ विवेचना गर्नुहोस् ।</span><br>सांस्कृतिक रूपमा न्यायपूर्ण समाज भनेको सबै जाति, भाषा, धर्म, समुदाय र सांस्कृतिक पहिचान भएका मानिसहरूलाई समान अधिकार र सम्मान दिइने समाज हो। यस्तो समाजमा कसैप्रति भेदभाव, अन्धविश्वास, वा अपमान हुने कुरा हुँदैन। जब सबैलाई आफ्नो सांस्कृतिक पहिचान मनाउन, आफ्नो भाषा बोल्न, र आफ्नो परम्परालाई जोगाउन स्वतन्त्रता मिल्छ, तब मात्र उनीहरूले आफूलाई समाजको बराबरी सदस्यको रूपमा महसुस गर्न सक्छन्। यसरी सांस्कृतिक न्यायले मात्र व्यक्तिमा आत्मसम्मान र सामाजिक सहभागिता बढाउँछ, जसले समग्र समाजमा समानता र समृद्धिको वातावरण तयार पार्छ।<br>यसको विपरीत, यदि कुनै समाजमा सांस्कृतिक भेदभाव, असमानता वा अन्याय छ भने त्यो समाज कहिल्यै पूर्णरूपमा समतामूलक बन्न सक्दैन। विभिन्न सांस्कृतिक समूहहरूमा विभाजन, असहिष्णुता र द्वन्द्वको सम्भावना बढ्छ। यसले सामाजिक शान्ति र विकासमा बाधा पुर्याउँछ। त्यसैले, संविधान, कानून र सामाजिक संरचनाले सांस्कृतिक न्यायलाई सुनिश्चित गर्नुपर्छ र सबै समुदायलाई आफ्नो संस्कृति पालन गर्न र सम्मान पाउन अवसर दिनुपर्छ। सांस्कृतिक रूपमा न्यायपूर्ण समाजले मात्र सबैलाई समान रूपमा अगाडि बढ्ने र अधिकार पाउने वातावरण तयार पारेर समतामूलक समाजको निर्माण गर्न सक्छ।</p>
+
+                        <p><span class="highlight-question">११. दिइएको अनुच्छेद पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) संस्कृतिभित्र के के लुकेका हुन्छन् ?</span><br>संस्कृतिभित्र कुनै पनि जातजतिका लवाइखवाइ, विशभूषा, भाषा, दर्शन, मान्यता र विश्वास लुकेका हुन्छन् ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) बहुजातीय मुलुकका के कस्ता विशेषता हुन्छन् ?</span><br>बहुजातीय मुलुकका सांस्कृतिक विविधता, सांस्कृतिक सम्पन्नता, जातीय पृथक्ता, जातीय सद्भाव, राष्ट्रिय एकता, धार्मिक एवं सांस्कृतिक मेल जस्ता विशेषता हुन्छन् ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) `संस्कृति मधुरस हो, सभ्यता धार हो´ भन्नाको तात्पर्य के हो ?</span><br>जसरी विनाधार मधुरस भण्डारण हुन सक्दैन ठीक त्यसैगरी सभ्यता भएन भने संस्कृति पनि फक्रन सक्दैन, नेपालीहरुको साझा सभ्यता र संस्कृति मेलका कारण नेपाल मधुरसले भरिपूर्ण मौरीको घार जस्तै बनेको छ भन्नुनै यसको तात्पर्य हो ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) `पृथक्ता´ र `अभ्यागत´को अर्थ लेख्नुहोस् ।</span><br>पृथक्ता : भिन्नता<br>अभ्यागत : पाहुना, अतिती</p>
+
+                        <p><span class="highlight-question">१२. दिइएको अनुच्छेद पढी चारवटा मुख्य बुँदाहरु टिप्नुहोस् र एक तृतीयांशमा सार लेख्नुहोस् ।</span></p>
+                        <p class="ml-5">बुँदाहरु:<br>१. पुर्खाको विगत, हाम्रो वर्तमानको व्यवहार नै भोलिका सन्तानको साँस्कृतिक धरोहर बन्नु,</p>
+                        <p class="ml-5">२. आमाबुबा, गुरु, पाहुना, वनस्पतिलाई देवत्वकरण गरी आदर गर्ने संस्कृति हाम्रो अमूल्य निधि हुनु,</p>
+                        <p class="ml-5">३. छोराछोरीलाई संस्कारयुक्त शिक्षा दिएमा संस्कार र संस्कृतिको संरक्षण हुने,</p>
+                        <p class="ml-5">४. परोपकारी बनाउने संस्कार र संस्कृति हाम्रो प्राण भएकाले यसको संरक्षण गर्नुपर्ने ।</p>
+
+                        <p class="ml-5">सारांश<br>**नेपाली संस्कृति**<br>पुर्खाको विगत र हाम्रो वर्तमान नै भोलिका सन्ततिको सांस्कृतिक धरोहर भएकाले छोराछोरीलाई सम्पत्तिको सट्टा संस्कारयुक्त शिक्षादीक्षा दिएर संस्कार र संस्कृतिको निर्माण गर्नुपर्छ । आमाबुबा, गुरु, पाहुना, वनस्पतिलाई देवत्वकरण गरी आदर गर्ने संस्कृति हाम्रो अमूल्य निधि हो । परोपकारी बनाउने संस्कार र संस्कृती हाम्रो प्राण भएकाले हामीले यसको संरक्षण गर्नुपर्छ ।</p>
+                        <p class="ml-5">दिइएको अनुच्छेदको शब्द सङ्ख्या : १६२<br>एक तृतीयांश शब्द सङ्ख्या : ५४<br>सारांश शब्द सङ्ख्या : ५४</p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">व्याकरण अभ्यास</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-6 content-justified">
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2">पदवर्ग: नाम</h4>
+                        <p>१. <span class="highlight-question">दिइएको अनुच्छेद पढी नाम वर्गका शब्दको पहिचान गर्नुहोस् ।</span><br>हुल, भिक्षु , स्तूप, परिक्रमा, सहर, भीमसेन, स्तम्भ, मन्जु, स्वयम्भू, प्राङ्गण, वुवा, खुशी, व्यक्त, नारायणहिटी, दरबार, सिंहदरबार, हनुमानढोका, एयरपोर्ट, कीर्तिपुर,महिमा, काठमाडौं, दृश्य, हात, प्रसाद, झोला, बाँदर ।</p>
+                        <p>२. <span class="highlight-question">दिइएका शब्दहरुबाट एउटै उपवर्गमा पर्ने नामहरुको सुची बनाउनु होस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) व्यक्तिवाचक नाम</span><br>गोपाल, काठमाडौं, कर्नाली, रामायण, मुनामदन, तिहार, होली, तिज, धरमपुर, दसैँ</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) जतिवाचक नाम</span><br>फूल, गाई, माछो, किताब, घर, विद्यालय, जुत्ता, औंठी, टोपी, साइकल, कार</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) समूहवाचक नाम</span><br>वथान, लहर, चाङ, खात, फौज, झुप्पो</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) द्रव्यवाचक नाम</span><br>रगत, कुहिरो, ढुङ्गा, माटो, सुन, चाँदी, चामल, पानी, शोभिता, तेल</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ङ) भाववाचक नाम</span><br>रिस, बसाइ, चोरी, युद्ध, मुर्ख्याइँ, प्रेम, घृणा, मानवता, शिक्षा, पढाई, जवानी, गरिबी, बाल्यावस्था</p>
+                        <p>३. <span class="highlight-question">दिइएको अनुच्छेदबाट बिसओटा नाम शब्द टिप्नुहोस् ।</span><br>नेपाल, पर्व, नारी, रुप, गौरा, महिला, व्रत, भगवान्, शिव, पार्वती, पुजा, सुख, समृद्धि, कामना, नदी, घर, पोखरी, चना, गहुँ, मकै ।</p>
+                        <p>४. <span class="highlight-question">पाठको पहिलो अनुच्छेदमा रहेका नाम शब्दहरु टिप्नुहोस् ।</span><br>वाल्यकाल, दसैँ, स्मृति, हृदय, नेपाल, पहाड, गाउँ, संस्कृत, महिना, बुबा, आमा, झरना, कोसी, नदी, लेखनाथ, बाढी, झरी, पहिरो, हिलो, धर्ती, पुर्खा, लुगा, पिङ, खाना, केरा, कुराउनी, मासु, चिउरा, परिकार, दक्षिणा, बालिका, तिहार, खुशी, जीवन आदि ।</p>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 mt-8">पदवर्ग: सर्वनाम</h4>
+                        <p>१. <span class="highlight-question">दिइएको अनुच्छेदमा नामको सट्टामा उपयुक्त सर्वनाम पद प्रयोग गरि पुनर्लेखन गर्नुहोस् ।</span></p>
+                        <p class="ml-5">क) आमाबुबाले छोराछोरीलाई पढ्नका लागि धनगढी पठाए । उनीहरु त्यहाँ बसी धेरै पढे । छोरी पढीसकेपछी गाउँ फर्की । उसले गाउँमा एउटा विद्यालय खोली । केही वर्षपछि छोरो पनि गाउँमै फर्क्यो । उसले पनि त्यस विद्यालयमा पढाउन थाल्यो । आमाबुबा खुशी हुनुभयो ।</p>
+                        <p class="ml-5">ख) मेरी छोरी ज्ञानुले व्यवस्थापनामा स्नातक गरिन् । उनी आफ्नो गाउँमा गइन् । उनले गाउँमा उद्योग खोलिन् । उद्योगमा धेरै मानिसले जागिर पाए । उनीहरुको आर्थिक स्थिति सुध्रियो ।</p>
+                        <p>२. <span class="highlight-question">दिइएका सर्वनामलाई मिल्दाजुल्दा उपवर्गमा सूचीकृत गर्नुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) पुरुषवाचक सर्वनाम</span><br>अ) प्रथम पुरुषवाचक : म, हामी<br>आ) द्वितीय पुरुषवाचक : तँ ,तिमी, तपाई ,तपाईंहरु<br>इ) तृतीय पुरुषवाचक : ऊ, त्यो, उनी, उनीहरु, उहाँ, उहाँहरु</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) दर्शकवाचक सर्वनाम</span><br>यो, यी, यिनीहरु, त्यो, ती, तिनीहरु</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) सम्बन्धवाचक सर्वनाम</span><br>जो, जे, जुन, जेसुकै, जोसुकै, जुनसुकै</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) प्रश्नवाचक सर्वनाम</span><br>को, के, कुन, केही, कोही, कुनै</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ङ) निजवाचक सर्वनाम</span><br>आफू, आफैं, स्वयम्, निज, अरु</p>
+                        <p>३. <span class="highlight-question">दिइएको गद्यांश पढी दशवटा सर्वनाम टिप्नुहोस् ।</span><br>म, हामी, तिमी, उनीहरु, तपाईं, को को, ऊ, जोसुकै, तँ, यस, आफै ।</p>
+                        <p>४. <span class="highlight-question">दिइएका सर्वनामलाई अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् ।</span></p>
+                        <p class="ml-5">त्यो<br>राम घर गएकाले त्यो आज स्कुल आएन ।</p>
+                        <p class="ml-5">तिनीहरु<br>सीता र गिता त घरमै थिए फेरि तिनीहरु पढ्न किन आएनन् ।</p>
+                        <p class="ml-5">यी<br>यी भ्रष्टाचारी नेताहरुले गर्दा आज देशमा अशान्ति फैलिएको छ ।</p>
+                        <p class="ml-5">स्वयम्<br>आफ्नो अधिकारका लागि आफू स्वयम् लड्नु पर्छ।</p>
+                        <p class="ml-5">जे<br>तिमीलाई जे इच्छा लाग्छ,तिमी त्यही गर ।</p>
+                        <p class="ml-5">को<br>तिमी को हौँमैले त चिनिन नि ।</p>
+                        <p class="ml-5">के<br>तिमी खानामा के खान्छौ ।</p>
+                        <p class="ml-5">आफू<br>परिवर्तन गर्दा पहिला आफूबाट सुरुवात गर्नुपर्छ ।</p>
+                        <p class="ml-5">उहाँ<br>बुबालाई खाना खान बोलएको उहाँ अझै आउनु भएको छैन ।</p>
+                        <p class="ml-5">कोही<br>साथीहरुलाई खेल्न बोलाएको कोही पनि आएनन् ।</p>
+                        <p class="ml-5">प्रत्येक<br>हामी प्रत्येक नेपालीको मनमा आफ्नो देशको लागि सम्मान हुनुपर्छ ।</p>
+                        <p class="ml-5">अरु<br>हामीले अरुको देखासिखि गर्नुहुदैन ।</p>
+                        <p class="ml-5">सबै<br>हाम्रो देश नेपाल, नेपालीहरुको साझा फुलबारी भएकाले सबैले यसको संरक्षण गर्नुपर्छ ।</p>
+                        <p class="ml-5">केही<br>तिमी बिरामी छौ त्यसैले तिमी बासी खानेकुरा केही नखाऊ ।</p>
+                        <p class="ml-5">हजुर<br>बुबा यहाँ पो हुनुहुदो रहेछ, मैले त हजुरलाई घरमा खोजीराथे ।</p>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 mt-8">पदवर्ग – विशेषण</h4>
+                        <p>१. <span class="highlight-question">दिइएको गद्यांशबाट विशेषण शब्द पहिचान गरी लेख्नुहोस् ।</span><br>एक, दुइटा, त्यस, एउटा, ठुलो, चलाख, कमजोर, धुर्त, मेरा, यो, धमिलो, प्रिय, सफा, सानो ।</p>
+                        <p>२. <span class="highlight-question">दिइएका पदावलीबाट विशेषण शब्द छानी तिनलाई उपवर्गमा वर्गीकरण गर्नुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">क) गुणबोधक विशेषण</span><br>सेतो, बलियो, गतिलो, बुझक्कड, चड्दो, शीतल, सांस्कृतिक, नैतिक, मलिलो</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ख) सङ्ख्याबोधक विशेषण</span><br>लाखौं, पाँच, सयौं, सप्त</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ग) परिमाणबोधक विशेषण</span><br>प्रशस्त, अलिकति, थोरै, सबै</p>
+                        <p class="ml-5"><span class="highlight-sub-question">घ) सार्वनामिक विशेषण</span><br>यो, त्यो, यी, ती</p>
+                        <p class="ml-5"><span class="highlight-sub-question">ङ) भेदक विशेषण</span><br>उसको, मेरो, तिम्रो</p>
+                        <p>३. <span class="highlight-question">दिइएको अनुच्छेदबाट दशओटा विशेषण शब्द पहिचान गरि टिपोट गर्नुहोस् ।</span><br>मेरो, सेता, हरियो, उर्वरशील, विविध, अनेक, सयौं ,मेहनती, यस, वीर, स्वच्छ, प्राकृतिक, नेपालको ।</p>
+                        <p>४. <span class="highlight-question">` संस्कृतको नयाँ यात्रा´ निबन्धबाट पाँचवटा विशेषण शब्दहरु टिप्नुहोस् ।</span><br>मेरो, एक,निलो, मीठो, यी, दुर्गम, गतिशील, साझा, सबै, वास्तविक, हाम्रो, नयाँ ।</p>
+
+                        <h4 class="text-xl font-semibold brighter-gradient-text mb-2 mt-8">पदवर्ग – क्रिया</h4>
+                        <p>१. <span class="highlight-question">दिइएको गद्यांशबाट क्रियापद पहिचान गरी लेख्नुहोस् ।</span><br>झुके, वने, सकेनन्, सजिए, बनेनन् , सकेनौँ, पोलिए, बद्लिए, बहकिए, मिसिए, लरबरियो, रह्यो ।</p>
+                        <p>२. <span class="highlight-question">दिइएका क्रियापद प्रयोग गरी आफूलाई मनपर्ने विषयमा छोटो अनुच्छेद लेख्नुहोस् ।</span><br>मेरो भाइले सरकारी जागिर खान्छ । उसले सरकारी स्कुलमा नै पढ्यो । अहिले भाइ विद्यालयमा पढाउन गएको छ । उसके असल शिक्षक बनी नाम कमाओस् भन्ने मेरो चाहाना छ । भाइ विद्यालयबाट कतिखेर आउला भनी म उसैको पर्खाइमा बसेको थियो । भाइ विद्यार्थीसँगै बाटोमा हिड्दै थियो भनेर श्यामले भन्न नपाउँदै आँगनीमा टुप्लुक्क आइपुगेको भाइले श्याम झुट बोल्छन् भनी रिसाएझै गर्दा श्याम त डराएर जुरुक्कै उठेछ ।</p>
+                        <p>३. <span class="highlight-question">दिइएका क्रियापदलाई मिल्दो उपवर्गमा वर्गीकरण गर्नुहोस् ।</span></p>
+                        <p class="ml-5"><span class="highlight-sub-question">१. अर्थप्रधानताका आधारमा</span><br>क) मुख्य क्रिया<br>सुन्छ, पढ्छ,हाँस्छ, भयो, रुदैँ, हुन्छ, ल्याउँछ, बनाउँछ, आइ, गएको, हुनु, उम्रँदै, वाङ्गिन्छ, भुतभुताउनु, छापेको, फरफरायो, कलकलाउँछ, लेख्छ, दियो, पढ्ने, भएको, भिजाउँदै, गर्दछौं, सुनिन्छ ।<br>ख) सहायक क्रिया<br>छ, हाल्छ, सक्यो, पगे, हो, थियो, छन् , सकेछ ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">२. बनोटका आधारमा</span><br>क) सरल क्रिया<br>सुन्छ, पढ्यो, ल्याउँछ, सक्यो, बनाउँछ, भयो, खोज्यौँ, वाङ्गिन्छ, फरफरायो, कलकलाउँछ, लेख्छ,दियो, गर्दछौ, सुनिन्छ ।<br>ख) जटिल क्रिया<br>भनिहाल्छ, रुदै छ, आइसक्यो, आइपुगे, गएको हुने छ, उम्रँदै छ, भुतभुताएको छ, छापेको थियो, पढ्ने छ, भएको छ, भिजाउँदै छ, लेखिसकेछ ।</p>
+                        <p class="ml-5"><span class="highlight-sub-question">३. कर्मका आधारमा</span><br>क) सकर्मक क्रिया<br>सुन्छ, पढ्यो, ल्याउँछ, बनाउँछ, खोज्यौ, लेख्छ, दियो, पढ्ने छ, भिजाउँदै छ, गर्दछौ ।<br>ख) अकर्मक क्रिया<br>हाँस्छे, दगुर्छन्, रुँदै छ, आइसक्यो, छ, हो, उम्रँदै छ, फरफरायो, कलकलाउँछ, भएको छ, सुनिन्छ ।</p>
+                        <p>४. <span class="highlight-question">दिइएको अनुच्छेदबाट बाह्रओटा क्रिया टिप्नुहोस् ।</span><br>पर्दै छ, भएको छ, ल्यायो, हरायो, वगायो, पुर्यो, आएछ, सुन्छु, हेर्छु, छुन्छ, रुवाउँछ, पर्छन्, बन्दछ ।</p>
+                        <p class="ml-5">५. <span class="highlight-question">`संस्कृतिको नयाँ यात्रा´ निबन्धको दोस्रो अनुच्छेदबाट पन्ध्रओटा क्रियापद टिप्नुहोस् ।</span><br>हो, रहेछौ, रहेछ, पुगेँ, भयो, थालेँ, पाएँ, मनाउँथ्यौ, मनाउँथे, गाउँथे, गर्थे, बताउँथे, भएँ, बुझेँ, गरेँ, थिए ।</p>
+                    </div>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mx-auto block animate-on-load delay-4" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary content visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const toggleButton = document.getElementById('toggle-summary-button');
+
+            if (summaryContent.classList.contains('active')) {
+                summaryContent.classList.remove('active');
+                toggleButton.textContent = 'VIEW SUMMARY';
+            } else {
+                summaryContent.classList.add('active');
+                // Set max-height to a very large value to ensure it expands fully
+                summaryContent.style.maxHeight = '9999px'; // Use a large fixed value for full expansion
+                toggleButton.textContent = 'HIDE SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+            // Attach event listener for the summary button
+            document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+        });
+    </script>
+</body>
+</html>
+

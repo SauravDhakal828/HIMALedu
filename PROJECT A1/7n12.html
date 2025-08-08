@@ -1,0 +1,732 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>हामीलाई बोलाउँछन् हिमचुली Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for हामीलाई बोलाउँछन् हिमचुली Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">७. हामीलाई बोलाउँछन् हिमचुली Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleHimchuliSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleHimchuliSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="himchuliSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    पाठ “हामीलाई बोलाउँछन् हिमचुली”ले हिमालको महानता र त्यसले मानिसको जीवनमा दिने प्रभावलाई गहिरो भावनात्मक शैलीमा प्रस्तुत गरेको छ। हिमाल मात्र प्राकृतिक संरचना होइन, त्यो देशको गौरव, पहिचान र जीवनशैलीसँग जोडिएको प्रतीक हो। हिमचुलीहरूले हामीलाई आफ्नो स्थिरता, शान्ति र कठिनाइहरू पार गर्ने साहसका कथा सुनाउँछन्। पाठले हिमालको सुन्दरता र शक्तिलाई मात्र नभएर त्यसले मानिसलाई दिने जीवनपाठलाई पनि उजागर गरेको छ।<br><br>
+
+पाठमा हिमालहरूलाई मानवीय भावनासँग जोडेर प्रस्तुत गरिएको छ। हिमचुलीहरूले हामीलाई निरन्तर बोलाइरहेझैँ लाग्छ, उनीहरूबाट जीवनका कठिनाइहरूलाई धैर्य र साहसका साथ सामना गर्न प्रेरणा मिल्छ। हिमालको कठोरता र चिसोपन भित्र एक अद्भुत स्थिरता र शान्ति छ, जसले मानिसलाई आफ्ना समस्याहरूलाई शान्त मनले हेर्न सिकाउँछ। हिमचुलीहरूको उचाइ र अटलता मानिसलाई निरन्तर अघि बढ्न र हार नमान्न प्रेरित गर्छ।<br><br>
+
+यस पाठले हिमाल र मानिसबीचको आत्मीय सम्बन्धलाई पनि देखाउँछ। हिमालहरू देशको सांस्कृतिक पहिचान हुन् र जनजीवनमा गहिरो प्रभाव पार्छन्। हिमालहरूले पर्वतारोहण र साहसिक खेलहरूद्वारा मानिसलाई चुनौती दिन्छन् भने, आफ्नो सौन्दर्य र विशिष्टता मार्फत पर्यटकलाई आकर्षित गर्छन्। पाठले हिमालको महत्वलाई केवल प्राकृतिक सौन्दर्यमा सीमित नराखी त्यसले दिएको जीवनदायिनी ऊर्जा र सांस्कृतिक सम्पदालाई पनि उजागर गरेको छ।<br><br>
+
+पाठले हिमालसँग सम्बन्धित चेतना र जिम्मेवारीबारे पनि प्रकाश पारेको छ। हिमचुलीहरूले हामीलाई प्राकृतिक स्रोतहरूको संरक्षण गर्न, हिमालका पर्यावरणीय सन्तुलनलाई कायम राख्न र प्रकृतिसँग मेलमिलाप गरेर बस्न सिकाउँछन्। यसले हामीलाई प्रकृति प्रेम र संरक्षणको महत्त्व बुझाउन चाहन्छ। हिमालहरूलाई माया गर्ने र सम्मान गर्ने संस्कार विकास गर्नु आवश्यक छ भन्ने कुरा यस पाठले जोड दिएको छ।<br><br>
+
+अन्ततः, “हामीलाई बोलाउँछन् हिमचुली” पाठले हिमालको सौन्दर्य, शक्तिलाई मात्र नभई त्यसले दिने प्रेरणा र जीवनदर्शनलाई पनि गहिरो रूपमा प्रस्तुत गरेको छ। हिमालहरूले हामीलाई जीवनका कठिनाइहरू अडिग भएर सामना गर्न र जीवनलाई सम्मानका साथ बाँच्न सिकाउँछन्। यसले हामीलाई प्रकृतिसँग सहअस्तित्व र संरक्षणको भावना जगाउँछ। यसरी, पाठले हिमालको माध्यमबाट जीवन र मनोबलको महत्त्वपूर्ण सन्देश दिएको छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. शब्दकोशको सहायता लिई दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>तिरिन : घाँस, पराल आदिको थोरै अंश</p>
+                            <p>डोरेटो : एक दुई जना मात्र हिँड्न हुने सानो बाटो</p>
+                            <p>निनी : गाईका ससाना बाछाबाछीलाई प्यारो गरेर भनिने शब्द</p>
+                            <p>पातल : सधैँ हराभरा भइरहने लेकको सेपिलो एवम् घना जङ्गल</p>
+                            <p>बुकी : हिमाली भेगमा पाइने भारविशेष</p>
+                            <p>नागियुँ : चौरी गाई चर्ने ठाउँ</p>
+                            <p>छङ्गाछुर : ज्यादै अग्लो र विकट खालकोभिर वा पहरो खगर : वर्षभरिमा नौ महिना हिउँले ढाकिने ठाउँ</p>
+                            <p>सामलतुमल : अन्न आदि खाने कुरा</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. दिइएका शब्दसँग मिल्ने अनुप्रासयुक्त शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>राम्रा : हाम्रा</p>
+                            <p>शिखर : रहर</p>
+                            <p>हेर्लान् : घेर्लान्</p>
+                            <p>होला : छोला</p>
+                            <p>हिलाएर : झुलाएर</p>
+                            <p>ढाक्ला: डाक्ला</p>
+                            <p>ध्वनि : पनि</p>
+                            <p>पारी : मारी</p>
+                            <p>हान्छ : जान्छ</p>
+                            <p>छाप : नापजाप</p>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएका शब्दको पर्यायवाची शब्द पाठबाट खोज्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>चिसो : शीतल</p>
+                            <p>देउराली : पहाडको उकालो सिद्धिने ठाउँ</p>
+                            <p>तिरिन : तृण</p>
+                            <p>टाकुरा : शिखर</p>
+                            <p>फूल : पुष्प</p>
+                            <p>बाटो : डोरेटा</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. गीतमा प्रयोग भएका केही शब्द कथ्य रूपमा छन् । गीतमा लय मिलाउन यस्ता शब्दको प्रयोग गरिन्छ । ती शब्दको स्तरीय रूप दायाँतर्फ दिइएको छ । यस्तै अन्य शब्द खोजी स्तरीय रूपसमेत लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>कल्ले : कसले</p>
+                            <p>नउरङ्गे : नौरङ्गे</p>
+                            <p>चम्री : चौंरी</p>
+                            <p>गोठालिनी : गोठाल्नी</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>२. उदाहरणमा देखाए जस्तै गरी दिइएका शब्दको अक्षर छुट्याएर शुद्ध उच्चारण गर्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>सुसेली : सु.से.लि</p>
+                            <p>हिमचुली : हिम्.चु.लि</p>
+                            <p>शिखर : सि. खर्</p>
+                            <p>उक्लियौला : उक्.लि.यौं.ला</p>
+                            <p>मर्नैपर्छ : मर्नै.पर्छ</p>
+                        </div>
+                        <p class="text-left-align"><strong>६. दिइएको कवितांश पढी मौखिक उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) माथिको कवितांशमा कस्तो परिवेशको चित्रण गरिएको छ ?</strong><br><span class="text-justify">कवितांशमा प्राकृतिक र हिमाली परिवेशको चित्रण गरिएको छ। यहाँ हिमचुली, खोल्सा, र पहाडहरूको सुन्दरता प्रस्तुत गरिएको छ, जुन शान्त, स्वच्छ र प्रेरणादायी छ। हिमचुलीले मान्छेलाई अघि बढ्न, संघर्ष गर्न र जीवनमा केही गरौं भन्ने प्रेरणा दिएको छ। यो परिवेशले प्रकृति र मानवबीचको सम्बन्धलाई देखाउँदै चेतना र क्रियाशीलताको सन्देश दिन्छ।</span></p>
+                            <p><strong>(ख) ‘देउरालीको बिसौनीमा सुसेलीले गाउँला’ यस कथनको तात्पर्य के हो ?</strong><br><span class="text-justify">‘देउरालीको बिसौनीमा सुसेलीले गाउँला’ भन्ने कथनको तात्पर्य गहिरो भावनात्मक र सांकेतिक अर्थ बोकेको छ। यसको अर्थ हो—जीवनको यात्रामा विश्राम लिने ठाउँ (बिसौनी) मा पनि प्राकृतिक आवाज (सुसेली) गुञ्जिरहन्छ, जसले यात्रुलाई थकाइ बिर्साएर अघि बढ्न प्रेरणा दिन्छ। यहाँ देउरालीको बिसौनी प्रतीकात्मक रूपमा कठिनाइपछि पाइने विश्राम हो भने सुसेली प्रकृतिको कोमल स्पर्श वा मनमा उकुसमुकुस गराउने भावना हो।</span></p>
+                            <p><strong>(ग) ‘वनभित्र ढुङ्गामाथि गाउलिन् गोठालिनी’ यस कथनलाई सामान्य पदक्रममा रूपान्तर गर्नुहोस् ।</strong><br>गोठाल्नी वनभित्र ढुङ्गामाथि गाउलिन् ।</p>
+                            <p><strong>(घ) गोठाल्नीले गाईलाई कसरी बोलाउँछिन् ?</strong><br>गोठाल्नीले गाईलाई लाला ओदी निनी भनेर बोलाउँछिन् ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>७. ‘टाकुरामा……. नउरङ्गे डाँफे’ कवितांश पढी हिमाली भेगमा पाइने जनावर र बोटबिरुवाका बारेमा छोटो अनुच्छेद लेख्नुहोस् ।</strong><br><span class="text-justify">‘टाकुरामा……. नउरङ्गे डाँफे’ कवितांशले हिमाली भेगको जैविक विविधताको चित्रण गरेको छ। यस कवितांशमा हिमाली क्षेत्रमा पाइने नउरङ्गे डाँफे (नेपालको राष्ट्रिय चराहरू मध्ये एक) को वर्णन गरिएको छ। त्यस्तै, टाकुरा (पर्वतको चुचुरो) मा उम्रने जुनिपर, लालीगुराँस, भोजपत्र जस्ता बोटबिरुवाको उल्लेख गरिएको छ। यी वनस्पति र जीवजन्तुहरू हिमाली क्षेत्रका प्राकृतिक सौन्दर्य र जैविक सम्पदाका प्रतीक हुन्। ती प्राणी र वनस्पतिहरूले वातावरणलाई जीवन्त, रंगीन र आकर्षक बनाएका छन्। यसरी, कविताले हिमाली भेगमा पाइने वन्यजन्तु र वनस्पतिहरूको जीवन्त चित्र प्रस्तुत गरेको छ।</span></p>
+                        <p class="text-left-align"><strong>८. दिइएको कवितांश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) माथिको कवितांशमा नेपालीको कस्तो मानसिकताको चित्रण गरिएको छ ?</strong><br><span class="text-justify">‘हामीलाई बोलाउँछ हिमचुली’ कवितामा नेपाली जनताको साहसी, कर्मशील र प्रकृतिप्रेमी मानसिकताको गहिरो चित्रण गरिएको छ। कवितामा हिमचुलीले बोलाएको प्रतीकात्मक भाषाले नेपालीहरूको साहसिक भावना र अगाडि बढ्ने चाहनालाई झल्काउँछ। नेपालीहरू कठिन भौगोलिक परिवेशमा बाँच्न बानी परेका, पर्वतहरू चढ्न नडराउने, दुर्गम यात्रालाई पनि सहज रूपमा स्वीकार गर्ने मनोवृत्तिका छन्। उनीहरू चुनौतीहरूलाई अवसरको रूपमा लिने स्वभाव राख्छन्, जुन कविता भित्र हिमचुलीको आह्वानले देखाएको छ। कवितामा वर्णन गरिएका हिमाली जनावर, रंगीचंगी फूल, चिसो हावा र सुसेलीहरूले नेपालीको प्रकृतिप्रेमी र आध्यात्मिक मानसिकता देखाउँछ। उनीहरू प्रकृतिसँग गहिरो सम्बन्ध राख्छन्, जहाँ प्रत्येक चिज उनीहरूका लागि जीवनको हिस्सा हो। ‘देउरालीको बिसौनीमा सुसेलीले गाउँला’ जस्ता पंक्तिहरूले विश्रामको बेला पनि प्रकृतिको संगतमा रमाउने नेपाली स्वभाव देखाउँछ। नेपालीहरूका लागि हिमाल, डाँफे, लालीगुराँस आदि केवल दृश्य सम्पत्ति होइनन्, ती सबैमा उनीहरूको भावना, प्रेरणा र पहिचान गाँसिएको हुन्छ। अन्ततः कवितामा चित्रण भएको मानसिकता केवल सौन्दर्यप्रेममा सीमित छैन, त्यो चेतनशीलता, सामाजिक उत्तरदायित्व र भविष्यप्रतिको आशावादी दृष्टिकोणबाट भरिएको छ। नेपालीहरूमा देशका निम्ति केही गर्नुपर्छ भन्ने भाव छ—जसले गर्दा उनीहरू हिमचुलीको आवाजलाई कर्मको निम्तोका रूपमा लिन्छन्। उनीहरू हिमचुलीको बोलावटलाई चुनौती होइन, अवसरको रूपमा हेर्छन्। यसरी कविता नेपालीको निष्ठा, सङ्घर्षशीलता, प्रकृतिप्रेम र उच्च मनोबलको प्रतिबिम्ब बनेको छ।</span></p>
+                            <p><strong>(ख) नेपालीले हिमचुलीबाट कस्तो प्रेरणा प्राप्त गरेका छन् ?</strong><br><span class="text-justify">'हामीलाई बोलाउँछ हिमचुली' कवितामा हिमचुली नेपाली जनताको लागि केवल एक भौगोलिक संरचना नभएर प्रेरणा, साहस, आत्मगौरव र राष्ट्रप्रेमको प्रतीक बनेर प्रस्तुत भएको छ। नेपालीहरू हिमचुलीलाई साक्षात् मातृभूमिको पुकारझैं अनुभव गर्छन्, जसले उनीहरूलाई निरन्तर कर्म र जागरणको बाटोमा डो-याइरहेको छ। हिमचुलीको उच्चता, स्थिरता, र गम्भीर उपस्थितिले नेपालीहरूको आत्मविश्वास र चेतनामा गहिरो प्रभाव पार्छ। यसले तिनीहरूलाई लक्ष्यप्रति अडिग हुन, संघर्षबाट नडराई अघि बढ्न, र जीवनलाई थप अर्थपूर्ण ढंगले हेर्न सिकाउँछ। हिमचुलीले दिएको प्रेरणा केवल व्यक्तिगत नभई सामूहिक चेतनासँग पनि जोडिएको छ। नेपालीहरूले हिमचुलीबाट राष्ट्रका लागि केही गरौँ, केही नयाँ सृजना गरौँ, र विश्वसामु आफ्नो पहिचान देखाऔं भन्ने गहिरो सन्देश लिएका छन्। हिमचुलीको शान्त बोलावट, “हामीलाई बोलाउँछ हिमचुली,” केवल प्राकृतिक सुन्दरता हेर्नको लागि नभई कर्तव्यबोध, आत्मबल र राष्ट्रिय गौरवको निम्तो हो। यसले जनताको मनोबल उच्च बनाउने, उनीहरूलाई गन्तव्यतर्फ अग्रसर गराउने शक्ति प्रदान गर्छ। यसैले, हिमचुली नेपालीहरूको भावना, आस्था र सङ्घर्षको स्रोत बनेको छ। यस प्रेरणाले नेपालीलाई प्रकृति, संस्कृति र मातृभूमिप्रतिको सम्बन्ध अझ प्रगाढ बनाएको छ। हिमचुलीको प्रतिकात्मक बोलीले उनीहरूमा कर्तव्यनिष्ठा, उत्साह, र आत्मचेतनाको विकास गराएको छ। हिमचुलीले सिकाएको साहस र शान्त सङ्केतहरूले नेपाली जनतालाई जहाँ भए पनि, जुन अवस्थामा भए पनि आफ्नो धर्म, माटो, र राष्ट्रिय भावना प्रति समर्पित हुन उत्प्रेरित गर्छ। यसरी, हिमचुली नेपालीहरूका लागि चेतनाको शिखर, आत्मबलको स्रोत, र भविष्य निर्माणको दिशानिर्देशक बनेको छ।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>९. ‘हामीलाई बोलाउँछन् हिमचुली’ कवितामा कस्तो परिवेशको चित्रण गरिएको छ, दिइएका बुंदालाई समेत आधार बनाई समीक्षात्मक प्रतिक्रिया लेख्नुहोस् :</strong><br><span class="text-justify">राष्ट्रकवि माधवप्रसाद घिमिरे (वि.सं. १९७६ – २०७७) नेपाली साहित्यका प्रतिष्ठित व्यक्तित्व हुन् जसले आफ्नो रचनामा नेपाली जीवन, संस्कृति र राष्ट्रिय चेतनालाई जीवन्त रूपमा प्रस्तुत गरेका छन्। उनको लेखनीमा पहाडी जनजीवन, प्रकृति र मानवीय संघर्षका विभिन्न पाटाहरू गहिरो भावनात्मक र दार्शनिक दृष्टिले उजागर हुन्छन्। ‘हामीलाई बोलाउँछ हिमचुली’ पनि यस्तै प्रेरणादायी र राष्ट्रिय चेतनाले ओतप्रोत कविताहरू मध्येको एक हो, जसले हिमाली परिवेश मार्फत नेपाली जनताको मनोविज्ञान र जीवन दर्शनलाई व्यक्त गरेको छ। यस कवितामा चित्रण गरिएको परिवेश केवल प्राकृतिक दृश्य मात्र नभई प्रेरणादायी, चेतनात्मक र राष्ट्रिय भावले भरिएको छ। कवितामा हिमचुली, देउराली, टाकुरा, लालीगुराँस, भोजपत्र, नउरङ्गे डाँफे जस्ता हिमाली क्षेत्रका वनस्पति र जीवजन्तुको वर्णन गरी नेपालका पहाडी भूगोल र जैविक विविधताको सुन्दर झल्को प्रस्तुत गरिएको छ। यी तत्त्वहरूले परिवेशलाई केवल दृश्यात्मक मात्र नभई जीवन्त र मनमोहक बनाएका छन्। साथै, हिमाली परिवेशमा पाइने चिसो हावा, सुसेली जस्ता प्राकृतिक आवाजहरूले शान्ति र सौन्दर्यको अनुभूति मात्र नभई नेपाली जनताको भावनात्मक र आध्यात्मिक सम्बन्धलाई झल्काउँछन्। कवितामा चित्रित यो परिवेश नेपालीको साहस, कर्मशीलता र राष्ट्रिय जिम्मेवारीको चिन्तनसँग जोडिएको छ। हिमचुलीको मौन आह्वानले नेपाली जनतालाई जीवनका चुनौतीहरू सामना गर्न, सङ्घर्ष गर्न र नयाँ ऊचाइमा पुग्न प्रेरित गर्छ। ‘देउरालीको बिसौनीमा सुसेलीले गाउँला’ जस्तो प्राकृतिक दृश्यले विश्राम र शान्ति त देखाउँछ, तर त्यो विश्राम स्थायी होइन; नयाँ यात्रा र संघर्षको तयारीको सङ्केत पनि हो। यसरी कविताको परिवेशले मात्र दृश्य सौन्दर्य देखाउँदैन, यो जीवन दर्शन, चेतना र क्रियाशीलताको पनि प्रतीक हो। अन्ततः, माधवप्रसाद घिमिरेले ‘हामीलाई बोलाउँछ हिमचुली’ कवितामार्फत प्राकृतिक परिवेशलाई नेपाली जनताको साहस र राष्ट्रिय चेतनासँग जोडेर प्रस्तुत गरेका छन्। यो परिवेश नेपालीहरूका लागि केवल हिमाल र वनस्पति होइन, एक गहिरो प्रेरणा र चेतनाको स्रोत हो, जसले उनीहरूलाई आफ्नो पहिचान, कर्तव्य र स्वाभिमान प्रति जागृत गराउँछ। यस प्रकार, कविताको परिवेशले पाठकलाई सौन्दर्य, चेतना र कर्मशीलताको महत्व बुझाउने एक सशक्त माध्यम बनेको छ।</span></p>
+                        <p class="text-left-align"><strong>१०. ‘हामीलाई बोलाउँछन् हिमचुली’ कविताले दिएको सन्देश के हो, समीक्षात्मक उत्तर लेख्नुहोस् ।</strong><br><span class="text-justify">राष्ट्रकवि माधवप्रसाद घिमिरे (वि.सं. १९७६ – २०७७) नेपाली साहित्यका एक महत्वपूर्ण स्तम्भ हुन्, जसले आफ्नो कविता र रचनाहरू मार्फत नेपाली जनताको जीवन, संघर्ष र राष्ट्रिय भावना उजागर गरेका छन्। उनका रचनाहरूमा पहाडको जीवनशैली, प्रकृति र राष्ट्रिय चेतना बडो सजीव रूपमा समेटिएको पाइन्छ। ‘हामीलाई बोलाउँछ हिमचुली’ कविता पनि यस्तै राष्ट्रिय चेतनाले भरिपूर्ण छ, जसले नेपाली जनतालाई कर्मशीलता र जागरुकताको बाटोमा डोर्याउने उद्देश्य राख्छ। यस कविताले मुख्य रूपमा संकल्प, कर्तव्यबोध र राष्ट्रिय जिम्मेवारीको सन्देश दिन्छ। हिमचुलीले जसरी शान्त, अडिग र स्थिर भएर हिमाली भूगोलमा टाकुरा जस्तै उभिएको छ, त्यसैगरी नेपाली जनताले पनि आफ्ना जीवनका चुनौतीहरू सामना गर्दै दृढ रहनुपर्छ भन्ने सन्देश कविताले दिएको छ। हिमचुलीको मौन आह्वानले जनतालाई “अब जागौं, अघि बढौं र आफ्नो पहिचान र सम्मानका लागि केही गरौं” भन्ने प्रेरणा दिन्छ। यो सन्देश केवल व्यक्तिगत उन्नति मात्र नभई समग्र समाज र राष्ट्रको उन्नतिका लागि पनि हो। कवितामा रहेको आह्वानले नेपालीहरूलाई स्वदेशप्रेम, संघर्षशीलता र आत्मबलको विकास गर्न उत्प्रेरित गर्छ। यसले वर्तमान पुस्तालाई इतिहासको गर्व, परिश्रमको महत्व र भविष्य निर्माण गर्ने चेतनाबाट जागृत गराउँछ। साथै, प्रकृतिसँगको गहिरो सम्बन्ध र त्यसबाट पाएको प्रेरणा नेपाली जनताको जीवन दर्शनमा गाढा रूपमा बन्दै गएको छ। यसरी, ‘हामीलाई बोलाउँछ हिमचुली’ कविता एउटा सशक्त संदेशवाहक बनेको छ जसले कर्मशीलता, जागरुकता र राष्ट्रप्रेमका मूल्यहरूलाई उजागर गर्दछ। यस सन्देशले नेपालीलाई केवल आन्तरिक रूपमा मात्र नभई विश्वसामु आफ्नो पहिचान गर्वले बोकेर प्रस्तुत हुन उत्प्रेरित गर्छ। त्यसैले, माधवप्रसाद घिमिरेको यो कविता राष्ट्रिय चेतना र कर्मशीलताको अमूल्य पाठ हो, जसले सबै नेपालीलाई निरन्तर अघि बढ्न र आफ्नो कर्तव्य पूरा गर्न प्रोत्साहित गर्दछ।</span></p>
+                        <p class="text-left-align"><strong>११. दिइएको गजल पढ्नुहोस्, यसको संरचनाका बारेमा हेक्का राख्नुहोस् र आफूलाई मन पर्ने विषयमा एउटा गजलको रचना गर्नुहोस्:</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>गजल</strong></p>
+                            <p>जोडेको त्यो नाता तोडेर गयौ</p>
+                            <p>पराई को घुम्टो ओडेर गयौ</p>
+                            <p>थुनेको नै थिएँ दिलमा राखी</p>
+                            <p>लाएको त्यो चाबी फोडेर गयौ</p>
+                            <p>तिमीनै हौ मेरो भनेकी थियौ</p>
+                            <p>अहिले त मुन्टो मोडेर गयौ</p>
+                            <p>उजाड नै भयो झुपडी मेरो</p>
+                            <p>पराई को बारी गोडेर गयौ</p>
+                            <p>छिनेको छ मुटु छुटायौ यता</p>
+                            <p>टुटायौ र उता जोडेर गयौ ।</p>
+                        </div>
+                        <p class="text-left-align"><strong>१२. दिइएको अनुच्छेद पढ़ी सोधिएका प्रश्नको छोटो उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) कविता भनेको के हो ?</strong><br>कविता भनेको विचार वा भावनाको लयबद्ध कलात्मक भाषिक अभिव्यक्ति हो ।</p>
+                            <p><strong>(ख) कविता र गजलमा के अन्तर छ ?</strong><br>कविता छन्दमा लेखिएको हुन्छ भने गजल बहरमा लेखिएको हुन्छ । छन्द र बहरको ढाँचा फरक हुने भएकाले यी दुईमा अन्तर छ ।</p>
+                            <p><strong>(ग) गजलका संरचक के के हुन् ?</strong><br>गजलका संरचक बहर, मिसरा, सेर, मत्ला, मक्ता, काफिया, रदिफ हुन् ।</p>
+                            <p><strong>(घ) गजलका प्रत्येक सेरको दोस्रो मिसरा कस्तो हुनुपर्छ ?</strong><br>गजलमा प्रत्येक सेरको दोस्रो मिसरा हमकाफिया अर्थात् अनुप्रासान्त हुनुपर्छ ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएको अनुच्छेदबाट उपसर्ग व्युत्पन्न शब्द टिप्नुहोस् र तालिकामा देखाए जस्तै गरी उपसर्ग र आधार छुट्याउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग व्युत्पन्न शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">आधार पद</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अत्यावश्यक</td><td class="py-2 px-4 border-b border-gray-700">अति</td><td class="py-2 px-4 border-b border-gray-700">आवश्यक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अधिकार</td><td class="py-2 px-4 border-b border-gray-700">अधि</td><td class="py-2 px-4 border-b border-gray-700">कार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अवरोध</td><td class="py-2 px-4 border-b border-gray-700">अव</td><td class="py-2 px-4 border-b border-gray-700">रोध</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">समृद्धि</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">ऋद्धि</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रतिकूल</td><td class="py-2 px-4 border-b border-gray-700">प्रति</td><td class="py-2 px-4 border-b border-gray-700">कूल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">समृद्ध</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">ऋद्ध</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सुस्वास्थ्य</td><td class="py-2 px-4 border-b border-gray-700">सु</td><td class="py-2 px-4 border-b border-gray-700">स्वास्थ्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">समुचित</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">उचित</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आहार</td><td class="py-2 px-4 border-b border-gray-700">आ</td><td class="py-2 px-4 border-b border-gray-700">हार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">संरक्षण</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">रक्षण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">संसार</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">सार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सङ्कट</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">कट</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रकोप</td><td class="py-2 px-4 border-b border-gray-700">प्र</td><td class="py-2 px-4 border-b border-gray-700">कोप</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परिणाम</td><td class="py-2 px-4 border-b border-gray-700">परि</td><td class="py-2 px-4 border-b border-gray-700">नाम</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उत्पन्न</td><td class="py-2 px-4 border-b border-gray-700">उत्</td><td class="py-2 px-4 border-b border-gray-700">पन्न</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विचार</td><td class="py-2 px-4 border-b border-gray-700">वि</td><td class="py-2 px-4 border-b border-gray-700">चार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सङगठन</td><td class="py-2 px-4 border-b border-gray-700">सङ्</td><td class="py-2 px-4 border-b border-gray-700">गठन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अनुसार</td><td class="py-2 px-4 border-b border-gray-700">अनु</td><td class="py-2 px-4 border-b border-gray-700">सार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उपयुक्त</td><td class="py-2 px-4 border-b border-gray-700">उप</td><td class="py-2 px-4 border-b border-gray-700">युक्त</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अत्यावश्यक</td><td class="py-2 px-4 border-b border-gray-700">अति</td><td class="py-2 px-4 border-b border-gray-700">आवश्यक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सचेत</td><td class="py-2 px-4 border-b border-gray-700">स</td><td class="py-2 px-4 border-b border-gray-700">चेत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उपचार</td><td class="py-2 px-4 border-b border-gray-700">उप</td><td class="py-2 px-4 border-b border-gray-700">चार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विकराल</td><td class="py-2 px-4 border-b border-gray-700">वि</td><td class="py-2 px-4 border-b border-gray-700">कराल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्पूर्णतः</td><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">पूर्णतः</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विकास</td><td class="py-2 px-4 border-b border-gray-700">वि</td><td class="py-2 px-4 border-b border-gray-700">कास</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अवरुद्ध</td><td class="py-2 px-4 border-b border-gray-700">अव</td><td class="py-2 px-4 border-b border-gray-700">रुद्</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रयोग</td><td class="py-2 px-4 border-b border-gray-700">प्र</td><td class="py-2 px-4 border-b border-gray-700">योग</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उपयोग</td><td class="py-2 px-4 border-b border-gray-700">उप</td><td class="py-2 px-4 border-b border-gray-700">योग</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रतिकूल</td><td class="py-2 px-4 border-b border-gray-700">प्रति</td><td class="py-2 px-4 border-b border-gray-700">कूल</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>२. भाषातत्वअन्तर्गत १ को अनुच्छेदमा प्रयुक्त ‘सम्’ उपसर्ग लागेर बनेका शब्द ‘सङ्गठन, सञ्चित, सन्तुलित सम्बन्धी संरक्षण को निर्माण प्रक्रिया तलको आरेखमा दिइएको छ । शब्दकोश हेरी ‘सम्’ उपसर्ग लागेर बनेका अन्य दशओटा शब्द टिप्नुहोस् र तिनको निर्माण प्रक्रिया पनि देखाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">आधार पद</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग व्युत्पन्न शब्द</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">ऋद्ध</td><td class="py-2 px-4 border-b border-gray-700">समृद्ध</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">सद</td><td class="py-2 px-4 border-b border-gray-700">संसद</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">मान</td><td class="py-2 px-4 border-b border-gray-700">सम्मान</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">हार</td><td class="py-2 px-4 border-b border-gray-700">संहार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">वाद</td><td class="py-2 px-4 border-b border-gray-700">संवाद</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">सार</td><td class="py-2 px-4 border-b border-gray-700">संसार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">रक्षण</td><td class="py-2 px-4 border-b border-gray-700">सम्रक्षण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">वेदना</td><td class="py-2 px-4 border-b border-gray-700">संवेदना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">स्मरण</td><td class="py-2 px-4 border-b border-gray-700">संस्मरण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्</td><td class="py-2 px-4 border-b border-gray-700">सान</td><td class="py-2 px-4 border-b border-gray-700">सम्सान</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएको तालिकाको बायाँतर्फ उपसर्ग दिइएका छन् र दायाँतर्फ आधार शब्द दिइएका छन् । प्रत्येक आधार शब्दमा एउटा एउटा उपसर्ग संयोजन गरेर नयाँ शब्द बनाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">आधार पद</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">उपसर्ग व्युत्पन्न शब्द</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अनु</td><td class="py-2 px-4 border-b border-gray-700">गमन</td><td class="py-2 px-4 border-b border-gray-700">अनुगमन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अव</td><td class="py-2 px-4 border-b border-gray-700">नति</td><td class="py-2 px-4 border-b border-gray-700">अवनति</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निस्</td><td class="py-2 px-4 border-b border-gray-700">छल</td><td class="py-2 px-4 border-b border-gray-700">निश्छल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निर्</td><td class="py-2 px-4 border-b border-gray-700">ईक्षण</td><td class="py-2 px-4 border-b border-gray-700">निरीक्षण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परि</td><td class="py-2 px-4 border-b border-gray-700">ईक्षा</td><td class="py-2 px-4 border-b border-gray-700">परीक्षा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अति</td><td class="py-2 px-4 border-b border-gray-700">अधिक</td><td class="py-2 px-4 border-b border-gray-700">अत्यधिक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सु</td><td class="py-2 px-4 border-b border-gray-700">आगत</td><td class="py-2 px-4 border-b border-gray-700">स्वागत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अधि</td><td class="py-2 px-4 border-b border-gray-700">आगमन</td><td class="py-2 px-4 border-b border-gray-700">अध्यागमन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रति</td><td class="py-2 px-4 border-b border-gray-700">एक</td><td class="py-2 px-4 border-b border-gray-700">प्रत्येक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दुस्</td><td class="py-2 px-4 border-b border-gray-700">चिन्ता</td><td class="py-2 px-4 border-b border-gray-700">दुश्चिन्ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दुर्</td><td class="py-2 px-4 border-b border-gray-700">आशय</td><td class="py-2 px-4 border-b border-gray-700">दुराशय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वि</td><td class="py-2 px-4 border-b border-gray-700">ज्ञान</td><td class="py-2 px-4 border-b border-gray-700">विज्ञान</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सन्</td><td class="py-2 px-4 border-b border-gray-700">देश</td><td class="py-2 px-4 border-b border-gray-700">सन्देश</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उत्</td><td class="py-2 px-4 border-b border-gray-700">नत</td><td class="py-2 px-4 border-b border-gray-700">उन्नत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अनु</td><td class="py-2 px-4 border-b border-gray-700">छेद</td><td class="py-2 px-4 border-b border-gray-700">अनुच्छेद</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएको अनुच्छेदबाट प्रत्यय न्युत्पन्न शब्द टिप्नुहोस् र तालिकामा देखाए जस्तै गरी आधार र प्रत्यय छुट्याउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">प्रत्यय व्युत्पन्न शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">आधार पद</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">प्रत्यय</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्मरणीय</td><td class="py-2 px-4 border-b border-gray-700">स्मृ</td><td class="py-2 px-4 border-b border-gray-700">अनीय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भुलक्कड</td><td class="py-2 px-4 border-b border-gray-700">भुल्</td><td class="py-2 px-4 border-b border-gray-700">अक्कड</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परिचायक</td><td class="py-2 px-4 border-b border-gray-700">परिचय</td><td class="py-2 px-4 border-b border-gray-700">अक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">संस्कृति</td><td class="py-2 px-4 border-b border-gray-700">संस्कृत</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कारण</td><td class="py-2 px-4 border-b border-gray-700">कृ</td><td class="py-2 px-4 border-b border-gray-700">अन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">जातीय</td><td class="py-2 px-4 border-b border-gray-700">जात</td><td class="py-2 px-4 border-b border-gray-700">ईय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सांस्कृतिक</td><td class="py-2 px-4 border-b border-gray-700">संस्कृति</td><td class="py-2 px-4 border-b border-gray-700">इक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्राचीन</td><td class="py-2 px-4 border-b border-gray-700">प्राच्</td><td class="py-2 px-4 border-b border-gray-700">ईन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वैदिक</td><td class="py-2 px-4 border-b border-gray-700">वेद</td><td class="py-2 px-4 border-b border-gray-700">इक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नेपाली</td><td class="py-2 px-4 border-b border-gray-700">नेपाल</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्वार्थी</td><td class="py-2 px-4 border-b border-gray-700">स्वार्थ</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भावना</td><td class="py-2 px-4 border-b border-gray-700">भाव</td><td class="py-2 px-4 border-b border-gray-700">ना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पूजा</td><td class="py-2 px-4 border-b border-gray-700">पूज्</td><td class="py-2 px-4 border-b border-gray-700">आ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">देवता</td><td class="py-2 px-4 border-b border-gray-700">देव</td><td class="py-2 px-4 border-b border-gray-700">ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निष्क्रियता</td><td class="py-2 px-4 border-b border-gray-700">निष्क्रिय</td><td class="py-2 px-4 border-b border-gray-700">ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">चोरी</td><td class="py-2 px-4 border-b border-gray-700">चोर</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">ठगाहा</td><td class="py-2 px-4 border-b border-gray-700">ठग्</td><td class="py-2 px-4 border-b border-gray-700">आहा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">मिचाहा</td><td class="py-2 px-4 border-b border-gray-700">मिच्</td><td class="py-2 px-4 border-b border-gray-700">आहा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">हेपाहा</td><td class="py-2 px-4 border-b border-gray-700">हेप्</td><td class="py-2 px-4 border-b border-gray-700">आहा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">चुसाहा</td><td class="py-2 px-4 border-b border-gray-700">चुस्</td><td class="py-2 px-4 border-b border-gray-700">आहा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">लुटाहा</td><td class="py-2 px-4 border-b border-gray-700">लुट्</td><td class="py-2 px-4 border-b border-gray-700">आहा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">हिंस्रक</td><td class="py-2 px-4 border-b border-gray-700">हिंसा</td><td class="py-2 px-4 border-b border-gray-700">अक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">शोषक</td><td class="py-2 px-4 border-b border-gray-700">शोष्</td><td class="py-2 px-4 border-b border-gray-700">अक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">शोषण</td><td class="py-2 px-4 border-b border-gray-700">शोष्</td><td class="py-2 px-4 border-b border-gray-700">अण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">घमण्डी</td><td class="py-2 px-4 border-b border-gray-700">घमण्ड</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पियक्कड</td><td class="py-2 px-4 border-b border-gray-700">पिउ</td><td class="py-2 px-4 border-b border-gray-700">अक्कड</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">बुझक्कड</td><td class="py-2 px-4 border-b border-gray-700">बुझ्</td><td class="py-2 px-4 border-b border-gray-700">अक्कड</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भुलक्कड</td><td class="py-2 px-4 border-b border-gray-700">भुल्</td><td class="py-2 px-4 border-b border-gray-700">अक्कड</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वन्दनीय</td><td class="py-2 px-4 border-b border-gray-700">वन्दना</td><td class="py-2 px-4 border-b border-gray-700">इय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आदरणीय</td><td class="py-2 px-4 border-b border-gray-700">आदृ</td><td class="py-2 px-4 border-b border-gray-700">अनीय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्मरणीय</td><td class="py-2 px-4 border-b border-gray-700">स्मृ</td><td class="py-2 px-4 border-b border-gray-700">अनीय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आर्थिक</td><td class="py-2 px-4 border-b border-gray-700">अर्थ</td><td class="py-2 px-4 border-b border-gray-700">इक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सुखी</td><td class="py-2 px-4 border-b border-gray-700">सुख</td><td class="py-2 px-4 border-b border-gray-700">ई</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विकृति</td><td class="py-2 px-4 border-b border-gray-700">विकृत</td><td class="py-2 px-4 border-b border-gray-700">इ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अन्ततः</td><td class="py-2 px-4 border-b border-gray-700">अन्त</td><td class="py-2 px-4 border-b border-gray-700">तः</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">फिरन्ते</td><td class="py-2 px-4 border-b border-gray-700">फिर्</td><td class="py-2 px-4 border-b border-gray-700">अन्ते</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">मगन्ते</td><td class="py-2 px-4 border-b border-gray-700">माग्</td><td class="py-2 px-4 border-b border-gray-700">अन्ते</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">जीवन</td><td class="py-2 px-4 border-b border-gray-700">जीव</td><td class="py-2 px-4 border-b border-gray-700">न</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उन्नति</td><td class="py-2 px-4 border-b border-gray-700">उन्नत</td><td class="py-2 px-4 border-b border-gray-700">इ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कारक</td><td class="py-2 px-4 border-b border-gray-700">कृ</td><td class="py-2 px-4 border-b border-gray-700">अक</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>६. तलको तालिकाको बायाँतर्फ धातु र शब्द दिइएका छन् र दायाँतर्फ प्रत्यय दिइएका छन् । प्रत्येक धातु र शब्दबाट एउटा एउटा प्रत्यय संयोजन गरेर कृदन्त व्युत्पन्न र तद्वितान्त व्युत्पन्न शब्द बनाउनुहोस्:</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">कृदन्त व्युत्पन्न शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">आधार पद</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">प्रत्यय</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दर्शक</td><td class="py-2 px-4 border-b border-gray-700">दृश्</td><td class="py-2 px-4 border-b border-gray-700">अक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सृष्टि</td><td class="py-2 px-4 border-b border-gray-700">सृज्</td><td class="py-2 px-4 border-b border-gray-700">ति</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">गन्तब्य</td><td class="py-2 px-4 border-b border-gray-700">गम्</td><td class="py-2 px-4 border-b border-gray-700">तब्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्मरणीय</td><td class="py-2 px-4 border-b border-gray-700">स्मृ</td><td class="py-2 px-4 border-b border-gray-700">अनीय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">श्रवण</td><td class="py-2 px-4 border-b border-gray-700">श्रु</td><td class="py-2 px-4 border-b border-gray-700">अन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नीत</td><td class="py-2 px-4 border-b border-gray-700">नी</td><td class="py-2 px-4 border-b border-gray-700">त</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वक्ता</td><td class="py-2 px-4 border-b border-gray-700">वच्</td><td class="py-2 px-4 border-b border-gray-700">ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नृत्य</td><td class="py-2 px-4 border-b border-gray-700">नृत्</td><td class="py-2 px-4 border-b border-gray-700">य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">नेता</td><td class="py-2 px-4 border-b border-gray-700">नी</td><td class="py-2 px-4 border-b border-gray-700">ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दैनिक</td><td class="py-2 px-4 border-b border-gray-700">दिन</td><td class="py-2 px-4 border-b border-gray-700">इक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">स्वर्णिम</td><td class="py-2 px-4 border-b border-gray-700">स्वर्ण</td><td class="py-2 px-4 border-b border-gray-700">इम</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">ग्रामीण</td><td class="py-2 px-4 border-b border-gray-700">ग्राम</td><td class="py-2 px-4 border-b border-gray-700">ईन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">दिवसीय</td><td class="py-2 px-4 border-b border-gray-700">दिवस</td><td class="py-2 px-4 border-b border-gray-700">ईय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">राष्ट्रिय</td><td class="py-2 px-4 border-b border-gray-700">राष्ट्र</td><td class="py-2 px-4 border-b border-gray-700">इय</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विशेषतः</td><td class="py-2 px-4 border-b border-gray-700">विशेष</td><td class="py-2 px-4 border-b border-gray-700">तः</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सौन्दर्य</td><td class="py-2 px-4 border-b border-gray-700">सुन्दर</td><td class="py-2 px-4 border-b border-gray-700">य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">महत्ता</td><td class="py-2 px-4 border-b border-gray-700">महत्</td><td class="py-2 px-4 border-b border-gray-700">ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">गौर</td><td class="py-2 px-4 border-b border-gray-700">गुरु</td><td class="py-2 px-4 border-b border-gray-700">अ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">वाङ्मय</td><td class="py-2 px-4 border-b border-gray-700">वाक्</td><td class="py-2 px-4 border-b border-gray-700">मय</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>७. दिइएको अनुच्छेदबाट सन्धियुक्त ब्युत्पन्न शब्द पहिचान गरी तिनको सन्धि विच्छेद गर्नुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">सन्धि व्युत्पन्न शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">निर्माण प्रक्रिया</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्रत्येक</td><td class="py-2 px-4 border-b border-gray-700">प्रति + एक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सदाचार</td><td class="py-2 px-4 border-b border-gray-700">सत् + आचार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सदैव</td><td class="py-2 px-4 border-b border-gray-700">सदा + एव</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सज्जन</td><td class="py-2 px-4 border-b border-gray-700">सत् + जन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सन्देश</td><td class="py-2 px-4 border-b border-gray-700">सम् + देश</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अनुसरण</td><td class="py-2 px-4 border-b border-gray-700">अनु + सरण</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निष्क्रियता</td><td class="py-2 px-4 border-b border-gray-700">निष्क्रिय + ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निराशा</td><td class="py-2 px-4 border-b border-gray-700">निर् + आशा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निष्काम</td><td class="py-2 px-4 border-b border-gray-700">निस् + काम</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भावना</td><td class="py-2 px-4 border-b border-gray-700">भाव + ना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निरन्तर</td><td class="py-2 px-4 border-b border-gray-700">निर् + अन्तर</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">समर्पित</td><td class="py-2 px-4 border-b border-gray-700">समर्पण + इत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सन्तुलन</td><td class="py-2 px-4 border-b border-gray-700">सन् + तुलन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अत्यधिक</td><td class="py-2 px-4 border-b border-gray-700">अति + अधिक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परीक्षित</td><td class="py-2 px-4 border-b border-gray-700">परीक्षा + इत</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सङ्कल्प</td><td class="py-2 px-4 border-b border-gray-700">सम् + कल्प</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">प्राप्ति</td><td class="py-2 px-4 border-b border-gray-700">प्राप्त + इ</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">उद्देश्य</td><td class="py-2 px-4 border-b border-gray-700">उद् + देश्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">तल्लीन</td><td class="py-2 px-4 border-b border-gray-700">तत् + लीन</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सफलता</td><td class="py-2 px-4 border-b border-gray-700">सफल + ता</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सफल</td><td class="py-2 px-4 border-b border-gray-700">स + फल</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विकास</td><td class="py-2 px-4 border-b border-gray-700">वि + कास</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <p class="text-left-align"><strong>८. शुद्ध गरी पुनर्लेखन गर्नुहोस् :</strong><br><span class="text-justify">म गत हप्ता भृकुटीमण्डपमा विज्ञान प्रदर्शनी हेर्न गएँ । त्यहाँ धेरै किसिमका कम्प्युटर, ल्यापटप र मोबाइलहरू राखिएका थिए । त्यस प्रदर्शनीमा भर्खर कक्षा दश पूरा गरेर एघारमा पढ्दै गरेका विद्यार्थीदेखि एम्. ए. र पि. एच्. डी. गरेका प्राध्यापकहरूसमेत आएका थिए । त्यहाँ इज्जतदार, इमानदार, जमिनदार, लेखनदास सबैको जमघट एक ठाउँमा भएको देखेर म दङ्ग परें । मान्छेहरूले खचाखच भरिएको त्यस प्रदर्शनी स्थलबाट एउटा ल्यापटप किनेर सरासर घर फर्के ।</span></p>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Himchuli Notes
+        function toggleHimchuliSummary() {
+            const summaryText = document.getElementById('himchuliSummaryText');
+            const toggleBtn = document.getElementById('toggleHimchuliSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

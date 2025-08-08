@@ -1,0 +1,553 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>नेपाली पहिचान Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+        /* Justify text for paragraphs */
+        .text-justify {
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for नेपाली पहिचान Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">१०. नेपाली पहिचान Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleNepaliPahichanSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleNepaliPahichanSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="nepaliPahichanSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    नेपालि पहिचान भनेको केवल भाषा, भूगोल वा जातजातिको मात्र नाम होइन, यो हाम्रो सांस्कृतिक, सामाजिक र ऐतिहासिक एकताको गहिरो भाव हो। “नेपाली पहिचान” पाठले नेपालमा रहेका विभिन्न जाति, भाषा, धर्म र संस्कृतिहरूको विविधता र एकतालाई उजागर गरेको छ। नेपाल एक बहुभाषिक, बहुसांस्कृतिक देश हो जहाँ हरेक समुदायले आफ्नो विशिष्टता राख्दै पनि साझा नेपाली संस्कृतिको हिस्सा बनेका छन्। पाठले नेपाली पहिचानको यो बहुआयामिक र समृद्ध पक्षलाई बिस्तारमा चित्रण गरेको छ।<br><br>
+
+नेपालका विभिन्न भौगोलिक क्षेत्रहरू र जातीय समुदायहरूबीचको अन्तरालले हाम्रो पहिचानलाई विशिष्टता दिएको छ। हिमालदेखि तराईसम्म फैलिएको नेपालको विविध भूभागले विभिन्न जीवनशैली र संस्कृतिहरूलाई जन्म दिएको छ। प्रत्येक क्षेत्रका मानिसहरूले फरक भाषा, पोशाक, पर्व र खानपानको चलन पालना गर्छन्। तर पनि यी सबै विभिन्नताहरूले नेपाली पहिचानलाई फरक नपारी, एकसाथ मिलेर देशको विकास र समृद्धिमा योगदान पुर्‍याइरहेका छन्। पाठले यी विविधताहरूलाई एकताको पक्षमा राखेर चर्चा गरेको छ।<br><br>
+
+पाठले नेपाली पहिचानलाई मात्र जातीय वा सांस्कृतिक रूपमा नभई राष्ट्रिय भावनाका रूपमा पनि प्रस्तुत गरेको छ। नेपालका सबै मानिसहरू नेपाली नागरिक हुन् र उनीहरूको साझा भाषा, परम्परा र सम्मानले राष्ट्रिय पहिचानलाई बलियो बनाउँछ। यो साझा भावना नै देशको एकतामा सहायक हुन्छ। पाठले नेपाली पहिचानलाई समयसँगै विकसित हुँदै आएको जीवित प्रक्रिया भनेको छ जसले हामीलाई एकता र सद्भावमा बाँधेको छ।<br><br>
+
+नेपाली पहिचानसँग जोडिएका सामाजिक र सांस्कृतिक मूल्यहरू पाठमा प्रष्ट छन्। हाम्रो भाषा, गीतसंगीत, नृत्य, साहित्य, कला र परम्पराले हामीलाई अलग गराउँछन्। यी सांस्कृतिक पक्षहरूलाई संरक्षण गर्न र प्रवर्द्धन गर्न सबै नेपालीहरूले प्रयास गर्न आवश्यक छ। पाठले हाम्रो पहिचानलाई मात्र जोगाउने होइन, त्यसलाई सम्मान र समृद्ध बनाउनुपर्ने कुरामा जोड दिएको छ। यो मात्र हाम्रो गौरव होइन, भविष्यका पुस्ताका लागि पनि आवश्यक छ।<br><br>
+
+अन्ततः, “नेपाली पहिचान” पाठले विविधताभित्रको एकता र हाम्रो सांस्कृतिक सम्पदाको महत्त्वलाई उजागर गरेको छ। यसले हामीलाई आफ्नो सांस्कृतिक र राष्ट्रिय पहिचानलाई गर्वका साथ स्वीकार्न र संरक्षण गर्न प्रेरित गर्छ। नेपाली पहिचान हाम्रो जीवनशैली, सोच र मूल्यहरूको प्रतिबिम्ब हो जुन हाम्रो अस्तित्वलाई पहिचान दिन्छ। यसरी, पाठले सबै नेपालीहरूलाई एक भएर आफ्नै संस्कृतिलाई माया गर्ने र जोगाउने सन्देश दिएको छ।<br><br>
+
+
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">अर्थ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निष्कर्षोन्मुख</td><td class="py-2 px-4 border-b border-gray-700">निष्कर्षमा पुग्न खोजेको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अर्गानिक</td><td class="py-2 px-4 border-b border-gray-700">जैविक</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सौन्दर्य</td><td class="py-2 px-4 border-b border-gray-700">सुन्दर हुनुको भाव</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">लैंगिक</td><td class="py-2 px-4 border-b border-gray-700">लिङ्गसम्बन्धी</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विभेद</td><td class="py-2 px-4 border-b border-gray-700">भेदभाव</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कुपरम्परा</td><td class="py-2 px-4 border-b border-gray-700">नराम्रो परम्परा</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">संश्लेषण</td><td class="py-2 px-4 border-b border-gray-700">जोड्ने काम</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">निर्मूल</td><td class="py-2 px-4 border-b border-gray-700">पूरै सखाप पारिएको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सान्दर्भिक</td><td class="py-2 px-4 border-b border-gray-700">प्रसङ्गअनुसार मिल्ने</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आडम्बर</td><td class="py-2 px-4 border-b border-gray-700">देखावटी, ठाटबाट</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">फलदायी</td><td class="py-2 px-4 border-b border-gray-700">फल दिने, फाइदादाजनक</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>२. शब्दकोशको सहायताबाट दिइएका शब्दको कोशीय क्रम मिलाई अर्थ लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">शब्द</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">अर्थ</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">अवलोकन</td><td class="py-2 px-4 border-b border-gray-700">हेर्ने काम, दृष्टि लगाउने कार्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आरोहण</td><td class="py-2 px-4 border-b border-gray-700">माथि चढ्ने कार्य, उक्लने प्रक्रिया</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">आविष्कार</td><td class="py-2 px-4 border-b border-gray-700">नयाँ कुरा पत्ता लगाउने वा बनाउने कार्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">गन्तव्य</td><td class="py-2 px-4 border-b border-gray-700">पुग्नुपर्ने अन्तिम स्थान वा लक्ष्य</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">छरपस्ट</td><td class="py-2 px-4 border-b border-gray-700">अव्यवस्थित रूपमा फैलिएको</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">परिकार</td><td class="py-2 px-4 border-b border-gray-700">परिकार, पकाइएको विभिन्न परिकारहरू, खाना</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">पहिचान</td><td class="py-2 px-4 border-b border-gray-700">चिन्ने वा चिन्न सक्ने अवस्था</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">मौका</td><td class="py-2 px-4 border-b border-gray-700">अनुकूल समय वा परिस्थिति</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सरोकार</td><td class="py-2 px-4 border-b border-gray-700">चासो वा सम्बन्ध</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सदुपयोग</td><td class="py-2 px-4 border-b border-gray-700">राम्ररी र उचित तरिकाले उपयोग गर्नु</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">सम्मान</td><td class="py-2 px-4 border-b border-gray-700">आदर वा प्रतिष्ठा दिने व्यवहार</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">विशिष्टता</td><td class="py-2 px-4 border-b border-gray-700">विशेष गुण वा विशेषता</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>३. दिइएका टुक्काको अर्थ पहिल्याई तिनलाई वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>लख काट्नु</strong> – अनुमान गर्नु<br><span class="text-justify">उसले उत्तर किताब नहेरी लख काटेर लेख्यो।</span></p>
+                            <p><strong>आलु खानु</strong> – हार खानु, पराजित हुनु<br><span class="text-justify">खेलमा रामले फेरि पनि आलु खायो।</span></p>
+                            <p><strong>पसिना काढ्नु</strong> – निकै मेहनत गर्नु<br><span class="text-justify">परिक्षामा राम्रो अंक ल्याउन उसले दिनरात पसिना काढ्यो।</span></p>
+                            <p><strong>कुरा खानु</strong> – अरूले भनेको कुरा चुपचाप स्वीकार गर्नु<br><span class="text-justify">उसले सबैको गाली सुनेर पनि कुरा खायो र केही बोलेन।</span></p>
+                            <p><strong>कान खानु</strong> – बारम्बार बोलेर हैरान पार्नु<br><span class="text-justify">सानु दिदीले हरेक दिन एउटै कुरा दोहोर्‍याएर मेरो कान खान थाली।</span></p>
+                            <p><strong>हावा खानु</strong> – नजिक नहुनु वा फस्नु<br><span class="text-justify">जमानत नपाएर उसले जेलको हावा खानुपर्‍यो।</span></p>
+                            <p><strong>आँखा चिम्लिनु</strong> – बेवास्ता गर्नु, नदेखेझैँ गर्नु<br><span class="text-justify">सरकारले भ्रष्टाचारप्रति आँखा चिम्लिरहेको छ।</span></p>
+                            <p><strong>मन चोर्नु</strong> – मोहनी लगाउनु, मन तान्नु<br><span class="text-justify">उसको मिठो बोलीले सबैको मन चोरेको छ।</span></p>
+                            <p><strong>मुख छाड्नु</strong> – असभ्य बोल्नु, जथाभावी बोल्नु<br><span class="text-justify">रिसको झोकमा उसले मुख छाड्यो, जुन गलत थियो।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>४. दिइएका उखानको प्रयोग गरी एक अनुच्छेद लेख्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">विजय एक पटक दुर्घटनामा परेकोले अहिले पनि बाइक देख्नासाथ तर्सिन्छ, **अगुल्टाले हानेको कुकुर बिजुली चम्कदा तर्सिन्छ** भनेजस्तै। एकपटक उसले परीक्षामा कलमको मसी सकिएपछि **अड्को पड्को तेलको धूप** जस्तै गरी सिसाकलमले लेख्नुपरेको थियो। उसले अनुभवी शिक्षकहरूसँग **इन्द्रका अगाडि स्वर्गको बयान गरेजस्तो** गरी पाठेक्रमका गफ छाँट्यो। तर,उसलाई थाहा थियो कि **एक हातले ताली नबज्ने** भएकाले साथीसँग सहयोग गर्नुपर्छ। अरुले के भन्छन् भनेर डराउनु पनि भएन,किनभने **काग कराउँदै गर्छ पिना सुक्दै गर्छ**।</p>
+
+                        <p class="text-left-align mt-4"><strong>५. दिइएका मानविकी तथा साहित्यिक क्षेत्रका पारिभाषिक शब्दलाई शब्दकोशीय अनुक्रममा मिलाउनुहोस् र शब्दकोशको सहायता लिई तिनको अर्थ पनि लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>अधिमूल्यन</strong> – कुनै वस्तु, कार्य वा सन्देशलाई आवश्यकता भन्दा बढी मूल्याङ्कन गर्नु।<br><span class="text-justify">उदाहरण: शिक्षकले उसको लेखन क्षमतालाई अधिमूल्यन गरे।</span></p>
+                            <p><strong>अवमूल्यन</strong> – मूल्य घटाउनु, कम आंक्नु वा महत्व घटाउनु।<br><span class="text-justify">उदाहरण: साहित्यको सामाजिक योगदानलाई अवमूल्यन गर्नु ठीक होइन।</span></p>
+                            <p><strong>अलङ्कार</strong> – भाषालाई सुन्दर र प्रभावशाली बनाउने विशेष शैली वा साधन (जस्तै उपमा, रूपक आदि)।<br><span class="text-justify">उदाहरण: कविता लेखनमा अलङ्कारको प्रयोगले सौन्दर्य बढाउँछ।</span></p>
+                            <p><strong>आवासीय</strong> – बसोबास गर्न उपयुक्त वा आवाससँग सम्बन्धित।<br><span class="text-justify">उदाहरण: विद्यालयमा आवासीय कार्यक्रम सञ्चालन गरिएको छ।</span></p>
+                            <p><strong>आशुकवि</strong> – तुरुन्तै कविता रचना गर्न सक्ने कवि।<br><span class="text-justify">उदाहरण: भानुभक्त आचार्यलाई आशुकविको रुपमा लिइन्छ।</span></p>
+                            <p><strong>उपन्यास</strong> – कल्पनामा आधारित लामो गद्य रचना जसमा पात्र, घटना, स्थान आदिको वर्णन हुन्छ।<br><span class="text-justify">उदाहरण: “सिरिषको फूल” नेपाली साहित्यको प्रसिद्ध उपन्यास हो।</span></p>
+                            <p><strong>कविता</strong> – भावना, विचार र कल्पनालाई छन्द वा मुक्त शैलीमा व्यक्त गरिएको साहित्यिक रचना।<br><span class="text-justify">उदाहरण: कविता साहित्यको आत्मा हो।</span></p>
+                            <p><strong>कथा</strong> – काल्पनिक वा यथार्थ घटनामा आधारित छोटो गद्य रचना जसमा पात्र र घटनाको विकास हुन्छ।<br><span class="text-justify">उदाहरण: “झोला” नेपाली कथाको एक उत्कृष्ट उदाहरण हो।</span></p>
+                            <p><strong>छन्द</strong> – कविता लेख्न प्रयोग हुने विशेष मात्रात्मक वा उच्चारात्मक संरचना (meter)।<br><span class="text-justify">उदाहरण: संस्कृत कवितामा विभिन्न प्रकारका छन्दहरूको प्रयोग पाइन्छ।</span></p>
+                            <p><strong>निबन्ध</strong> – विचार, भावना र विश्लेषणात्मक दृष्टिकोणमा आधारित गद्य रचना।<br><span class="text-justify">उदाहरण: विद्यार्थीहरूले सामाजिक विषयमा निबन्ध लेख्छन्।</span></p>
+                            <p><strong>रस</strong> – साहित्यमा पाठक वा श्रोताले अनुभव गर्ने आनन्द वा भावात्मक असर।<br><span class="text-justify">उदाहरण: वीर रसले वीरता र साहसको भावना उत्पन्न गर्छ।</span></p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. संवाद पढी दिइएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) नेपाली समाजको अवस्थाप्रति घनश्यामको बुझाइ कस्तो छ भन्नुहोस् ।</strong><br><span class="text-justify">घनश्यामले नेपाली समाजलाई असमानता, भेदभाव र चुनौतीले भरिएको देख्छन्। उनी समाजमा सुधार र समानताको आवश्यकतालाई जोड दिन्छन् र सामाजिक एकता र न्यायका लागि सचेत प्रयास हुनुपर्ने बताउँछन्।</span></p>
+                            <p><strong>(ख) नेपाली समाजको पहिचान के हो, बेखामानको भनाइका आधारमा लेख्नुहोस् ।</strong><br><span class="text-justify">बेखामानका अनुसार नेपाली समाजको पहिचान भनेको बहुजातीय, बहुभाषिक र बहुसांस्कृतिक विविधता हो, जसले सहअस्तित्व र सहिष्णुतामा आधारित समाज बनाएको छ।</span></p>
+                            <p><strong>(ग) विविधता नै सम्पत्ति हो कसरी, सिम्माको भनाइका आधारमा लेख्नुहोस् ।</strong><br><span class="text-justify">सिम्माका अनुसार विविधता नै नेपाली समाजको ठूलो सम्पत्ति हो जसले सहिष्णुता, सद्भाव र समृद्धि ल्याउँछ।</span></p>
+                            <p><strong>(घ) सलिमको भनाइका आधारमा नेपाली समाजको सुन्दर पक्षका बारेमा स्पष्ट पार्नुहोस् ।</strong><br><span class="text-justify">सलिमका अनुसार नेपाली समाजको सुन्दर पक्ष यसको सहिष्णुता र सबैको मेलमिलापमा छ।</span></p>
+                            <p><strong>(ङ) कसरी नेपाली विविधतालाई पर्यटनसँग जोड्न सकिन्छ, आफ्नो विचार लेख्नुहोस् ।</strong><br><span class="text-justify">नेपाली विविधता—जसमा जाति, भाषा, संस्कृति र पर्वहरू छन्—पर्यटनलाई आकर्षित गर्न सकिन्छ। यसले पर्यटन विकाससँगै स्थानीय आर्थिक सुधार र सांस्कृतिक संरक्षणमा पनि मद्दत गर्छ।</span></p>
+                            <p><strong>(च) नेपाली समाजमा के कस्ता विकृति, विसङ्गति छन्, पाठका आधारमा लेख्नुहोस् ।</strong><br><span class="text-justify">नेपाली समाजमा जातीय भेदभाव, लैङ्गिक असमानता, गरिबी, भ्रस्टाचार र अन्धविश्वास जस्ता विकृति र विसङ्गति छन्।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>२. जब शिक्षाको राम्रो विकास हुन्छ तब अन्धविश्वास, कुसंस्कार, कुरीति जस्ता कुरा निर्मूल हुँदै जान्छन् । यस कथनलाई स्पष्ट पार्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">नेपालको प्राकृतिक सौन्दर्य अत्यन्तै बहुआयामिक र मनमोहक छ, जसले विश्वभरका पर्यटकहरूलाई आकर्षित गर्छ। नेपालको भूगोलमा हिमाल, पहाड, तराई, उपत्यका, नदी, ताल, झरना लगायतका विविध भौगोलिक र प्राकृतिक सम्पदाहरू समेटिएका छन्। सबैभन्दा पहिले, यहाँ विश्वकै सर्वोच्च शिखर सगरमाथा सहितका विशाल हिमालहरूको श्रृंखला छ, जसले नेपाललाई हिमाली देशको रुपमा परिचित बनाएको छ। अन्नपूर्ण, धौलागिरी, मनास्लु जस्ता हिमालहरू पनि यहाँका प्राकृतिक सम्पत्तिहरू हुन्, जुन पर्वतारोहण र ट्रेकिङका लागि विश्वप्रसिद्ध स्थल हुन्।</p>
+                        <p class="ml-4 text-justify">त्यसैगरी, नेपालको हरियाली जंगलहरू जैविक विविधताले भरिपूर्ण छन् जहाँ बाघ, गैंडा, हात्ती, भालु, विभिन्न प्रकारका चराचुरुङ्गी लगायत धेरै वन्यजन्तुहरू पाइन्छन्। चितवन राष्ट्रिय निकुञ्ज र बर्दिया राष्ट्रिय निकुञ्ज जस्ता संरक्षित क्षेत्रहरूले वन्यजन्तु संरक्षणका साथै पर्यटकहरूको आकर्षणको केन्द्र बनेका छन्। देशभरि फैलिएका नदीहरू जस्तै कोशी, गण्डकी, कर्णाली र तिनका तटमा रहेका तालहरू तथा झरनाहरू पनि नेपालको प्राकृतिक सौन्दर्यलाई थप समृद्ध बनाउँछन्। पोखरा शहरको फेवा ताल, रारा ताल, गौसी ताल जस्ता सुन्दर तालहरू पर्यटकहरूको प्रिय गन्तव्य हुन्।</p>
+                        <p class="ml-4 text-justify">नेपालको पहाडी भूभाग र उपत्यकाहरू पनि प्राकृतिक सुन्दरताले भरिपूर्ण छन्। यहाँका हरियाली भरेका पहाड, धानखेतहरू, र माटोको गन्धले गाउँको सौन्दर्यलाई झल्काउँछन्। हिमाली क्षेत्रको शीतल मौसम र रमणीय दृश्यहरू मात्र होइन, यहाँको वनस्पति र चराचुरुङ्गीहरूले पनि प्राकृतिक सौन्दर्यमा चार चाँद लगाएका छन्। हिमाली हिमनदीहरू, क्रिस्टल झरना र ठूला ठूला जङ्गलहरूले नेपाललाई प्रकृतिको अपूर्व उपहार दिएका छन्।</p>
+                        <p class="ml-4 text-justify">यसरी नेपालका हिमाल, वन, नदी, ताल, झरना र जैविक विविधताले भरिएको प्राकृतिक सौन्दर्यले देशलाई विश्वमै विशिष्ट र अनुपम बनाएको छ। यी प्राकृतिक सम्पदाहरूले मात्र होइन, यहाँका सांस्कृतिक र ऐतिहासिक स्थलहरूसँग मिलेर नेपालको समग्र सुन्दरतामा चार चाँद लगाएका छन्। नेपालमा प्रकृतिसँग सहअस्तित्व गर्दै जीवन बिताउने अवसर पाइन्छ, जसले मानिसलाई शान्ति र आनन्द अनुभूति गराउँछ। यो प्राकृतिक सौन्दर्यको संरक्षण र संवद्र्धन गर्दा मात्र भविष्यमा पनि यसले पर्यटन र वातावरणीय दुवै क्षेत्रमा योगदान दिनेछ।</p>
+
+                        <p class="text-left-align mt-4"><strong>३. दिइएको संवादांश पढ्नुहोस् र सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) नेपालको प्राकृतिक सौन्दर्यभित्र के के कुरा पर्छन् ?</strong><br><span class="text-justify">नेपालको प्राकृतिक सौन्दर्य अत्यन्तै विविधतापूर्ण र मनमोहक छ, जसले विश्वभरका मानिसहरूको ध्यान आकर्षित गर्दछ। यहाँ हिमाल, पहाड, तराई, उपत्यका, नदी, ताल, झरना, जंगल र जैविक विविधता जस्ता प्राकृतिक तत्वहरूको समृद्धि पाइन्छ। विश्वकै अग्ला हिमालहरू मध्ये सगरमाथा, अन्नपूर्ण, धौलागिरी र मनास्लुजस्ता हिमालहरू नेपालमा अवस्थित छन्, जसले देशलाई हिमाली देशको रूपमा परिचित बनाएको छ। यी हिमालहरूले मात्र नभई हिमनदीहरू र हिमाली भू-भागको अनुपम सौन्दर्यले पनि नेपालको प्राकृतिक छवि उजागर गर्छ। नेपालको तराई र पहाडी भू-भागमा फैलिएका हरियाली जंगलहरूमा विभिन्न प्रकारका वनस्पति र जीवजन्तुहरू पाइन्छन्। चितवन, बर्दिया, सगरमाथा लगायतका राष्ट्रिय निकुञ्जहरू वन्यजन्तु संरक्षणका महत्वपूर्ण केन्द्र हुन्। यहाँ हात्ती, गैंडा, बाघ, भालु लगायतका बहुमूल्य जीवहरू सुरक्षित छन्। यसले न केवल जैविक विविधतालाई संरक्षण गर्छ, तर पर्यटकहरूको आकर्षणको केन्द्र पनि हो। नेपालका नदीहरू, तालहरू र झरनाहरू पनि प्राकृतिक सौन्दर्यका प्रमुख अंग हुन्। कोशी, गण्डकी, कर्णाली लगायतका ठूला नदीहरू तथा पोखराको फेवा ताल, रारा ताल र अन्य साना ठूला तालहरूले शान्ति र रमाइलो प्रदान गर्छन्। झरनाहरू भने प्रकृतिको संगीतझैं वातावरणमा मधुरता थप्छन्। हिमाली र पहाडी क्षेत्रका रमणीय भू-भागहरूले मनोहर दृश्यावलोकनका लागि अवसर दिन्छन्। यी सबै प्राकृतिक सम्पदाहरूले नेपाललाई विश्वकै सुन्दर र अनुपम देशको रुपमा चिनाउन मद्दत गरेका छन्। प्राकृतिक सुन्दरतासँगै यहाँको सांस्कृतिक विविधता र ऐतिहासिक महत्त्वले पनि देशको पहिचानलाई थप बलियो बनाउँछ। यसैले नेपाललाई प्राकृतिक सौन्दर्य र सांस्कृतिक सम्पदाको अद्भुत संगम मान्न सकिन्छ, जसले सबैलाई मन्त्रमुग्ध पार्ने क्षमता राख्छ।</span></p>
+                            <p><strong>(ख) नेपालमा सांस्कृतिक पर्यटनको कस्तो सम्भावना छ ?</strong><br><span class="text-justify">नेपालमा सांस्कृतिक पर्यटनको अत्यन्तै ठूलो सम्भावना छ, किनभने यहाँ विविध जाति, भाषा, धर्म र सांस्कृतिक परम्पराहरू पाइन्छन्, जसले देशलाई सांस्कृतिक धरोहरको खजाना बनाएको छ। नेपालको इतिहास, धर्म, कला, वास्तुकला, र परम्परागत जीवनशैलीले विदेशी र घरेलु पर्यटकहरूलाई आकर्षित गर्ने महत्वपूर्ण तत्वहरू प्रस्तुत गर्दछ। यहाँ रहेका प्राचीन मठमन्दिर, दरबारहरू, स्तूपहरू, र ऐतिहासिक स्थलहरूले नेपालको समृद्ध सांस्कृतिक इतिहास झल्काउँछन्। पाटन दरबार, भक्तपुर दरबार, लुम्बिनी, स्वयम्भू, पशुपतिनाथ जस्ता स्थलहरू विश्वव्यापी रुपमा परिचित छन् र ती ठाउँहरूमा हरेक वर्ष लाखौँ पर्यटकहरु घुम्न आउँछन्। नेपालका विभिन्न जातीय समूहहरूले मनाउने चाडपर्वहरू जस्तै दशैं, तिहार, होली, बुद्धजयन्ती, माघे संक्रान्ति लगायतका सांस्कृतिक पर्वहरूले पर्यटकहरूको चासो तान्छन्। यी पर्वहरूमा देखिने नाचगान, रीतिरिवाज, रङीन पोशाकहरू नेपाली सांस्कृतिक विविधताको उत्कृष्ट उदाहरण हुन्। साथै, हस्तकला र परम्परागत खाना पनि सांस्कृतिक पर्यटनमा महत्त्वपूर्ण भूमिका खेल्छन्, जसले पर्यटकलाई स्थानीय जीवनशैली नजिकबाट बुझ्न र अनुभव गर्न मद्दत गर्छ। सांस्कृतिक पर्यटनले मात्र होइन, स्थानीय समुदायको आर्थिक उत्थानमा पनि ठूलो योगदान पुर्‍याउँछ। यसले गाउँगाउँमा रोजगारी सिर्जना गर्छ र सांस्कृतिक सम्पदाको संरक्षणमा सहयोग पुर्‍याउँछ। सरकारले र विभिन्न सङ्घसंस्थाहरूले सांस्कृतिक स्थलहरूको संरक्षण र प्रवर्द्धनमा ध्यान दिइरहेकोले सांस्कृतिक पर्यटनको भविष्य अझ उज्जवल देखिन्छ। यसरी, नेपालको समृद्ध सांस्कृतिक सम्पदा र विविधताको कारणले यहाँ सांस्कृतिक पर्यटनलाई विकास गर्ने अपार सम्भावना छ, जसले देशको आर्थिक विकाससँगै सामाजिक र सांस्कृतिक संरक्षणमा पनि योगदान पुर्‍याउने छ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>४. दिइएको समाचारको नमुना पढ्नुहोस् र यसका विषयवस्तु संरचना र शैलीका बारेमा छलफल गर्नुहोस् :</strong></p>
+                        <p class="ml-4 text-justify">दिइएको समाचार लामा छोटा गरि छ ओटा अनुच्छेदमा संरचित छ । प्रस्तुत समाचारको नमुना नेपालको हिमाल आरोहण, आरोहण गरी राखिएका विश्व कीतिमान, पर्यटनसँग सम्बन्धित छ । यस समाचारको लेखनशैलीमा वर्णनात्मक भन्दा ज्यादा तथ्यपरकता एवं विवरणात्मकतालाई नै जोड दिइएको पाइन्छ । समाचार सरल, सहज, स्पष्ट र विशिष्ट भाषा शैलीमा संरचित भएको पाइन्छ । सगरमाथाको सफल आरोहण गरी को को ले के कस्ता कीर्तिमान राखेका थिए भन्ने विषयमा नै प्रस्तुत समाचार लेखिएको पाइन्छ । समग्रमा ज्ञानवर्धक सूचना सम्प्रेषण गरी नेपालको पर्यटकीय गतिविधिमा केन्द्रित रही सरल, तथ्यपरक र विवरणात्मक शैलीका माध्यमबाट समाचार प्रस्तुत भएको पाइन्छ ।</p>
+
+                        <p class="text-left-align mt-4"><strong>५. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) कस्तो विषयवस्तु समाचार बन्न सक्छ ?</strong><br><span class="text-justify">पाठक वा श्रोताको ध्यान आकर्षित गर्ने र नयाँ सूचना सम्प्रेषण गर्ने राजनीति, शिक्षा, खेलकुद, व्यापार, वाणिज्य, संस्कृति आदि जुनसुकै विषयवस्तु समाचार बन्न सक्छ ।</span></p>
+                            <p><strong>(ख) समाचारको भाषा कस्तो हुनुपर्छ ?</strong><br><span class="text-justify">समाचारको भाषा सरल, छोटो छोटो वाक्य प्रयोग गरिएको र अनावश्यक विशेषण, क्रियाविशेषण नजोडिएको हुनुपर्छ ।</span></p>
+                            <p><strong>(ग) फिचर, घटनापरक र प्रक्रियापरक समाचारमा के भिन्नता छ ?</strong><br><span class="text-justify">फिचरमा कुनै खास घटना वा तथ्यलाई कलात्मक बनाएर प्रस्तुत गरिन्छ । त्यसै गरी घटनापरक समाचार प्रायः दृश्य विवरणमा केन्द्रित रही को ? के ? कहाँ ? किन ? कसरी ? कहिले ? जस्ता प्रश्नको उत्तर खोज्ने प्रयास गरिन्छ । प्रक्रियापरक समाचारमा भने घटनाको सरसरती वर्णन मात्र नगरी तथ्यको विस्तृत व्याख्या, त्यसको पृष्ठभूमि र परिणामका बारेमा पनि उल्लेख गरिएको हुन्छ ।</span></p>
+                            <p><strong>(घ) समाचारका विशेषता के के हुन् ?</strong><br><span class="text-justify">समाचारका विशेषता सत्यता, विश्वसनीयता, नवीनता, रोचकता, सन्तुलन, भाषिक सरलता स्पष्टता र मिठास हुन् ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>६. आफ्नो टोलमा वातावरण सुधारका लागि गरिएका प्रयत्नका बारेमा छोटो समाचार लेखी कक्षामा सुनाउनुहोस् ।</strong></p>
+                        <p class="ml-4 text-left-align"><strong>सामाजिक समाचार</strong></p>
+                        <p class="ml-4 text-left-align"><strong>टोलमा वातावरण सुधारका लागि सक्रिय प्रयास</strong></p>
+                        <p class="ml-4 text-justify">हाम्रो टोलमा वातावरण संरक्षणका लागि विभिन्न पहलहरू सुरु भएका छन्। टोलवासीहरूले फोहोर व्यवस्थापनमा विशेष ध्यान दिएका छन्। फोहोरलाई छुट्ट्याएर निकासी गर्ने व्यवस्था मिलाइएको छ। टोलमा हरेक शनिवार सरसफाइ अभियान सञ्चालन गरिन्छ जसमा सबै बुढाबुढीदेखि बालबालिकासम्म सहभागी हुन्छन्।</p>
+                        <p class="ml-4 text-justify">त्यसैगरी, टोलमा वृक्षारोपण कार्यक्रम पनि नियमित रूपमा गरिँदैछ। टोलका खुला ठाउँहरूमा रुख रोपेर हरियाली बढाउने काम भइरहेको छ। साथै, प्लास्टिकको प्रयोग घटाउन र पुनःप्रयोगयोग्य सामग्री प्रयोग गर्न सबैलाई सचेत गराइएको छ।</p>
+                        <p class="ml-4 text-justify">यी प्रयासले टोलको वातावरण सफा, स्वच्छ र हरियालीमय बन्न मद्दत गरिरहेको छ र सबैले सहयोग गर्दै थप सुधार गर्ने प्रतिबद्धता जनाएका छन्।</p>
+                        <p class="ml-4 text-left-align">— तपाईँको टोलबाट खबर।</p>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">भाषातत्व</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. उदाहरणमा दिए जस्तै गरी वाक्य संश्लेषण गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) अस्मिता घर गइन् । अस्मिताले आफ्ना साथीसङ्गी भेटिन् । अस्मिता साथीसँग जङ्गल घुम्न गइन् । अस्मिताले खोलामा गएर पौडी खेलिन् । अस्मिताले एक हप्ता रमाइलोसँग बिताइन् । अस्मिता सहर फर्किइन् ।</strong><br><span class="text-justify">घर गएर आफ्ना साथीसङ्गी भेटी उनीहरूसँग जङ्गल घुम्न गएकी अस्मिता खोलामा गएर पौडी खेल्दै एक हप्ता रमाइलोसँग बिताएर सहर फर्किइन् ।</span></p>
+                            <p><strong>(ख) मुस्ताङ हिमाली जिल्ला हो । मुस्ताङ पर्यटकीय जिल्ला हो । मुस्ताङमा धेरै हावा चल्छ । मुस्ताङ स्याउका लागि प्रसिद्ध छ । मलाई मुस्ताङ घुम्न मन लागेको छ ।</strong><br><span class="text-justify">पर्यटकीय हिमाली जिल्ला मुस्ताङमा धेरै हावा चले पनि स्याउका लागि प्रसिद्ध भएकाले मलाई मुस्ताङ घुम्न मन लागेको छ ।</span></p>
+                            <p><strong>(ग) विनोद कर्ण सप्तरीका बासिन्दा हुन् । उनी नेपाली साहित्यका प्राध्यापक हुन् । उनी सहयोगी र इमानदार छन् । उनी कविता लेख्न र चित्र कोर्न मन पराउँछन् ।</strong><br><span class="text-justify">सहयोगी र इमानदार सप्तरीका बासिन्दा विनोद कर्ण नेपाली साहित्यका प्राध्यापक भएकाले उनी कविता लेख्न र चित्र कोर्न मन पराउँछन् ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>२. वाक्य विश्लेषण गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) जगल सखाप हुन थालेपछि मृग, घोरल जस्ता जनावर र कतिपय चरा लोप हुने अनि पानीको मुहान पनि सुक्ने खतरा भएको छ । (३ वाक्यमा)</strong><br><span class="text-justify">जङ्गल सखाप हुन थाल्छ । मृग, घोरल जस्ता जनावर र कतिपय चरा लोप हुन्छन् । पानीको मुहान पनि सुक्ने खतरा भएको छ ।</span></p>
+                            <p><strong>(ख) प्रदूषण बढेसँगै हिमालमा हिउँ घट्यो समयमा पानी पर्न छाड्यो अनि सफा आकाश देख्न छाडियो । (४ वाक्यमा)</strong><br><span class="text-justify">प्रदूषण बढ्यो । हिमालमा हिउँ घट्यो । समयमा पानी पर्न छाड्यो । सफा आकाश देख्न छाडियो ।</span></p>
+                            <p><strong>(ग) सुदूरपश्चिम र कर्नाली क्षेत्रमा प्रचलित देउडा काठमाडौँ र विदेशमा समेत लोकप्रिय छ । (३ वाक्यमा)</strong><br><span class="text-justify">देउडा सुदूरपश्चिम क्षेत्रमा प्रचलित छ । देउडा कर्नाली क्षेत्रमा प्रचलित छ । देउडा काठमाडौँ र विदेशमा समेत लोकप्रिय छ ।</span></p>
+                            <p><strong>(घ) मलाई घमाइलो दिन, जुनेली रात, हरियो वन, लहलह बाली झुलेको खेतबारी, नेपाली खाना र सहयोगी साथी मनपर्छ । (५वाक्यमा)</strong><br><span class="text-justify">मलाई घमाइलो दिन र जुनेली रात मनपर्छ । मलाई हरियो वन मनपर्छ । मलाई लहलह बाली झुलेको खेतबारी मनपर्छ । मलाई नेपाली खाना मनपर्छ । मलाई सहयोगी साथी मनपर्छ ।</span></p>
+                            <p><strong>(ङ) जब असार लाग्छ तब मेरो मनले गाउँघर सम्झिन्छ । (२ वाक्यमा)</strong><br><span class="text-justify">असार लाग्छ । मेरो मनले गाउँघर सम्झिन्छ ।</span></p>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>३. दिइएको अनुच्छेदबाट कर्तृ, कर्म र भाव वाच्यका वाक्य पहिचान गरी तालिकामा देखाउनुहोस्ः</strong></p>
+                        <div class="ml-4 overflow-x-auto">
+                            <table class="min-w-full bg-transparent border border-gray-700 rounded-lg">
+                                <thead>
+                                    <tr class="bg-gray-700">
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">वाच्य</th>
+                                        <th class="py-2 px-4 border-b border-gray-700 text-left">वाक्य</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्तृवाच्य</td><td class="py-2 px-4 border-b border-gray-700">म सबेरै उठें ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्तृवाच्य</td><td class="py-2 px-4 border-b border-gray-700">मैले उमेशलाई बोलाएँ ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्तृवाच्य</td><td class="py-2 px-4 border-b border-gray-700">उमेश आँखा मिच्दै आयो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्तृवाच्य</td><td class="py-2 px-4 border-b border-gray-700">हामी बाटो लाग्यौँ ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">दाउन्नेमा पुगेर खाना खाइयो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">भालुवाङमा चिया पिइयो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">गाडीमा गीत गाइयो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">ठट्टा गरियो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">भोलिपल्ट स्थानीय साथी भेटिए ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">कुराकानी गरियो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">कर्मवाच्य</td><td class="py-2 px-4 border-b border-gray-700">रमाइलो गरियो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाववाच्य</td><td class="py-2 px-4 border-b border-gray-700">बेलुका घोराहीमा वास बसियो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाववाच्य</td><td class="py-2 px-4 border-b border-gray-700">राती मस्त निदाइयो ।</td></tr>
+                                    <tr><td class="py-2 px-4 border-b border-gray-700">भाववाच्य</td><td class="py-2 px-4 border-b border-gray-700">मस्तसँग हाँसियो ।</td></tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <p class="text-left-align mt-4"><strong>४. कर्तृवाच्यको प्रयोग गरी आफ्नो दिनचर्याका बारेमा एक अनुच्छेद लेख्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">म बिहान सबेरै ६ बजे उठ्छु । करिब १५ मिनट जति हातमुख धोई ताजा दिनको सुरुवात गर्दछु । म दिनहुँ आधा घण्टा जति शारीरिक व्यायाम गर्दछु । सधैँ सात बजे चिया नास्ता खाएर गृहकार्य गर्दछु । नौ बजे खाना खाएर विद्यालय जान्छु । विद्यालयमा अनुशासित भएर पढ्छु । आफूले नजानेका विषयवस्तुहरू गुरूहरूलाई सोधेर लेख्छु । चार बजे विद्यालय छुट्टी भएपछि घर आउँछु । घर आएर विद्यालयको पोशाक काढदछु । हातमुख धोई आमाले दिएको खाजा खाएर केही समय खेल्न जान्छु । बेलुका गृहकार्य गर्छु । प्राय : साढे सात बजेतिर खाना खान्छु । केही समय पढेपछि दश बजेतिर सुत्छु ।</p>
+
+                        <p class="text-left-align mt-4"><strong>५. कर्म तथा भाव वाच्यको प्रयोग गरी वनभोज गएको विषयमा एउटा अनुच्छेद लेख्नुहोस् ।</strong></p>
+                        <p class="ml-4 text-justify">वनभोज गाउँका साथीहरू मिलि हामी वैशाख १ गते बिहानै वनभोज गइयो । घरदेखि एक किलोमिटर पश्चिम ‘केप्छाकी टाहार’ सम्म पुगियो । साथीहरूद्वारा गाडीबाट सामानहरू झारिए । मद्वारा चिया पकाइयो । चिया खाइसकेपछि हामी सबै मिलेर खानपिनको काममा व्यस्त भइयो । कसैद्वारा दाउरा–झिक्रा खोजियो, कसैद्वारा आगो बालियो, कसैद्वारा पानी ल्याइयो त कसैद्वारा सब्जी केलाइयो । हामीद्वारा रमाइला गीतहरू गाइएका थिए । मद्वारा साथीहरू नचाइएका थिए । अर्जुनद्वारा मादल बजाइएको थियो । वनभोजमा आफू पनि खुब नाचियो अनि साथीहरूद्वारा पनि नाचियो । घर फर्किने बेला राजेश हम

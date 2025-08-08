@@ -1,0 +1,475 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Day Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Day Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">1. A Day Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “A Day” is a gripping and dramatic short story by Horacio Quiroga that portrays a man’s terrifying and desperate struggle for survival against the forces of nature. The story revolves around a man who goes to fish in the jungle, and his entire day turns into a fight for his life after he is bitten by a venomous snake. Quiroga’s vivid storytelling captures the intense emotions of fear, pain, and hope in the face of danger.<br><br>
+
+The story begins with the man heading to the river to fish, a routine activity for him. However, his day takes a tragic turn when he is bitten by a snake. The snakebite immediately causes him intense pain and paralysis, threatening his life. Realizing the seriousness of the situation, the man musters his strength to act quickly and save himself. The initial shock and fear are described in detail, showing the reader how vulnerable humans are in the wild.<br><br>
+
+Despite his severe condition, the man manages to drag himself toward his home to seek help. The journey is filled with obstacles—the man’s body weakens, and pain increases, but his will to survive remains strong. Quiroga’s vivid descriptions of the jungle environment and the man’s physical suffering create a tense and immersive atmosphere. The story emphasizes the unpredictable and harsh realities of life in the jungle.<br><br>
+
+As the day progresses, the man’s situation becomes more critical. He struggles against time and his failing strength, aware that if he does not get help soon, he will die. The story highlights themes of human endurance and determination in the face of overwhelming odds. The man’s fight to survive becomes a powerful symbol of human resilience and the instinct to live.<br><br>
+
+In the end, the story leaves readers reflecting on the fragility of life and the harshness of nature. Though the man’s fate is uncertain, his courage and determination inspire admiration. Quiroga’s “A Day” serves as a reminder of the constant battle between humans and nature, and the strength required to face life’s challenges.<br><br>
+
+In conclusion, “A Day” is a thrilling and poignant story that explores survival, courage, and the human spirit. Horacio Quiroga’s intense narrative and vivid imagery make the reader experience the man’s struggle firsthand, leaving a lasting impression about the power of will and the unpredictability of life.<br><br>
+
+
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How is the morning sun depicted by the poet in the first stanza?</span><br>
+                    The poet describes the morning sun as a beautiful beginning of a new day that brings hope, light, and joy. It fills the world with a warm glow, signaling the start of new opportunities and happiness.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What is the meaning of the line “The news like squirrels ran”?</span><br>
+                    This line means that as soon as the sun rises, the news or activity spreads quickly and energetically, just like squirrels darting around fast. It suggests that with daylight, everything starts moving rapidly.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What does the phrase “The hills untied their bonnets” signify?</span><br>
+                    This phrase metaphorically means that the hills, which were covered in darkness (like bonnets covering heads), are now uncovered or revealed by the sunlight. The darkness lifts, and the hills become visible and bright.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Is the speaker actually watching the morning sun? Why or why not?</span><br>
+                    No, the speaker is not literally watching the morning sun. This is because the poem presents images and events (like sunrise and sunset) that cannot happen at the same time. The speaker’s vision is more symbolic, expressing feelings and reflections rather than literal observation.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. In what way does the sun set according to the poem?</span><br>
+                    The poem describes the sun setting by taking away the day’s happiness, light, and beauty, and leaving behind the darkness of dusk. The sunset marks the end of the day’s journey and the arrival of quiet and rest.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How does the speaker define a day?</span><br>
+                    The speaker defines a day as a miniature journey that reflects the larger journey of life itself. Each day begins with the fresh promise of new hopes, happiness, and possibilities—much like the start of a new phase in life filled with excitement and anticipation. As the day unfolds, a person experiences various events, learns lessons, and gains knowledge, symbolizing growth and development. The day moves steadily forward, gathering moments and memories just as life accumulates experiences over time. Finally, the day comes to an end with dusk, which represents the closing of this small cycle, leaving behind the calmness of night. In this way, the speaker uses the metaphor of a day to illustrate the natural progression of life—from beginnings and growth to endings—emphasizing the continuous flow and rhythm of existence.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What role does the hyphen play in the first line of the poem?</span><br>
+                    The hyphen in the first line of the poem plays an important role by creating a deliberate pause that is longer than a comma but shorter than a full stop. This pause encourages readers to slow down and absorb the imagery and mood the poet is trying to convey. Instead of rushing through the line, the hyphen allows the scene to unfold gently and thoughtfully, reflecting the calm and peaceful beginning of the day. It enhances the rhythm of the poem, making it feel more methodical and unhurried, which mirrors the gradual arrival of morning light. Additionally, the hyphen leaves a space for the reader’s imagination to fill in the moment between the phrases, making the reading experience more immersive and reflective. Overall, the hyphen contributes to the poem’s lyrical quality and helps set the tone for the rest of the poem by emphasizing the quiet beauty of dawn.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What elements make this poem both lyrical and musical? Explain.</span><br>
+                    The poem A Day is both lyrical and musical because of several important poetic elements that work together to create its emotional depth and pleasing sound. First, the poem is lyrical because it conveys the poet’s personal feelings and reflections about life through the metaphor of a day. The use of the pronoun “I” makes the poem intimate and personal, allowing readers to experience the poet’s emotions and thoughts directly. This expression of individual experience and emotion is a defining feature of lyrical poetry, which often focuses on inner feelings rather than external events. The poem’s thoughtful meditation on the passage of time and the cycle of life gives it a reflective and expressive quality that touches the reader emotionally.
+                    <br><br>
+                    In addition to its lyrical quality, the poem is musical because of the skillful use of sound devices that create a rhythm and melody in the language. The poet uses alliteration, which is the repetition of consonant sounds at the beginning of words (for example, “sun shines”), to create a smooth and flowing sound. Assonance, or the repetition of vowel sounds within words, adds to the musical effect by producing harmony in the poem’s lines. The careful use of rhyme and the structured rhythm of the poem also contribute to its melodic quality, making it pleasant to read aloud. The combination of these sound techniques gives the poem a sense of movement and fluidity, much like the natural progression of a day itself. This musicality helps to engage the reader’s auditory senses, enhancing the overall impact and beauty of the poem.
+                    <br><br>
+                    Together, these lyrical and musical elements make the poem both emotionally expressive and aesthetically enjoyable, allowing it to resonate deeply with readers on both intellectual and sensory levels.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Who is the intended audience of the speaker, and why?</span><br>
+                    The intended audience of the speaker in the poem A Day is primarily children. The speaker uses the metaphor of a day to explain the cycle of life in a simple and relatable way that children can easily understand. By comparing life to a day—from the hopeful beginning in the morning to the calm ending at dusk—the poem conveys important life lessons about growth, experience, and the passage of time in a gentle and accessible manner. Children, who are at the beginning of their own life journeys, can relate to this imagery and grasp the deeper meaning behind the everyday events described.
+                    <br><br>
+                    Moreover, the poem’s tone is nurturing and instructive, as if the speaker is guiding young minds to reflect on life’s natural rhythm. The speaker wants to impart wisdom about embracing both happiness and challenges as parts of life, preparing children to face the world with understanding and hope. Although the message is simple enough for children, it is universal and meaningful for all readers. Adults can also appreciate the poem’s reflections on life’s stages, but the style and approach suggest that children are the primary audience the speaker wishes to reach.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. Since the poem seems aimed at children, how might adults interpret it? Discuss based on opinions from parents or guardians.</span><br>
+                    Although the poem A Day is primarily aimed at children, adults often interpret it with a deeper understanding and appreciation based on their life experiences. While children may see the poem as a simple and beautiful description of a day’s cycle, adults recognize the symbolic meaning behind the metaphor—that a day represents the journey of life, from innocence and hope to experience and eventually the end of a phase.
+                    <br><br>
+                    Parents and guardians, when reflecting on the poem, might see it as a reminder of the fleeting nature of time and the importance of cherishing each moment. They may also appreciate the poem’s message about growth, learning, and the inevitability of change. For adults, the poem can evoke feelings of nostalgia, as they recall their own journeys through childhood, youth, and adulthood. It encourages them to reflect on how they have matured and the lessons they have learned along the way.
+                    <br><br>
+                    Many adults may also interpret the poem as an encouragement to guide and support children on their own journeys, helping them navigate the challenges and joys of life with hope and resilience. Overall, while children receive the poem as a gentle lesson about life’s natural cycle, adults perceive it as a profound reflection on life’s stages, filled with wisdom and emotional depth.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Observe your surroundings on a clear morning and write a poem inspired by what you see.</span><br>
+                    Morning’s Gentle Touch
+                    <br><br>
+                    The golden sun peeks softly through the trees,<br>
+                    Whispering secrets carried on the breeze.<br>
+                    Birds awake with songs so sweet and clear,<br>
+                    Filling the air with melodies I hold dear.<br>
+                    <br><br>
+                    Dewdrops sparkle like diamonds on the grass,<br>
+                    Nature’s jewels that shimmer as I pass.<br>
+                    The flowers stretch, greeting the new day,<br>
+                    Bathed in light that chases night away.<br>
+                    <br><br>
+                    A gentle calm wraps the world around,<br>
+                    Peace and hope in silence found.<br>
+                    In this moment, fresh and bright,<br>
+                    Morning’s touch feels pure and light.<br>
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Write a personal essay describing a day at school.</span><br>
+                    A Day at School
+                    <br><br>
+                    A day at school is always full of energy, learning, and memorable moments. From the moment I step through the school gates in the morning, I feel a mix of excitement and curiosity about what the day will bring. The school is not just a place for studying; it is where friendships grow, lessons come alive, and new experiences shape who I am.
+                    <br><br>
+                    The day usually begins with the morning assembly, where we gather as a whole school community. We stand together, sing the national anthem, and listen to important announcements. This moment helps me feel connected and ready to focus on the day ahead. Then, classes start, and each subject offers something different. Whether it is mathematics that challenges my problem-solving skills or literature that sparks my imagination, I enjoy learning new things that broaden my understanding of the world.
+                    <br><br>
+                    Break times are special because they allow me to relax and interact with my friends. We share stories, play games, and sometimes help each other with homework. These moments create a sense of belonging and joy. The teachers are always encouraging and supportive, guiding us through difficult topics and inspiring us to work hard.
+                    <br><br>
+                    As the day comes to an end, I often reflect on what I have learned and experienced. School is not just about textbooks and exams; it is a place where I grow emotionally and socially. The friendships I build, the challenges I overcome, and the knowledge I gain all prepare me for the future. Each day at school is a valuable step in my journey of becoming a responsible and confident person.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>
+

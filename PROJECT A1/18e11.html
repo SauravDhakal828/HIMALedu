@@ -1,0 +1,549 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trifles Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Style for the summary content to be hidden/shown */
+        #summary-content {
+            display: none; /* Hidden by default */
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        #summary-content.is-visible {
+            opacity: 1;
+            display: block; /* Show when active */
+        }
+
+        /* Style for the summary button */
+        .summary-button {
+            /* Inherit button styles from browse-button for consistency */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjust padding for a button look */
+            border-radius: 9999px; /* Fully rounded */
+            font-weight: 600; /* Semi-bold */
+            font-size: 1.25rem; /* Larger font size */
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: block; /* Make it a block element to center */
+            margin: 0 auto 1rem auto; /* Center and add margin below */
+            text-align: center;
+        }
+        .summary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image -->
+        <!-- Arrow Group (top-left) -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Trifles Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text fade-in-slide-up">Trifles Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="summaryToggleButton" class="summary-button fade-in-slide-up" onclick="toggleSummary()">Summary</button>
+                <div id="summary-content" class="brighter-gradient-text mb-4">
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        “Trifles” is a one-act play by Susan Glaspell that explores themes of gender roles, justice, and the difference between men’s and women’s perspectives. The play is based on a real murder case and focuses on how women’s lives and emotions are often overlooked by men, leading to misunderstandings and unfair judgments. Through the story, Glaspell critiques the patriarchal society and highlights the importance of empathy and understanding.<br><br>
+
+The play opens with the arrival of a county attorney, a sheriff, and two men at the house of Mrs. Wright (formerly Mrs. Hale), who is suspected of murdering her husband. The men are investigating the crime, while Mrs. Peters, the sheriff’s wife, and Mrs. Hale accompany them to gather some household items for the accused woman. The men dismiss the kitchen and the women’s world as trivial or “trifles,” but it is precisely in these small details that the women find clues about Mrs. Wright’s life and mental state.<br><br>
+
+As the men search the house for evidence, Mrs. Peters and Mrs. Hale quietly observe the domestic surroundings. They notice how neglected and gloomy the kitchen is, reflecting Mrs. Wright’s lonely and unhappy life. Through their conversations, it becomes clear that Mrs. Wright was once a lively woman named Minnie Foster but became isolated and repressed after marriage. The women find a broken birdcage and a dead bird with a wrung neck hidden in a sewing box, which they believe was Mrs. Wright’s only source of joy and companionship.<br><br>
+
+The discovery of the dead bird is a turning point in the play. The women understand that Mrs. Wright’s isolation and emotional abuse may have driven her to kill her husband, who probably strangled the bird, symbolizing his cruelty. The men, however, fail to see these emotional “trifles” and continue to focus on physical evidence, missing the deeper story behind the murder. Mrs. Peters and Mrs. Hale decide to hide the dead bird to protect Mrs. Wright from punishment, showing solidarity and empathy.<br><br>
+
+Through this act of silent rebellion, Glaspell challenges the male-dominated justice system and raises questions about morality and the reasons behind crime. The play suggests that the women’s perspective, often dismissed as insignificant, reveals truths that the men overlook. It emphasizes the emotional and psychological effects of oppression and loneliness on women’s lives.<br><br>
+
+In conclusion, “Trifles” is a powerful critique of gender inequality and societal injustice. By focusing on the “trifles” or small details of domestic life, Susan Glaspell reveals the complexities of women’s experiences and calls for empathy and understanding. The play remains relevant today as a commentary on how society values different voices and perspectives.<br><br>
+                    </p>
+                </div>
+
+                <!-- New content starts here -->
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. Do you believe that Mrs. Wright killed her husband? Explain.</strong><br>
+                            Yes, I believe Mrs. Wright killed her husband. Her lonely and unhappy life, along with the killing of her beloved bird, likely drove her to desperation and led her to kill him.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. Do you think Mr. Wright’s death would have been uncovered if Mr. Hale hadn’t stopped by the Wrights’ home?</strong><br>
+                            No, probably not. Mr. Hale’s visit raised concerns that led to the investigation and discovery of Mr. Wright’s death.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">c. Why does Mrs. Hale think that Mrs. Wright’s worries about her preserves indicate her innocence?</strong><br>
+                            Mrs. Hale thinks it shows Mrs. Wright’s care for her home despite hardships, suggesting she wasn’t cruel or careless, which points to her innocence in intention.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">d. How does Mrs. Peters’ homesteading experience connect her to Mrs. Wright?</strong><br>
+                            Mrs. Peters understands Mrs. Wright’s loneliness and struggles because she has faced similar hardships in rural life, which makes her more sympathetic.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">e. How do the women’s perspectives on men differ?</strong><br>
+                            The women see men as unsympathetic and dismissive of women’s feelings, while men focus only on facts and ignore emotional struggles.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. Read the extract: “MRS. PETERS: (glancing around) …”</strong><br>
+                            <strong class="font-semibold">i. Who does ‘she’ refer to?</strong><br>
+                            ‘She’ refers to Mrs. Wright (formerly Minnie Foster), the accused woman.
+                            <br><br>
+                            <strong class="font-semibold">ii. What does the word ‘one’ stand for?</strong><br>
+                            The word ‘one’ stands for a woman, generally referring to any woman in Mrs. Peters’ or Mrs. Hale’s position.
+                            <br><br>
+                            <strong class="font-semibold">iii. What is the full form of “s’pose”?</strong><br>
+                            The full form of “s’pose” is “suppose.”
+                            <br><br>
+                            <strong class="font-semibold">iv. What do you mean when Mrs. Hale says, “the cat got it”?</strong><br>
+                            When Mrs. Hale says “the cat got it,” she means that something has been lost, broken, or ruined—like the damaged or missing part of the quilt or evidence that seems to have disappeared mysteriously.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. Read the extract: “MRS. HALE: Wright was close...”</strong><br>
+                            <strong class="font-semibold">i. Why does Mrs. Hale refer to Mrs. Wright as “Minnie Foster”?</strong><br>
+                            Mrs. Hale calls her “Minnie Foster” to remind us of who Mrs. Wright was before marriage — a young, lively woman with hopes and happiness.
+                            <br><br>
+                            <strong class="font-semibold">ii. What does her description tell you about Mrs. Wright?</strong><br>
+                            It shows that Mrs. Wright used to be cheerful and full of life, but after marrying Mr. Wright, she became lonely and unhappy.
+                            <br><br>
+                            <strong class="font-semibold">iii. What does Mrs. Hale mean by “that was thirty years ago”?</strong><br>
+                            She means that the happy times Mrs. Wright had before marriage are long past, emphasizing how much her life has changed and deteriorated since then.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">c. What is the main theme of the play?</strong><br>
+                            The main theme of Trifles centers on the oppression and marginalization of women in a male-dominated society. Throughout the play, the women characters, Mrs. Hale and Mrs. Peters, uncover the emotional and psychological suffering of Mrs. Wright, who has been isolated and neglected by her husband and the community. The men in the play dismiss the women’s observations as mere “trifles,” showing their lack of understanding and empathy towards women’s lives and struggles. This theme highlights how society often overlooks the subtle signs of emotional pain and confines women to roles that limit their freedom and voice. The play critiques this injustice by showing how the women, through their shared experiences and compassion, recognize the deeper story behind Mrs. Wright’s actions.
+                            <br><br>
+                            Another important aspect of the theme is the damaging effect of loneliness and isolation. Mrs. Wright’s life before marriage was full of joy and social interaction, but after marrying Mr. Wright, she became cut off from community and happiness. This emotional isolation, combined with an oppressive marriage, ultimately leads to her breaking point. The play suggests that the “trifles” – small details like a broken birdcage or unfinished sewing – reveal the profound impact of loneliness and cruelty on a person’s mental state. Through this, Trifles brings attention to how social and emotional neglect can lead to tragic consequences, making a powerful statement about the need for empathy and understanding in human relationships.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">d. Discuss the symbolism used in the play.</strong><br>
+                            Trifles uses several powerful symbols to highlight the emotional and social themes of the play. One of the most important symbols is the dead bird, which represents Mrs. Wright’s lost happiness and spirit. Before marriage, Mrs. Wright (then Minnie Foster) was cheerful and lively, like a singing bird. The bird’s death—likely caused by Mr. Wright—symbolizes the crushing of her joy and freedom in her oppressive marriage. The broken birdcage further emphasizes how confined and trapped she felt in her life, cut off from the outside world and deprived of simple pleasures.
+                            <br><br>
+                            Another key symbol in the play is the unfinished quilting or sewing. The uneven, incomplete stitching reflects Mrs. Wright’s disturbed mental state and her growing despair. It also symbolizes the larger “unfinished” story of women’s lives that men dismiss as insignificant. The kitchen setting itself serves as a symbol of traditional women’s roles—domestic, overlooked, and undervalued. These symbols work together to reveal the emotional isolation and silencing of women in society, underscoring the play’s critique of gender inequality and the harsh consequences of emotional neglect.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">e. Discuss the setting of the play. Does it have an impact on the theme of the play?</strong><br>
+                            The setting of Trifles is a remote, rural farmhouse kitchen in the early 20th century. This domestic space reflects the traditional roles and expectations placed on women during that time. The kitchen, usually considered the heart of the home and a place of warmth, is instead portrayed as cold and lonely, mirroring Mrs. Wright’s isolated and unhappy life. The sparse, worn-down surroundings emphasize the hardships faced by women who lived far from towns and social interaction, cut off from support or companionship. This setting helps the audience understand the emotional and physical confinement that Mrs. Wright endured in her marriage and life.
+                            <br><br>
+                            The setting significantly impacts the theme of the play because it highlights the emotional and social isolation that women faced, which is central to the story. The rural farmhouse becomes a symbol of the limited world available to women, where their work and feelings are often ignored or belittled by men. The physical isolation mirrors Mrs. Wright’s emotional isolation, showing how loneliness and oppression can lead to despair. Thus, the setting not only grounds the story in a realistic place but also deepens the play’s message about gender roles, loneliness, and the consequences of ignoring women’s experiences.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. The credibility of a character is determined not only by the character’s thoughts and actions but also by what other characters say and think about him or her. Discuss in relation to the characters of Trifles.</strong><br>
+                            In Trifles, the credibility of characters is built not only through their own words and actions but also through how other characters perceive and describe them. For example, Mrs. Wright (formerly Minnie Foster) is portrayed indirectly through the observations and conversations of Mrs. Hale and Mrs. Peters. The women’s sympathy and understanding reveal Mrs. Wright as a tragic figure—once lively and cheerful but worn down by a cold, oppressive marriage. Although Mrs. Wright herself speaks very little, the way others talk about her life and personality builds a credible image of a woman crushed by loneliness and emotional abuse. This indirect portrayal makes her situation more powerful and believable.
+                            <br><br>
+                            Similarly, Mr. Wright’s character is established mainly through what others say about him. The men describe him as a hard, unfriendly man, and the women’s reactions imply that he was unsympathetic and harsh toward his wife. His credibility as a cold, oppressive husband helps explain Mrs. Wright’s emotional state and possible motive for murder. The interactions among characters and their opinions reveal much about each other, creating a fuller picture that deepens the audience’s understanding of their personalities and motivations, even without direct dialogue from all character
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. Dramatic irony occurs when the reader or audience has information that is unknown to the characters in a play; it creates tension and suspense. Analyse the play discussing the author’s use of dramatic irony based on these questions:</strong><br>
+                            <strong class="font-semibold"> (i) What information is crucial to the play Trifles?</strong><br>
+                            The crucial information in Trifles is the discovery of the dead bird, Mrs. Wright’s only source of joy and companionship, which was likely killed by her husband or taken away from her. This fact reveals the emotional abuse and isolation Mrs. Wright suffered, providing the motive behind her actions. The men in the play are unaware of this detail, as they dismiss the women’s concerns and the “trifles” they find in the kitchen, while the women piece together the story through these small clues.
+                            <br><br>
+                            <strong class="font-semibold"> (ii) How does the playwright use this information to create dramatic irony?</strong><br>
+                            Susan Glaspell uses dramatic irony by letting the audience and the women characters know about the dead bird and what it symbolizes, while the men remain ignorant of its significance. The men focus only on the legal and physical evidence, ridiculing the women for their attention to domestic details. This gap in knowledge creates tension, as the audience understands the emotional truth behind the crime, but the men do not, which highlights the gender divide and the failure of the legal system to see the full picture.
+                            <br><br>
+                            <strong class="font-semibold"> (iii) What effect does the dramatic irony have on the audience and on the play?</strong><br>
+                            The dramatic irony engages the audience by making them complicit in the women’s silent rebellion against injustice. It creates suspense and sympathy for Mrs. Wright, as the audience realizes her suffering and possible justification for her crime before the men do. This technique deepens the play’s critique of gender inequality and societal neglect, making the audience question the fairness of a system that dismisses women’s experiences as insignificant “trifles.
+                        </p>
+                    </div>
+                </div>
+                <!-- New content ends here -->
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility and button text
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const summaryToggleButton = document.getElementById('summaryToggleButton');
+
+            if (summaryContent.classList.contains('is-visible')) {
+                // If summary is visible, hide it and change button text to "Summary"
+                summaryContent.classList.remove('is-visible');
+                summaryToggleButton.textContent = 'Summary';
+            } else {
+                // If summary is hidden, show it and change button text to "Hide Summary"
+                summaryContent.classList.add('is-visible');
+                summaryToggleButton.textContent = 'Hide Summary';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>
+

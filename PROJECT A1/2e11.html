@@ -1,0 +1,468 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Oval Portrait Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Justified text alignment for content text */
+        .content-justified p,
+        .content-justified ul,
+        .content-justified ol {
+            text-align: justify;
+        }
+        .content-justified .ml-5 { /* Adjusting for existing left margin on sub-items */
+            margin-left: 1.25rem; /* Keep original left margin */
+            margin-right: 0; /* Remove right margin */
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Specific SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for The Oval Portrait Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">The Oval Portrait Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto content-justified">
+                <button id="toggleSummaryButton" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <div id="summaryContent" class="hidden">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        "The Oval Portrait" by Edgar Allan Poe begins with an injured narrator seeking refuge in an abandoned château in the Apennines. Accompanied by his valet, Pedro, he breaks into the desolate building, finding it filled with strange and captivating artworks. To pass the time and distract himself from his injuries, he instructs Pedro to light candles and bring him a small volume he discovers on his pillow. This book contains critical descriptions and histories of the very paintings that adorn the walls of his temporary bedchamber.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        As the narrator reads through the night, he repositions his candle, causing its light to fall upon a previously unnoticed oval portrait. This portrait depicts a young girl, and its lifelike quality immediately mesmerizes him. He finds himself unable to tear his gaze away, feeling an almost uncanny sense of reality emanating from the painted face. The intensity of his fascination compels him to search the accompanying book for an explanation of this extraordinary artwork.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        The book reveals the tragic story behind the portrait. It tells of a beautiful and vivacious young woman, the bride of an eccentric painter who was passionately devoted to his art. The painter, consumed by his desire to capture his wife's beauty on canvas, began a portrait of her. His artistic zeal was so profound that he became entirely absorbed in the work, neglecting everything else, including his beloved wife. She, in turn, was a patient and loving sitter, enduring the long hours in the gloomy studio, though her health slowly deteriorated.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        As days turned into weeks, the painter grew increasingly obsessed with his masterpiece, barely noticing his wife's fading vitality. He would mix his colors with a feverish intensity, rarely taking his eyes off the canvas or his subject. Meanwhile, the young bride, though dwindling, maintained her cheerful demeanor, fearing to distract her husband from his grand artistic endeavor. Her friends and servants were forbidden from entering the studio, ensuring no interruption to the painter's work.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        Finally, after many weeks, the portrait was complete. The painter, in a moment of triumph and ecstasy, exclaimed, "Indeed, this is Life itself!" But as he turned to look at his wife, he found that she had died. The very life and spirit that he had so meticulously transferred to the canvas had, in the process, drained away from her body, leaving behind only a lifeless shell. The story serves as a chilling commentary on the dangerous obsession with art at the expense of human life and connection.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Understanding the Text:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. Where did the narrator and his servant make forcible entrance?</span><br>
+                        The narrator and his servant made a forcible entrance into an abandoned, old château (a large mansion) in the Apennines, a mountain range in Italy, to seek shelter from a storm.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. Which special picture did the narrator notice in the room?</span><br>
+                        The narrator noticed a small, oval portrait hanging on the wall. It was a painting of a young woman.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. Describe the portrait that the narrator saw in the room.</span><br>
+                        The portrait was of a young girl, shown from head to shoulders. She had a pale, lifelike complexion with beautiful, delicate features and a peaceful expression. The painting was so realistic that it seemed almost alive.
+                    </p>
+                    <p>
+                        <span class="font-bold">d. What is the relationship between the portrait painter and its subject?</span><br>
+                        The painter was the young woman’s husband. He was deeply devoted to painting her portrait, and the subject was his wife. The story reveals that he painted her so intensely that she died during the process.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference to the Context:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. What is the central theme of the story? Who is the woman depicted in the oval portrait?</span><br>
+                        The central theme of The Oval Portrait revolves around the dangerous obsession with art and the consequences of valuing artistic perfection over human life. The story highlights how the artist’s intense desire to capture every detail of his wife’s beauty in a portrait consumes him completely, leading to tragic consequences. It explores the idea that art, while meant to preserve and celebrate life, can sometimes overshadow the very life it intends to immortalize. The narrative serves as a cautionary tale about losing sight of what truly matters — the living, breathing person — in the pursuit of artistic achievement.
+                        <br><br>
+                        The woman in the oval portrait is the painter’s young wife, who was not only his model but also his beloved spouse. She willingly posed for the portrait, trusting her husband’s love and dedication to his art. However, as the artist became more and more absorbed in painting, he neglected her well-being. The story reveals that she died quietly beside him while he was fully focused on completing the portrait. Her death underscores the tragic cost of the artist’s obsession — the very beauty he sought to capture forever was lost because he ignored the living woman behind the image.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. "The Oval Portrait" is a short horror story by Edgar Allan Poe involving the disturbing circumstances surrounding a portrait in a chateau. Elaborate.</span><br>
+                        The Oval Portrait is a chilling short story by Edgar Allan Poe that combines elements of horror and psychological drama, centered around a mysterious portrait found in an abandoned chateau. The story begins with a narrator seeking shelter from a storm in an old, eerie mansion. As he explores, he discovers a beautifully painted oval portrait of a young woman. However, the portrait’s lifelike quality soon gives way to a disturbing revelation: the woman in the painting was the painter’s wife, who died as he obsessively worked to capture her image in perfect detail. This discovery casts a dark shadow over the story, transforming what initially seems like a simple artistic tribute into a haunting tale of obsession, neglect, and death.
+                        <br><br>
+                        The horror in The Oval Portrait arises not from supernatural elements but from the tragic human consequences of the artist’s fixation. Poe’s story explores themes of life and death, and how an artist’s passion for creating beauty can become destructive. The painter’s inability to balance his love for his wife and his dedication to his art results in her untimely death, making the portrait a symbol of loss and a grim reminder of the cost of obsession. The story’s eerie atmosphere, combined with the revelation that the painted woman is dead, creates a powerful sense of dread and unease, firmly placing The Oval Portrait within the realm of psychological horror.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. "The Oval Portrait" suggests that the woman’s beauty condemns her to death. Discuss.</span><br>
+                        The woman’s beauty is indeed what "condemns" her, not directly, but indirectly through her husband’s obsessive desire to capture it perfectly. Her beauty became the object of his consuming artistic passion, leading him to neglect her physical well-being. The more life he poured into the painting of her beauty, the more life drained from her, ultimately resulting in her death.
+                        <br><br>
+                        Her beauty is thus both a blessing and a curse—it inspires the artist to create a masterpiece but also causes him to overlook the real human being behind the image. The painter’s fixation on freezing her beauty in time ironically causes that beauty to fade from life. In this way, Poe critiques how obsession with surface appearances or ideals can lead to destruction rather than preservation, highlighting a tragic consequence of valuing art above life. The woman’s beauty, admired and sought after in the portrait, becomes the very reason for her demise.
+                    </p>
+                    <p>
+                        <span class="font-bold">d. Discuss the story as a frame narrative (a story within a story).</span><br>
+                        "The Oval Portrait" is a classic example of a frame narrative, which means it is a story within a story. The outer frame begins with the narrator and his servant taking shelter in an abandoned château during a storm. This initial setting creates a mysterious and suspenseful atmosphere, drawing the reader into the narrator’s personal experience. While exploring the dark mansion, the narrator finds a book that tells the inner story—the main narrative—about the painter and his young wife. This inner story explains the haunting circumstances behind the portrait hanging in the room.
+                        <br><br>
+                        The use of a frame narrative serves several purposes in the story. First, it adds layers to the storytelling, making the revelation about the portrait more dramatic and immersive. The reader discovers the tragic tale indirectly through the narrator’s reading, which enhances the suspense and the eerie mood. Second, the frame allows Poe to create a sense of realism by grounding the supernatural or tragic elements inside a believable experience of exploration and discovery. Finally, it emphasizes the theme of observation—just as the narrator observes the portrait and learns its story, the reader is invited to uncover the hidden truth beneath the surface. This storytelling technique deepens the emotional impact and underscores the connection between art, life, and death in the narrative.
+                    </p>
+                    <p>
+                        <span class="font-bold">e. The story is told in a descriptive style, with plenty of imagery and symbolism. Which images and symbols do you find in the story?</span><br>
+                        In The Oval Portrait, the most important image is the small oval painting of the young woman. This portrait looks very real and beautiful, but it also shows that the woman is no longer alive. The oval shape can mean that she is trapped forever inside the picture. The abandoned old house where the story happens is another strong image. It feels dark, quiet, and empty, which makes the place seem sad and a little scary. This house shows how things are forgotten and left to die, just like the woman in the story.
+                        <br><br>
+                        There are also symbols in the story that show the difference between life and death. Light and shadow are used to show this—while the painter works in the light to make the picture perfect, the shadows remind us that the woman’s life is slowly disappearing. The act of painting itself is a symbol too. It shows how making art can be both good and bad—the artist creates a beautiful portrait, but at the same time, he causes his wife to die because he ignores her needs. These images and symbols help us understand the story’s message about the dangers of focusing too much on appearances and not enough on real life.
+                    </p>
+                    <p>
+                        <span class="font-bold">f. What does the expression “She was dead!” mean?</span><br>
+                        The expression “She was dead!” is the moment of tragic revelation in the story, where the narrator discovers the heartbreaking truth behind the portrait. Throughout the story, the painter is so completely absorbed in painting his wife’s portrait that he fails to notice her weakening condition. His intense focus on capturing every detail of her beauty blinds him to the fact that she is quietly dying beside him. When the narrator reads this, it becomes clear that the woman’s life was sacrificed to the artist’s obsession with perfection.
+                        <br><br>
+                        This phrase carries a strong emotional impact because it shows how the painter’s passion for art ultimately caused the death of the very person he loved. It highlights the story’s main message about the danger of valuing art and beauty over real life and human connection. “She was dead!” serves as a grim reminder that sometimes, in the pursuit of creating something perfect, we may lose what is truly precious and irreplaceable—life itself.
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Reference Beyond Text:</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4 content-justified">
+                    <p>
+                        <span class="font-bold">a. Do you think there is life in art?</span><br>
+                        Yes, many people believe that there is a special kind of life in art, though it’s not life in the biological sense. Art has the power to capture emotions, stories, and moments in a way that can deeply move people. When you look at a painting, read a poem, or listen to music, it can feel like the artwork is alive because it expresses feelings and ideas that connect with our own experiences. In The Oval Portrait, for example, the painting is described as so realistic and full of life that it seems to breathe and have a presence beyond just colors on canvas. This shows how art can give a sense of life by preserving the beauty and spirit of its subject.
+                        <br><br>
+                        However, while art can seem alive, it is also different from real life because it cannot grow, change, or feel on its own. A painting or a sculpture stays the same, frozen in time, unlike a living person who changes with every moment. So, art carries a kind of “life” through the meaning and emotions it holds, but it depends on people to feel that life. Art becomes alive in the eyes of the viewer or reader, who brings their own thoughts and feelings to it. In this way, art connects us to life’s experiences and memories, keeping them alive even after the actual moments have passed.
+                    </p>
+                    <p>
+                        <span class="font-bold">b. As a thing of art nothing could be more admirable than the painting itself. Explain.</span><br>
+                        This statement praises the portrait in The Oval Portrait as an extraordinary masterpiece. The artist’s skill is shown in the way he captures every tiny detail of the young woman’s face — her delicate features, the light in her eyes, and the softness of her skin. The painting looks so lifelike that it almost seems to have a soul or spirit. From a purely artistic point of view, the portrait is perfect; it represents the highest level of talent, patience, and dedication. The narrator is amazed by how beautiful and realistic the painting is, which makes it stand out as something truly admirable in the world of art.
+                        <br><br>
+                        However, the story also asks us to think deeper about this admiration. Although the painting is remarkable as art, it is connected to a tragic event — the death of the woman who was its subject. The artist’s obsession with making the portrait flawless causes him to ignore the life of the woman, showing how the pursuit of artistic perfection can sometimes come at a terrible cost. This dual meaning adds complexity to the admiration for the painting: it is not just beautiful, but also a symbol of the dangers of placing art above human life. So, while the painting is admirable as an artistic creation, the story encourages us to remember the real life and love behind the art.
+                    </p>
+                    <p>
+                        <span class="font-bold">c. A more intense look at the painting reveals the illusion. Have you noticed any such painting?</span><br>
+                        Yes, many paintings throughout history create an illusion so strong that they almost seem alive or real at first glance, but a closer, more intense look reveals their true nature as art. This effect is often called “trompe-l'œil,” a French term meaning “deceive the eye.” Artists use this technique to create paintings that look three-dimensional or lifelike, tricking viewers into thinking they are seeing something real.
+                        <br><br>
+                        For example, some famous paintings by artists like Leonardo da Vinci or Johannes Vermeer have such detailed and realistic depictions of people and objects that you might feel as if the subjects could move or breathe. However, when you look carefully, you realize it’s just paint on canvas, a clever illusion created by the artist’s skill. These paintings, like the portrait in The Oval Portrait, show how powerful art can be in creating lifelike images that capture our attention and imagination, while still being just representations rather than real life. Have you seen any painting or photo that felt almost alive to you?
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggleSummaryButton').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summaryContent');
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.classList.add('hidden');
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+    </script>
+</body>
+</html>

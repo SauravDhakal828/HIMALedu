@@ -1,0 +1,713 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>वीर पुर्खा Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Justified text alignment for content text */
+        .content-justified p,
+        .content-justified ul,
+        .content-justified ol {
+            text-align: justify;
+        }
+        .content-justified .ml-5 { /* Adjusting for existing left margin on sub-items */
+            margin-left: 1.25rem; /* Keep original left margin */
+            margin-right: 0; /* Remove right margin */
+            text-align: justify;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for वीर पुर्खा Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">१. वीर पुर्खा Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto content-justified">
+                <button id="toggleSummaryButton" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <div id="summaryContent" class="hidden">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">सारांश:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        'वीर पुर्खा' निबन्धमा नेपाली जातिका साहसी, आत्मबलिदानी र राष्ट्रभक्त वीर योद्धाहरूको प्रशंसा गरिएको छ। लेखकले गौरवपूर्वक उल्लेख गरेका छन् कि नेपालका वीर सपूतहरूले देशको स्वाभिमान र स्वतन्त्रताका लागि ज्यानको आहुति दिन पनि हिचकिचाएनन्। गोर्खालीको साहस, अनुशासन, ईमानदारी र परिश्रमले विश्वभर उनीहरूको छुट्टै पहिचान बनाएको छ। भारत, बेलायत, हङकङ, ब्रुनाइजस्ता देशहरूमा गोर्खालीहरू सैनिक सेवामा कार्यरत छन् र उनीहरूले आफू बसेको देशको सुरक्षामा बहादुरीपूर्वक योगदान दिइरहेका छन्।<br><br>
+
+लेखकले गोर्खाली सैनिकहरूको बहादुरीका थुप्रै ऐतिहासिक घटनाहरू उल्लेख गरेका छन्। पहिलो विश्वयुद्ध, दोस्रो विश्वयुद्ध र अन्य धेरै युद्धहरूमा गोर्खालीहरू अग्रमोर्चामा रहे। उनीहरूको वीरता यति प्रशंसनीय थियो कि विदेशी सैनिकहरू समेत उनीहरूको साहसप्रति चकित हुन्थे। जस्तो कि, दोस्रो विश्वयुद्धको बेलामा जापानीहरूद्वारा कब्जा गरिएका क्षेत्रहरूमा गोर्खालीहरूले निर्णायक लडाइँ गरेका थिए। बेलायती सेनामा कार्यरत गोर्खालीहरूले आफ्ना बलिदानद्वारा अनेकौं पदक र सम्मान प्राप्त गरेका छन्।<br><br>
+
+निबन्धमा नेपाली वीरहरूले कसरी विभिन्न युद्धहरूमा आफ्नो ज्यान अर्पण गरे भन्ने कुरा भावुक ढंगले वर्णन गरिएको छ। विदेशी भूमिमा युद्ध गर्दै गर्दा थुप्रै गोर्खालीहरूले अमूल्य जीवन गुमाए, तर उनीहरूको आत्मबलिदानले नेपाललाई अन्तर्राष्ट्रिय रूपमा गौरवान्वित बनाएको छ। उनीहरूले "जय नेपाल!" भन्ने नारा जप्दै वीरगति प्राप्त गरेका थिए। यस्तो अद्वितीय साहस र कर्तव्यनिष्ठाको उदाहरण विश्वमै विरलै पाइन्छ।<br><br>
+
+यस निबन्धले वीरताको मात्रै प्रशंसा गर्दैन, यसले नयाँ पुस्तालाई पनि प्रेरणा दिन खोज्छ। लेखकले आजका युवाहरूमा देशभक्ति, इमानदारी र अनुशासनको भावना जागृत हुनुपर्ने कुरा जोड दिएका छन्। केवल ऐतिहासिक गर्वमा रमाउनु हुँदैन, ती पुर्खाहरूको आदर्शबाट सिकेर आजको पुस्ताले पनि मुलुकको सेवा गर्नुपर्छ भन्ने सन्देश निबन्धले दिन खोजेको छ।<br><br>
+
+अन्त्यमा, 'वीर पुर्खा' निबन्ध नेपाली इतिहासको गौरवशाली पक्षलाई उजागर गर्ने साहित्यिक र भावनात्मक रचना हो। यसले पाठकमा राष्ट्रप्रेम, कर्तव्यनिष्ठा र वीरताको भावना जगाउँछ। वीर गोर्खालीहरूको योगदानले आजको स्वतन्त्र नेपाल सम्भव भएको छ भन्ने भाव यस निबन्धको मूल सन्देश हो। यसले केवल वीरताको गाथा सुनाउँदैन, यो समर्पण र स्वाभिमानको स्रोत बनिदिन्छ।<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">शब्दभण्डार (Vocabulary)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>२. दिइएका अर्थ दिने शब्द पाठबाट छानेर लेख्नुहोस् :</strong>
+                    </p>
+                    <p class="ml-5">
+                        गिद्ध प्रजातिको ठूलो पंक्षी विषेश – <strong>गरुड</strong>
+                    </p>
+                    <p class="ml-5">
+                        प्रवाह – <strong>वेग</strong>
+                    </p>
+                    <p class="ml-5">
+                        डाम – <strong>डोब</strong>
+                    </p>
+                    <p class="ml-5">
+                        गौँडा – <strong>नाका</strong>
+                    </p>
+                    <p class="ml-5">
+                        पुरुषार्थ – <strong>पौरख</strong>
+                    </p>
+                    <p>
+                        <strong>३. तल दिइएका शब्दलाई वाक्यमा प्रयोग गर्नुहोस् :</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>पर्वत:</strong> नेपालका अग्ला पर्वतहरूले विश्वभरका पर्वतारोहीहरूलाई आकर्षित गर्छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>तिर:</strong> साँझमा नदीको तिरमा टहलिनु मनमोहक हुन्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>बहादुर:</strong> गोर्खाली सैनिकहरू आफ्नो बहादुरीका लागि विश्वभर प्रख्यात छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>सङ्केत:</strong> मौसम परिवर्तनले वर्षाको सङ्केत दिइरहेको थियो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>नभ:</strong> रातको नभमा चम्किला ताराहरूले मनै लोभ्याउँछन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>समुद्र:</strong> समुद्रको गहिराइमा अनगिन्ती रहस्यहरू लुकेका छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>पाषाण:</strong> प्राचीन सभ्यताका अवशेषहरूमा पाषाणका कलाकृतिहरू भेटिएका छन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>झन्डा:</strong> राष्ट्रिय झन्डाले देशको गौरव र पहिचानको प्रतिनिधित्व गर्छ।
+                    </p>
+                    <p>
+                        <strong>४. दिइएका शब्दसँग मिल्ने अनुप्रासयुक्त शब्द खोज्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        आँधी : <strong>बाँधी</strong>
+                    </p>
+                    <p class="ml-5">
+                        वेग : <strong>भेग</strong>
+                    </p>
+                    <p class="ml-5">
+                        खोला : <strong>होला</strong>
+                    </p>
+                    <p class="ml-5">
+                        तराई : <strong>पराई</strong>
+                    </p>
+                    <p class="ml-5">
+                        धारा : <strong>भारा</strong>
+                    </p>
+                    <p class="ml-5">
+                        माटो : <strong>बाटो</strong>
+                    </p>
+                    <p class="ml-5">
+                        रगत : <strong>जगत</strong>
+                    </p>
+                    <p class="ml-5">
+                        गौरव : <strong>सौरव</strong>
+                    </p>
+                    <p class="ml-5">
+                        यात्रा : <strong>जात्रा</strong>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">बोध र अभिव्यक्ति (Comprehension and Expression)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. कविता पढी दिइएका प्रश्नको उत्तर दिनुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) कवितामा कतिवटा श्लोक छन् ?</strong><br>
+                        कवितामा चारवटा श्लोक छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) कुन कुन पङ्क्तिमा सबैभन्दा बढी पद रहेका छन् ?</strong><br>
+                        पहिलो पङ्क्तिमा सबैभन्दा बढी पद रहेका छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग) समान पदसङ्ख्या भएको श्लोक कुन हो ?</strong><br>
+                        समान पदसङख्या भएको श्लोक दोस्रो हो ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ) कुन पङ्क्तिमा सबैभन्दा कम पद रहेका छन् ?</strong><br>
+                        तेस्रो पङ्क्तिमा सबैभन्दा कम पद रहेका छन् ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ङ) कवितामा प्रयोग भएका नदी र स्थानको सुची बनाउनु होस् ?</strong><br>
+                        नदी : <strong>टिस्टा, रावी, वेत्रावती, हिमनदी</strong><br>
+                        स्थान : <strong>हिमाल, पहाड, तराई, काँगडा, डिगर्चा</strong>
+                    </p>
+                    <p>
+                        <strong>२. ‘ वीर पुर्खा ‘ कविताको पहिलो श्लोक पढी त्यसलाई गद्यमा रुपान्तरण गर्नुहोस् ।</strong><br>
+                        हाम्रा वीर पुर्खाहरूको अदम्य साहसलाई विश्वको कुनै पनि शक्तिले रोक्न सकेन। उनीहरूको अगाडि आइपर्ने कुनै खोला, अग्ला पहाड वा भीषण आँधीले पनि उनीहरूको विजय यात्रालाई छेक्न वा रोक्न सकेन। वीर पुर्खाको गति आकाशमा स्वतन्त्र उड्ने गरुडको जस्तै तीव्र र असीमित थियो, जसलाई कुनै पनि सीमाले बाँध्न सकेन। उनीहरूकै अथक पौरख र वीरताका कारण आज हाम्रो देश नेपाल, यसका तराई, पहाड र हिमालका भूभागहरू एकताबद्ध भई एउटै राष्ट्रको रूपमा स्थापित हुन सफल भएको छ।
+                    </p>
+                    <p>
+                        <strong>३. कविता पढी विषयको क्रम मिलाएर लेख्नुहोस् ।</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>ख) वीर पुर्खाको गतिलाई खोला र आँधीले रोक्न सक्दैन ।</li>
+                        <li>ङ) पुर्खाको पौरखले नेपालको पहाड र तराईलाई जोडेको छ ।</li>
+                        <li>ग) वेत्रवेतीमा किनारमा नेपालीको पौरखको चिनो छ ।</li>
+                        <li>घ) काँगडा र कलङ्गाले नेपालको इतिहास बोलेको छ ।</li>
+                        <li>क) वीर पुर्खाको रगत नेपालीको नसा नसामा छ ।</li>
+                    </ul>
+                    <p>
+                        <strong>४. दिइएको कवितांश पढ्नुहोस् र सङ्क्षिप्त उत्तर लेख्नुहोस् ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) माथिको कवितांशमा हाम्रा पुर्खाहरुको बारेमा के भनिएको छ ?</strong><br>
+                        "वीर पुर्खा" कवितांशमा हाम्रा पुर्खाहरूको अतुलनीय साहस, त्याग र राष्ट्रप्रतिको गहिरो समर्पणको महिमा गाइएको छ। उनीहरूले आफ्नो जीवनको बाजी लगाएर नेपालको निर्माण र अखण्डताको रक्षा गरे। उनीहरूको अदम्य वीरता यस्तो थियो कि कुनै पनि प्राकृतिक बाधा वा शत्रुको शक्तिले उनीहरूको विजय यात्रालाई रोक्न सकेन। विशेषगरी, उनीहरूले आधुनिक हतियार भएका विदेशी सेनासँग पनि खुकुरी, गुलेली र ढुङ्गाको भरमा युद्ध जितेर आफ्नो युद्ध कौशल र बहादुरीको अनुपम उदाहरण प्रस्तुत गरे।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) हामीले हाम्रा पुर्खाको गौरव कसरी जोगाउन सक्छौ ?</strong><br>
+                        हामीले हाम्रा पुर्खाको गौरव जोगाउनका लागि उनीहरूले देखाएको देशभक्ति, एकता र त्यागको मार्गमा हिँड्नुपर्छ। देशको सार्वभौमिकता र अखण्डताको रक्षाका लागि सधैँ सजग रहनुपर्छ, भ्रष्टाचार र देशद्रोही गतिविधिहरूको विरुद्धमा उभिनुपर्छ। देशका निर्माता पृथ्वीनारायण शाहको 'घुस लिने र दिने दुवै देशका शत्रु हुन्' भन्ने भनाइलाई आत्मसात गर्दै भ्रष्ट व्यक्तिहरूलाई निरुत्साहित गर्नुपर्छ। लिम्पियाधुरा, कालापानी र नालापानीजस्ता मिचिएका भूभागको रक्षाका लागि राजनीतिक, कूटनीतिक र आवश्यक परे सैनिक प्रयाससमेत गर्नुपर्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग) `सागर तरी संसारभरि वीर गोर्खा रगत बग्यो ।´ यस कथनको तात्पर्य के हो ?</strong><br>
+                        यस कथनको तात्पर्य यो हो कि नेपाली वीर गोर्खालीहरूको साहस र पराक्रम नेपालको सिमानाभित्र मात्र सीमित छैन, बरु उनीहरूले समुद्र पार गरी विश्वका विभिन्न भूभागमा पनि आफ्नो वीरता प्रदर्शन गरेका छन्। यसले प्रथम र दोस्रो विश्वयुद्ध लगायतका विभिन्न अन्तर्राष्ट्रिय द्वन्द्वहरूमा गोर्खाली सैनिकहरूले पुर्‍याएको अतुलनीय योगदान र उनीहरूको बहादुरीको विश्वव्यापी ख्यातिलाई सङ्केत गर्दछ। उनीहरूको रगत संसारभरि बगेको भन्नुको अर्थ उनीहरूले विश्व शान्ति र न्यायका लागि पनि ठूलो बलिदान दिएका छन् भन्ने हो।
+                    </p>
+                    <p>
+                        <strong>५. तलको कवितांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) नेपालीहरुको कस्तो पौरखले नेपालको रचना भएको हो ?</strong><br>
+                        नेपालीहरूको अदम्य साहस, देशभक्ति एवम्‌ वीरताले र खोलाको गति जस्तो, आँधी र गरुडको वेग जस्तो नेपालीहरूको पौरखले पहाड, हिमाल र तराईलाई एक बनाई नेपालको रचना भएको हो। उनीहरूकै निस्वार्थ त्याग र कठोर परिश्रमबाट यो देशले वर्तमान स्वरूप प्राप्त गरेको हो।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) कवितांशका आधारमा हाम्रा वीर पुर्खाको गौरव गाथाको वर्णन गर्नुहोस् ?</strong><br>
+                        हाम्रा वीर पुर्खाहरूको गौरव गाथा वास्तवमै असीमित छ। उनीहरूको पाइलालाई कुनै पहाड, खोला वा आँधीको वेगले पनि रोक्न सकेन। गरुडको जस्तै तीव्र र निर्भीक यात्राले उनीहरूले आफ्ना अगाडि बढेका पाइलालाई कहिल्यै रोकेनन्। उनीहरूकै अथक पौरख र बलिदानले यस देशको निर्माण सम्भव भयो, जसले गर्दा आज हामी स्वतन्त्र र सार्वभौम राष्ट्रका नागरिकका रूपमा गर्व गर्न सक्छौं।
+                    </p>
+                    <p>
+                        <strong>६. `वीर पुर्खा´ कविताको चौथो श्लोकलाई मुख्य आधार बनाई दिइएका प्रश्नहरुको उत्तर दिनुहोस् ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) नेपालीहरुको वीरता कसरी गुन्जिएको छ ?</strong><br>
+                        नेपालीहरूको वीरता शत्रुहरूले सिमानामा नाका थुनेर पनि छेक्न नसकेको र देश तथा जनताका लागि रगत बगाउन पछि नहटेको कुराबाट गुन्जिएको छ। उनीहरूको साहस र बलिदानको गाथा विश्वभर फैलिएको छ, जसले उनीहरूको अमर वीरतालाई प्रमाणित गर्छ। उनीहरूको निडरता र राष्ट्रभक्तिले सधैँ नेपालीको शिर उच्च राखेको छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) चन्द्रसूर्य ध्वजामा कस्तो गौरव अङ्कित छ ?</strong><br>
+                        नेपालको चन्द्रसूर्य ध्वजामा राष्ट्र निर्माण गर्ने वीर गोर्खालीहरूले आफ्नो रगत बगाएर आर्जेको स्वतन्त्रता, सार्वभौमिकता र अखण्डताको गौरव अङ्कित छ। यो झन्डाले नेपालीहरूको अटल स्वाभिमान र बलिदानी इतिहासलाई झल्काउँछ, साथै भविष्यका पुस्तालाई पनि देशप्रेमको प्रेरणा दिन्छ।
+                    </p>
+                    <p>
+                        <strong>७. दिइएको कवितांशको व्याख्या गर्नुहोस् ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        प्रस्तुत कवितांश कक्षा ११ को अनिवार्य नेपाली विषयको "वीर पुर्खा" कविताबाट लिइएको हो, जसका रचनाकार कवि वासुदेव त्रिपाठी हुन्। यस अंशमा हाम्रा पुर्खाहरूको अतुलनीय वीरता, साहस र देशप्रतिको समर्पणको महिमा गाइएको छ।
+                    </p>
+                    <p class="ml-5">
+                        कवितांशले वीर पुर्खाहरूको विजय यात्रालाई कुनै पनि भौतिक बाधाले रोक्न नसकेको कुरा स्पष्ट पार्छ। उनीहरूको गति खोलाको प्रवाह जस्तै तीव्र, पहाड जस्तै अटल र आँधी जस्तै शक्तिशाली थियो। आकाशमा स्वच्छन्द उड्ने गरुडको वेगसँग उनीहरूको साहसलाई तुलना गरिएको छ, जसले उनीहरूको अदम्यतालाई झल्काउँछ। उनीहरू शत्रुसँग डराएनन्, बरु मर्न तयार भए तर हार्न कहिल्यै जानेनन्। नेपालको इतिहास साक्षी छ कि कुनै पनि साम्राज्यवादी शक्तिले यहाँ आफ्नो प्रभुत्व जमाउन सकेन, न त नेपालीहरूले कसैसामु घुँडा टेके। पृथ्वीनारायण शाह, बलभद्र कुँवरजस्ता हजारौँ वीरहरूको त्याग र बलिदानले नै आजको अखण्ड नेपालको निर्माण भएको हो। उनीहरूकै पौरखले हिमाल, पहाड र तराईलाई एक सूत्रमा बाँधेर बलियो राष्ट्रको जग बसालियो।
+                    </p>
+                    <p class="ml-5">
+                        अतः, यो कवितांशले हाम्रा पुर्खाहरूको राष्ट्र निर्माणमा पुर्‍याएको अद्वितीय योगदान र उनीहरूको अदम्य वीरताको गाथालाई सशक्त रूपमा प्रस्तुत गर्दछ। यसले देशप्रेम र राष्ट्रिय एकताको भावनालाई प्रगाढ बनाउन मद्दत गर्छ।
+                    </p>
+                    <p>
+                        <strong>८. दिइएका बुँदाका आधारमा ‘वीर पुर्खा” कविताको समीक्षात्मक टिप्पणी गर्नुहोस्‌ ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        <strong>टिप्पणी:</strong><br>
+                        कवि वासुदेव त्रिपाठीद्वारा रचित "वीर पुर्खा" कविता राष्ट्रप्रेम र देशभक्तिको भावनाले ओतप्रोत एक उत्कृष्ट रचना हो। यस कविताले नेपाली पुर्खाहरूको अदम्य साहस, वीरता, त्याग र राष्ट्र निर्माणमा उनीहरूले पुर्‍याएको महत्त्वपूर्ण योगदानको गौरवगान गर्दछ।
+                    </p>
+                    <p class="ml-5">
+                        कवितामा पुर्खाहरूको गतिलाई खोला, पहाड र आँधीको वेगसँग तुलना गरिएको छ, जसले उनीहरूको असीमित शक्ति र अजेयतालाई दर्साउँछ। गरुडको जस्तै स्वच्छन्द उडान भर्ने उनीहरूको पौरखले हिमाल, पहाड र तराईलाई एकताबद्ध गरी अखण्ड नेपालको निर्माण गरेको कुरालाई जोड दिइएको छ। टिस्टा, रावी, काँगडा, कलङ्गा र गङ्गासम्म उनीहरूको बहादुरीको गीत गुन्जिएको उल्लेखले नेपाली वीरताको व्यापकतालाई देखाउँछ। उनीहरूको विजय यात्रालाई मित्रताले मात्र रोक्न सकेको भन्ने भनाइले नेपालीहरूको कूटनीतिक सामर्थ्य र छिमेकीहरूसँगको सुमधुर सम्बन्धको महत्त्वलाई पनि सङ्केत गर्छ। नेपाली भूमिमा मात्र नभई विश्वयुद्धहरूमा समेत गोर्खालीहरूको वीरताले विश्वभरि आफ्नो पहिचान बनाएको कुराले उनीहरूको विश्वव्यापी प्रभावलाई उजागर गर्छ। आज पनि हाम्रा नसा नसामा वीर पुर्खाको रगत बगेको अनुभूतिले राष्ट्रिय गौरवको भावनालाई जीवन्त राख्छ।
+                    </p>
+                    <p class="ml-5">
+                        यस कविताको शीर्षक ‘वीर पूर्वां’ अभ्यन्त सार्थक देखिएको छ किनभने यस कवितामा हाम्रा वीर पुरवले हाम्रो स्वाभिमान, सार्वभौमिकता र अखण्डता रक्षाका लागि पुर्याएको विशेष योगदानको चर्चा गरिएको छ। चार श्लोक रहेको कवितामा प्रत्येक श्लोक असाध्यै राम्रा छन् । तृतीय पुरुषमा लेखिएको कविताको यात्रा भाषा अत्यन्त सरल छ। राष्ट्रप्रेम र देशभक्तिको भावनाले ओतप्रोत यस कविता अत्यन्त उत्कृष्ट रचना हो ।
+                    </p>
+                    <p>
+                        <strong>९. दिइएको अनुच्छेद पढी मुख्य मुख्य बुँदाहरू टिप्नुहोस् ।</strong><br>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>इतिहासकारहरूले सत्य घटनालाई रोचक बनाउन काल्पनिक कुराहरू जोड्ने प्रवृत्ति।</li>
+                        <li>प्राचीन कालमा इतिहासलाई मनोरञ्जनको साधन र साहित्यको एक अङ्ग मानिनु।</li>
+                        <li>इसापूर्व पाँचौँ शताब्दीतिर केही चिन्तकहरूद्वारा इतिहासलाई तथ्यपूर्ण बनाउने प्रयासको सुरुवात।</li>
+                        <li>प्रथम इतिहासकार हेरोडोटसले इतिहासलाई कथा र दन्त्यकथाभन्दा फरक ढङ्गले लेख्ने प्रयत्न गर्नु।</li>
+                        <li>अरिस्टोटलले इतिहासलाई दार्शनिक चिन्तनका रूपमा हेर्नु।</li>
+                        <li>मध्यकालमा इतिहासलाई धर्मसँग जोडेर अध्ययन र परिभाषा गरिनु।</li>
+                        <li>सोह्रौँ-सत्रौँ शताब्दीमा युरोपमा आएको पुनर्जागरणले इतिहास लेखनलाई तथ्यमा आधारित बनाउनुमा जोड।</li>
+                        <li>आधुनिक युगमा प्राचीन इतिहासको खोजी प्रक्रिया तीव्र भई इतिहासलाई एक छुट्टै विधाका रूपमा स्थापित गर्नु।</li>
+                    </ul>
+                    <p>
+                        <strong>१०. दिइएको अनुच्छेद पढी सोधिएका प्रश्नहरूको जवाफ दिनुहोस् ।</strong><br>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) भाषा भनेको के हो ?</strong><br>
+                        भाषा भनेको मानव समाजमा विचार, भावना र सूचना आदानप्रदान गर्न प्रयोग गरिने ध्वनि प्रतीकहरूको एक व्यवस्थित प्रणाली हो। यो एक सामाजिक उपकरण हो जसले मानिसहरूलाई एकअर्कासँग जोड्छ र संस्कृति तथा ज्ञानको हस्तान्तरणमा महत्त्वपूर्ण भूमिका खेल्छ।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) भाषाका विशेषताहरू बताउनुहोस् ।</strong><br>
+                        भाषाका मुख्य विशेषताहरूमा सिर्जनात्मकता (नयाँ वाक्य बनाउन सक्ने क्षमता), यादृच्छिकता (शब्द र अर्थबीचको मनमानी सम्बन्ध), सान्दर्भिकता (सन्दर्भअनुसार अर्थ परिवर्तन हुने), द्वैधता (ध्वनि र अर्थको दुई तहको संरचना), मौखिकता (मुख्यतः बोलीमा आधारित), र श्रावणिकता (सुन्न सकिने) आदि पर्दछन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ग) `वाक्प्रतिक´ र `यादृच्छिक´ शब्दको अर्थ लेखी वाक्यमा प्रयोग गर्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        वाक्प्रतिक: <strong>बोली वा ध्वनिको माध्यमबाट कुनै वस्तु वा विचारलाई बुझाउने प्रतीक।</strong><br>
+                        वाक्यमा प्रयोग: मानव भाषामा प्रत्येक शब्द एक वाक्प्रतिक हो जसले निश्चित अर्थ बोक्छ।
+                    </p>
+                    <p class="ml-5">
+                        यादृच्छिक: <strong>कुनै निश्चित नियम वा तर्कबिना, संयोगवश वा स्वेच्छाले निर्धारण भएको।</strong><br>
+                        वाक्यमा प्रयोग: भाषामा शब्द र त्यसले बुझाउने अर्थबीचको सम्बन्ध यादृच्छिक हुन्छ, अर्थात् यसको कुनै तार्किक कारण हुँदैन।
+                    </p>
+                    <p class="ml-5">
+                        <strong>घ) यस अनुच्छेदको पहिलो वाक्यलाई संयुक्त वाक्यमा बदल्नुहोस् ।</strong><br>
+                        साधारण वाक्य: भाषा विचार विनिमयको माध्यम हो।<br>
+                        संयुक्त वाक्य: भाषा विचार विनिमयको माध्यम हो र यसले समाजमा मानिसहरूलाई जोड्छ।
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">व्याकरण (Grammar)</h3>
+                <div class="brighter-gradient-text space-y-2 mb-4">
+                    <p>
+                        <strong>१. कथ्य नेपालीमा नभएका वर्णहरु कुन कुन हुन् लेख्नुहोस् ।</strong>
+                    </p>
+                    <p class="ml-5">
+                        <strong>क) स्वर वर्णहरू ?</strong><br>
+                        कथ्य नेपालीमा प्रायः प्रयोग नहुने वा कम प्रयोग हुने स्वर वर्णहरू : <strong>ऋ, लृ, ऐ, औ</strong> हुन्।
+                    </p>
+                    <p class="ml-5">
+                        <strong>ख) व्यञ्जन वर्णहरू ?</strong><br>
+                        कथ्य नेपालीमा प्रायः प्रयोग नहुने वा कम प्रयोग हुने व्यञ्जन वर्णहरू : <strong>ञ, ण, ष, श, क्ष, त्र, ज्ञ</strong> हुन्।
+                    </p>
+                    <p>
+                        <strong>२. दिइएका लेख्य वर्णहरूको उच्चारण कस्तो हुन्छ, लेख्नुहोस् :</strong><br>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>ई: <strong>इ (लामो)</strong></li>
+                        <li>ऊ: <strong>उ (लामो)</strong></li>
+                        <li>ऋ: <strong>रि</strong></li>
+                        <li>ऐ: <strong>अइ</strong></li>
+                        <li>औ: <strong>अउ</strong></li>
+                        <li>अं: <strong>अम्/अँ</strong></li>
+                        <li>अ: <strong>अह</strong></li>
+                        <li>ञ: <strong>न्य/य</strong></li>
+                        <li>ण: <strong>न</strong></li>
+                        <li>ष: <strong>स</strong></li>
+                        <li>श: <strong>स</strong></li>
+                        <li>क्ष: <strong>छ्य/क्ष्य</strong></li>
+                        <li>त्र: <strong>त्र</strong></li>
+                        <li>ज्ञ: <strong>ग्य</strong></li>
+                    </ul>
+                    <p>
+                        <strong>३. दिइएको कवितांशबाट गाढा वर्ण टिपी तिनको उच्चारण स्थान छुट्टाउनुहोस् ।</strong><br>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>वर्ण: <strong>म</strong> - उच्चारण स्थान: <strong>ओष्ठ्य</strong></li>
+                        <li>वर्ण: <strong>क</strong> - उच्चारण स्थान: <strong>कण्ठ्य</strong></li>
+                        <li>वर्ण: <strong>छ</strong> - उच्चारण स्थान: <strong>तालव्य</strong></li>
+                        <li>वर्ण: <strong>त</strong> - उच्चारण स्थान: <strong>दन्त्य</strong></li>
+                        <li>वर्ण: <strong>र</strong> - उच्चारण स्थान: <strong>दन्तमूलीय</strong></li>
+                    </ul>
+                    <p>
+                        <strong>४. “काँगडा र कलङ्गाको ढुङ्गा माटो बोल्छ होला” पङ्क्तिमा रहेका सग्ला व्यञ्जन वर्णलाई उच्चारण स्थानका आधारमा पहिचान गरि सुचीबद्ध गर्नुहोस् ।</strong><br>
+                        <ul class="list-disc list-inside ml-5">
+                            <li><strong>कण्ठ्य:</strong> क् (काँगडा), ग् (कलङ्गा), ङ् (काँगडा, कलङ्गा, ढुङ्गा), ग् (ढुङ्गा), ह् (होला)</li>
+                            <li><strong>दन्त्य:</strong> ल् (कलङ्गा, बोल्छ, होला)</li>
+                            <li><strong>ओष्ठ्य:</strong> म् (माटो), ब् (बोल्छ)</li>
+                            <li><strong>मूर्धन्य:</strong> ड् (काँगडा), ढ् (ढुङ्गा), ट् (माटो)</li>
+                            <li><strong>तालव्य:</strong> छ् (बोल्छ)</li>
+                        </ul>
+                    </p>
+                    <p>
+                        <strong>५. दिइएको अनुच्छेदबाट पाँचवटा सघोष र पाँचवटा अघोष वर्ण खोजी लेख्नुहोस् ।</strong><br>
+                        सघोष वर्ण : <strong>ग, ज, द, भ, म</strong><br>
+                        अघोष वर्ण : <strong>क, च, ट, थ, प</strong>
+                    </p>
+                    <p>
+                        <strong>६. दिइएको पङ्क्तिबाट पाँचवटा अल्पप्राण र पाँचवटा महाप्राण पहिचान गर्नुहोस् ।</strong><br>
+                        अल्पप्राण : <strong>क, ग, च, ज, ट</strong><br>
+                        महाप्राण : <strong>ख, घ, छ, झ, ठ</strong>
+                    </p>
+                    <p>
+                        <strong>७. दिइएका वर्णहरुको उच्चारण स्थान र प्राणत्वको पहिचान गर्नुहोस् । (क, झ, ट, त, फ, ह)</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>वर्ण: <strong>क</strong> - उच्चारण स्थान: <strong>कण्ठ्य</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                        <li>वर्ण: <strong>झ</strong> - उच्चारण स्थान: <strong>तालव्य</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                        <li>वर्ण: <strong>ट</strong> - उच्चारण स्थान: <strong>मूर्धन्य</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                        <li>वर्ण: <strong>त</strong> - उच्चारण स्थान: <strong>दन्त्य</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                        <li>वर्ण: <strong>फ</strong> - उच्चारण स्थान: <strong>ओष्ठ्य</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                        <li>वर्ण: <strong>ह</strong> - उच्चारण स्थान: <strong>स्वरयन्त्रमुखी</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                    </ul>
+                    <p>
+                        <strong>८. उच्चारण प्रयत्न र घोषत्वका आधारमा दिइएका वर्णहरुको पहिचान गरी लेख्नुहोस् । (ख, छ, स, न, य, ब)</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>वर्ण: <strong>ख</strong> - उच्चारण प्रयत्न: <strong>स्पर्शी</strong>, घोषत्व: <strong>अघोष</strong></li>
+                        <li>वर्ण: <strong>छ</strong> - उच्चारण प्रयत्न: <strong>स्पर्श-संघर्षी</strong>, घोषत्व: <strong>अघोष</strong></li>
+                        <li>वर्ण: <strong>स</strong> - उच्चारण प्रयत्न: <strong>संघर्षी</strong>, घोषत्व: <strong>अघोष</strong></li>
+                        <li>वर्ण: <strong>न</strong> - उच्चारण प्रयत्न: <strong>नासिक्य</strong>, घोषत्व: <strong>सघोष</strong></li>
+                        <li>वर्ण: <strong>य</strong> - उच्चारण प्रयत्न: <strong>अर्धस्वर</strong>, घोषत्व: <strong>सघोष</strong></li>
+                        <li>वर्ण: <strong>ब</strong> - उच्चारण प्रयत्न: <strong>स्पर्शी</strong>, घोषत्व: <strong>सघोष</strong></li>
+                    </ul>
+                    <p>
+                        <strong>९. उच्चारण स्थान र घोषत्वका आधारमा दिइएका व्यञ्जन वर्गको वर्गीकरण गर्नुहोस् । (घ, द, छ, ह, फ, य)</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>वर्ण: <strong>घ</strong> - उच्चारण स्थान: <strong>कण्ठ्य</strong>, घोषत्व: <strong>सघोष</strong></li>
+                        <li>वर्ण: <strong>द</strong> - उच्चारण स्थान: <strong>दन्त्य</strong>, घोषत्व: <strong>सघोष</strong></li>
+                        <li>वर्ण: <strong>छ</strong> - उच्चारण स्थान: <strong>तालव्य</strong>, घोषत्व: <strong>अघोष</strong></li>
+                        <li>वर्ण: <strong>ह</strong> - उच्चारण स्थान: <strong>स्वरयन्त्रमुखी</strong>, घोषत्व: <strong>सघोष</strong></li>
+                        <li>वर्ण: <strong>फ</strong> - उच्चारण स्थान: <strong>ओष्ठ्य</strong>, घोषत्व: <strong>अघोष</strong></li>
+                        <li>वर्ण: <strong>य</strong> - उच्चारण स्थान: <strong>तालव्य</strong>, घोषत्व: <strong>सघोष</strong></li>
+                    </ul>
+                    <p>
+                        <strong>१०. उच्चारण प्रयत्न र प्राणत्वका आधारमा दिइएका व्यञ्जन वर्णको वर्गीकरण गर्नुहोस् । (म, स, ठ, ज, थ, र )</strong>
+                    </p>
+                    <ul class="list-disc list-inside ml-5">
+                        <li>वर्ण: <strong>म</strong> - उच्चारण प्रयत्न: <strong>नासिक्य</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                        <li>वर्ण: <strong>स</strong> - उच्चारण प्रयत्न: <strong>संघर्षी</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                        <li>वर्ण: <strong>ठ</strong> - उच्चारण प्रयत्न: <strong>स्पर्शी</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                        <li>वर्ण: <strong>ज</strong> - उच्चारण प्रयत्न: <strong>स्पर्श-संघर्षी</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                        <li>वर्ण: <strong>थ</strong> - उच्चारण प्रयत्न: <strong>स्पर्शी</strong>, प्राणत्व: <strong>महाप्राण</strong></li>
+                        <li>वर्ण: <strong>र</strong> - उच्चारण प्रयत्न: <strong>कम्पित</strong>, प्राणत्व: <strong>अल्पप्राण</strong></li>
+                    </ul>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggleSummaryButton').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summaryContent');
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.classList.add('hidden');
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+    </script>
+</body>
+</html>
+

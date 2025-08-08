@@ -1,0 +1,704 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>एक चिहान Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Explicit left alignment for specific short text blocks */
+        .text-left-align {
+            text-align: left !important;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for एक चिहान Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">५. एक चिहान Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleEkChihanSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleEkChihanSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="ekChihanSummaryText" class="text-lg brighter-gradient-text mb-4" style="display: none;">
+                    “एक चिहान” पाठका लेखक प्रदीप श्रेष्ठ नेपाली साहित्यका एक प्रभावशाली कथाकार हुन्। उनी आफ्नो सरल र मार्मिक शैलीका लागि परिचित छन् जसले मानवीय मनोभाव र जीवनका गहिरा पक्षहरूलाई सहज तरिकाले उजागर गर्छन्। उनका लेखनहरूमा दैनिक जीवनका सामान्य घटनाहरूमा लुकेको गहिरो अर्थ भेटिन्छ। यस पाठमा उनले मृत्यु र जीवनका अन्त्य तथा त्यसपछिका भावनात्मक अवस्थालाई जीवन्त रुपमा चित्रण गरेका छन् जसले पाठकलाई गहिरो सोचमा लगाउँछ।<br><br>
+
+कथाको केन्द्रबिन्दु एउटा चिहान हो, जुन केवल माटो र ढुङ्गाको थुप्रो नभई मानिसको जीवनको अन्तिम विश्रामस्थल र सम्मानको प्रतिक हो। चिहानले मृत्युपछि पनि व्यक्ति र उसको स्मृतिलाई जोगाउने भूमिका खेल्छ। लेखकले यस चिहानलाई जीवनको अन्त्य नभई नयाँ अध्यायको सुरुवातका रूपमा देखाएका छन्। पाठले मृत्युपछि पनि केही कुरा बाँकी रहने र त्यसले जीवनलाई गहिरो अर्थ प्रदान गर्ने कुरा बताउँछ।<br><br>
+
+चिहानको वरिपरि रहेको शान्त र सुनसान वातावरणले मानिसलाई जीवनका गम्भीर प्रश्नहरूको सोच्न बाध्य पार्छ। पाठमा त्यस ठाउँमा पुगेर आउने भावना, शोक, शान्ति र सम्झनाको मिश्रणलाई सूक्ष्म भावनात्मक तरिकाले प्रस्तुत गरिएको छ। यो वातावरणले पाठकलाई जीवनको अर्थ, मृत्युपछि हुने अवस्था र मनको शान्ति बारे गम्भीर चिन्तन गर्न उत्प्रेरित गर्छ। यहाँ मृत्युलाई मात्र अन्त्य नभई एक नयाँ यात्रा पनि भनेर बुझ्न सकिन्छ।<br><br>
+
+लेखकले मृत्युलाई जीवनचक्रको एउटा अविभाज्य भागको रूपमा देखाएका छन्। चिहानले मृतकको शरीरलाई मात्र होइन, उसको सम्झना र कर्मलाई पनि जोगाउँछ। जीवनका संघर्ष, उपलब्धि र सम्बन्धहरू चिहानको माध्यमबाट जीवित रहन्छन्। यसले मृत्युपछि पनि व्यक्ति समाजमा केही न केही छाप छोड्ने कुरा प्रष्ट पार्छ। जीवन र मृत्युवीचको सिमाना धुंधली बनिन्छ र त्यसले हामीलाई जीवनका मूल्य र महत्व बुझ्न सिकाउँछ।<br><br>
+
+पाठले मृत्युपछि समाज र परिवारले मृतकलाई कसरी सम्झन्छन् र सम्मान गर्छन् भन्ने सामाजिक पक्षलाई पनि उजागर गरेको छ। चिहानले मानिसको जीवनमा कस्तो प्रभाव र स्मृति छोडियो भन्ने संकेत गर्दछ। यसले हामीलाई जीवनमा सदाचार र सकारात्मक छाप छोड्न उत्प्रेरित गर्छ। यसरी, “एक चिहान” पाठले जीवन र मृत्युवीचको भावनात्मक र दार्शनिक सम्बन्धलाई गहिरो रूपमा चित्रण गर्दै मानवीय संवेदनशीलता र जीवनका अमूर्त पक्षहरूलाई बुझ्न मद्दत गर्दछ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. शब्द र अर्थका बिचमा जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>रुजु – कुनै कुरा ठिक छ कि छैन भनी जाँच्ने काम</p>
+                            <p>कविराज – आयुर्वेदिक उपचार गर्ने चिकित्सकको एक उपाधि</p>
+                            <p>पेस्की – काम पूरा हुनु पहिले दिइने रकम</p>
+                            <p>तल्सिङ – मोहीलाई जग्गा कमाउन दिने व्यक्ति, जग्गाधनी</p>
+                            <p>समवेदना – उस्तै दु:खको अनुभव</p>
+                            <p>निर्दयी – दया नभएको</p>
+                            <p>अकर्मण्य – केही पनि काम नगर्ने, निस्क्रिय</p>
+                            <p>मुराद – भित्री आशय</p>
+                            <p>सान्त्वना – आश्वासन, ढाडस</p>
+                            <p>हथुङ्गा – हातको नाडीदेखि औंलाका टुप्पासम्मको भाग</p>
+                            <p>दागबत्ती – शवका मुखमा राख्ने बत्ती</p>
+                            <p>कृतज्ञता – अरूले गरेको गुनप्रति धन्यवाद दिने भाव</p>
+                        </div>
+                        <p class="text-left-align"><strong>२. पाठमा प्रयोग भएका दिइएका शब्दको अर्थ पहिचान गरी लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>गुभाजु – चुपचाप, गंभीर स्वभावका व्यक्ति</p>
+                            <p>उघाड –  खोल्नु, खोलिएको अवस्था</p>
+                            <p>फोने –  फुल्ने, बढ्न</p>
+                            <p>माचाछी – माछा मार्ने व्यक्ति</p>
+                            <p>नङ्के –  नङ छोटो र कुटेको मानिस</p>
+                            <p>बिचा: – बीचमा, मध्यान्तर, बीचको स्थान</p>
+                            <p>डल्लेठो – पातलो, सुक्खा, झरझर गरेको</p>
+                            <p>खर्पन –  जुत्ता लगाउने ठाउँ, पायदान</p>
+                            <p>क्वेना – खाने वा पिउने स्थान (साँझको भोजन वा स्याहार गर्ने ठाउँलाई जनाउन पनि प्रयोग हुन्छ)</p>
+                        </div>
+                        <p class="text-left-align"><strong>३. दिइएका शब्दको उस्तै अर्थ दिने शब्द पहिचान गरी लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>दीक्षा – आरम्भ, शुरुवात</p>
+                            <p>सितिमिति – सिस्नो, चिसो</p>
+                            <p>उपचार – उपचार, चिकित्सा</p>
+                            <p>पेटपालो – खाना, भोजन</p>
+                            <p>मृत्यु – निधन, मृत्यू</p>
+                            <p>बोली – भाषा, वक्तव्य</p>
+                            <p>मौन – चुप्पी, निश्चब्धता</p>
+                            <p>तत्क्षण – तुरुन्त, सिधा</p>
+                            <p>फजिती – सफलता, विजय</p>
+                            <p>सावगास – सम्मान, आदर</p>
+                        </div>
+                        <p class="text-left-align"><strong>४. दिइएका अनेकार्थक शब्दलाई फरक फरक अर्थ दिने गरी वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>उत्तर</strong><br><span class="brighter-gradient-text">१. प्रश्नको उत्तर दिनुपर्छ।<br>२. पूर्वबाट पश्चिमतर्फ जानको लागि हामीले उत्तर दिशा रोज्यौं।</span></p>
+                            <p><strong>खरी</strong><br><span class="brighter-gradient-text">१. यो फल धेरै खरी छ। (तितो)<br>२. जाडो मौसममा खरी लागेको छ। (चिसो)</span></p>
+                            <p><strong>गोल</strong><br><span class="brighter-gradient-text">१. खेल मैदानमा बच्चाले बललाई गोल मा पारे।<br>२. उसको अनुहार गोल आकारको छ।</span></p>
+                            <p><strong>जग</strong><br><span class="brighter-gradient-text">१. पानी राख्न ठूलो जग चाहिन्छ।<br>२. उहाँलाई ठूलो जग पाइएको छ। (पद, सम्मान)</span></p>
+                            <p><strong>तान</strong><br><span class="brighter-gradient-text">१. उसले डोरीलाई तन्काएर तान दियो।<br>२. उसले कसरतमा धेरै तान लियो। (शक्ति)</span></p>
+                            <p><strong>तर</strong><br><span class="brighter-gradient-text">१. मलाई जान मन लाग्दैन, तर जानै पर्छ।<br>२. पानी भित्र गयो तर माछा झैं पौडियो।</span></p>
+                            <p><strong>पत्र</strong><br><span class="brighter-gradient-text">१. मैले मेरो साथीलाई पत्र लेखें।<br>२. झरनाको पात हरियो पत्र जस्तै छ।</span></p>
+                            <p><strong>वर</strong><br><span class="brighter-gradient-text">१. विवाहमा दुलाहा अर्थात् वर आएको छ।<br>२. यो तरकारी निकै वर छ। (स्वादिलो)</span></p>
+                            <p><strong>बाली</strong><br><span class="brighter-gradient-text">१. किसानले खेतमा गहुँको बाली लगायो।<br>२. उनको आर्थिक बाली राम्रो छ। (सम्पत्ति)</span></p>
+                            <p><strong>रहर</strong><br><span class="brighter-gradient-text">१. उसलाई सफलता पाउने रहर छ।<br>२. त्यस ठाउँमा मलाई पुरानो सम्झनाको रहर भयो।</span></p>
+                            <p><strong>साँचो</strong><br><span class="brighter-gradient-text">१. उसले गरेको कुरा साँचो हो।<br>२. काठको साँचो बनाएर पानी भर्ने।</span></p>
+                            <p><strong>सुर</strong><br><span class="brighter-gradient-text">१. गीत गाउन सुर मिलाउनु पर्छ।<br>२. त्यो शहर हिमालको सुर छ। (किनारा)</span></p>
+                            <p><strong>हार</strong><br><span class="brighter-gradient-text">१. खेलमा उसले हार भोग्यो।<br>२. दिदीले मलाई फूलको हार दिए।</span></p>
+                            <p><strong>जाली</strong><br><span class="brighter-gradient-text">१. माछा मार्न जाली प्रयोग गरिन्छ।<br>२. उसको कुरा सबै जाली निक्लियो। (झूट)</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>५. दिइएका शब्दको श्रुतिसमभिन्नार्थक शब्द लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>दिन – दीन</p>
+                            <p>दिशा – दिसा</p>
+                            <p>शव – सब</p>
+                            <p>बाँस – बास</p>
+                            <p>व्यसन – बेसन</p>
+                            <p>प्रदान – प्रधान</p>
+                            <p>कोस – कोश</p>
+                            <p>जाति – जाती</p>
+                            <p>फेरि – फेरी</p>
+                            <p>खालि – खाली</p>
+                            <p>पाश – पास</p>
+                            <p>गर्भ – गर्व</p>
+                            <p>विष – बिस</p>
+                            <p>आदि – आदी</p>
+                            <p>पाइन् – पाइन</p>
+                            <p>ताप – टाप</p>
+                            <p>देखि – देखी</p>
+                            <p>सिता – सीता</p>
+                        </div>
+                        <p class="text-left-align"><strong>६. दिइएका शब्दको समूहवाचक शब्द लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>कमिला – झुण्ड</p>
+                            <p>गाईवस्तु – दल / गोठ</p>
+                            <p>मौरी – झुण्ड / छत्ता</p>
+                            <p>बारुला – समूह</p>
+                            <p>बाँस – जंगल / वने</p>
+                            <p>दाउरा – गुच्छा</p>
+                            <p>डोरी – फेद</p>
+                            <p>मानिस – जाति / समूह</p>
+                            <p>मकै – बाली</p>
+                            <p>भेडा – झुण्ड</p>
+                            <p>पराल – थुप्रो</p>
+                            <p>पर्वत – शृङ्खला / पहाड समूह</p>
+                            <p>सिपाही – दस्ता / फौज</p>
+                            <p>धुवाँ – बादल / बादलझैँ समूह</p>
+                        </div>
+                        <p class="text-left-align"><strong>७. शिक्षकसँग सोधेर दिइएका प्रतीकात्मक शब्दको अर्थ लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>छेपारो – रङ बदल्ने</p>
+                            <p>कुवेर – धनी</p>
+                            <p>रामराज्य – सम्पन्न र सुखी राज्य</p>
+                            <p>दुर्वासा – रिसाहा</p>
+                            <p>दधिची – त्यागी</p>
+                            <p>सुदामा – गरिब, निर्धन</p>
+                            <p>भीष्म – भयानक</p>
+                            <p>बाँदर – आफ्नो घर बिगार्ने अरुको पनि बनाउन नदिने</p>
+                            <p>साँढे – मिचाहा</p>
+                            <p>जुको – परजीवी</p>
+                            <p>सावित्री – सती वा पतिव्रता</p>
+                            <p>गङ्गा – पवित्रता</p>
+                            <p>स्याल – बाठो</p>
+                            <p>ब्वाँसो – धूर्त</p>
+                            <p>आकाश – रित्तो वा विशाल</p>
+                            <p>एकलव्य – लगनशील वा एक्लो योद्धा</p>
+                            <p>मौरी – परिश्रमी</p>
+                            <p>लक्ष्मण रेखा – सीमा वा मर्यादा</p>
+                            <p>महाभारत – लडाइँ, झगडा</p>
+                            <p>कर्ण – दानी, उदारता</p>
+                            <p>भेडो – मुर्ख</p>
+                            <p>कुम्भकर्ण – सुताहा</p>
+                            <p>भगीरथ – प्रयत्न कठिन प्रयास</p>
+                            <p>विदुर – ज्ञानी वा विवेकी</p>
+                            <p>युधिष्ठिर – धर्मात्मा वा अजेय</p>
+                            <p>शकुनि – कपटी वा षडयन्त्रकारी</p>
+                            <p>नारद – कुरौटे</p>
+                        </div>
+                        <p class="text-left-align"><strong>८. कक्षामा छलफल गरी दिइएका सिङ्गो शब्दको अर्थ लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>शाकाहारी – सात्विक भोजन मात्र गर्ने वा माछामासु नखाने</p>
+                            <p>मांसाहारी – माछामासु खाने</p>
+                            <p>पुङमाङ – दुवैपट्टि खुला भएको ढुङ्ग्रो</p>
+                            <p>गृहस्थी – घरबार गरेर बस्ने व्यक्ति</p>
+                            <p>अल्लारे – आलोकाँचो अवस्थाको</p>
+                            <p>पेवा – निजी</p>
+                            <p>दशक – दश वर्षको अवधि</p>
+                            <p>शताब्दी – सय वर्षको समय</p>
+                            <p>सहस्राब्दी – एक हजार वर्ष</p>
+                            <p>शाश्वत – सधैं रहिरहने, चिरस्थायी</p>
+                            <p>वात्सल्य – आमाबाबुको सन्तानप्रतिको स्नेह</p>
+                            <p>न्वाँगी – नयाँ धानबाली पाकेपछि देवता वा पितृलाई चढाई खाइने दही चामल</p>
+                            <p>नाबालक – बालिग हुने उमेर नपुगेको बालक</p>
+                            <p>लैनो – भर्खर बियाएको</p>
+                            <p>बकेर्नो – दुध थाक्ने बेला भएको दुहुनो</p>
+                            <p>सत्पात्र – असल व्यक्ति वा पात्र</p>
+                            <p>आद्योपान्त – सुरुदेखि अन्त्यसम्म</p>
+                            <p>क्षितिज – पृथ्वी र आकाश जोडिएजस्तो देखिने</p>
+                            <p>उपवास – केही नखाई व्रत बस्ने काम</p>
+                            <p>सर्वभक्षी – भोज्य र अभोज्य विचार नगरी सबै कुरा खाने</p>
+                            <p>ढडिया – माछा समात्ने सोलीजस्तो पासो</p>
+                            <p>अभेद्य – प्वाल पार्न नसकिने</p>
+                            <p>कटुभाषी – नमिठो बोल्ने</p>
+                            <p>अल्पभाषी – थोरै भाषा जान्ने</p>
+                            <p>मृदुभाषी – मिठो भाषा बोल्ने</p>
+                            <p>बहुभाषी – धेरै भाषा बोल्ने</p>
+                            <p>बहुरूपी – धेरै रूप धारण गर्ने</p>
+                            <p>अघोरी – जे पायो त्यही खाने</p>
+                            <p>कायममुकायम – कार्यबाहक</p>
+                            <p>कार्यवाहक – कुनै व्यक्तिको अनुपस्थितिमा नियमानुसार अधिकार लिई अस्थायी रूपमा काम गर्ने कर्मचारी</p>
+                            <p>पर्म – आलोपालो गरी एकले अर्काको काम गरिदिने चलन</p>
+                            <p>अवर्णनीय – वर्णन गर्न नसकिने</p>
+                            <p>अव्यक्त – प्रकट नभएको</p>
+                            <p>थाती – धरौटी जमानत</p>
+                            <p>कलस्यौली – विवाहमा कलश बोकेर जन्तीमा हिँड्ने कन्या अलौकिक – यस लोकमा नहुने वा नपाइने</p>
+                        </div>
+                        <p class="text-left-align"><strong>९. अन्तरिक्षसँग सम्बन्धित तलका शब्दलाई शब्दकोशीय अनुक्रममा मिलाई लेख्नुहोस् र तिनको अर्थ पनि पत्ता लगाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>अनुक्रममा मिलाइएको:</p>
+                            <p>उल्का, ज्ञेय, ग्रह, तारापुञ्ज, धूमकेतु, नक्षत्र, ब्रह्माण्ड, राशि, सौर्यमण्डल</p>
+                            <p>अर्थहरु :</p>
+                            <div class="ml-4 space-y-2">
+                                <p><strong>उल्का</strong> – पुञ्ज, धूमकेतु</p>
+                                <p><strong>ज्ञेय</strong> – जान्न लायक</p>
+                                <p><strong>ग्रह</strong> – सूर्य र यसको वरिपरि घुम्ने आकाशीय पिण्ड</p>
+                                <p><strong>तारापुञ्ज</strong> – आकाशमा देखिने ताराहरूको समुदाय, तारामण्डल</p>
+                                <p><strong>धूमकेतु</strong> – पुच्छ्रेतारोउल्काका राती आकाशबाट खस्न लागेको वा एक गइरहेको देखिने</p>
+                                <p><strong>नक्षत्र</strong> – तारा, सितारा मोती</p>
+                                <p><strong>ब्रह्माण्ड</strong> – पृथ्वी, अन्तरिक्ष, ग्रह</p>
+                                <p><strong>राशि</strong> – क्रान्तिवृत्तमा रहेका मेष, वृष, मिथुन लगायत बाह्र ताराहरुको समूह</p>
+                                <p><strong>सौर्यमण्डल</strong> – सूर्य र यसको वरिपरि घुम्ने ग्रहहरूको समूह</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>१. ‘एक चिहान’ उपन्यासको पहिलो परिच्छेद पढ्नुहोस् र दिइएका प्रश्नको उत्तर भन्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) अष्टनारानले श्रीमती, छोराहरू र छोरीलाई के भनेर सम्झाउँछन् ?</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासको पहिलो परिच्छेदमा, अष्टनारानले आफ्नो श्रीमती, छोराहरू र छोरीलाई यस्तो सम्झाउँछन् कि जीवन अनिश्चित छ र मानिसले आफ्नो मृत्युको बारेमा सोच्नुपर्छ। उनी आफ्नो परिवारलाई जीवनका दुःख–सुख र मृत्युको सत्यलाई आत्मसाथ गरेर अघि बढ्न प्रेरणा दिन्छन्। अर्थात्, उनले परिवारलाई चेतावनी दिन्छन् कि सबैको अन्ततः मृत्यु हुन्छ, त्यसैले एकअर्काप्रति सद्भाव राख्न र जीवनको मूल्य बुझेर सही बाटोमा लाग्नुपर्छ।</span></p>
+                            <p class="text-left-align"><strong>(ख) अष्टनारानले आफ्नो काजकिरियाका लागि कस्तो बन्दोबस्त मिलाएका छन् ?</strong><br><span class="brighter-gradient-text">अष्टनारानले आफ्नो काजकिरियाका लागि सहज र मर्यादित बन्दोबस्त मिलाएका छन्। उनी आफ्ना आफन्त र छरछिमेकका मानिसहरूसँग मिलेर ठूलो सङ्गठन र व्यवस्थापन गरेर सबै कुरा ठीकठाक गर्न चाहन्छन्, जसले गर्दा उनको अन्तिम संस्कार मर्यादापूर्वक र सम्मानजनक तरिकाले सम्पन्न होस्। उनले आफ्नो मृत्यु पछि परिवारलाई झन्झट र तनाव नहोस् भनी सबै पक्षहरूको ध्यान राखेर व्यवस्थित तयारी गरेका छन्।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>२. दिइएका बुँदालाई समेटेर ‘एक चिहान’ उपन्यासको परिच्छेद दुई र तीनको सार लेख्नुहोस् :</strong><br><span class="brighter-gradient-text">दुई महिना देखि सिकिस्त बिरामी अष्टनारानको उपचार सुरु हुन्छ । उनलाई आफ्नै टोलको गुभाजुबाट एक महिना, असनका तुयु गुभाजुबाट एक्काइस दिन, माहिला कविराजबाट एक हप्ता उपचार गराउँछन् । येति गर्दा पनि कसैको सिप लाग्दैन र व्यथा झन् बढ्दै जान्छ । गाउँमा एउटा डाक्टर त थिए तर उसँग उपचार गराउन उनीहरूसँग पैसा भने थिएन । उनीहरुले क्रियाको खर्चका लागि भनेर राखेको पचिच्स रुपियाँले बाबुको उपचार गर्ने निर्णय गर्छन् र डाक्टर गोदत्तप्रसादकहाँ जान्छन् । गोदत्तप्रसादले शिवनारानको आग्रहलाई महत्त्व दिँदैन । अष्टनारानलाई बिमारले साह्रो पारेपछि पुननारान पनि डाक्टरकहाँ पुग्छन् । शिवनारान र पुननारानले अनुरोध गर्दा पनि गोदत्तप्रसाद आउन तयार हुँदैनन् । घरपुग्नासाथ पाँच रुपियाँ फी दिने कबोल गरेपछि मात्र गोदत्तप्रसाद अष्टनारानकहाँ जान तयार हुन्छन् ।</span></p>
+                        <p class="text-left-align"><strong>३. तलको उपन्यास अंश पढी दिइएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>(क) प्रेम हुन केही गाह्रो छैन भन्नुको तात्पर्य के हो ?</strong><br><span class="brighter-gradient-text">“प्रेम हुन केही गाह्रो छैन” भन्नुको तात्पर्य हो—प्रेम हुनु स्वाभाविक र सहज कुरा हो, जुन सहजै कसैको मनमा उत्पन्न हुन सक्छ। प्रेम जतिसुकै सरल र स्वाभाविक भए तापनि त्यसलाई कायम राख्नु, सँधै टिकाउ बनाउन कठिन हुन्छ। अर्थात्, प्रेमको शुरुवात सजिलो भए पनि त्यसलाई सही तरिकाले बुझ्न र निभाउन चुनौती हुन्छ।</span></p>
+                            <p class="text-left-align"><strong>(ख) दिइएको उपन्यास अंशमा प्रेमका सम्बन्धमा कसरी व्याख्या गरिएको छ ?</strong><br><span class="brighter-gradient-text">दिइएको उपन्यास अंशमा प्रेमका सम्बन्धमा यस्तो व्याख्या गरिएको छ कि प्रेम सहज रूपमा उत्पन्न हुन सक्ने</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>४. अष्टनारानले मर्ने वेलामा आफ्ना छोरालाई किसानको सिद्धान्तका बारेमा बताएका छन् । उनले बताएका किसानका सिद्धान्त के के हुन्, उपन्यासको छैटौँ परिच्छेद पढी उत्तर लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">अष्टनारानले मर्ने वेला आफ्ना छोरालाई किसानको सिद्धान्तका बारेमा धेरै महत्वपूर्ण कुरा सम्झाएका छन्। उपन्यासको छैटौँ परिच्छेद अनुसार, उनले छोराहरुलाई जीवनमा सफल हुन र परिश्रमशील बन्न किसानको सिद्धान्तका आधारमा केही महत्वपूर्ण पाठ सिकाएका छन्। सबैभन्दा पहिले, अष्टनारानले मेहनत र लगनशीलताको महत्वबारे जोड दिएका छन्। उनी भन्छन् कि जीवनमा सफल हुनको लागि आफ्नो खेत जस्तै आफ्नो जीवन र कामलाई पनि राम्रोसँग सम्हाल्नुपर्छ। जस्तै किसानले खेतमा पानी हाल्ने, मल हाल्ने, समयमै बाली टिप्ने र राम्रो सम्हाल गर्ने काम गर्छ, त्यस्तै मानिसले पनि आफ्नो जिम्मेवारीलाई ध्यानपूर्वक पूरा गर्नुपर्छ। मेहनत बिना जीवनमा राम्रो फल मिल्दैन भन्ने कुरा उनले स्पष्ट पारेका छन्। दोस्रो, अष्टनारानले धैर्यता र सहनशीलताको कुरा बताएका छन्। किसानलाई कहिलेकाहीं प्राकृतिक विपत्तिहरू जस्तै हावाहुरी, वर्षा कमी वा धेरै हुने, कीरा लाग्ने आदि चुनौतीहरूसँग जुध्नुपर्छ। तर किसानले हार मान्दैन, निरन्तर प्रयास गर्छ। उनले छोराहरुलाई पनि जीवनमा आउने कठिनाइ र असफलतालाई धैर्यपूर्वक सामना गर्न सिकाएका छन्। सफलताका लागि निरन्तर प्रयास र आत्मबल आवश्यक रहेको कुरा उनले जोड दिएका छन्। तेस्रो, अष्टनारानले आत्मनिर्भर बन्ने र आफ्नो कामलाई गम्भीरतापूर्वक गर्ने सन्देश दिएका छन्। किसान जस्तै प्रत्येक व्यक्तिले आफ्नो काममा निष्ठा राखेर इमानदारीपूर्वक लाग्नुपर्छ। अरुको भर नपरेर आफैँ अघि बढ्नुपर्छ भन्ने कुरा उनीले छोराहरुलाई भनेका छन्। अन्त्यमा, अष्टनारानले जीवनका सिद्धान्तलाई किसानको कामसँग तुलना गरेर छोराहरुलाई प्रोत्साहित गरेका छन् कि जीवन पनि खेतीझैँ हो, जहाँ परिश्रम, धैर्यता, निष्ठा र आत्मबलले मात्र राम्रो परिणाम दिन्छ। यसरी उनले छोराहरूलाई जीवनका कठिनाइलाई परास्त गरेर सफल बन्ने बाटो देखाएका छन्। यस प्रकार, उपन्यासको छैटौँ परिच्छेदमा अष्टनारानले छोराहरुलाई मेहनत, धैर्यता, आत्मनिर्भरता र निष्ठाका महत्वपूर्ण सिद्धान्तहरू सिकाइदिएका छन् जसले उनीहरूको जीवनलाई समृद्ध र सफल बनाउन मद्दत पुर्‍याउनेछ।</span></p>
+                        <p class="text-left-align"><strong>५. मरेपछि गरिने काजक्रिया र दानदक्षिणासम्बन्धी अष्टनारानको विचारसँग तपाईंको सहमति वा विमति के छ, तर्कसहित लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">अष्टनारानले मरेपछि गरिने काजकिरिया र दानदक्षिणा सम्बन्धमा जे विचार व्यक्त गर्नुभएको छ, म त्यससँग पूर्ण रूपमा सहमत छु। उनका विचारमा, मृत्युपछि गरिने काजकिरिया सादा, मर्यादित र अनावश्यक खर्चविहीन हुनुपर्छ। यसले परिवारमाथि आर्थिक बोझ नपरोस् र समाजमा पनि काजकिरियाले असल उदाहरण प्रस्तुत गरोस् भन्ने उनको चाहना रहेको देखिन्छ। मेरो विचारमा पनि, मरेपछि गरिने काजकिरिया अत्यन्तै सरल र सम्मानजनक हुनुपर्छ। किनभने मृत्यु जीवनको अन्तिम सत्य हो र यसमा कुनै भव्यता वा खर्चले आत्माको शान्तिमा फरक पार्दैन। बरु, अत्यधिक खर्च र देखावटी संस्कारहरूले परिवारमा आर्थिक समस्या ल्याउन सक्छ, जसले बाँकी जीवनलाई कठिन बनाउँछ। दानदक्षिणा सम्बन्धमा पनि अष्टनारानले ज्ञान र संस्कार अनुसार उचित मात्रामा मात्र गर्नुपर्ने सुझाउँछन्। अत्यधिक दानले परिवारको आर्थिक स्थिति कमजोर हुन सक्छ भने कम मात्रामा गरिने दानले धार्मिक र सामाजिक कर्तव्य पनि पूरा हुन्छ। यसले सन्तुलन र विवेकको महत्त्व देखाउँछ। सारांशमा भन्नुपर्दा, मरेपछि गरिने काजकिरिया र दानदक्षिणा यथासम्भव सरल, मर्यादित र परिवारको अवस्थालाई ध्यानमा राखेर गर्नुपर्छ भन्ने अष्टनारानको विचार अत्यन्त व्यावहारिक र मानवतावादी छ। यसले मृत व्यक्तिको सम्मान गर्ने संस्कारलाई कायम राख्दै परिवारलाई आर्थिक र मानसिक रूपमा सुरक्षित राख्न मद्दत गर्दछ। त्यसैले म यसको पूर्ण समर्थन गर्छु।</span></p>
+                        <p class="text-left-align"><strong>६. ‘एक चिहान’ उपन्यासमा नेपाली समाजको कस्तो अवस्थाको चित्रण गरिएको छ, वर्णन गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासका लेखक हृदय चन्द्र सिंह प्रधान (वि.सं. १९७२–२०१६) आधुनिक नेपाली साहित्यका प्रभावशाली लेखक मध्ये एक हुन्। उहाँको रचना शैली सरल र स्पष्ट छ, जसले समाजका विभिन्न पक्षहरूलाई बडो सूक्ष्मतापूर्वक उजागर गर्दछ। ‘एक चिहान’ उपन्यासमा उनले नेपाली समाजको विविध समस्याहरूलाई गहिरो रूपमा चित्रण गर्नुभएको छ, जसले पाठकलाई समाजको यथार्थ बुझ्न प्रेरित गर्छ। उपन्यासमा नेपाली समाजको चित्रण गर्दा विशेष गरी सामाजिक असमानता, वर्ग भेद, र परम्परागत सोचलाई देखाइएको छ। समाजमा रहेका धनी र गरिब बीचको ठूलो खाडल उपन्यासमा प्रष्ट रूपमा प्रस्तुत गरिएको छ। साथै, धार्मिक र संस्कृतिक आडम्बरी संस्कारहरूको प्रभावले मानिसहरूलाई केन्द्रीकृत बनाएको र उनीहरूको वास्तविक आवश्यकताबाट टाढा पुर्याएको कुरा पनि उजागर गरिएको छ। जीवन र मृत्युलाई लिएर भएको अनावश्यक खर्च र देखावटी संस्कारहरूले परिवारमा आर्थिक बोझ थप्ने र सामाजिक विकासलाई बाधा पुर्याउने पक्षलाई लेखकले प्रभावकारी तरिकाले चित्रित गरेका छन्। यसरी ‘एक चिहान’ले नेपाली समाजको सामाजिक, आर्थिक र सांस्कृतिक अवस्थालाई साँच्चिकै यथार्थपूर्ण तरिकाले प्रस्तुत गरेको छ। यसले पाठकहरूलाई समाजका असल र खराब पक्षहरूलाई चिनेर सुधार गर्न प्रेरणा दिन्छ। हृदयचन्द्र सिंह प्रधानले उपन्यासमार्फत परम्परागत सोचलाई चुनौती दिएर नयाँ सोच र जीवन मूल्यका पक्षलाई स्थापित गर्न खोजेका छन्, जसले नेपाली समाजलाई सुधार्न र प्रगतिशील बनाउने दिशा देखाउँछ।</span></p>
+                        <p class="text-left-align"><strong>७. ‘एक चिहान’ उपन्यासका आधारमा दिइएका पात्रको चरित्र चित्रण गर्नुहोस् :</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासका लेखक हृदय चन्द्र सिंह प्रधान (वि.सं. १९७२–२०१६) ले आफ्ना पात्रहरूलाई जीवन्त र यथार्थपरक बनाउँदै नेपाली समाजका विभिन्न पक्षहरूलाई उजागर गर्न सफल भएका छन्। उहाँका पात्रहरू मार्फत मानवीय भावना, संघर्ष र सामाजिक अवस्थाका विविध आयामहरू प्रस्तुत भएका छन् जसले उपन्यासलाई प्रभावशाली बनाएको छ। उपन्यासका मुख्य पात्र अष्टनारान एक मेहनती, धैर्यशील र परिवारप्रतिको गहिरो माया राख्ने व्यक्ति हुन्। उनी किसान हुनुका साथै जीवनका कठोर परिस्थिति सामना गर्ने क्षमता राख्नुहुन्छ। अष्टनारानले आफ्नो मृत्युको तयारी गर्दा पनि परिवारका लागि जिम्मेवारी निभाउन खोज्नुहुन्छ र छोराछोरीलाई जीवनका महत्वपूर्ण सिद्धान्तहरू सिकाउनुहुन्छ। उनको चरित्रमा परिश्रम, धैर्यता र आत्मनिर्भरताको विशेषता प्रष्ट देखिन्छ। अर्कोतर्फ, उपन्यासका अन्य पात्रहरू पनि सामाजिक र पारिवारिक भूमिकामा विशिष्ट छन् जसले समाजमा व्याप्त विभिन्न चुनौती र मूल्यहरूको प्रतिनिधित्व गर्छन्। यसरी ‘एक चिहान’का पात्रहरूले नेपाली समाजका विभिन्न तह र वर्गका मान्छेहरूलाई प्रतिबिम्बित गर्छन्। हृदय चन्द्र सिंह प्रधानले यी पात्रहरूको माध्यमबाट जीवनका यथार्थता, सामाजिक बन्धन र मानवीय सम्बन्धहरूलाई गहिरो अर्थमा देखाउनुभएको छ। पात्रहरूको चरित्र चित्रण उपन्यासको कथानकलाई अझ प्रभावकारी र मन छुने बनाउँछ, जसले पाठकमा दीर्घकालीन प्रभाव पार्ने गर्दछ।</span></p>
+                        <p class="text-left-align"><strong>८. डाक्टर गोदत्तप्रसाद र सुरमान सुब्बाका चरित्रमा पाइने समानता के के हुन् एक चिहान’ उपन्यासका आधारमा लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासका आधारमा डाक्टर गोदत्तप्रसाद र सुरमान सुब्बाका चरित्रमा पाइने समानता निम्न छन्: पहिलो, दुबै पात्र समाजसेवी र प्रगतिशील छन्। उनीहरूले आफ्नो पेशा र जीवनमार्फत समाजमा सकारात्मक परिवर्तन ल्याउन चाहेका छन्। डाक्टर गोदत्तप्रसाद स्वास्थ्य क्षेत्रमा समर्पित छन् भने सुरमान सुब्बा शिक्षा र सामाजिक जागरणमा सक्रिय छन्। दोस्रो, दुवै पात्रहरूमा उच्च नैतिकता र कर्तव्यपरायणता देखिन्छ। उनीहरू आफ्नो जिम्मेवारीलाई गम्भीरतापूर्वक लिन्छन् र व्यक्तिगत स्वार्थभन्दा माथि उठेर समाजको हितमा काम गर्छन्। तेस्रो, डाक्टर गोदत्तप्रसाद र सुरमान सुब्बा दुवैले परम्परागत सोच र रूढिवादितालाई चुनौती दिएका छन्। उनीहरू परिवर्तनको पक्षमा उभिएका छन् र नयाँ सोचलाई प्रवर्द्धन गर्न प्रयासरत छन्। यसरी, ‘एक चिहान’ उपन्यासका यी दुई पात्रले समाज सुधारका लागि समान दृष्टिकोण र उद्देश्य राखेका व्यक्तित्वहरू हुन्, जसले उपन्यासमा सकारात्मक संदेश प्रवाह गर्छन्।</span></p>
+                        <p class="text-left-align"><strong>९. ‘एक चिहान’ उपन्यासमा हर्षनारान र पुतली तथा नानीथकुँ र रामखेलावन राउतका बिचको विवाहबाट उपन्यासले के सन्देश दिन खोजेको छ, स्पष्ट पार्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासमा हर्षनारान र पुतली तथा नानीथकुँ र रामखेलावन राउतबीचको विवाहले समाजमा प्रेम, समझदारी र पारम्परिक मान्यतामा आएको परिवर्तनलाई स्पष्ट रूपमा देखाउँछ। पहिलो, यी विवाहहरूले देखाउँछन् कि विवाह केवल पारिवारिक वा सामाजिक दायित्व मात्र होइन, व्यक्तित्व र प्रेमको मेल पनि हुनुपर्छ। हर्षनारान र पुतलीको विवाहमा प्रेम र आत्मीयता प्रबल हुन्छ भने नानीथकुँ र रामखेलावन राउतको विवाहले पनि सामाजिक बन्धनहरूलाई पार गर्दै नयाँ सोचको प्रतिनिधित्व गर्छ। दोस्रो, यी विवाहहरूले उपन्यासले परम्परागत रूढिवादी सोचलाई चुनौती दिने सन्देश दिन खोजेको छ। विवाहलाई मात्र जात, सम्पत्ति वा अनुशासनको आधारमा नगरेर प्रेम, सहमति र समझदारीमा आधारित हुनुपर्ने कुरा उठाइएको छ। यसले समाजमा सामाजिक समानता र नवीन सोचको प्रवर्धन गर्छ। यसरी, ‘एक चिहान’ उपन्यासले विवाहमार्फत प्रेम, सम्मान र सामाजिक परिवर्तनको महत्वलाई उजागर गर्दै सकारात्मक र प्रगतिशील समाजको सन्देश दिन खोजेको छ।</span></p>
+                        <p class="text-left-align"><strong>१०. ‘एक चिहान’ उपन्यासको अन्त्य तपाईंलाई ठिक वा बेठिक कस्तो लाग्यो ? यदि तपाईं त्यसको लेखक हुनुभएको भए यसलाई कसरी अन्त्य गर्नुहुन्थ्यो, आफ्नो विचार लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">‘एक चिहान’ उपन्यासको अन्त्य मलाई ठिक लाग्यो किनभने यसले उपन्यासमा उठाइएका मुख्य विषयहरू—जस्तै जीवन, मृत्यु, सामाजिक व्यवहार र परिवारका सम्बन्धहरू—लाई गहिरो र व्यावहारिक तरिकाले समेटेको छ। अन्त्यले पाठकलाई सोच्न बाध्य पार्छ कि मृत्यु पछि हुने संस्कार र समाजका रूढीवादी चलनहरूलाई फेरि एक पटक समीक्षा गर्न आवश्यक छ। यसले पारिवारिक एकता, सामाजिक सहिष्णुता र जीवनको वास्तविक अर्थ खोज्ने सन्देश दिन्छ, जुन उपन्यासको विषयसँग मेल खान्छ। तर यदि म यस उपन्यासको लेखक हुने अवसर पाउँथेँ भने, म अन्त्यलाई अझ खुला र आशावादी बनाउने थिएँ। म पाठकलाई जीवन र मृत्युबारे मात्र सोच्न नभई भविष्यका पुस्ताले कसरी यी रूढीवादी विचारलाई परिवर्तन गरी आधुनिक र समृद्ध समाज बनाउन सक्छन् भन्ने विषयमा पनि प्रेरणा दिने थिएँ। उदाहरणका लागि, म छोराछोरीहरूले आफ्ना बुवाको मर्यादापूर्ण अन्त्यपछि नयाँ सोच र आधुनिक जीवनशैली अपनाउँदै सामाजिक सुधारमा कसरी लागेका छन् भन्ने कुरालाई जोड दिन्थें। यसले पाठकमा आशा र सकारात्मक सोच जगाउने थियो। समग्रमा, ‘एक चिहान’ को अन्त्य प्रभावकारी भए तापनि यदि यसलाई अझ जीवन्त र प्रगतिशील भावनाले भरिएको बनाइयो भने उपन्यासले अझ गहिरो प्रभाव पार्ने थियो भन्ने मेरो विचार छ। यसले नेपाली समाजमा परिवर्तनका सन्देशलाई थप बलियो बनाउन मद्दत गर्थ्यो।</span></p>
+                        <p class="text-left-align"><strong>११. दिइएको उपन्यास अंशबाट मुख्य मुख्य घटना टिप्नुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p>१) अष्टनारानले आफ्नो परिवारलाई मृत्युको सत्य र जीवनका कठोर यथार्थबारे सम्झाउनु।</p>
+                            <p>२) अष्टनारानले आफ्नो काजकिरियाका लागि सादगीपूर्ण र व्यवस्थित तयारी गर्नु।</p>
+                            <p>३) परिवारका सदस्यहरूबीच भावनात्मक संवाद र समझदारीको विकास हुनु।</p>
+                            <p>४) समाजमा चलिरहेको अनावश्यक खर्च र देखावटी संस्कारहरूको आलोचना हुनु।</p>
+                            <p>५) छोराछोरीलाई जीवनका महत्वपूर्ण सिद्धान्त र परिश्रमको महत्त्व सिकाउनु।</p>
+                        </div>
+                        <p class="text-left-align"><strong>१२. दिइएको उपन्यास अंशमा आएका पात्रको चरित्रचित्रण गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align"><strong>अष्टनारान</strong> — <span class="brighter-gradient-text">उपन्यासका मुख्य पात्र अष्टनारान एक जिम्मेवार, परिश्रमी, निष्ठावान् र व्यवहारिक सोच भएका व्यक्ति हुन्। उनले आफ्नो जीवनको अन्तिम चरणमा पनि परिवारको हितका लागि सोच्न छोड्दैनन्। मृत्युजस्तो गम्भीर विषयलाई पनि शान्त र विवेकी ढंगले स्वीकार गर्दै उनले काजकिरिया सादा र मर्यादित रूपमा गर्नुपर्ने सन्देश दिन्छन्। छोराछोरीलाई जीवनका यथार्थ सिकाउँदै, उनी किसानका सिद्धान्तहरू जस्तै धैर्यता, परिश्रम र आत्मनिर्भरता अङ्गिकार गर्न प्रेरित गर्छन्।</span></p>
+                            <p class="text-left-align"><strong>रञ्जनादेवी (श्रीमती)</strong> — <span class="brighter-gradient-text">रञ्जनादेवी एक भावुक, समर्पित र स्नेही गृहिणी हुन्। उनले अष्टनारानको सेवा र साथमा जीवन बिताएकी हुन् र बिस्तारै आफ्नो पतिको मृत्युको यथार्थलाई स्वीकार गर्न प्रयास गरिरहेकी छन्। उनले घरको वातावरण सन्तुलित राख्न, छोराछोरीलाई सम्हाल्न र परम्परागत संस्कारलाई सम्मान गर्ने प्रयास गर्छिन्।</span></p>
+                            <p class="text-left-align"><strong>शिवनारान</strong> — <span class="brighter-gradient-text">अष्टनारानका जेठो छोरा शिवनारान व्यवहारिक, जिम्मेवार र अनुशासित छन्। उनले बुवाको विचारलाई सम्मान गर्छन् र परिवारको दायित्वलाई सम्हाल्न तयार छन्। उनी आधुनिक सोच र परम्परागत मूल्यको सन्तुलन राख्न चाहने व्यक्ति हुन्।</span></p>
+                            <p class="text-left-align"><strong>नानीथकुँ</strong> — <span class="brighter-gradient-text">अष्टनारानकी छोरी नानीथकुँ एक संवेदनशील, भावुक तर आत्मनिर्भर बन्ने सोच भएकी युवती हुन्। उनले आफ्नो विवेकले प्रेम विवाह गर्ने निर्णय लिन्छिन् र परम्परागत सोचलाई चुनौती दिन्छिन्। उनी समाज परिवर्तनको संकेतस्वरूप प्रस्तुत हुन्छिन्।</span></p>
+                            <p class="text-left-align"><strong>रामखेलावन राउत</strong> — <span class="brighter-gradient-text">नानीथकुँको प्रेमी, जसले जात, वर्ग वा परम्परालाई नहेरी प्रेम र समझदारीमा आधारित सम्बन्ध स्वीकार गर्छ। उनी एक इमानदार, समानता चाहने र सामाजिक परिवर्तनप्रति सकारात्मक दृष्टिकोण राख्ने पात्र हुन्।</span></p>
+                            <p class="text-left-align"><strong>सुरमान सुब्बा</strong> — <span class="brighter-gradient-text">समाजप्रेमी र शिक्षाप्रतिको गहिरो समझ भएका व्यक्तित्व, जो व्यवहारिक सुधार र परम्परागत सोचलाई आधुनिक सोचले प्रतिस्थापन गर्न चाहन्छन्।</span></p>
+                            <p class="text-left-align"><strong>डाक्टर गोदत्तप्रसाद</strong> — <span class="brighter-gradient-text">व्यावसायिक दक्षतासँगै समाजसेवी भावना भएका पात्र हुन्। रोग निवारण मात्र होइन, सामाजिक चेतना फैलाउने प्रयास गर्ने उदार मन भएका व्यक्ति।</span></p>
+                        </div>
+                        <p class="text-left-align"><strong>१३. परिवेश भनेको ठाउँ, समय र वातावरण हो । उपन्यासमा परिवेश महत्त्वपूर्ण र अनिवार्य तत्त्व हो । दिइएको उपन्यास अंश पढ्नुहोस् र त्यसबाट चित्रण गरिएको परिवेशलाई बुँदागत रूपमा लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p class="text-left-align">‘एक चिहान’ उपन्यास अंशमा चित्रण गरिएको परिवेशलाई तल बुँदागत रूपमा प्रस्तुत गरिएको छ:</p>
+                            <p class="text-left-align">१.स्थान–परिवेश:</p>
+                            <div class="ml-4 text-left-align">
+                                <p>नेपाली ग्रामीण समाजको वातावरण।</p>
+                                <p>एउटा सामान्य किसानको घर र खेतको परिवेश।</p>
+                                <p>गाउँको सामूहिक सामाजिक जीवन, जहाँ छरछिमेक, आफन्त र समुदायको सहभागिता महत्त्वपूर्ण हुन्छ।</p>
+                            </div>
+                            <p class="text-left-align">२.समय–परिवेश:</p>
+                            <div class="ml-4 text-left-align">
+                                <p>जीवनको अन्त्यतिर पुगेको पात्र (अष्टनारान) को जीवनकाल।</p>
+                                <p>परम्परागत सोच र आधुनिक चेतनाबीच संक्रमणको समय।</p>
+                                <p>काजकिरिया, संस्कार, मृत्यु र परिवारको भूमिकालाई हेर्ने दृष्टिकोण परिवर्तन हुँदै गएको समय।</p>
+                            </div>
+                            <p class="text-left-align">३.सांस्कृतिक–परिवेश:</p>
+                            <div class="ml-4 text-left-align">
+                                <p>हिन्दू परम्परामा आधारित काजकिरिया र मृत्युपछिको संस्कार।</p>
+                                <p>जातीय र पारिवारिक संरचना, जहाँ बुवा–छोराको सम्बन्ध विशेष महत्त्वपूर्ण हुन्छ।</p>
+                                <p>विवाह, दानदक्षिणा, संस्कार र सामाजिक मर्यादाको प्रभाव।</p>
+                            </div>
+                            <p class="text-left-align">४.सामाजिक–परिवेश:</p>
+                            <div class="ml-4 text-left-align">
+                                <p>परम्परागत मूल्य, सामाजिक दायित्व र कर्तव्यबोध।</p>
+                                <p>वर्गीय विभाजन (धनी–गरिब, शिक्षित–अशिक्षित)।</p>
+                                <p>सामाजिक परिवर्तनको संकेत (नानीथकुँ–रामखेलावन विवाह, अष्टनारानको सोच)।</p>
+                            </div>
+                            <p class="text-left-align">५.भावनात्मक–परिवेश:</p>
+                            <div class="ml-4 text-left-align">
+                                <p>परिवारभित्रको आत्मीयता, स्नेह र जिम्मेवारी।</p>
+                                <p>मृत्युको सन्निकट अवस्थाले सिर्जिएको गम्भीर, भावुक र सोचपूर्ण वातावरण।</p>
+                                <p>पात्रहरूमा कर्तव्यबोध, प्रेम, बिछोड र विवेकको द्वन्द्व।</p>
+                            </div>
+                            <p class="brighter-gradient-text">यी परिवेश तत्त्वहरूले उपन्यासको घटनाक्रमलाई यथार्थपरक बनाउँदै पात्रहरूका व्यवहार र सोचलाई गहिरो रूपमा प्रभाव पार्छन्।</p>
+                        </div>
+                        <p class="text-left-align"><strong>१४. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2 text-left-align">
+                            <p><strong>(क) “उस्तरी बस्ती थिएन” भन्नुको तात्पर्य के हो ?</strong><br>“उस्तरी बस्ती थिएन” भन्नुको तात्पर्य त्यस बस्तीमा कम मानिस बसोबास गर्थे भन्नु हो ।</p>
+                            <p><strong>(ख) सम्साँझमै स्याल कराउनका लागि कुन कुराले सहयोग गरेको थियो ?</strong><br>सम्साँझमै स्याल कराउनका लागि तितेपातीका घारी र खरीका रुखले सहयोग गरेको थियो ।</p>
+                            <p><strong>(ग) कसरी कोटेश्वर आधुनिक जङ्गलमा बदलियो ?</strong><br>मानिसका घारी, आधुनिक भवनहरू, बिजुलीका पोल र तारका कारणले कोटेश्वर आधुनिक जङ्गलमा बदलियो ।</p>
+                            <p><strong>(घ) अहिलेको कोटेश्वरमा कस्ता मानिस बस्छन् ?</strong><br>अहिलेको कोटेश्वरमा नेता, कार्यकर्ता, व्यापारी, सुरक्षाकर्मी, न्यायकर्ता, साहुमहाजन, उद्योगी, चोरफटाहा सबै किसिमका मानिसहरु बस्छन् ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 text-left-align">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p class="text-left-align"><strong>२. ‘खेल्, हिँड्, खा, बस्, घुम्, नाच्’ जस्ता धातुबाट बनेका भूतकालिक क्रियापदको प्रयोग गरी शैक्षिक भ्रमणबारे एक अनुच्छेद लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">वि. सं. २०७७ साल माघ १३ गते हामी नेपाल मा.वि. चितवनको कक्षा १२ मा अध्ययनरत १२८ जना विद्यार्थी साथीहरू शैक्षिक भ्रमणको लागि बिहानै पोखरा हिँड्यौँ । बाटोमा कोही साथीहरू अन्ताक्षरी खेल्दै थिए अनि कोही साथीहरू नाच्दै थिए । हामी करिब एघार बजेतिर लेखनाथ पुगी खाना खाएका थियौँ । खाना खाएपछि हामी फेवाताल, बेगनास ताल, महेन्द्र गुफा, चमेरे गुफा, रुपा ताल, माटेपानी गुम्बा आदि रमणीय ठाउँहरू घुम्यौँ । त्यो दिनको बास हामी पोखरामा नै बस्यौँ । बेलुकाको खाना पनि त्यहिको होटेलमा खायौँ । हामी बेलुका गीत गाउँदै नाचेका थियौँ । भोलिपल्ट भने बिहानै सात बजे हामी चिया र नास्ता खाएर चितवन फर्कीयौँ ।</span></p>
+                        <p class="text-left-align"><strong>३. भूत कालका अभ्यस्त पक्षका क्रियापदको प्रयोग गरी आफ्नो बाल्यकालका बारेमा वर्णन गर्नुहोस् ।</strong><br><span class="brighter-gradient-text">म बाल्यकालमा साथीहरूसँग खुब खेल्थेँ । म प्रायः घुम्न जान्थेँ । म जङ्गलमा कटुस टिप्थेँ, दमौरा टिप्यै, लिची टिप्थेँ, आँप टिप्यँ, काफल टिप्थेँ, तिजु टिप्थेँ अनि साथीहरूसँगै रमाउँदै खान्थेँ । मलाई पौड़ी खेल्न असाध्यै मन पर्थ्यो । म हर्पन खोलामा खुब पौडी खेल्थेँ । मलाई पुलबाट तल खोलामा हाम फाल्न खुब मज्जा आउँथ्यो । कोही साथीहरू डुबेको खण्डमा मैले नै निकाल्थेँ । म कालिका मा. वि. मा पढ्थेँ । म कहिलेकाहीँ कश्यप तालमा पनि पौडी खेल्न जान्थेँ । म कश्यप ताल पूरै एक फन्का हान्थेँ । म तिब्र गतिमा पौडी खेल्न सक्थेँ । मलाई पौडी खेलमा कसैले जित्न सक्दैनथ्यो । म अनुशासित, मिहिनेती विद्यार्थी भनेर चिनिन्थेँ । म परीक्षामा प्रायः प्रथम नै हुन्थेँ ।</span></p>
+                        <p class="text-left-align"><strong>४. भविष्यत् कालका अपूर्ण तथा पूर्ण पक्षको प्रयोग गरी आफ्नो भविष्यको योजनाबारे लेख्नुहोस् ।</strong><br><span class="brighter-gradient-text">म भविष्यमा असल शिक्षक बनेको हुने छु । म उच्च शिक्षा अध्ययनका लागि त्रिभुवन विश्व | विद्यालयमा भर्ना भएको हुने छु । म धेरै मिहिनेत गरी पढ्दै हुने छु । राम्रो प्रतिशत ल्याएर | स्नातकोत्तर तह उत्तीर्ण गरेको हुने छु । शिक्षक सेवा आयोगको तयारी गर्दै हुने छु । आयोगको परीक्षा दिँदै हुने छु । मैले परीक्षामा राम्रोसँग लेखेको हुने छु । आयोगको परीक्षामा नाम निकालेको हुने छु । दुर्गम गाउँमा शिक्षाको ज्योति छर्दै हुने छु । म असल एवं कर्तव्यनिष्ठ शिक्षक बनेको हुने छु ।</span></p>
+                        <p class="text-left-align"><strong>५. दिइएको अनुच्छेदलाई वर्तमान कालको अपूर्ण पक्षमा परिवर्तन गरी लेख्नुहोस् :</strong><br><span class="brighter-gradient-text">शिवनारान आज साबिक झैँ समयमै खेतमा जाँदै छन् । आजैदेखि उनले नानीथकुँलाई पनि खेतमा लैजान सुरु गर्दै छन् । रोपाइँ सकिएकाले खेतको सुरक्षाका लागि आजदेखि खेतमा खाने र सुत्ने अर्थात् रातदिन खेतैमा बस्ने बन्दोबस्त पनि शिवनारानले गर्दै छन् । खास गरेर शिवनारानको कोठाको एक परिवार खेतैमा बस्न थाल्दै छ । नानीथकुँ र पुननारानकी स्वास्नी अनि उनका दुई केटाकेटीसहित दिनभरि खेतमा काम गरी साँझमा फर्कदै छन् ।</span></p>
+                        <p class="text-left-align"><strong>६. दिइएको अनुच्छेदलाई भूत कालको अज्ञात पक्षमा परिवर्तन गरी लेख्नुहोस् :</strong><br><span class="brighter-gradient-text">डाक्टर गोदत्तप्रसादले आफू विवाहित र छोराछोरीको बाबु हुँ भन्ने पनि बिर्सिएछन् । उनी नानीथकुँका घरमा धाउन थालेछन् । उनीहरू एकान्तमा भेट्ने र कुराकानी गर्न थालेछन् । त्यो कुरा थाहा पाएर शिवनारानले नानीथकुँलाई सम्झाएछन् । डाक्टर गोदत्तप्रसादकी पत्नी रञ्जनादेवीले पनि सम्झाइछन्। अन्त्यमा नानीथकुँले पनि कुरा बुझिछन् । नानीथकुँ र गोदत्तप्रसादका बिचमा सम्बन्ध टुटेछ । एक दिन नानीथकुँको रामखेलावन राउतसँग भेट भएछ । रामखेलावन र नानीथकुँका बिचमा प्रेम भएछ । त्यो कुरा शिवनारानले विचार गरिराखेछन् उनले नानीथकुँको बिहे रामखेलावनसँग गराइदिएछन् । आफूले रोजेको मान्छेसँग बिहे गर्न पाएर दुवै जना खुसी भएछन् ।</span></p>
+                        <p class="text-left-align"><strong>७. शिरबिन्दु तथा चन्द्रबिन्दुको प्रयोग भएका तलका शब्दलाई वर्णानुक्रमअनुसार लेख्नुहोस् :</strong><br><span class="brighter-gradient-text">अँगार, अँध्यारो, अंश, भयौँ, वंश, सँग, संयम, संरक्षण, संलग्न, संवाद, संशय, संसार, संहार</span></p>
+                        <p class="text-left-align"><strong>८. दिइएका शब्दलाई तालिकामा देखाउनुहोस् :</strong></p>
+                        <div class="ml-4 text-left-align">
+                            <p><strong>क, ख, ग, घ अघि ‘ङ्’</strong></p>
+                            <p>अङ्क, शङ्कर, शङ्ख, पङ्खा, ढङ्ग, मङ्गल, बङ्गुर, गङ्गा, चङ्गा, सङ्घ</p>
+                            <p><strong>च, छ, ज, झ अघि (तत्सम शब्दमा मात्र) ‘ञ्’</strong></p>
+                            <p>अञ्चल, पञ्च, पुञ्ज, लाञ्छना, ब्यञ्जन, झञ्झा, मञ्जुल</p>
+                            <p><strong>ट. ठ ड ढ अघि (तत्सम शब्दमा मात्र) ‘ण्’</strong></p>
+                            <p>पण्डित, कण्ठ, कुण्ठा, दण्ड, खण्ड, खण्डन</p>
+                            <p><strong>त, थ, द ध अघि ‘न्’</strong></p>
+                            <p>सन्त, बन्धन, भिन्न, मन्तब्य, परन्तु पन्थ, बन्दी, खिन्न</p>
+                            <p><strong>प. फ ब भ अघि ‘म्’</strong></p>
+                            <p>कम्प, पम्फा, अम्बा, लम्ब, स्तम्भ, जम्मा</p>
+                            <p><strong>य, र, ल, व, श, ष, स, ह, ज्ञ अघि (तत्सम शब्द) शिरबिन्दु</strong></p>
+                            <p>सयम, संशय, संसार संहार, संरक्षण, संलग्न, संवाद, वंश संज्ञा संज्ञान, संवाद संवत्</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Ek Chihan Notes
+        function toggleEkChihanSummary() {
+            const summaryText = document.getElementById('ekChihanSummaryText');
+            const toggleBtn = document.getElementById('toggleEkChihanSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

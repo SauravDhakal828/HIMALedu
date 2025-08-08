@@ -1,0 +1,460 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Very Old Man with Enormous Wings Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Very Old Man with Enormous Wings Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">7. A Very Old Man with Enormous Wings Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                         “A Very Old Man with Enormous Wings” is a magical realist short story by Gabriel García Márquez that explores human nature, compassion, and the clash between the extraordinary and the mundane. The story begins when a very old man with enormous wings mysteriously appears in a small village, astonishing the villagers and challenging their beliefs. The old man’s appearance raises questions about faith, cruelty, and human behavior.<br><br>
+
+The villagers are both fascinated and confused by the old man. They do not know whether he is an angel, a human, or some kind of supernatural being. Despite his wings, the old man is frail, dirty, and weak, which contrasts sharply with the villagers’ expectations of a divine creature. Instead of treating him with reverence, many villagers are skeptical, cruel, or exploitative. They cage him and show him off like a circus attraction, hoping to benefit from the curiosity he generates.<br><br>
+
+Throughout the story, Márquez uses magical realism to blend the ordinary with the fantastic. The old man’s wings symbolize mystery and the possibility of miracles, yet his physical condition reminds readers of human vulnerability. The villagers’ reactions reveal a mix of fear, ignorance, and selfishness. They fail to recognize the old man’s true nature and instead judge him by appearances and their own superstitions.<br><br>
+
+The story also highlights themes of compassion and cruelty. While some characters, like the child and Pelayo’s wife, show moments of kindness and curiosity, the majority treat the old man harshly or with indifference. This contrast exposes the complexity of human nature—our capacity for empathy alongside greed and cruelty. The story questions how society responds to the unfamiliar and the extraordinary.<br><br>
+
+In the end, the old man remains a mystery, eventually flying away as mysteriously as he came. His departure leaves the villagers to reflect on their own behavior and beliefs, but the story does not provide clear answers. Márquez invites readers to think about faith, human nature, and the way we treat those who are different or misunderstood.<br><br>
+
+In conclusion, “A Very Old Man with Enormous Wings” is a rich and thought-provoking story that blends fantasy and reality to explore deep human themes. Gabriel García Márquez uses magical realism to challenge readers to look beyond appearances and to question how we respond to the miraculous and the unknown in our lives.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. How does the narrator describe the weather and its effects in the exposition of the story?</span><br>
+                    The narrator describes the weather as continuous rain falling for three days, filling the land and houses with water. The sky and sea turn an ash grey color, and the shore’s sand glimmers faintly like powdered light but is actually a mix of mud and rotten shellfish. The light is weak and hard to see, setting a gloomy and oppressive atmosphere at the start.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Describe the strange old man as Pelayo and his wife first encounter within their courtyard.</span><br>
+                    Pelayo and his wife find the strange old man lying face down in the mud. He looks like a rag picker, with a bald head and almost completely shaved. His mouth is nearly toothless, and he has huge, dirty buzzard wings that are half-plucked and muddy. His overall appearance is decrepit and unusual.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why did Pelayo and Elisenda imprison the old man in the chicken coop?</span><br>
+                    They imprisoned the old man in the chicken coop because they thought he might be an angel sent to take their sick child. They wanted to keep him confined and safe while they figured out what to do.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why was Father Gonzaga not sure about the old man being a celestial messenger?</span><br>
+                    Father Gonzaga doubted the old man was an angel because he didn’t know how to greet ministers properly and couldn’t understand the language of God. When Father Gonzaga greeted him in Latin, the old man only murmured something in an unknown dialect. Also, the old man’s appearance was too human and lacked the dignity expected of angels.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. Many people gathered at Pelayo’s house to see the strange old man. Why do you think the crowd assembled to see him?</span><br>
+                    The crowd gathered because the old man was very unusual and mysterious, especially due to his enormous wings. People were curious and fascinated, some thinking he might be an angel or a celestial messenger, while others came for entertainment or to make fun of him.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. Some miracles happened while the crowd gathers to see the strange man. What are these miracles?</span><br>
+                    Some miracles mentioned include a blind man who could not regain his sight but grew three new teeth, a paralytic man who could not walk but almost won the lottery, and a leper whose infected sores grew sunflowers instead.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">g. State the irritating things that the people did with the strange old man.</span><br>
+                    The crowd was often cruel and teasing toward the old man. They threw stones at him, burned his side with an iron rod causing injury, pulled his feathers, and treated him like an animal rather than a human or divine being.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">h. How and why was the woman changed into a spider?</span><br>
+                    The woman was changed into a spider as punishment for disobeying her parents. She went out to dance at night without permission, and on her way back, a massive lightning strike hit the sky. A bolt of brimstone struck her and transformed her into a giant spider.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">i. Describe how Elisenda saw the strange man flying over the houses?</span><br>
+                    Elisenda saw the old man flying while she was chopping vegetables in the kitchen. She felt a breeze, went to the window, and saw the old man struggling to fly. After some effort, he successfully flew away over the houses and disappeared from sight.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. The arrival of a strange old man at Pelayo’s courtyard arouses many suspicions and explanations. Explain how the neighbour woman, Father Gonzaga and the doctor speak of the strange man. Why do you think these three people give three different kinds of interpretations?</span><br>
+                    When the strange old man with enormous wings arrives at Pelayo’s courtyard, different people respond to him in various ways based on their beliefs and roles. The neighbor woman immediately calls him an “angel” who has come to take their sick child. She explains his weakened state by saying that the rain has knocked him down. Her interpretation is rooted in local folklore and superstition, reflecting how common people often explain mysterious events through religious or mythical ideas.
+                    <br><br>
+                    In contrast, Father Gonzaga, the local priest, is doubtful about the old man being a celestial messenger. He notes that the old man does not understand Latin, the language of the Church, and fails to greet ministers properly. Additionally, the old man’s dirty appearance and the parasites on his wings do not fit the dignified image of angels as described by the Church. Father Gonzaga’s view is shaped by religious doctrine and a need for clear signs before accepting anything supernatural.
+                    <br><br>
+                    The doctor, on the other hand, approaches the strange old man from a scientific perspective. After examining him, the doctor concludes that the old man is very old and sick, noticing unusual sounds in his heart and kidneys. He treats the old man as a biological being with a strange condition rather than a supernatural entity.
+                    <br><br>
+                    These three different interpretations arise because each person sees the strange old man through their own worldview. The neighbor woman’s perspective comes from popular belief, Father Gonzaga’s from organized religion, and the doctor’s from science and rationalism. This variety highlights how people try to understand the unknown in ways that align with their cultural, religious, or scientific backgrounds.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. This story belongs to the genre of ‘magical realism, a genre perfected by Gabriel Garcia Marquez in his novels and short stories. Magical realism is a narrative technique in which the storyteller narrates the commonplace things with magical colour and the events look both magical and real at the same time. Collect five magic realist happenings from the story and argue why they seem magical to you.</span><br>
+                    The story A Very Old Man with Enormous Wings is a fine example of magical realism, where ordinary events are narrated with magical elements, blending the real and the fantastical seamlessly.
+                    <br><br>
+                    1. The very presence of the old man with enormous wings: This is the most striking magical element. He looks human yet possesses large, dirty, buzzard-like wings, which is an unusual and mysterious blending of human and mythical traits in an otherwise ordinary setting.
+                    2. The old man's incomprehensible language: His inability to communicate in any known human language, only murmuring in an "unknown dialect," suggests he is from another realm, adding a layer of mystery beyond normal human experience.
+                    3. The transformation of the woman into a giant spider: This bizarre and sudden metamorphosis, described as a punishment for disobedience, introduces a surreal and grotesque element that defies natural laws, reinforcing the magical tone.
+                    4. The "miracles" that happen around the old man: The blind man growing three new teeth (but not regaining sight), the paralytic almost winning the lottery (but not walking), and the leper's sores blooming into sunflowers are strange, symbolic, and subtly magical occurrences that twist conventional expectations of miracles.
+                    5. The old man's eventual flight: Despite his initial frailty and the mundane conditions of his captivity, his ability to eventually grow new feathers and fly away, struggling but ultimately disappearing over the horizon, is a magical image that contrasts sharply with the harsh reality and indifference he faced.
+                    <br><br>
+                    These events seem magical because they break the rules of ordinary life and natural possibility, yet the story presents them as part of normal, everyday life without extensive explanation or wonder from the characters. This seamless integration of the fantastical into the mundane is the hallmark of magical realism.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. The author introduces the episode of a woman who became a spider for having disobeyed her parents. This episode at once shifts people’s concentration from the strange old man to the spider woman. What do you think is the purpose of the author to bring this shift in the story?</span><br>
+                    The author introduces the episode of the woman who is transformed into a giant spider as a punishment for disobeying her parents, which immediately shifts the attention of the villagers from the strange old man with enormous wings to this new, bizarre spectacle. This shift highlights how easily people’s interests change, especially when something fresh and sensational appears. The villagers, who were initially fascinated by the old man’s mysterious presence, quickly lose interest in him as soon as the spider woman arrives. This shows human nature’s fickleness and short attention span, revealing how people are often distracted by novelty and fail to sustain their curiosity or concern over time. The episode also strengthens the story’s magical realism by introducing another fantastical element that seems just as strange and unbelievable as the old man, blending the magical and real worlds.
+                    <br><br>
+                    Furthermore, the shift serves as a critique of human greed, cruelty, and superficiality. Pelayo and Elisenda exploit the old man by charging admission to see him, benefiting financially from people’s curiosity. However, when the spider woman appears, the villagers forget about the old man and no longer care for him, allowing him to suffer neglect and mistreatment. This contrast exposes the selfishness of people who use the unfamiliar for entertainment or profit but lack true empathy or understanding. By diverting attention away from the old man, the author comments on society’s tendency to overlook what is genuinely extraordinary or meaningful, focusing instead on trivial distractions. This episode deepens the story’s message about human nature and the complex ways people respond to the magical and mysterious in everyday life.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. The story deals with the common people’s gullibility. How do Pelayo and his wife take advantage of common people’s whom?</span><br>
+                    The story highlights the gullibility of common people and how Pelayo and Elisenda take advantage of this trait for their own benefit. When the strange old man with wings appears in their courtyard, many villagers become curious and flock to see him, believing he might be an angel or a celestial messenger. Pelayo and Elisenda quickly realize that people’s fascination with the old man can be turned into a source of income. They start charging five cents as admission for people to come and see the “angel.” This small fee soon brings them a lot of money, which they use to improve their living conditions and eventually build a luxurious house.
+                    <br><br>
+                    Pelayo and Elisenda’s actions reveal how they exploit the common people’s superstitions and willingness to believe in the extraordinary without question. Instead of caring for the old man or understanding him, they treat him as a means to gain wealth. Their greed blinds them to the old man’s suffering and dignity. This manipulation of the villagers’ curiosity and beliefs reflects a broader commentary on human nature—how people can be easily fooled and how others may take advantage of that gullibility for personal gain.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>
+

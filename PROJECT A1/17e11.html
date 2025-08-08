@@ -1,0 +1,551 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Scientific Research is a Token of Humankind’s Survival Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Style for the summary content to be hidden/shown */
+        #summary-content {
+            display: none; /* Hidden by default */
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        #summary-content.is-visible {
+            opacity: 1;
+            display: block; /* Show when active */
+        }
+
+        /* Style for the summary button */
+        .summary-button {
+            /* Inherit button styles from browse-button for consistency */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjust padding for a button look */
+            border-radius: 9999px; /* Fully rounded */
+            font-weight: 600; /* Semi-bold */
+            font-size: 1.25rem; /* Larger font size */
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: block; /* Make it a block element to center */
+            margin: 0 auto 1rem auto; /* Center and add margin below */
+            text-align: center;
+        }
+        .summary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image -->
+        <!-- Arrow Group (top-left) -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Scientific Research is a Token of Humankind’s Survival Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text fade-in-slide-up">Scientific Research is a Token of Humankind’s Survival Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="summaryToggleButton" class="summary-button fade-in-slide-up" onclick="toggleSummary()">Summary</button>
+                <div id="summary-content" class="brighter-gradient-text mb-4">
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        “Scientific Research is a Token of Humankind’s Survival” is an insightful essay that highlights the vital role scientific research plays in the progress and survival of human beings. The essay explains how science and research have been instrumental in solving problems, improving life quality, and enabling humans to adapt to changing environments. It emphasizes that scientific inquiry is not just a pursuit of knowledge but a crucial tool for the survival of humankind in an ever-evolving world.<br><br>
+
+The essay begins by discussing the history of human civilization, showing how scientific discoveries have shaped our development. From the invention of the wheel to modern medical advancements, scientific research has allowed humans to overcome obstacles and improve living standards. The author points out that every significant leap in human progress has been linked to scientific innovation, which has provided practical solutions to everyday problems.<br><br>
+
+Next, the essay focuses on the importance of research in tackling present-day challenges. It explains how science helps us understand diseases, environmental changes, and technological needs. For example, medical research leads to the discovery of vaccines and cures, which save millions of lives. Environmental studies help us address climate change and preserve natural resources. Technology research contributes to developing tools that make life easier and more efficient. This ongoing research ensures that humans can adapt to new threats and continue thriving.<br><br>
+
+The essay also stresses that scientific research is a collective effort involving scientists, governments, and institutions working together worldwide. It requires investment, dedication, and collaboration. The author argues that supporting scientific education and funding research projects are essential for future survival. Without continued research, humanity risks stagnation and vulnerability to new challenges.<br><br>
+
+Furthermore, the essay highlights the ethical responsibility that comes with scientific knowledge. Research should be guided by the welfare of humanity and the planet. Misuse of scientific discoveries can cause harm, so it is vital to conduct research responsibly. The essay encourages a balance between innovation and ethical considerations to ensure that science serves the greater good.<br><br>
+
+In conclusion, “Scientific Research is a Token of Humankind’s Survival” makes a compelling case for the importance of science in human life. It shows that research is not just about curiosity but a necessary means to solve problems, protect life, and secure the future of mankind. The essay calls on society to value, support, and responsibly use scientific knowledge for the continued progress and survival of humanity.<br><br>
+                    </p>
+                </div>
+
+                <!-- New content starts here -->
+                <div class="mt-12"> <!-- Removed fade-in-slide-up to make it immediately visible -->
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. What does a scientist get instead of big money?</strong><br>
+                            A scientist gets freedom, camaraderie (friendship and collaboration with fellow scientists), and independence instead of big money.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. What was the problem that the nuclear powers had faced?</strong><br>
+                            The nuclear powers had agreed to a moratorium (a temporary stop) on testing nuclear weapons. However, the problem they faced was that if any country secretly conducted underground nuclear tests, it would be difficult or impossible to detect such violations and enforce the agreement.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">c. In which area did Keilis Borok’s theoretical knowledge have a direct application?</strong><br>
+                            Keilis Borok’s theoretical knowledge was directly applied in predicting natural disasters, especially earthquakes, helping to minimize damage and loss of life.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">d. What was the important decision that the politicians took before Geneva Summit?</strong><br>
+                            Before the Geneva Summit, the politicians decided to trust scientific data and agreed to the moratorium on nuclear weapons testing, relying on scientists’ advice for verification and detection methods.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">e. What are the natural and man-made disasters as mentioned by the author?</strong><br>
+                            The natural disasters mentioned include earthquakes, volcanic eruptions, and floods. Man-made disasters include nuclear explosions and wars.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12"> <!-- Removed fade-in-slide-up to make it immediately visible -->
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. The professional addressed as ‘you’ in the sentence “If you are clever, why are you so poor?” refers to a… Justify your choice.</strong><br>
+                            The professional addressed as ‘you’ in the sentence “If you are clever, why are you so poor?” refers to a poor or disadvantaged person. This direct address highlights the contradiction between intelligence and poverty. The speaker is questioning the common belief that being clever or smart should naturally result in success and wealth. By using ‘you,’ the author emphasizes the reality faced by many individuals who, despite having intelligence or talent, remain trapped in poverty. It challenges the simplistic idea that poverty is always a result of lack of ability or effort, suggesting that there are deeper social and economic factors at play.
+                            <br><br>
+                            Moreover, this question draws attention to the unfairness and complexity of social problems like poverty. It implies that cleverness alone is not enough to overcome systemic barriers such as inequality, lack of opportunities, or social discrimination. The author uses this rhetorical device to provoke readers to think critically about the causes of poverty and to empathize with those who are poor despite their capabilities. By addressing the poor person directly, the sentence brings the issue closer to the reader, making it more personal and urgent. It challenges society’s stereotypes and urges a deeper understanding of why poverty persists even among the talented and hardworking.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. The writer says, “I found myself in Geneva.” What does it express?</strong><br>
+                            The phrase **“I found myself in Geneva”** expresses the writer’s sudden realization of being present in an important place and moment in history. It shows that the writer did not just physically arrive in Geneva but also became aware of the significance of the event or situation unfolding there. This expression reflects a sense of surprise and reflection, as if the writer had unexpectedly become part of something much bigger than anticipated. It emphasizes how the writer’s personal experience was intertwined with a historic or scientific milestone, highlighting the importance of the place.
+                            <br><br>
+                            Furthermore, this statement conveys the writer’s feeling of involvement and responsibility in the events at Geneva. It suggests a moment of introspection and awareness where the writer understands that their presence is meaningful, possibly linked to their work or contribution to scientific research or peace efforts. The phrase also adds a narrative touch, making the reader feel the writer’s emotional connection to the event. It captures the intersection of personal journey and larger global affairs, underlining the idea that scientific research and diplomacy can bring individuals to pivotal moments in history.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">c. Are the following statements true? Why or why not?</strong><br>
+                            <strong class="font-semibold">i. Money is more powerful than intellectual resources.</strong><br>
+                            This statement is not true according to the author’s perspective. While money can provide material comfort and power, intellectual resources—such as knowledge, creativity, and scientific understanding—are far more valuable for the long-term progress and survival of humankind. The chapter emphasizes that true advancement comes from scientific research and intellectual efforts rather than just financial wealth. Money alone cannot solve complex global problems or create meaningful, lasting change without the guidance of intellectual resources.
+                            <br><br>
+                            <strong class="font-semibold">ii. Intellectual resources help survival of the mankind.</strong><br>
+                            This statement is true. The author highlights how scientific knowledge and intellectual efforts play a crucial role in ensuring the survival and well-being of humankind. Intellectual resources help us understand natural disasters, develop technologies to predict or prevent them, and create solutions for global challenges such as nuclear disarmament. Unlike material wealth, intellectual resources build the foundation for human progress, peace, and safety, making them essential for mankind’s continued existence.
+                            <br><br>
+                            <strong class="font-semibold">iii. Basic research is a way of stalling disasters.</strong><br>
+                            This statement is true. The chapter explains that basic research, which involves the pursuit of fundamental knowledge, is vital for anticipating and mitigating disasters. For example, scientists use theoretical knowledge to predict earthquakes or detect nuclear tests, which helps governments and communities prepare and respond effectively. Basic research doesn’t just create inventions; it provides deep understanding that can delay, reduce, or even prevent the impact of both natural and man-made disasters, saving lives and property.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">d. How does the essayist justify that scientific research is the humankind’s survival?</strong><br>
+                            The essayist justifies that scientific research is crucial for humankind’s survival by emphasizing how it helps us understand and manage the challenges that threaten our existence. Through scientific research, humans gain knowledge about natural phenomena such as earthquakes, floods, and other disasters, enabling us to predict and prepare for these events. This preparedness can save countless lives and reduce damage. The essayist also points out that research plays a vital role in addressing man-made dangers, like nuclear weapons, by helping monitor and control their testing, thus preventing potential catastrophes. This shows that scientific inquiry is not just about curiosity but a practical tool for protecting humanity.
+                            <br><br>
+                            Furthermore, the essayist highlights that scientific research fosters cooperation and communication among nations, which is essential for peace and progress. The example of international agreements, such as moratoriums on nuclear testing, demonstrates how scientific data and verification methods build trust between countries and reduce the risk of conflict. By advancing technology and knowledge, scientific research empowers humanity to tackle both natural and social threats, securing a safer and more stable future. Therefore, the essayist argues that science is not merely an intellectual pursuit but a fundamental necessity for the survival and well-being of humankind.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">e. What can be the purpose of the essayist of using quotations in the essay?</strong><br>
+                            The essayist uses quotations in the essay to add authority and credibility to the ideas presented. Quotations from well-known figures, experts, or relevant sources help support the arguments, making them more convincing and trustworthy. By including these words, the essayist connects the essay’s message to a broader context of knowledge and experience, showing that the ideas are shared or validated by respected people. This technique also helps to engage the reader by providing familiar or thought-provoking statements that deepen understanding.
+                            <br><br>
+                            Moreover, the use of quotations enriches the essay’s style and tone, making it more interesting and persuasive. Quotations can emphasize important points, highlight key themes, or introduce new perspectives without lengthy explanations. They act as powerful tools to illustrate complex ideas simply and effectively. The essayist’s purpose in using quotations is therefore twofold: to strengthen the argument logically and to create a more compelling and engaging reading experience, encouraging readers to reflect on the topic more deeply.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">f. Discuss and illustrate the writer’s stand that scientists are the most practical people in the world.</strong><br>
+                            The writer’s stand that scientists are the most practical people in the world is based on the idea that scientists focus on solving real-world problems through observation, experimentation, and evidence. Unlike those who deal with abstract ideas or mere theories, scientists apply their knowledge to develop practical solutions that improve everyday life. For example, by studying natural disasters, scientists create early warning systems that save lives, and by researching diseases, they develop vaccines and treatments. Their work directly impacts the world in tangible ways, showing their practical approach to challenges.
+                            <br><br>
+                            Moreover, the writer illustrates this practicality by highlighting how scientists work with facts and realities rather than opinions or assumptions. They test hypotheses, gather data, and refine their understanding based on results, which makes their approach grounded and effective. The example of scientists helping politicians detect underground nuclear tests demonstrates how their practical skills contribute to peace and security. In this way, scientists combine intellect with real-world application, making them uniquely equipped to address the problems that affect humanity daily.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12"> <!-- Removed fade-in-slide-up to make it immediately visible -->
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">a. Everyone lives under the fear of annihilation by nuclear weapons. Explain this statement.</strong><br>
+                            The statement **“Everyone lives under the fear of annihilation by nuclear weapons”** expresses the widespread anxiety and threat that nuclear weapons pose to humanity. Since nuclear weapons have the power to cause massive destruction and loss of life in a very short time, people around the world feel a constant fear that such a catastrophe could happen at any moment. This fear affects not only governments and military leaders but ordinary citizens as well, as the consequences of a nuclear war would be devastating for all living beings on the planet. The possibility of complete annihilation creates a tense and uncertain global atmosphere.
+                            <br><br>
+                            Furthermore, this fear has influenced international relations and efforts toward peace. Nations have had to come together to negotiate treaties and moratoriums to control nuclear weapons testing and reduce the risk of their use. The fear acts as both a warning and a motivator for political leaders and scientists to work toward disarmament and safer policies. It highlights how nuclear weapons, while powerful, bring with them a responsibility to prevent their catastrophic use, making the fear of annihilation a shared concern that shapes global security and diplomacy.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">b. The essayist says ‘While there is science, there is hope of survival and wellbeing for all of us.’ Explain it.</strong><br>
+                            The statement, "While there is science, there is hope of survival and wellbeing for all of us," posits that scientific research is the cornerstone of humanity's ability to overcome challenges and secure a prosperous future. This is because science serves as our primary tool for problem-solving across all critical areas of life. In medicine, scientific breakthroughs have eradicated diseases and developed treatments, ensuring longer and healthier lives. In agriculture, research has led to improved crop yields and food security, mitigating the threat of famine. Furthermore, in the face of global threats like climate change, science provides both the data to understand the problem and the technological solutions, such as renewable energy, to combat it. The essayist argues that without the continuous pursuit of scientific knowledge and its application, our capacity to tackle these existential threats would be severely limited, making science a beacon of hope for our very survival.
+                            <br><br>
+                            Beyond mere survival, science is also instrumental in enhancing our overall wellbeing and quality of life. The countless technological advancements we rely on daily, from the internet to modern transportation, are all products of scientific inquiry and innovation. These tools not only make our lives more convenient but also foster global connectivity and economic progress. Science also expands our understanding of the universe, satisfying our innate curiosity and providing us with the knowledge to make informed decisions about our future. Therefore, the essayist sees science as a symbol of humanity's collective potential—a collaborative, global effort to reason, innovate, and create a better world. As long as this pursuit of knowledge continues, we hold the key to not only surviving but also thriving, ensuring a future filled with progress and wellbeing for all.
+                        </p>
+                        <p class="brighter-gradient-text">
+                            <strong class="font-semibold">c. Is science a blessing or a curse? Write an essay on it.</strong><br>
+                            <strong class="font-semibold">Science: A Double-Edged Sword</strong><br><br>
+                            Science, in its purest form, is a quest for knowledge and understanding, yet its applications have created a profound dichotomy, leading many to question whether it is ultimately a blessing or a curse. On one hand, science has undoubtedly been a powerful blessing, revolutionizing nearly every aspect of human life for the better. The dramatic increase in life expectancy over the last century is a direct result of scientific breakthroughs in medicine, from the discovery of antibiotics and vaccines to advanced surgical techniques and diagnostic tools. Similarly, advancements in agriculture, such as the development of high-yield crops and efficient farming methods, have saved millions from starvation. In our daily lives, science has gifted us with the internet, smartphones, and instantaneous global communication, connecting humanity in ways previously unimaginable. These contributions highlight science's incredible potential to solve our most pressing problems and improve the human condition.
+                            <br><br>
+                            However, the very knowledge that has the potential to heal and connect also carries the capacity for immense destruction, making science, in a certain light, a curse. The development of weapons of mass destruction, such as nuclear bombs and biological weapons, stands as a chilling testament to how scientific knowledge can be weaponized with catastrophic consequences. The Industrial Revolution, a period of remarkable scientific and technological progress, also led to widespread pollution, climate change, and environmental degradation, the effects of which we are still grappling with today. Furthermore, modern scientific advancements in areas like surveillance technology and artificial intelligence raise serious ethical concerns about privacy, autonomy, and the potential for these tools to be used for control and oppression. These examples demonstrate that the pursuit of knowledge, without a corresponding ethical framework, can unleash forces that threaten our very existence.
+                            <br><br>
+                            Ultimately, the question of whether science is a blessing or a curse is a false dilemma, for science itself is a neutral tool. The true nature of science is determined by the intentions and choices of those who wield it. Nuclear technology can provide clean, sustainable energy for millions, or it can be used to annihilate entire cities. Genetic engineering can cure hereditary diseases, or it can be used to create unforeseen biological risks. The internet can be a platform for education and community, or a breeding ground for misinformation and hate. Therefore, the responsibility lies not with science, but with humanity. The challenge is to foster a global commitment to ethical principles and moral foresight, ensuring that our scientific progress is guided by wisdom and compassion, so that it continues to serve as a blessing rather than becoming our greatest curse.
+                        </p>
+                    </div>
+                </div>
+                <!-- New content ends here -->
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility and button text
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const summaryToggleButton = document.getElementById('summaryToggleButton');
+
+            if (summaryContent.classList.contains('is-visible')) {
+                // If summary is visible, hide it and change button text to "Summary"
+                summaryContent.classList.remove('is-visible');
+                summaryToggleButton.textContent = 'Summary';
+            } else {
+                // If summary is hidden, show it and change button text to "Hide Summary"
+                summaryContent.classList.add('is-visible');
+                summaryToggleButton.textContent = 'Hide Summary';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            // Only apply to the main title and content-box itself, not the inner text sections
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

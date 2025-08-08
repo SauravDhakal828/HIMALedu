@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Refund Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Style for the summary content to be hidden/shown */
+        #summary-content {
+            display: none; /* Hidden by default */
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        #summary-content.is-visible {
+            opacity: 1;
+            display: block; /* Show when active */
+        }
+
+        /* Style for the summary button */
+        .summary-button {
+            /* Inherit button styles from browse-button for consistency */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjust padding for a button look */
+            border-radius: 9999px; /* Fully rounded */
+            font-weight: 600; /* Semi-bold */
+            font-size: 1.25rem; /* Larger font size */
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: block; /* Make it a block element to center */
+            margin: 0 auto 1rem auto; /* Center and add margin below */
+            text-align: center;
+        }
+        .summary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image -->
+        <!-- Arrow Group (top-left) -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Refund Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text fade-in-slide-up">Refund Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="summaryToggleButton" class="summary-button fade-in-slide-up" onclick="toggleSummary()">Summary</button>
+                <div id="summary-content" class="brighter-gradient-text mb-4">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Refund” is a humorous one-act play written by Ferdinand Zecca and Leo Fall that revolves around a comical situation involving a customer, his wife, and a chemist. The play highlights the themes of honesty, deception, and human nature through a simple but funny storyline set in a chemist’s shop.<br><br>
+
+The story begins with a man who visits the chemist to ask for a refund for a medicine he had purchased earlier. He claims that the medicine did not work and that his health actually worsened after using it. The chemist, however, is skeptical and tries to find out the truth behind the man’s request. The man’s reason for the refund is that he wanted to cure his illness but ended up feeling worse, which leads to a funny argument between the two.<br><br>
+
+As the conversation unfolds, the man’s wife arrives, adding more humor and confusion to the situation. She supports her husband’s claim and helps him argue for the refund. However, it becomes evident that the problem is not with the medicine but with the man’s own foolishness or misunderstanding. The dialogue reveals how people often try to get refunds or advantages through trickery or excuses, making the situation more entertaining.<br><br>
+
+The play uses witty and sharp dialogues to portray the characters’ personalities and highlight the humorous aspects of human nature. The chemist represents honesty and business sense, while the customer and his wife show how people can sometimes be cunning or careless. The play also reflects on the everyday situations where misunderstandings lead to comical results.<br><br>
+
+In the end, the chemist refuses to give the refund after realizing the truth, and the man and his wife leave the shop, embarrassed but still trying to save face. The play concludes with a moral lesson about honesty and responsibility. It shows that trying to cheat or deceive others is not the right way to solve problems.<br><br>
+
+In conclusion, “Refund” is a light-hearted and amusing play that uses a simple plot to entertain and teach an important lesson. Through the clever use of humor and character interactions, the play explores themes of truth, deception, and human folly in everyday life.<br><br>
+                    </p>
+                </div>
+
+                <!-- New content starts here -->
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. Why does Wasserkopf demand a refund of his tuition fees from the school?</strong><br>
+                            Wasserkopf demands a refund because he believes that after eighteen years of schooling, he has learned nothing useful. He feels the education has failed him completely, leaving him incompetent and worthless despite the fees he paid.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. Why does Wasserkopf consider himself good for nothing?</strong><br>
+                            Wasserkopf considers himself good for nothing because, despite all his years of study, he has gained no practical knowledge or skills. He thinks the education system has made him incapable of doing anything useful in life.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">c. What did the teachers decide to do when Wasserkopf asked for a refund?</strong><br>
+                            The teachers decided to test Wasserkopf’s knowledge by asking him various questions from different subjects. They wanted to see if he really had learned nothing and to prove whether his demand for a refund was justified.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">d. Why did Wasserkopf give ridiculous answers? Why did the teachers accept these answers?</strong><br>
+                            Wasserkopf gave ridiculous answers intentionally to show that the school had not taught him properly. The teachers, on the other hand, accepted these answers because they realized Wasserkopf was cleverly using nonsense to embarrass them and to justify his refund demand. They wanted to outsmart him by pretending to accept his answers.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">e. How does the Mathematics Master describe Wasserkopf’s character?</strong><br>
+                            The Mathematics Master describes Wasserkopf as someone who is clever and cunning. Despite his claims of ignorance, Wasserkopf is shrewd enough to fool the teachers and turn the situation to his advantage.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">f. How did the teachers outwit Wasserkopf?</strong><br>
+                            The teachers outwitted Wasserkopf by continuing to accept his ridiculous answers and then demanding their fees back from him. They turned his game around and showed that while he might be clever at giving silly answers, the teachers were still in control of the situation.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">g. What is the final judgment on Wasserkopf’s demand of refund?</strong><br>
+                            The final judgment is that Wasserkopf’s demand for a refund is rejected. The teachers prove that despite his ridiculous answers, Wasserkopf’s knowledge and attitude do not justify a refund, and ultimately he fails to get any money back.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. Look at the extract and answer:</strong><br>
+                            “It’s possible I’ve changed. What the hell…! Your class records will show I’ve got a right to come here.”
+                            <br><br>
+                            <strong class="font-semibold">i. Who is the speaker? Who is he speaking to?</strong><br>
+                            The speaker is Wasserkopf, the student who is demanding a refund. He is speaking to the school authorities or teachers.
+                            <br><br>
+                            <strong class="font-semibold">ii. Why does the speaker say these words?</strong><br>
+                            Wasserkopf says these words to assert his right to be at the school despite his criticism of the education he received. He acknowledges that maybe he has changed but insists that the school records prove he was enrolled and thus has the right to demand a refund.
+                            <br><br>
+                            <strong class="font-semibold">iii. Where is the speaker at this moment?</strong><br>
+                            At this moment, the speaker, Wasserkopf, is inside the school, likely in a classroom or the principal’s office, confronting the teachers or the school officials.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. Read the extract dialogue and answer:</strong><br>
+                            “THE STAFF: (bowing, heartily) How do you do?<br>
+                            WASSERKOPF: Who the hell are you? Sit down, you loafers! (He grins, waiting to be thrown out)<br>
+                            THE PRINCIPAL: How dare you –”
+                            <br><br>
+                            <strong class="font-semibold">i. What is to be the response to ‘How do you do?’</strong><br>
+                            The expected response to “How do you do?” is a polite greeting in return, such as “How do you do?” or “I’m fine, thank you.” It is a formal way of acknowledging someone.
+                            <br><br>
+                            <strong class="font-semibold">ii. Is Wasserkopf’s response polite enough to the staff?</strong><br>
+                            No, Wasserkopf’s response is rude and disrespectful. Instead of responding politely, he insults the staff by calling them “loafers” and questions their identity aggressively.
+                            <br><br>
+                            <strong class="font-semibold">iii. How does Wasserkopf rebuke the staff?</strong><br>
+                            Wasserkopf rebukes the staff by telling them to sit down and calling them “loafers,” implying they are lazy and unworthy of respect.
+                            <br><br>
+                            <strong class="font-semibold">iv. What does the principal mean by ‘How dare you -’?</strong><br>
+                            The principal’s phrase “How dare you -” expresses shock and anger at Wasserkopf’s disrespectful and insolent behavior towards the school staff. It shows that the principal is offended by Wasserkopf’s rude language and attitude.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">c. Explain the following line:</strong><br>
+                             “Because I didn’t get my money’s worth, that’s why!”
+                            <br><br>
+                            The line “Because I didn’t get my money’s worth, that’s why!” clearly expresses Wasserkopf’s deep dissatisfaction with the education he received from the school. He believes that despite investing many years and paying a significant amount of money in tuition fees, he has not gained any valuable knowledge or skills. The phrase “money’s worth” means receiving the expected value or benefit in exchange for what was paid. Wasserkopf feels that his education has failed to provide him with practical or useful learning, making the entire expense pointless. This frustration highlights his sense of being cheated or let down by the institution that promised to prepare him for life.
+                            <br><br>
+                            Furthermore, this line serves as the basis for Wasserkopf’s demand for a refund of his tuition fees. He argues that since the school did not fulfill its promise to educate him effectively, he should be compensated for the loss. This complaint questions the quality and purpose of the educational system, suggesting that the years spent in school were wasted. His statement challenges the authorities to acknowledge their failure and take responsibility. Overall, the line captures the core conflict of the play, where Wasserkopf’s disappointment with his schooling leads him to confront the system and demand justice.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">d. What is the theme of the play?</strong><br>
+                            The central theme of the play Refund by Fritz Karinthy revolves around the failure of the education system and the questioning of its true value. The play humorously critiques how traditional schooling often focuses more on rote learning and formalities rather than imparting meaningful knowledge or practical skills to students. Through Wasserkopf’s demand for a refund, the play exposes the disconnect between what education promises and what it actually delivers, highlighting the frustration of students who feel unprepared for real life despite years of study.
+                            <br><br>
+                            Additionally, the play explores themes of cleverness and wit versus authority. Wasserkopf uses his wit to challenge the teachers, while the teachers try to outsmart him in return. This battle symbolizes the tension between individual critical thinking and the rigid, sometimes absurd, structure of institutional education. Overall, Refund is a satirical commentary on the inefficiency of the education system and a call to reflect on the true purpose and effectiveness of schooling.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">e. Sketch the character of Wasserkopf.</strong><br>
+                            Wasserkopf is a clever and outspoken student who is highly dissatisfied with the education he has received over the years. He is bold and fearless in confronting the school authorities, demanding a refund of his tuition fees because he believes he has not learned anything useful during his long years of study. Wasserkopf is witty and quick-thinking, using humor and ridiculous answers to challenge the teachers and expose the flaws in the education system. Despite his apparent ignorance, he is quite shrewd and knows how to use his cleverness to his advantage.
+                            <br><br>
+                            At the same time, Wasserkopf is frustrated and disillusioned, feeling that the school has failed to prepare him for real life. His demand for a refund reflects his deep disappointment and sense of injustice. However, his cheeky and rebellious attitude also shows his confidence and refusal to be a passive victim of the system. Overall, Wasserkopf is a symbolic character representing students who question the value of traditional education and seek to hold it accountable
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. The play is a satire on the present day education system. Do you think that our education system does not prepare students for life? Discuss.</strong><br>
+                            The play Refund by Fritz Karinthy is indeed a satire on the present-day education system, and it raises important questions about whether our education truly prepares students for life. In many ways, the play highlights a common criticism: that education often focuses heavily on memorization, exams, and theoretical knowledge rather than practical skills and critical thinking. Just like Wasserkopf, many students feel that despite years of schooling, they emerge unprepared to face real-world challenges, such as problem-solving, communication, and financial literacy.
+                            <br><br>
+                            In our current education system, this problem still persists in many places. Students may learn facts and formulas but not how to apply them meaningfully in everyday life. The system often values rote learning over creativity and independent thinking. This can leave students feeling frustrated and disconnected from their studies, much like Wasserkopf in the play. However, it’s important to recognize that education systems are evolving in some areas to include life skills, vocational training, and more holistic development. Still, there is a long way to go to ensure that education truly equips students not just for exams, but for the practical demands and complexities of life beyond school.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. Our education system focuses on memorisation rather than creative thinking. Do you think the knowledge imparted by education may not have practical relevance in one’s day-to-day life? Who do you blame for this?</strong><br>
+                            Our education system often emphasizes memorization over creative thinking, which can limit the practical relevance of the knowledge students acquire. When education focuses mainly on rote learning—memorizing facts, formulas, and dates without truly understanding or questioning them—students may struggle to apply what they learn in real-life situations. This approach can make education seem disconnected from everyday life, leaving students unprepared to solve problems, think critically, or innovate. For example, a student might be able to recite historical dates or mathematical formulas but find it difficult to use that knowledge practically, such as understanding current events or managing finances.
+                            <br><br>
+                            The blame for this situation can be shared among various factors. Firstly, the education system itself often prioritizes exam results and standardized testing, encouraging teachers and students to focus on memorization to achieve high scores. Secondly, curriculum designers may not always update the syllabus to include relevant life skills or encourage critical thinking. Thirdly, some educators, constrained by these systemic demands, may lack the training or resources to teach creatively. Lastly, societal expectations and parental pressure can also reinforce this approach by valuing grades over genuine understanding. To improve, it is essential for all stakeholders—educators, policymakers, parents, and students—to advocate for an education system that fosters creativity, practical skills, and critical thinking alongside knowledge.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">c. Most of the students want to learn just for examination rather than knowledge. Do you think that certificate will help them in their future career?</strong><br>
+                            Many students focus primarily on learning just to pass examinations rather than truly understanding or gaining knowledge. This exam-oriented approach often leads to superficial learning, where students memorize information temporarily instead of developing deep comprehension or skills. While certificates and good grades can open doors to higher education and job opportunities, relying solely on them without genuine knowledge or skills may not be enough for long-term career success.
+                            <br><br>
+                            In today’s competitive world, employers increasingly value practical skills, problem-solving abilities, creativity, and communication, which cannot be fully measured by certificates alone. A certificate might get a student an interview or entry-level job, but to excel and grow in their career, they need real understanding and the ability to apply what they have learned. Therefore, while certificates have their importance, students should aim to balance exam preparation with true learning. This will help them become capable professionals and lifelong learners rather than just certificate holders.
+                        </p>
+                    </div>
+                </div>
+                <!-- New content ends here -->
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility and button text
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const summaryToggleButton = document.getElementById('summaryToggleButton');
+
+            if (summaryContent.classList.contains('is-visible')) {
+                // If summary is visible, hide it and change button text to "Summary"
+                summaryContent.classList.remove('is-visible');
+                summaryToggleButton.textContent = 'Summary';
+            } else {
+                // If summary is hidden, show it and change button text to "Hide Summary"
+                summaryContent.classList.add('is-visible');
+                summaryToggleButton.textContent = 'Hide Summary';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

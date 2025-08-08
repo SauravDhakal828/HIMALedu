@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marriage as a Social Institution Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Marriage as a Social Institution Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">2. Marriage as a Social Institution Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        In her reflective essay “Marriage as a Social Institution,” Indian writer Shashi Deshpande examines the traditional concept of marriage and how it functions in society, especially in Indian culture. She begins by acknowledging that marriage has long been seen as an essential institution that binds two individuals and families together. It’s not just a private relationship but a public and social contract that carries deep cultural, emotional, and practical significance. Deshpande notes that marriage in India is often considered a duty and a way of preserving family honor and social order.<br><br>
+
+Deshpande also discusses how, in Indian society, marriage is surrounded by expectations—particularly for women. From a young age, girls are taught that marriage is one of the most important events in life, and often their lives are shaped by this belief. She critiques the way marriage is often seen as the ultimate goal for women, limiting their independence, education, and personal choices. Despite these social pressures, Deshpande doesn’t reject marriage entirely. Instead, she wants to understand its place in modern life and how it can evolve to serve both partners equally.<br><br>
+
+The author explores her own experiences and observations, showing how marriage has different meanings for different people. She believes that while marriage can bring companionship, stability, and emotional support, it can also become a burden if it is based on inequality or control. She argues that for marriage to be successful, both partners must respect each other and grow together. She emphasizes that love, trust, and friendship should be at the heart of any strong marriage, rather than blind obedience to tradition.<br><br>
+
+One important point Deshpande makes is that marriage, like any relationship, changes over time. It requires constant effort, compromise, and communication. The roles of husband and wife should not be rigid or defined by outdated gender roles. Instead, marriage should allow both individuals to retain their identity and pursue their dreams. She encourages readers to question traditional norms and think about what makes a meaningful and respectful partnership.<br><br>
+
+Throughout the essay, Deshpande remains thoughtful and balanced. She doesn’t dismiss the importance of marriage but urges people to rethink how it is practiced and valued. She believes that as society progresses, the institution of marriage must also adapt. It must become a space where equality, freedom, and understanding can thrive—not just a tradition to be followed without question.<br><br>
+
+In conclusion, “Marriage as a Social Institution” invites readers to examine marriage beyond cultural expectations. Shashi Deshpande shows that while marriage can be a valuable part of life, it must be based on mutual respect and personal growth to be truly fulfilling. Her essay is a call for change—not in the concept of marriage itself, but in how it is viewed and lived in modern society.<br><br>
+                    </p>
+                    
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. According to the author, what is marriage?</span><br>
+                    According to the author, marriage is more than just a legal or social contract between two individuals. It is a complex social institution that involves loyal, moral, and conventional assumptions. Marriage establishes close personal relationships and associations that fulfill various social, economic, and emotional needs.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. How is marriage an institution?</span><br>
+                    Marriage is an institution because it is an established social system that fulfills important functions in society. It helps meet social, economic, physical, and family requirements by creating a stable relationship between two individuals. It is linked to other institutions like education, religion, and law, and follows established rules and norms accepted by society.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What are the rules that a marriage has?</span><br>
+                    Marriage has rules related to the selection of partners, rights and responsibilities of spouses, social conduct, inheritance, and legitimacy of children. These rules are often guided by cultural, religious, and legal frameworks that govern how marriages should be conducted and maintained.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Why does marriage matter to men?</span><br>
+                    Marriage matters to men because it provides social status, economic stability, and emotional support. It often fulfills societal expectations about adulthood and responsibility. Marriage also helps men establish a family and lineage, which is important in many cultures.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. What is one of the central problems in modern society?</span><br>
+                    One of the central problems in modern society is the weakening of social bonds and community ties. The author suggests that social relationships, including marriage, are under strain due to changes in social values, economic pressures, and individualism, which lead to a decline in social capital.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">f. What does social capital consist of?</span><br>
+                    Social capital consists of the networks, relationships, trust, and norms that enable people to work together and support each other within a community. It includes social connections that provide emotional support, economic cooperation, and social cohesion.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">g. What is normative marriage? Explain.</span><br>
+                    Normative marriage refers to the ideal or socially accepted form of marriage that follows cultural norms and expectations. It is the marriage pattern that society views as appropriate, including monogamy, lifelong commitment, and roles assigned to spouses. Normative marriage sets the standard for behavior and responsibilities within the marriage.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Discuss six dimensions that define normative marriage in America.</span><br>
+                    Here are six dimensions that define normative marriage in America, often discussed in sociology and family studies:
+                    <ul>
+                        <li><span class="font-bold">Monogamy:</span> Normative marriage in America is based on monogamy, meaning one spouse at a time. Marriage is expected to be an exclusive union between two people.</li>
+                        <li><span class="font-bold">Heterosexual Union (Traditionally):</span> Traditionally, normative marriage has been defined as a union between a man and a woman, though this is evolving with legal recognition of same-sex marriages.</li>
+                        <li><span class="font-bold">Lifelong Commitment:</span> Marriage is ideally seen as a lifelong commitment. Divorce is possible but generally considered a last resort when the marriage cannot be sustained.</li>
+                        <li><span class="font-bold">Gender Roles (Evolving):</span> Normative marriage often includes traditional gender roles, where the husband is the primary breadwinner and the wife manages the household and childcare, though these roles are becoming more flexible.</li>
+                        <li><span class="font-bold">Economic Partnership:</span> Marriage involves economic partnership—sharing resources, managing finances jointly, and providing economic support to each other.</li>
+                        <li><span class="font-bold">Procreation and Child-Rearing:</span> Normative marriage is linked with the expectation to have and raise children together, creating a family unit that nurtures and socializes the next generation.</li>
+                    </ul>
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Do marriages differ according to culture? How is your marriage practice different from marriage in America?</span><br>
+                    Yes, marriages differ a lot according to culture because every culture has its own unique traditions, beliefs, and ways of celebrating marriage. In many cultures, including mine, families often play a very important role in choosing a partner through arranged marriages or family discussions. The wedding ceremonies are usually long, with many religious rituals, traditional customs, and celebrations that can last several days. Marriage is not only about the couple but also about joining two families and communities together. On the other hand, in America, people usually choose their own partners based on love and personal feelings. The focus is more on the relationship between the two individuals rather than on family decisions.
+                    <br><br>
+                    For example, in my culture, marriage involves big family gatherings, gift exchanges, and respecting elders throughout the ceremony. Religious and cultural traditions guide how the marriage is performed, and the whole community often takes part in the celebrations. In America, weddings are generally shorter and more flexible, reflecting the couple’s personal preferences and modern lifestyles. Family involvement is still important, but the decision-making is mostly left to the couple. This shows that marriage practices can be very different depending on the cultural values, social expectations, and historical backgrounds of each society. Both ways of marrying have their own special meaning and importance.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference beyond the text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Write an essay on the marriage practice in your own culture.</span><br>
+                    Marriage is an important and respected social institution in my culture. It is considered not only the union of two individuals but also the joining of two families. The process of marriage involves many traditions, rituals, and celebrations that reflect our values and beliefs. Families play a major role in arranging marriages, and it is common for parents and elders to help find a suitable partner based on family background, education, and social status. This arranged marriage system is still widely practiced, although love marriages are becoming more common today.
+                    <br><br>
+                    The wedding ceremony itself is a grand event that lasts for several days. It involves many religious rituals performed by priests, symbolizing the sacred bond between the bride and groom. Guests from both families come together to bless the couple and celebrate with music, dance, and food. Gifts are exchanged between families as a sign of goodwill and respect. After the wedding, the couple is expected to live together and take care of each other while honoring their family responsibilities. Overall, marriage in my culture is a joyful occasion that strengthens family ties and promotes social harmony.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. Is marriage a social institution? Discuss.</span><br>
+                    Yes, marriage is definitely a social institution. A social institution is an organized system of social relationships and rules that meet the basic needs of society and help maintain order. Marriage qualifies as one because it is a formal and socially recognized arrangement that regulates the relationship between two individuals, their families, and the society around them. It is not just a private bond between two people but a social contract that comes with certain rights, responsibilities, and expectations.
+                    <br><br>
+                    Marriage serves many important functions in society. It helps in the regulation of sexual behavior and reproduction, ensuring that children are born and raised within a stable family environment. Marriage also provides emotional support, companionship, and economic cooperation between spouses. Beyond the couple, marriage connects families and creates social networks that strengthen community ties. The institution of marriage is supported by laws, religious beliefs, and cultural norms, which guide how marriages are formed, maintained, and dissolved. Because marriage influences many aspects of social life—including inheritance, property rights, and social status—it plays a crucial role in maintaining social order and continuity. For these reasons, marriage is considered a fundamental social institution across cultures.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md" onclick="window.location.href='english12.html'">
+                    Back to English 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

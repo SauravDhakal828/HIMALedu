@@ -1,0 +1,705 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>रारा भ्रमण Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for रारा भ्रमण Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">११. रारा भ्रमण Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleRaraSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleRaraSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="raraSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    “रारा भ्रमण” पाठले नेपालको पश्चिमी भूभागमा अवस्थित रारा ताल र त्यस वरिपरिका क्षेत्रको प्राकृतिक सौन्दर्यलाई निकै मनमोहक र सुन्दर भाषामा चित्रण गरेको छ। रारा ताललाई नेपालको सबैभन्दा ठूलो र गहिरो ताल मानिन्छ जसले हरेक पर्यटकको मन लोभ्याउँछ। पाठमा लेखकले तालको निर्मल पानी, वरिपरि फैलिएको घना जंगल, हिमालका सेता शिखरहरू, र शीतल हावा लगायतका तत्वहरूलाई वर्णन गर्दै रारा क्षेत्रको अपूर्व महत्त्व उजागर गरेका छन्। यहाँको प्रकृतिले मानिसलाई शान्ति र आनन्द दुवै प्रदान गर्छ, जसले शहरी जीवनको व्यस्तता र तनावबाट मुक्ति दिलाउँछ।<br><br>
+
+पाठले रारा राष्ट्रिय निकुञ्जमा पाइने विभिन्न प्रकारका वनस्पति र जंगली जनावरहरूको विवरण पनि दिएका छन्। दुर्लभ जनावरहरू जस्तै भालु, मुसा र विभिन्न चराचुरुङ्गीहरू यो क्षेत्रको जैविक विविधताको प्रमाण हुन्। यस क्षेत्रको जैविक धरोहरले पर्यावरणीय सन्तुलनमा ठूलो भूमिका खेल्छ। राराको शान्त र स्वच्छ वातावरणले मात्र होइन, त्यसका जैविक सम्पदाले पनि पर्यटकलाई आकर्षित गर्दछ। यस्तो वातावरणमा पुगेर मानिसले प्रकृतिसँग गहिरो सम्बन्ध महसुस गर्न सक्छ र संरक्षणको महत्व बुझ्न सक्छ।<br><br>
+
+लेखकले आफ्नो रारा भ्रमणका अनुभवहरूलाई रोचक र जीवन्त तरिकाले प्रस्तुत गरेका छन्। यात्राको क्रममा उनले देखेका सुन्दर दृश्यहरू, स्थानीय बासिन्दाहरूको सरल जीवनशैली, र पर्यटन स्थलमा देखिएका विभिन्न गतिविधिहरूले पाठलाई थप आकर्षक बनाएका छन्। लेखकले तालको किनारमा बसेर प्राकृतिक शान्ति अनुभव गर्ने अनुभूति र हिमालको मनमोहक दृश्यावलोकनले उनलाई गहिरो आनन्द दिएको कुरा बर्णन गरेका छन्। यस्तो अनुभवले पाठकमा पनि त्यस्तो प्राकृतिक सौन्दर्यको यात्रा गर्ने इच्छा जागृत गर्छ।<br><br>
+
+पाठले रारा क्षेत्रको पर्यटनिक महत्वलाई पनि जोड दिएको छ। राराको प्राकृतिक सौन्दर्य, जैविक विविधता र सांस्कृतिक पक्षले यो स्थानलाई पर्यटकहरूको लागि अत्यन्तै मनमोहक गन्तव्य बनाएको छ। यसले स्थानीय समुदायको आर्थिक विकासमा पनि योगदान पुर्‍याएको छ। पर्यटन प्रवर्द्धनले यहाँको जनजीवनमा सकारात्मक प्रभाव पुर्‍याउँछ भने यसका लागि उचित संरक्षण र व्यवस्थापनको आवश्यकतालाई पाठले स्पष्ट गरेको छ। असंरचित पर्यटनले यहाँको प्रकृति र सांस्कृतिक धरोहरमा नकारात्मक प्रभाव पार्न सक्ने खतरा पनि व्याख्या गरिएको छ।<br><br>
+
+अन्तमा, “रारा भ्रमण” पाठले हामीलाई नेपालको एक अद्वितीय प्राकृतिक सम्पदा र पर्यटकीय स्थलको परिचय मात्र गराएन, प्रकृतिप्रति सम्मान र संरक्षणको महत्व पनि सिकायो। यसले पाठकमा पर्यावरणीय चेतना जगाउन मद्दत पुर्‍याउँछ र प्राकृतिक सौन्दर्यलाई संरक्षण गर्न प्रेरित गर्दछ। रारा भ्रमणले देखाउँछ कि प्राकृतिक सम्पदाहरू जोगाउने र उचित रूपमा पर्यटन प्रवर्द्धन गर्ने दायित्व हामी सबैको हो। यसले प्रकृति र पर्यटनको सन्तुलित विकासको पक्षमा सशक्त सन्देश दिन्छ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका पदावली र अर्थको जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>विविधतायुक्त वैभव – विभिन्नताले भरिएको सम्पत्ति</p>
+                            <p>सञ्जीवनी बुटी – जीवन बचाउने औषधी</p>
+                            <p>अवलोकन भ्रमण – घुम्दै हेर्न गरिने यात्रा</p>
+                            <p>दिव्य अनुभूति – अलौकिक अनुभव</p>
+                            <p>शुक्ल पक्ष – अँध्यारो पक्षपछिको उज्यालो पक्ष</p>
+                            <p>सदाबहार वनस्पति – सधैंभरि हरियो रहने बोटबिरुवा</p>
+                        </div>
+                        <p><strong>२. दिइएका शब्दहरू प्रयोग गरी एउटा अनुच्छेद तयार पार्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="text-justify">पोखराबाट हामी रारा तालको अनुपम सौन्दर्यको दृष्टिगोचर गर्नका लागि दुई दिनको यात्रामा निस्कियौं। यात्राको क्रममा हामी नेपाली भाषाको उद्गम स्थल सिँजा उपत्यका पुग्यौं। त्यसपछि गुल्जाररूपी रारा राष्ट्रिय निकुञ्ज नजिकै पुग्यौं। त्यहाँका सदाबहार वनस्पतिहरूले बनाएको अनुपम रसायन र सम्मिश्रणले राराको जल अझ आकर्षक देखिन्थ्यो। तालको पानीमा उन्मत्त भै छचल्किएका बेताल लहरहरू देखेर म मन्त्रमुग्ध भएँ। आफ्नो आत्मालाई साक्षी राखेर पुनः भेट्ने वाचा गर्दै हामी आफ्नै गन्तव्य पोखरा फर्कियौं।</p>
+                        </div>
+                        <p><strong>३. दिइएका प्राविधिक तथा पारिभाषिक शब्दको अर्थ खोजेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क) दृश्यावलोकन: सुन्दर दृश्यहरू हेर्ने काम।</p>
+                            <p>अनुभूति: कुनै कुरा मनमा अनुभव गर्ने।</p>
+                            <p>पिरती: प्रेम, स्नेह।</p>
+                            <p>कविता: कविले लेखेको भावपूर्ण काव्य।</p>
+                            <p>ख) कच्ची: पक्की नभएको, बलियो नभएको।</p>
+                            <p>जिप: सानो आकारको तर बलियो सवारी साधन।</p>
+                            <p>राजमार्ग: मूल र फराकिलो सडक।</p>
+                            <p>बसपार्क: बसहरू रोक्ने र छुट्ने ठाउँ।</p>
+                            <p>ग) उपत्यका: पहाडको बीचमा रहेको समथर भूभाग।</p>
+                            <p>चट्टान: ठूलो, कडा र अचल ढुङ्गा।</p>
+                            <p>पर्वत: ठूलो पहाड।</p>
+                            <p>क्षेत्रफल: कुनै भूभागले ओगटेको जम्मा स्थान।</p>
+                            <p>हिमाल: हिउँले ढाकिएको अग्लो पहाड।</p>
+                            <p>घ) खस राज्य: मध्ययुगमा पश्चिमी नेपालमा रहेको एउटा राज्य।</p>
+                            <p>बस्ती: मानिसहरू बसोबास गर्ने ठाउँ।</p>
+                            <p>शासक: राज्य चलाउने व्यक्ति।</p>
+                            <p>कार्यालय: कुनै विशेष काम सम्पन्न गरिने ठाउँ।</p>
+                            <p>ङ) होटल: पैसा तिरेर बस्ने र खाने ठाउँ।</p>
+                            <p>खानपान: खाने र पिउने क्रियाकलाप।</p>
+                            <p>रिसोर्ट: आधुनिक सुविधासहितको ठूलो होटल।</p>
+                            <p>भ्रमण: घुमफिर गर्ने वा यात्रा गर्ने काम।</p>
+                            <p>च) निकुञ्ज: जीवजन्तु र वनस्पतिहरूको संरक्षण गरिने विशेष क्षेत्र।</p>
+                            <p>संरक्षण: कुनै चीजलाई बिगार्न वा नाश हुनबाट बचाउने काम।</p>
+                            <p>सदाबहार: सधैं हरियो रहने।</p>
+                            <p>वनस्पति: बोटबिरुवाको समूह।</p>
+                        </div>
+                        <p><strong>४. दिइएका शब्दहरू कुन कुन विषयक्षेत्रसँग सम्बन्धित छन्, पहिचान गरेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क) मानविकी क्षेत्र</p>
+                            <p>ख) कृषि तथा वन क्षेत्र</p>
+                            <p>ग) इतिहास क्षेत्र</p>
+                            <p>घ) प्रशासन क्षेत्र</p>
+                            <p>ङ) कानून क्षेत्र</p>
+                            <p>च) चिकित्सा क्षेत्र</p>
+                            <p>छ) विज्ञान र प्रविधि क्षेत्र</p>
+                        </div>
+                        <p><strong>५. दिइएका विषय क्षेत्रका आधारमा समूह बनाई हरेक क्षेत्रका दस-दसओटा खोज्नुहोस् र कक्षामा प्रस्तुत गर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क ) शिक्षा:</p>
+                            <p>विद्यालय, पुस्तक, क्याम्पस, प्रधानाध्यापक, पुस्तकालय, प्रश्नपत्र, छात्रवृत्ति, निरीक्षक, उत्तीर्ण, केन्द्राध्यक्ष।</p>
+                            <p>ख) कृषि तथा वन क्षेत्र:</p>
+                            <p>अब्बल, दोयल, सिम, चहार, रोपाइँ, फडानी, छपान, वनपाले, सामुदायिक वन, कुकाठ।</p>
+                            <p>ग) मानविकी र सामाजिकशास्त्र:</p>
+                            <p>दृश्यावलोकन, अनुभूति, पिरती, कविता, विवाह, झैझगडा, जातजाति, धर्म, सापटी, मेलमिलाप।</p>
+                            <p>घ) व्यापार, वाणिज्य:</p>
+                            <p>नाफा, घाटा, आयव्यय, निक्षेप, निकासी, भौचर, पैठारी, विरेजु, राजस्व, तराजु।</p>
+                            <p>ङ) कानुनी तथा राजनीतिकशास्त्र:</p>
+                            <p>सचिव, मन्त्री, सरुवा, अध्यादेश, विद्येयक, जमानत, आन्दोलन, राजिनामा, सरजमिन।</p>
+                            <p>च) चिकित्सा:</p>
+                            <p>शल्यक्रिया, एक्सरे, अन्तरङ्ग, प्रशोधन, जीवाणु, सरुवा रोग, महामारी, बहिरङ, कुपोषण।</p>
+                            <p>छ) विज्ञान तथा प्रविधि:</p>
+                            <p>विकिरण, विद्युतीकरण, तापक्रम, रकेट, बम, जोड, घटाउ, समीकरण, ऊर्जा, जीवकोष।</p>
+                            <p>ज) सञ्चार क्षेत्र:</p>
+                            <p>कम्प्युटर, रेडियो, इमेल, ईन्टरनेट, म्यासेन्जर, समाचार, सूचना, प्रविधि, पत्रमित्रता, संवाददाता।</p>
+                            <p>झ) जनप्रशासन:</p>
+                            <p>सचिव, अधिकृत, सरुवा, बढुवा, टिप्पणी, फिराद पत्र, मन्त्री, खरिदार, सुब्बा, हाकिम।</p>
+                            <p>ञ) इन्जिनियरिङ:</p>
+                            <p>झोलुङ्गे पुल, आकासे पुल, कच्ची बाटो, पक्की घर, लम्बाइ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. पाठका आधारमा उत्तर भन्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p><strong>क) दैनिकीलाई कस्तो ढाँचामा प्रस्तुत गरिएको छ ?</strong><br>उत्तर: दैनिकीलाई यात्रा वर्णनका रूपमा प्रस्तुत गरिएको छ, जहाँ लेखकले आफ्नो यात्राको अनुभवहरूलाई चरणबद्ध रूपमा वर्णन गरेका छन्।</p>
+                            <p><strong>ख) दैनिकीमा प्रयोग भएको सबैभन्दा ठूलो र सानो अनुच्छेद संरचना कुन कुन हुन् ?</strong><br>उत्तर: दैनिकीमा प्रयोग भएको सबैभन्दा ठूलो अनुच्छेद अनुच्छेद १९ हो, भने सबैभन्दा सानो अनुच्छेद अनुच्छेद २५ हो।</p>
+                            <p><strong>ग) दैनिकीको सुरुदेखि अन्त्यसम्मका संरचनालाई जोड्ने आधार के हो ?</strong><br>उत्तर: दैनिकीको सुरुदेखि अन्त्यसम्मका संरचनालाई जोड्ने आधार समय र स्थानको क्रमबद्धता हो, जसले लेखकको यात्रालाई एक सूत्रमा बाँधेको छ।</p>
+                            <p><strong>घ) दैनिकीको दोस्रो दिनका घटनाहरूको सूची बनाउनुहोस् ।</strong><br>उत्तर: दैनिकीको दोस्रो दिनका घटनाहरूको सूची यस प्रकार छ:</p>
+                            <div class="ml-4">
+                                <p>बिहान ५ बजे सुर्खेतबाट राराको यात्रामा निस्कनु।</p>
+                                <p>कर्णाली नदीको किनारै किनार हुँदै अगाडि बढ्नु।</p>
+                                <p>कालीकोट हुँदै ऐतिहासिक सिँजा उपत्यका पुग्नु।</p>
+                                <p>सिँजामा खाजा खाएर अगाडि बढ्नु।</p>
+                                <p>रारा राष्ट्रिय निकुञ्जको चेकपोस्ट हुँदै रिसोर्टमा पुग्नु।</p>
+                                <p>बेलुका आगो तापेर राराको दृश्यावलोकन गर्नु।</p>
+                            </div>
+                        </div>
+                        <p><strong>२. "बिहानै मिर्मिरे ……जागिरहँदो रहेछ " दैनिकी अंशका आधारमा दिइएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) रारा तालका बेताल लहरहरू कस्ता थिए ?</strong><br><span class="text-justify">उत्तर: रारा तालका बेताल लहरहरू बैसले छचल्किएका र पर्यटकसँग प्रेम गाँस्न हतारिएका जस्ता थिए।</span></p>
+                            <p><strong>ख) राराले शासकलाई पनि कसरी कवि बनाउन सक्दो रहेछ ?</strong><br><span class="text-justify">उत्तर: राराले आफ्नो प्राकृतिक सौन्दर्यको जादुले गर्दा कठोर शासकहरूलाई पनि भावुक बनाई कवि बनाउन सक्ने रहेछ।</span></p>
+                            <p><strong>ग) राराको सुन्दरतालाई किन जादु भनिएको हो ?</strong><br><span class="text-justify">उत्तर: राराको सुन्दरतालाई जादु भनिएको हो, किनभने यसमा पर्यटकहरूको मन मोहित पार्ने र उनीहरूको दिनलाई अविस्मरणीय बनाउने अद्भुत शक्ति छ।</span></p>
+                            <p><strong>घ) यस अनुच्छेदमा राराको प्राकृतिक सौन्दर्यको वर्णन कसरी गरिएको छ ?</strong><br><span class="text-justify">उत्तर: यस अनुच्छेदमा राराको प्राकृतिक सौन्दर्यलाई छचल्किएका लहरहरू र माया गाँस्न हतारिएका दृश्यका रूपमा वर्णन गरिएको छ। यसले रारालाई एक प्रेमिल र जादुमयी पात्रको रूपमा प्रस्तुत गरेको छ।</span></p>
+                        </div>
+                        <p><strong>३. दिइएको दैनिकी अंशका आधारमा सोधिएका प्रश्नहरूको उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) सिँजा उपत्यकाको चिनारी दिनुहोस् ।</strong><br><span class="text-justify">उत्तर: सिँजा उपत्यका ऐतिहासिक र पवित्र भूमि हो। यसलाई बाइसे खस राज्यको राजधानी र नेपाली भाषाको उद्गम स्थलका रूपमा चिनिन्छ। यहाँ वरिपरि रमणीय दृश्यहरू र खेतीयोग्य जमिन छन् जसलाई हिम नदीले सिँचाइ पुर्‍याउँछ। यो उपत्यका आफ्नो ऐतिहासिकता र प्राकृतिक सुन्दरताका लागि प्रसिद्ध छ।</span></p>
+                            <p><strong>ख) लेखकले सिँजादेखि रारासम्मको यात्रा कसरी पूरा गरे ?</strong><br><span class="text-justify">उत्तर: लेखकले सिँजादेखि रारासम्मको यात्रा गाडी र पैदल दुवै तरिकाले पूरा गरे। उनले मालिका बोतादेखि चट्टानहरू छिचोल्दै घुच्चीको लेकमा रहेको रारा राष्ट्रिय निकुञ्जको चेकपोस्टसम्म जिपमा यात्रा गरे। त्यसपछि, पिनागाउँ हुँदै सल्लेरीको जङ्गलमा पुगेर गाडी रोकी करिब एक घण्टा हिँडेर रिसोर्टमा पुगेका थिए।</span></p>
+                        </div>
+                        <p><strong>४. उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) पाठका आधारमा राराको परिचय दिनुहोस् ।</strong><br><span class="text-justify">उत्तर: पाठका अनुसार, रारा ताल एक मनमोहक र अनुपम प्राकृतिक उपहार हो, जुन समुद्री सतहबाट २८७२ मिटरको उचाइमा अवस्थित छ। यसको अधिकतम लम्बाइ पाँच किलोमिटर र अधिकतम चौडाइ ३.२ किलोमिटर छ, जसले गर्दा यसको क्षेत्रफल १०.८ वर्ग किलोमिटर पुगेको छ। यो विशालता, उच्चता र भव्यताले भरिएको ताल हो। तालको चारैतिर सदाबहार वनस्पतिले भरिएका पहाडहरूले यसलाई घेरेका छन्, जसले गर्दा यसको पानीको रङ्ग गाढा हरियो देखिन्छ। राराको सौन्दर्यलाई लेखकले स्वर्गको एक टुक्राको संज्ञा दिएका छन्। यहाँका बेताल लहरहरू बैसले छचल्किएका र पर्यटकहरूसँग पिरती गाँस्न हतारिएका जस्ता लाग्छन्, जसले यसको प्राकृतिक आकर्षणलाई अझ बढाएको छ। ताल वरिपरिको जडीबुटीयुक्त वनस्पतिहरूले समेत तालको पवित्रता र महत्त्वलाई बढाएका छन्। समग्रमा, रारा ताल प्राकृतिक सौन्दर्य, विशालता र दिव्यताको संगम हो।</span></p>
+                            <p><strong>ख) दैनिकी लेखकले पहिलो दिनको यात्रा कसरी पूरा गरे ?</strong><br><span class="text-justify">उत्तर: दैनिकी लेखकले आफ्नो रारा यात्राको पहिलो दिनलाई एक लामो र थकानपूर्ण यात्राका रूपमा वर्णन गरेका छन्। उनले आफ्नो यात्रा गुल्मीको तल्ला फाँटबाट बिहान सबेरै ४ बजे सुरु गरेका थिए। उनीहरू रुद्रावती नदीको किनारै किनार हुँदै मकुवा, चोरकाटे र उल्लीखोलाका फाँटहरू पार गर्दै अगाडि बढे। रुद्रवेणी हुँदै रिडी पुगेपछि उनीहरूले केहीबेर विश्राम गरी पकौडा र चिया खाए। त्यसपछि अर्गली, जोर्ते, लगुवा र हार्थोक हुँदै करिब ९ बजे बुटवल पुगे। यहाँबाट पूर्व-पश्चिम राजमार्ग हुँदै कोहलपुर पुग्दा साँझको ४ बजिसकेको थियो। यात्रा जारी राख्दै ७५ किलोमिटरको दूरी पार गरेर रातको ९ बजेतिर उनीहरू सुर्खेत पुगे। लामो र निरन्तरको यात्राबाट थाकेर उनीहरूले बसपार्क नजिकैको एउटा होटलमा बास बसेर आफ्नो पहिलो दिनको यात्रा पूरा गरे।</span></p>
+                            <p><strong>ग) रारा पुगेर लेखक किन खुसी भए ?</strong><br><span class="text-justify">उत्तर: रारा पुगेर लेखक असाध्यै खुसी हुनुका धेरै कारणहरू छन्। सबैभन्दा पहिला त, रारा पुग्ने उनको लामो समयदेखिको सपना पूरा भएको थियो। यो यात्रा उनका लागि एउटा अभिलाषा मात्र नभएर एक रोमाञ्चक गन्तव्य पनि थियो। यात्राका क्रममा उनले बाटोमा देखिएका प्राकृतिक दृश्यहरू, जस्तै कर्णाली नदी, नागवेली घुम्तीहरू, सुन्दर उपत्यका र सिँजाको ऐतिहासिकतालाई नजिकबाट नियाल्ने मौका पाए, जसले उनलाई आनन्दित बनायो। तर जब उनी रारा तालको नजिक पुगे, त्यहाँको अनुपम सौन्दर्य र गाढा हरियो पानीले उनलाई मोहित बनायो। तालका लहरहरूलाई उनले बैसले छचल्किएका र आफूसँग पिरती गाँस्न हतारिएका जस्ता अनुभूत गरे, जसले उनको मनमा एउटा अलौकिक र आत्मिक आनन्द भरिदियो। प्रकृतिले यस्तो अनुपम उपहार दिएको देखेर उनी पुलकित भए र आफू नेपाली भएकोमा गौरवको अनुभूति गरे। यसैले, राराको भव्यता र प्राकृतिक सौन्दर्यले उनलाई अपार खुसी प्रदान गरेको थियो।</span></p>
+                            <p><strong>घ) यस दैनिकीमा लेखकको कस्तो प्रकारको अनुभूति प्रस्तुत भएको छ ?</strong><br><span class="text-justify">उत्तर: यस दैनिकीमा लेखकको व्यक्तिगत र आत्मिक अनुभूति प्रमुख रूपमा प्रस्तुत भएको छ। उनले आफ्नो यात्राको प्रत्येक क्षणलाई आफ्नो निजी भावनासँग जोडेका छन्। लेखकले बाटामा देखिएका प्राकृतिक दृश्यहरूलाई केवल वर्णन मात्र नगरी, ती दृश्यहरूबाट पाएको आनन्द र गौरवको भावनालाई पनि व्यक्त गरेका छन्। रारा तालको वर्णन गर्दा उनले यसलाई बैसले छचल्किएका र आफूसँग पिरती गाँस्न आएका लहरहरूको रूपमा कल्पना गरेका छन्, जसले श्रृङ्गारिक भावको अनुभूति गराउँछ। त्यस्तै, सूर्य, चन्द्रमा, बादल र पहाडहरू राराको पानीमा पौडी खेलेको कल्पना गरी उनले प्रकृतिलाई मानवीकरण गरेका छन्। यी सबै अभिव्यक्तिले लेखकको मनमा गहिरो शान्ति र आत्मिक आनन्द मिलेको देखाउँछ। समग्रमा, यो दैनिकी एक साधारण यात्रावर्णन मात्र नभई एक भावनात्मक यात्राको कथा हो, जहाँ लेखकले आफ्नो मनको गहिराइबाट पाएको अनुभूतिलाई सुन्दर शब्दहरूमा प्रस्तुत गरेका छन्।</span></p>
+                        </div>
+                        <p><strong>५. यस दैनिकीमा प्रकृतिलाई कसरी मानवीकरण गरिएको छ, वर्णन गर्नुहोस् ।</strong><br><span class="text-justify">उत्तर: मानवीकरण भनेको निर्जीव वस्तु वा प्राकृतिक तत्वहरूलाई मानिसको जस्तै क्रियाकलाप र भावनाहरूमा संलग्न गराएर वर्णन गर्ने एक साहित्यिक शैली हो। यस दैनिकीमा लेखकले रारा भ्रमणका क्रममा देखिएका प्राकृतिक तत्वहरूलाई जीवन्त रूपमा प्रस्तुत गर्न मानवीकरणको भरपूर प्रयोग गरेका छन्। उदाहरणका लागि:
+
+                        राराको आँगनी: लेखकले ताललाई 'राराको आँगनी' भनेर सम्बोधन गरेका छन्, जसले रारालाई एउटा घरको रूपमा चित्रित गरेको छ।
+                        लहरहरूको क्रियाकलाप: रारा तालका लहरहरूलाई बैसले छचल्किएका र पर्यटकसँग पिरती गाँस्न हतारिएका भनिएको छ। यसले निर्जीव लहरहरूलाई प्रेमिल मानव पात्रको रूपमा प्रस्तुत गरेको छ।
+                        दिल चोर्ने जादु: लेखकले राराको सुन्दरतालाई 'दिल चोर्ने जादु' भनेका छन्। यो मानिसको भावना हो, तर लेखकले यसलाई राराको सुन्दरतामा आरोपित गरेका छन्।
+                        सूर्य र चन्द्रमाको पौडी: लेखकले राराको पानीमा घाम र जूनले पालो गरेर पौडी खेलेको कल्पना गरेका छन्, जसले प्राकृतिक तत्वहरूलाई मानिसको जस्तै क्रियाकलापमा देखाएको छ।
+                        पहरा दिने पहाड: वरिपरिका पहाड र जङ्गलहरूलाई राराको सुरक्षाका लागि 'पहरो दिएको' भनिएको छ, जसले निर्जीव पहाडहरूलाई पहरेदारको भूमिकामा राखेको छ।
+                        यी सबै उदाहरणहरूले दैनिकीलाई अझै जीवन्त, भावनात्मक र कलात्मक बनाएका छन्। मानवीकरणको प्रयोगले लेखकले प्रकृतिसँग आफूलाई जोडेको र प्रकृतिको सौन्दर्यलाई अझ गहिरोसँग महसुस गरेको देखाउँछ।</span></p>
+                        <p><strong>६. दैनिकी पढी मुख्य मुख्य घटना टिपोट गर्नुहोस् ।</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>२०७७ जेठ २३ गते बिहान साढे तीन बजे उठेर लेखकको टोली गुल्मीबाट राराको यात्राका लागि जिपमा हिँडेको।</p>
+                            <p>यात्राको क्रममा रिडी, पाल्पा र बुटवल हुँदै राति ९ बजे सुर्खेत पुगी होटलमा बास बसेको।</p>
+                            <p>२०७७ जेठ २४ गते बिहान ५ बजे सुर्खेतबाट कर्णाली नदीको किनारै किनार हुँदै सिँजा उपत्यका पुगेको।</p>
+                            <p>सिँजामा खाजा खाएर रारा राष्ट्रिय निकुञ्जको चेकपोस्ट हुँदै रिसोर्टसम्म पैदल हिँडेको।</p>
+                            <p>२०७७ जेठ २५ गते बिहान ५ बजे उठेर राराको प्राकृतिक सौन्दर्य हेरेको र पाँच किलोमिटरको क्षेत्र हिँडेर पूरा गरेको।</p>
+                            <p>लेखकसहितको टोलीले राराको अनुपम सौन्दर्यको अवलोकन गरी आफ्नो बासस्थानमा फर्किएको।</p>
+                        </div>
+                        <p><strong>७. तपाईं सहभागी भएको कुनै कार्यक्रमको वर्णन गर्दै एक दिनको दैनिकी तयार पार्नुहोस् ।</strong><br><span class="text-justify">उत्तर: गोरखा दरबारको भ्रमण २०७७ माघ १३ गते, मङ्गलबार
+                        आज मेरो जीवनको एउटा अविस्मरणीय दिन रह्यो। नयाँ वर्षको उपलक्ष्यमा हाम्रो विद्यालयका केही शिक्षक र ११ तथा १२ कक्षाका विद्यार्थीहरू मिलेर गोरखा दरबारको भ्रमण र वनभोजको आयोजना गरिएको थियो। मेरो मनमा गोरखा दरबार घुम्ने इच्छा धेरै पहिलेदेखि थियो, र आज त्यो सपना पूरा भयो। बिहानै हामी सबै गोरखा पुग्यौँ र पहिले खाना पकाउने ठाउँको खोजी गर्यौँ। हामीले चयन गरेको ठाउँबाट हिमाल, पहाड र सम्पूर्ण गोरखा बजारको मनोरम दृश्य छर्लङ्गै देखिन्थ्यो। खाना तयार गर्ने काममा मैले पनि साथीहरूसँग मिलेर भरपूर सहयोग गरेँ।
+                        खाना तयार हुँदासम्म केही साथीहरू गीत गाएर रमाइलो गरिरहेका थिए। म र केही साथीहरू त्यहाँबाट अलि माथि रहेको टावरमा गयौँ। टावरमा चढ्न सबै डराइरहेका थिए, तर मैले आँट गरेर चढेपछि सबै साथीहरूमा पनि हिम्मत आयो र हामी सबै टावरमा चढ्यौँ। त्यहाँबाट वरिपरिका हिमालहरूको दृश्य साँच्चै लोभलाग्दो थियो। दिउँसो दुई बजेतिर हामी सबैले खाना खायौँ र त्यसपछि गुराँसका फूल र हरिया बुट्यानहरूसँग केहीबेर रमाइलो गर्यौँ। म प्रकृतिको यस्तो सुन्दर काखबाट विमुख हुनुपरेकोमा आफ्नो सहरिया जीवनलाई धिक्कार गरिरहेको थिएँ र मनमनै सोचिरहेको थिएँ कि सधैँ यस्तै प्राकृतिक वातावरणमा खेलिरहन पाए कति आनन्द हुन्थ्यो। बेलुका घर फर्कँदा पनि मेरो मस्तिष्कमा गोरखाको त्यो सुन्दर र रमाइलो दृश्य नाचिरह्यो। आज साह्रै थाकेकोले निद्रादेवीले पनि छिट्टै स्वागत गरिन्। मेरो मस्तिष्कमा गोरखाको रमाइलो दृृश्य नाचिरह्यो।</span></p>
+                        <p><strong>१०. दिइएको अनुच्छेद पढी सोधिएका प्रश्नहरूको उत्तर लेख्नुहोस् ।</strong><br>उत्तर:</p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) मिथिला लोककलामा महिलाको कस्तो भूमिका छ ?</strong><br><span class="text-justify">मिथिला लोककलाको सुरुवात र विकासमा महिलाहरूको भूमिका महत्त्वपूर्ण छ। उनीहरूले यो कलालाई पुस्तान्तरण गरेर यसको अस्तित्व जोगाएका छन्।</span></p>
+                            <p><strong>ख) अल्पना किन निर्माण गरिन्छ ?</strong><br><span class="text-justify">घरमा आउँदा र निस्कँदा शुभ र राम्रो हुन्छ भन्ने विश्वासका साथ अल्पना बनाइन्छ। यसलाई भूमिचित्रका रूपमा चित्रित गरिन्छ।</span></p>
+                            <p><strong>ग) मिथिला लोककलालाई के कसरी वर्गीकरण गरिएको छ ?</strong><br><span class="text-justify">मिथिला लोककलालाई मुख्यतया भित्तेचित्र, भूमिचित्र, पटचित्र, काष्ठचित्र, वास्तुचित्र, भाण्डचित्र र व्यक्तिचित्र गरी विभिन्न प्रकारमा वर्गीकरण गरिएको छ।</span></p>
+                            <p><strong>घ) माङ्गलिक र द्योतक शब्दको अर्थ लेख्नुहोस् ।</strong></p>
+                            <div class="ml-4">
+                                <p>माङ्गलिक: शुभ, कल्याणकारी।</p>
+                                <p>द्योतक: संकेत गर्ने, प्रकाश पार्ने।</p>
+                            </div>
+                        </div>
+                        <p><strong>११. दिइएको अनुच्छेदलाई चारओटा बुँदामा लेख्नुहोस् र उक्त बुँदाहरू समेटेर एक तृतीयांशमा सारांश लेख्नुहोस् ।</strong><br>उत्तर:</p>
+                        <div class="ml-4 space-y-2">
+                            <p>बुँदाहरू :</p>
+                            <div class="ml-4">
+                                <p>१. ऋष्यशृङ्ग ऋषिले तपस्या गरेको भूमि भएकाले रेसुङ्गा धार्मिक तीर्थस्थलको रूपमा चिनिएको।</p>
+                                <p>२. ऋषिले पुत्रेष्ठी यज्ञ गराएकाले राजा दशरथलाई पुत्र लाभ भएको।</p>
+                                <p>३. ऋषिको दर्शन गर्न जाँदा पानीको समस्या थाहा पाएपछि रामले बाण हानेर पानी निकालेको।</p>
+                                <p>४. योगी नरहरिनाथले कोटीहोम गरेपश्चात् यसको पर्यटकीय र धार्मिक महत्त्व बढेको।</p>
+                            </div>
+                            <p>सारांश</p>
+                            <p class="text-justify">योग साधना र विचार</p>
+                            <p class="text-justify">रेसुङ्गा ऋष्यशृङ्ग ऋषिको तपोभूमि भएकाले एक महत्त्वपूर्ण तीर्थस्थल हो। यस स्थानमा ऋषिले गराएको पुत्रेष्ठी यज्ञपछि राजा दशरथलाई पुत्र लाभ भएको थियो। ऋषिको दर्शन गर्न पुगेका रामले पानीको समस्या देखेर बाण हानेर पानी निकालेका थिए। योगी नरहरिनाथले कोटीहोम गरेपछि रेसुङ्गाको धार्मिक र पर्यटकीय महत्त्व अझ बढेको हो।</p>
+                            <p>(शब्द सङ्ख्या: ४७)</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएको अनुच्छेदबाट द्वित्व शब्द छानेर लेख्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>ससाना</p>
+                            <p>गाडीसाडी</p>
+                            <p>आलीआली</p>
+                            <p>सानासाना</p>
+                            <p>ठुलाठुला</p>
+                            <p>आआफ्ना</p>
+                            <p>धनसन</p>
+                            <p>खानासाना</p>
+                        </div>
+                        <p><strong>२. दिइएका शब्दहरुबाट द्विरुक्त शब्द बनाउनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>घर: घरघर</p>
+                            <p>बजार: बजारसजार</p>
+                            <p>साथी: साथीसाथी</p>
+                            <p>मान्छे: मान्छेमान्छे</p>
+                            <p>पानी: पानीपानी</p>
+                            <p>फूल: फूलसुल</p>
+                            <p>हिमाल: हिमालसिमाल</p>
+                            <p>चित्र: चित्रमित्र</p>
+                            <p>किताब: किताबसिताब</p>
+                            <p>गाडी: गाडीसाडी</p>
+                            <p>सामान: सरसामान</p>
+                            <p>गहना: गरगहना</p>
+                            <p>झगडा: झैझगडा</p>
+                            <p>सापटी: सरसापटी</p>
+                            <p>झल्को: झझल्को</p>
+                            <p>ठूलो: ठुलोठुलो</p>
+                            <p>थर्को: थथर्को</p>
+                            <p>सर: सरासर</p>
+                            <p>बर: बरबर</p>
+                            <p>एक: एकएक</p>
+                            <p>चार: चारचार</p>
+                            <p>पैँचो: ऐचोपैँचो</p>
+                            <p>बानी: आनीबानी</p>
+                            <p>पैसा: पैसापैसा</p>
+                            <p>चिया: चियासिया</p>
+                            <p>तरकारी: तरकारीसरकारी</p>
+                            <p>फोन: फोनसोन</p>
+                            <p>बोली: बोलीसोली</p>
+                            <p>टेबल: टेबलसेबल</p>
+                            <p>कलेज: कलेजसलेज</p>
+                            <p>लुगा: लुगासुगा</p>
+                            <p>बजार: बजारबजार</p>
+                        </div>
+                        <p><strong>३. दिइएक द्विरुक्त शब्दहरुलाई उस्तै उस्तै समूहमा सूचीबद्ध गरि निर्माण प्रक्रिया समेत देखाउनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>हात हात: हात + हात</p>
+                            <p>गरगहना: गहना + गहना</p>
+                            <p>खोला खोला: खोला + खोला</p>
+                            <p>सरसल्लाह: सल्लाह + सल्लाह</p>
+                            <p>छोरी छोरी: छोरी + छोरी</p>
+                            <p>गोदगाद: गोद + गोद</p>
+                            <p>गाडी गाडी: गाडी + गाडी</p>
+                            <p>आनीबानी: बानी + बानी</p>
+                            <p>ससानो: सानो + सानो</p>
+                            <p>झझल्को: झल्को + झल्को</p>
+                            <p>दुधसुध: दुध + दुध</p>
+                            <p>चोरचार: चोर + चोर</p>
+                        </div>
+                        <p><strong>४. `रारा भ्रमण ´ बाट द्वित्व प्रक्रियाबाट बनेका दशओटा शब्दहरु टिप्नुहोस् र द्वित्व विच्छेद गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>किनारै किनार: किनार + किनार</p>
+                            <p>हर्ल्याङहुर्लुङ: हर्ल्याङ + हर्ल्याङ</p>
+                            <p>आआफ्नो: आफ्नो + आफ्नो</p>
+                            <p>आलोपालो: पालो + पालो</p>
+                            <p>कुट्दाकुट्दै: कुट्दै + कुट्दै</p>
+                            <p>छचल्किनु: छल्किनु + छल्किनु</p>
+                            <p>सँगसँगै: सँगै + सँगै</p>
+                            <p>तलतल: तल + तल</p>
+                            <p>माथि माथि: माथि + माथि</p>
+                            <p>फाट्टफुट्ट: फाट्ट + फाट्ट</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">सन्धि</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएको अनुच्छेदबाट सन्धियुक्त शब्द पहिचान गरी सन्धि विच्छेद गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) नरेश: नर + ईश</p>
+                            <p>अत्याचार: अति + आचार</p>
+                            <p>सूर्योदय: सूर्य + उदय</p>
+                            <p>रुवाइ: रु + आइ</p>
+                            <p>कमाइ: काम + आइ</p>
+                            <p>ख) निष्काम: निस् + काम</p>
+                            <p>दुराशय: दुर् + आशय</p>
+                            <p>मानवोचित: मानव + उचित</p>
+                        </div>
+                        <p><strong>२. दिइएका शब्दहरुको सन्धि विच्छेद गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>पुस्तकालय: पुस्तक + आलय</p>
+                            <p>चन्द्रोदय: चन्द्र + उदय</p>
+                            <p>सूक्ति: सूक्त + इ</p>
+                            <p>नारीश्वर: नारी + ईश्वर</p>
+                            <p>आज्ञानुसार: आज्ञा + अनुसार</p>
+                            <p>देवर्षि: देव + ऋषि</p>
+                            <p>नरेन्द्र: नर + इन्द्र</p>
+                            <p>धीरेन्द्र: धीर + इन्द्र</p>
+                            <p>उल्लेख: उत् + लेख</p>
+                            <p>संवाद: सम् + वाद</p>
+                            <p>उद्बोध: उत् + बोध</p>
+                            <p>सङ्कीर्ण: सम + कीर्ण</p>
+                            <p>सन्देश: सम् + देश</p>
+                            <p>दिगम्बर: दिक् + अम्बर</p>
+                            <p>जगदीश: जगत् + ईश</p>
+                            <p>उल्लास: उत् + लास</p>
+                            <p>सद्भावना: सत् + भावना</p>
+                            <p>सन्न्यास: सत् + न्यास</p>
+                            <p>यशोधरा: यशस् + धरा</p>
+                            <p>पुनर्कथन: पुनः + कथन</p>
+                            <p>मनोरञ्जन: मनः + रञ्जन</p>
+                            <p>हतियार: हात + इयार</p>
+                            <p>ढकनी: ढक + अनी</p>
+                            <p>पन्यालो: पानी + आलो</p>
+                            <p>प्रेमर्षि: प्रेम + ऋषि</p>
+                        </div>
+                        <p><strong>३. अन्तिम दिनको दैनिकीको चौथो अनुच्छेद पढी सन्धियुक्त चारवटा शब्द खोजी सन्धि विच्छेद गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>मादक: मद + अक</p>
+                            <p>देखेर: देख् + एर</p>
+                            <p>ठडिएका: ठाडो + एका</p>
+                            <p>देखिने: देख् + इने</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Rara Notes
+        function toggleRaraSummary() {
+            const summaryText = document.getElementById('raraSummaryText');
+            const toggleBtn = document.getElementById('toggleRaraSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

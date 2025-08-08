@@ -1,0 +1,556 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Sunny Morning Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Style for the summary content to be hidden/shown */
+        #summary-content {
+            display: none; /* Hidden by default */
+            transition: opacity 0.5s ease-in-out;
+            opacity: 0;
+        }
+        #summary-content.is-visible {
+            opacity: 1;
+            display: block; /* Show when active */
+        }
+
+        /* Style for the summary button */
+        .summary-button {
+            /* Inherit button styles from browse-button for consistency */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            color: white;
+            padding: 0.5rem 1.5rem; /* Adjust padding for a button look */
+            border-radius: 9999px; /* Fully rounded */
+            font-weight: 600; /* Semi-bold */
+            font-size: 1.25rem; /* Larger font size */
+            cursor: pointer;
+            border: none;
+            outline: none;
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: block; /* Make it a block element to center */
+            margin: 0 auto 1rem auto; /* Center and add margin below */
+            text-align: center;
+        }
+        .summary-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image -->
+        <!-- Arrow Group (top-left) -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="index.html#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Sunny Morning Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text fade-in-slide-up">A Sunny Morning Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="summaryToggleButton" class="summary-button fade-in-slide-up" onclick="toggleSummary()">Summary</button>
+                <div id="summary-content" class="brighter-gradient-text mb-4">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                         “A Sunny Morning” is a thought-provoking one-act play by Sudhir Manandhar that explores themes of truth, identity, and human relationships. The play revolves around two main characters, Dona Laura and Don Gonzalo, who meet unexpectedly on a sunny morning and engage in a conversation filled with secrets and misunderstandings. Through their dialogue, the play examines how people hide their true selves and the consequences of deception.<br><br>
+
+The play begins with Dona Laura and Don Gonzalo meeting on a beautiful sunny morning. Both are strangers to each other but share a moment of companionship. They start talking and gradually reveal bits of their lives, though both choose to keep their real identities a secret. This initial encounter sets the tone for the play as a delicate dance of revealing and concealing.<br><br>
+
+As their conversation progresses, it becomes clear that both characters have hidden pasts and secrets. Dona Laura and Don Gonzalo are cautious but curious, trying to understand each other while protecting themselves emotionally. The play explores how people often create masks to face society or protect themselves from pain and judgment. Their interaction shows the tension between the desire to connect and the fear of being truly known.<br><br>
+
+The theme of truth is central to the play. Both characters struggle with whether to reveal their real selves or continue the façade. The play raises questions about trust and honesty in human relationships. It highlights how secrets can create distance and misunderstanding but can also be a form of self-preservation. The sunny morning symbolizes a fresh start or clarity, yet the characters remain trapped by their hidden truths.<br><br>
+
+Towards the end, the play leaves the audience reflecting on the nature of identity and the masks people wear. Dona Laura and Don Gonzalo part ways without fully revealing who they are, suggesting that some truths remain hidden and some connections remain incomplete. The play doesn’t provide clear answers but encourages thoughtful consideration of how we relate to others.<br><br>
+
+In conclusion, “A Sunny Morning” is a subtle yet powerful play that delves into the complexities of human interaction. Through the meeting of two strangers, Sudhir Manandhar explores themes of secrecy, identity, and the challenges of genuine communication. The play invites us to think about the masks we wear and the truths we keep hidden in our own lives.<br><br>
+                    </p>
+                </div>
+
+                <!-- New content starts here -->
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. What makes Dona Laura think that Don Gonzalo is an ill-natured man? Why do neither Dona Laura nor Don Gonzalo reveal their true identities?</strong><br>
+                            Dona Laura thinks Don Gonzalo is ill-natured because he behaves rudely and suspiciously from the very beginning. He refuses to sit on a bench shared with her and curses the priests occupying his usual bench. His gruff attitude and quick temper give her a negative impression of him.
+                            <br><br>
+                            Neither Dona Laura nor Don Gonzalo reveal their true identities initially because they are cautious and suspicious of each other. They both want to protect themselves emotionally as they suspect the other person might be someone from their past with whom things ended badly. Also, both enjoy the game of hiding their true selves, which adds an element of intrigue and tension to their conversation.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. At what point of time do you think Laura and Gonzalo begin to recognise each other?</strong><br>
+                            Laura and Gonzalo begin to recognise each other during their conversation, especially when they talk about their past, their lives, and certain personal details. The subtle hints and similarities in their stories make them suspicious, and gradually, their true identities dawn on them as they piece together the clues.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">c. When does Dona Laura realise that Don Gonzalo was her former lover?</strong><br>
+                            Dona Laura realises that Don Gonzalo was her former lover when he mentions specific details about their past relationship—such as the place where they met, shared memories, and events only the two of them would know. The way he talks about his bitterness and his attitude triggers her memory, and she connects the dots to recognise him.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">d. Why do Dona Laura and Don Gonzalo spin fictitious stories about themselves?</strong><br>
+                            They spin fictitious stories to protect their feelings and avoid vulnerability. Both have been hurt in the past and want to guard their hearts by hiding their true identities and emotions. Also, it is a kind of defense mechanism to avoid awkwardness and to keep the conversation light and playful while testing each other’s intentions.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">e. How do Dona Laura and Don Gonzalo feel about each other?</strong><br>
+                            Despite the initial suspicion and bitterness, both Dona Laura and Don Gonzalo still feel a deep emotional connection and affection for each other. Beneath their playful and guarded conversation lies lingering love, regret, and longing. They show a mix of resentment for the past and a hope for reconciliation.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. Look at the extract and answer:</strong><br>
+                            “Yes, you are only twenty. (She sits down on the bench.) Oh, I feel more tired today than usual. (Noticing Petra, who seems impatient.) Go, if you wish to chat with your guard.”
+                            <br><br>
+                            <strong class="font-semibold">i. Who is the speaker?</strong><br>
+                            The speaker is Dona Laura.
+                            <br><br>
+                            <strong class="font-semibold">ii. Who does ‘you’ refer to?</strong><br>
+                            The word ‘you’ refers to Petra, Dona Laura’s maid.
+                            <br><br>
+                            <strong class="font-semibold">iii. Who is the ‘guard’ the speaker is talking to?</strong><br>
+                            The ‘guard’ refers to Don Gonzalo, who is the man sitting on the bench and whom Petra seems interested in or impatient to talk to.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. In the dialogue between Dona Laura and Don Gonzalo:</strong><br>
+                            DONA LAURA: (Indignantly.) Look out!<br>
+                            DON GONZALO: Are you speaking to me, senora?<br>
+                            DONA LAURA: Yes, to you.<br>
+                            DON GONZALO: What do you wish?<br>
+                            DONA LAURA: You have scared away the birds who were feeding on my crumbs.<br>
+                            DON GONZALO: What do I care about the birds?<br>
+                            DONA LAURA: But I do.<br>
+                            DON GONZALO: This is a public park.
+                            <br><br>
+                            <strong class="font-semibold">i. Who is Dona addressing by saying “Look out”?</strong><br>
+                            Dona Laura is addressing Don Gonzalo when she says “Look out.”
+                            <br><br>
+                            <strong class="font-semibold">ii. What was Dona doing?</strong><br>
+                            Dona Laura was feeding birds with crumbs in the park.
+                            <br><br>
+                            <strong class="font-semibold">iii. Who scared the birds? Are they pet birds?</strong><br>
+                            Don Gonzalo scared the birds away by his sudden presence or behavior. The birds are wild birds in the public park, not pets.
+                            <br><br>
+                            <strong class="font-semibold">iv. Where are the speakers at the time of the conversation?</strong><br>
+                            The speakers are in a public park, sitting on benches
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">c. What is the effect of flashback in the play when Dona Laura and Don Gonzalo knew that they were the lovers in the past?</strong><br>
+                            The use of flashback in the play, when Dona Laura and Don Gonzalo come to realize that they were once lovers, plays a crucial role in revealing the deeper layers of the story and the characters. It takes the audience back in time, providing important context about their past relationship and the events that led to their current estrangement. This glimpse into their history helps explain why both characters behave so cautiously and defensively toward each other in the present. The flashback makes it clear that their bitterness and suspicion are rooted in old wounds and misunderstandings. It also adds emotional depth to the characters, allowing the audience to see them not just as strangers or adversaries but as people who once shared love and intimacy. This connection makes their interaction more poignant and meaningful, as it hints at unresolved feelings and the possibility of reconciliation.
+                            <br><br>
+                            Furthermore, the flashback creates dramatic tension and suspense by gradually revealing the truth to both the characters and the audience. As Dona Laura and Don Gonzalo piece together the clues from their conversation, the audience experiences the same surprise and emotional impact when the truth is finally unveiled. This technique enriches the narrative by weaving past and present together, highlighting the themes of love, regret, and forgiveness. The flashback also serves as a tool for character development, showing how time and experience have changed them but have not completely erased their feelings for one another. Overall, the flashback deepens the audience’s engagement with the story by providing a richer understanding of the characters’ motivations and the emotional stakes involved in their reunion.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">d. Discuss how the play is built around humour and irony.</strong><br>
+                            The play “A Sunny Morning” is skillfully built around humour, which often arises from the witty and playful exchanges between Dona Laura and Don Gonzalo. Their conversation is filled with sarcastic remarks, teasing, and banter that lighten the mood despite the underlying tension of their past. For example, Don Gonzalo’s gruff behavior and Dona Laura’s sharp replies create amusing moments that entertain the audience. The humour helps to mask their true feelings and adds a charming quality to their interaction. It also makes their characters more relatable and human, showing how people use humour to deal with uncomfortable situations or unresolved emotions. This lighthearted tone balances the serious themes of lost love and regret, making the play engaging and enjoyable.
+                            <br><br>
+                            Irony is another key element in the play, adding depth and complexity to the story. Dramatic irony is present as the audience gradually realizes that Dona Laura and Don Gonzalo are former lovers long before they openly admit it to each other. The characters themselves are unaware at first, leading to misunderstandings and ironic situations where they unknowingly talk around their shared past. There is also situational irony in the fact that both try to appear indifferent or even hostile, while in reality, they still harbor feelings for each other. This contrast between appearance and reality creates a tension that is both poignant and ironic. Together, humour and irony work to highlight the contradictions in human relationships and the ways people protect themselves emotionally, enriching the play’s emotional impact and making it memorable.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">e. How is the title ‘A Sunny Morning’ justifiable? Discuss.</strong><br>
+                            The title “A Sunny Morning” is justifiable because it symbolizes a fresh beginning and the possibility of warmth and reconciliation between Dona Laura and Don Gonzalo. A sunny morning often represents hope, clarity, and the chance to start anew after a dark or difficult period. In the play, despite the bitterness and misunderstandings that exist between the two characters, their meeting in the park on a bright morning becomes an opportunity for them to reconnect and confront their past. The natural setting of a sunny morning reflects the potential for healing and the lightness that humour brings to their interaction. It suggests that, like the sun dispelling darkness, the conversation may help clear up old grievances and misunderstandings, allowing them to move forward.
+                            <br><br>
+                            Moreover, the title highlights the contrast between the harshness of their past relationship and the gentle, pleasant atmosphere of the present moment. The peacefulness and brightness of the morning create a backdrop for their candid and sometimes playful exchange, softening the emotional tension between them. This setting emphasizes the themes of renewal and forgiveness, indicating that even after pain and separation, there is room for warmth and affection. The “sunny morning” is thus not only a literal description of the time and place but also a metaphor for the hope and possibility that life offers, making the title meaningful and fitting for the play’s mood and message.
+                        </p>
+                    </div>
+                </div>
+
+                <div class="mt-12 fade-in-slide-up">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <div class="space-y-4 text-lg">
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">a. What do you predict will happen in the next meeting between Dona Laura and Don Gonzalo? Discuss.</strong><br>
+                            In their next meeting, it is likely that Dona Laura and Don Gonzalo will begin to drop their defensive masks and speak more openly about their past and feelings. The initial meeting was filled with playful teasing, suspicion, and hidden emotions, but as they get more comfortable, they may start to express their regrets, misunderstandings, and lingering affection more honestly. This openness could lead to a deeper emotional connection and a chance to clear up the bitterness that separated them before. Their interaction might move from guarded conversation to heartfelt dialogue, allowing them to revisit their relationship with a clearer perspective and possibly pave the way for forgiveness and reconciliation.
+                            <br><br>
+                            Additionally, the next meeting might bring moments of vulnerability where both characters confront the pain of their past mistakes and lost time. They may share more personal stories or apologies, which could soften their attitudes and bring them closer together. However, some tension or hesitation might still remain, as old wounds are not easily healed. This push and pull between hope and caution will likely make their reunion emotionally rich and complex. Overall, the next meeting holds the promise of transformation—moving from estrangement to understanding, and perhaps, rekindling the bond they once shared.
+                        </p>
+                        <p class="brighter-gradient-text text-justify">
+                            <strong class="font-semibold">b. Was it wise for Dona Laura and Don Gonzalo to keep their identities secret? How might their secrets affect future meetings?</strong><br>
+                            It was understandable, though perhaps not entirely wise, for Dona Laura and Don Gonzalo to keep their true identities secret during their first meeting. Given their painful past and the bitterness that lingered between them, both were cautious and protective of their emotions. By hiding who they really were, they avoided immediate confrontation and the risk of reopening old wounds too soon. This secrecy allowed them to interact in a lighter, more playful manner without the heavy burden of their history weighing down the conversation. However, keeping their identities hidden also meant that their communication was based on suspicion, misunderstanding, and half-truths, which could prevent genuine reconciliation from beginning.
+                            <br><br>
+                            Their secrets might complicate future meetings because trust is difficult to build when both parties are not fully honest. If they continue to hide their true feelings and past, it may lead to further misunderstandings and emotional distance. On the other hand, once they decide to reveal their identities and confront their shared history openly, it could either bring them closer through forgiveness or deepen the conflict if unresolved issues resurface. Ultimately, honesty and openness will be crucial for healing and rebuilding their relationship. The secrets create a fragile dynamic that could either break or strengthen depending on how they handle the truth in their future encounters.
+                        </p>
+                    </div>
+                </div>
+                <!-- New content ends here -->
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility and button text
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const summaryToggleButton = document.getElementById('summaryToggleButton');
+
+            if (summaryContent.classList.contains('is-visible')) {
+                // If summary is visible, hide it and change button text to "Summary"
+                summaryContent.classList.remove('is-visible');
+                summaryToggleButton.textContent = 'Summary';
+            } else {
+                // If summary is hidden, show it and change button text to "Hide Summary"
+                summaryContent.classList.add('is-visible');
+                summaryToggleButton.textContent = 'Hide Summary';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

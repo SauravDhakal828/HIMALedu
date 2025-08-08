@@ -1,0 +1,476 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>What is Poverty? Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background for futuristic theme */
+            background: linear-gradient(135deg, #0a0a2a 0%, #2a2a5a 50%, #4a4a8a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0; /* Default light text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for main titles (matching Gift in Wartime) */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text (matching Gift in Wartime) */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer (matching Gift in Wartame) */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons (matching Gift in Wartime) */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line (matching Gift in Wartime) */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(10, 10, 42, 0.9); /* Darker background for mobile menu */
+            color: #e0e0e0; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0e0; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from new gradient */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Slightly transparent white */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow (matching Gift in Wartime) */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border matching new gradient */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #050515; /* Even darker footer */
+            color: #e0e0e0; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Summary output is now hidden by default */
+        #summaryOutput {
+            display: none; /* Changed from block to none */
+        }
+
+        /* Styling for the new text content */
+        .text-section h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem; /* Equivalent to text-2xl */
+            font-weight: 600; /* Equivalent to font-semibold */
+        }
+        .text-section p {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            text-align: justify; /* Added for text justification */
+        }
+        .text-section strong {
+            font-weight: 700;
+        }
+        .text-section ul {
+            list-style: disc;
+            padding-left: 1.25rem; /* Tailwind's pl-5 */
+            margin-bottom: 1rem;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/>
+                        <stop offset="1" stop-color="#a18cd1"/>
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/>
+                        <stop offset="1" stop-color="#fbc2eb"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-400 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-400 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-400 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0e0] bright-solid-text hover:bg-blue-900 hover:text-blue-400 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0e0] bright-solid-text hover:bg-blue-900 hover:text-blue-400 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for What is Poverty? Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text">What is Poverty? Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <p class="text-lg bright-solid-text mb-4">
+                </p>
+                <button id="showSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+                <div id="summaryOutput" class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="bright-solid-text mb-4">
+                        “What is Poverty?” is a thought-provoking chapter that explores the meaning and nature of poverty beyond just the lack of money. It explains that poverty is not only about being poor financially but also involves deprivation in many aspects of life, such as education, healthcare, and basic living standards. The chapter encourages readers to understand poverty as a complex and multi-dimensional problem that affects millions of people worldwide.<br><br>
+
+The chapter begins by defining poverty in simple terms: it is the state of being extremely poor or lacking enough resources to meet basic needs like food, clothing, and shelter. However, the chapter goes further by explaining that poverty is also about the lack of access to opportunities. For example, people who cannot afford education or healthcare are also considered poor because they are deprived of the chance to improve their lives.<br><br>
+
+It explains how poverty leads to a cycle of disadvantages. Poor health, lack of education, and unemployment create barriers that keep people trapped in poverty for generations. The chapter emphasizes that poverty affects not just individuals but entire communities, preventing them from participating fully in social and economic activities. It also highlights that poverty can cause social exclusion and inequality.<br><br>
+
+The chapter also discusses different types of poverty. Absolute poverty means lacking the most basic necessities to survive, while relative poverty refers to being poor compared to others in society. It mentions that poverty exists in both rural and urban areas, but the causes and effects can vary. For example, rural poverty may result from lack of land or farming resources, while urban poverty may come from unemployment or high living costs.<br><br>
+
+Towards the end, the chapter stresses the importance of understanding poverty correctly so that effective measures can be taken to reduce it. It calls for efforts from governments, communities, and individuals to address the root causes of poverty through education, healthcare, job creation, and social welfare programs. The chapter also inspires readers to show empathy and work towards a fairer society where everyone has equal opportunities.<br><br>
+
+In conclusion, “What is Poverty?” provides a comprehensive view of poverty as more than just a lack of money. It encourages awareness of the many ways poverty limits human potential and calls for collective action to fight poverty and bring about social justice and equality.<br><br>
+                    </p>
+                </div>
+
+                <!-- Understanding the Text section - Always visible -->
+                <div class="text-lg brighter-gradient-text mb-4 text-justify mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">a. What is poverty according to Parker?</strong><br>
+                        Poverty is a combination of physical hardship and emotional stress, including poor living conditions, illness, lack of proper food, and constant worry about making ends meet.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">b. How is poverty difficult for Parker’s children? List some specific examples.</strong><br>
+                        Poverty causes Parker’s children to face poor health, hunger, lack of proper clothing, and the stress of living in unsafe, unsanitary homes.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">c. How does Parker try to obtain help, and what problems does she encounter?</strong><br>
+                        Parker tries to get help from welfare agencies and charities but faces rejection, long waiting times, and complicated procedures.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">d. Why are people’s opinions and prejudices her greatest obstacles?</strong><br>
+                        People judge her harshly, assuming poverty is due to laziness or bad choices, which makes it harder for her to get sympathy or support.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">e. How does Parker defend her inability to get help? How does she discount the usual solutions society has for poverty (e.g., welfare, education, and health clinics)?</strong><br>
+                        She explains that welfare is insufficient and humiliating, education is hard to access for her children, and health clinics often don’t address the root causes of poverty or the chronic nature of her struggles.
+                    </p>
+                </div>
+
+                <!-- Reference to the Context section - Always visible -->
+                <div class="text-lg brighter-gradient-text mb-4 text-justify mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">a. Explain: Poverty is looking into a black future.</strong><br>
+                        The phrase “Poverty is looking into a black future” captures the deep hopelessness and uncertainty that people living in poverty often face. When someone is poor, they may see their future as bleak, full of struggles, and without clear opportunities for improvement. The “black future” symbolizes a sense of darkness, where possibilities seem limited or even nonexistent. It reflects the fear and anxiety about what lies ahead—whether it’s about providing basic needs like food, shelter, and healthcare or concerns about education and a better life for their children. Poverty traps people in a cycle where the immediate hardships cloud their hopes and make it difficult to envision a brighter tomorrow.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        Moreover, this idea highlights the psychological and emotional burden of poverty, not just the physical or material lack. It’s not only about what is missing in the present but also about the despair that comes from imagining a life filled with ongoing hardship. The “black future” suggests a future shadowed by uncertainty, missed opportunities, and continuous suffering. It emphasizes how poverty steals not only resources but also the ability to dream, plan, and aspire, leaving individuals stuck in a dark place mentally and emotionally, which makes escaping poverty even harder.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">b. What does Parker mean by “The poor are always silent”?</strong><br>
+                        When Parker says, “The poor are always silent,” she means that people living in poverty often don’t have a voice in society and are overlooked or ignored. They rarely get the chance to speak up about their struggles because they are marginalized, lack power, or fear judgment and rejection. This silence is not because they have nothing to say but because society often dismisses or ignores their problems. The poor might also feel ashamed or powerless to demand help, leading them to suffer quietly. Their hardships and needs remain hidden, making it harder for others to understand the reality of poverty and offer meaningful support.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        Furthermore, this silence is a result of social and economic barriers that prevent the poor from expressing themselves. The poor may lack education, confidence, or access to platforms where their voices could be heard. Additionally, the stigma and prejudice around poverty can discourage them from speaking out, as they might worry about being blamed or misunderstood. Parker’s statement highlights how this silence contributes to the invisibility of poverty, reinforcing the cycle where the poor remain unheard, unsupported, and trapped in their difficult circumstances.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">c. What writing strategy does the author use at the beginning of most of the paragraphs? Do you notice a recurring pattern? What is it?</strong><br>
+                        At the beginning of most paragraphs, the author uses a descriptive and reflective writing strategy, often starting with vivid images or direct statements that capture the harsh realities of poverty. This approach immediately draws the reader’s attention to the physical and emotional conditions faced by the poor, such as sickness, hunger, or hopelessness. By using strong, concrete details early on, the author sets the tone for each paragraph and establishes a clear focus. This helps the reader connect emotionally and understand the gravity of the situation right from the start.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        The recurring pattern throughout the text is that the author alternates between personal observations and broader social commentary. Each paragraph often begins with a specific description or example from Parker’s experience and then expands into a reflection on what this means in terms of societal attitudes, obstacles, or systemic problems. This pattern effectively builds a layered understanding of poverty—not just as an individual issue but as a complex social problem that involves prejudice, inadequate help, and silence. The repetition of this structure reinforces the message and keeps the reader engaged throughout the essay.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">d. How does Parker develop each paragraph? What details make each paragraph memorable?</strong><br>
+                        Parker develops each paragraph by starting with a strong, often personal or vivid statement, then expanding it with specific examples, observations, and reflections that bring her experience of poverty to life. She combines emotional details—such as feelings of exhaustion, fear, or helplessness—with concrete descriptions of her environment, like dirty living conditions or the physical ailments affecting her family. This mix of the emotional and the tangible helps readers not only understand poverty intellectually but also feel its impact deeply. Parker’s use of personal stories and detailed imagery makes her writing authentic and relatable, which strengthens the connection between the reader and the realities she describes.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        What makes each paragraph especially memorable are the specific and relatable details Parker includes, such as the struggles her children face with illness or hunger, the way bureaucratic systems fail her, and the judgments she endures from society. These details move beyond abstract ideas to reveal the human side of poverty. Additionally, Parker’s candid tone—her honesty about her fears, frustrations, and resilience—adds emotional weight to her narrative. By balancing hard facts with heartfelt reflections, she creates paragraphs that stay with the reader and challenge common assumptions about poverty. This approach ensures that each section contributes meaningfully to the overall message of the essay.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">e. In the final paragraph, how does the author use questions to involve the reader in the issue of poverty?</strong><br>
+                        In the final paragraph, the author uses **rhetorical questions** to actively engage the reader and make them reflect on the harsh realities of poverty. Instead of simply stating facts or conclusions, the questions invite readers to think deeply about the situation and challenge their own perceptions and assumptions. By asking questions, the author shifts the responsibility onto the reader, encouraging them to consider what poverty really means and how society responds to it. This technique creates a sense of involvement and urgency, making the reader an active participant in contemplating the problem rather than just a passive observer.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        Moreover, these questions highlight the complexity and persistence of poverty, emphasizing that it cannot be easily solved or ignored. The questions also underline the frustration and helplessness Parker feels, while simultaneously pushing readers to think critically about why poverty continues to exist despite available resources and efforts. This strategy effectively closes the essay with a call for awareness and empathy, leaving a lasting impression that poverty is not just an abstract issue but a pressing human concern that demands attention and action.
+                    </p>
+                </div>
+
+                <!-- Reference Beyond the Text section - Always visible -->
+                <div class="text-lg brighter-gradient-text mb-4 text-justify mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">a. Define a social problem (homelessness, unemployment, racism) imitating Parker’s style.</strong><br>
+                        A social problem is like a shadow that falls across the lives of many, darkening their days and narrowing their chances. It is not just one person’s trouble but a weight that presses on entire communities, often hidden in plain sight yet felt deeply by those who live it. Whether it is homelessness, unemployment, or racism, a social problem strips away dignity and hope, leaving people to wrestle with pain and exclusion. It is a wound that society refuses to fully heal, no matter how many times it is pointed out, and the silence around it only makes the suffering grow louder inside.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        Like poverty, social problems are tangled webs of unfairness and neglect, where the systems meant to help often fall short or turn a blind eye. They trap people in cycles of hardship, where escaping feels impossible and every day is a struggle against not only material needs but also against judgment, prejudice, and isolation. The faces of these problems are real people—mothers, fathers, children—each carrying stories of dreams deferred and chances missed. And until these problems are seen not as distant issues but as urgent calls for change, the darkness will remain, swallowing hopes and futures alike.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        <strong class="brighter-gradient-text">b. Using adjectives to highlight the futility of the situation, write a short definition essay on Growing up in Poverty.</strong><br>
+                        Growing up in poverty is a harsh and relentless experience marked by constant struggle and despair. It is a confusing and exhausting journey where every step forward is met with overwhelming obstacles and setbacks. Children who grow up in such conditions face bleak and uncertain futures, surrounded by scarcity, neglect, and emotional turmoil. Their lives are shaped by inadequate resources, unhealthy environments, and persistent fear, leaving them vulnerable and isolated. The futility of their situation lies in the unending cycle of deprivation that seems impossible to break, no matter how hard they try.
+                    </p>
+                    <p class="bright-solid-text mb-2">
+                        This experience is not only physically draining but also mentally and emotionally shattering. The children live in a world that is unforgiving, indifferent, and often cruel, where hope is fragile and dreams are easily crushed. The constant presence of poverty creates feelings of helplessness, invisibility, and resignation, making it difficult for them to envision a better life. Growing up in poverty is a grim reminder of society’s failure to protect its most vulnerable, trapping young lives in a frustrating and bleak reality with few opportunities for escape or improvement.
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+
+            const showSummaryBtn = document.getElementById('showSummaryBtn');
+            const summaryOutput = document.getElementById('summaryOutput');
+
+            // Set initial button text based on summary visibility
+            // The summary is initially hidden by CSS, so the button should say "View Summary"
+            if (summaryOutput.style.display === 'block') { // This condition will now be false on load
+                showSummaryBtn.textContent = 'Hide Summary';
+            } else {
+                showSummaryBtn.textContent = 'View Summary'; // This will be true on load
+            }
+
+            // Toggle summary visibility when button is clicked
+            showSummaryBtn.addEventListener('click', () => {
+                if (summaryOutput.style.display === 'none' || summaryOutput.style.display === '') {
+                    summaryOutput.style.display = 'block';
+                    showSummaryBtn.textContent = 'Hide Summary'; // Change button text
+                } else {
+                    summaryOutput.style.display = 'none';
+                    showSummaryBtn.textContent = 'View Summary'; // Change button text
+                }
+            });
+        });
+    </script>
+</body>
+</html>

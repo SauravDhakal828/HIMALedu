@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Every Morning I Wake Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Every Morning I Wake Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">2. Every Morning I Wake Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Every Morning I Wake” is a deeply emotional and poignant poem by Kamala Das that delves into the themes of loneliness, alienation, and the ongoing struggle to find meaning in life. The poem powerfully captures the speaker’s recurring experience of waking up each day to a sense of emptiness and despair. Through simple yet evocative language, Kamala Das conveys the cyclical nature of the speaker’s emotional pain, highlighting the monotony and bleakness that seem to envelop her existence. This poem resonates with anyone who has grappled with feelings of sadness or the search for fulfillment in life.<br><br>
+
+The poem begins with the repeated phrase, “Every morning I wake,” which immediately sets a tone of routine and emotional stagnation. This repetition is significant because it underlines the speaker’s trapped condition—each day begins with the same overwhelming feeling of sorrow and hopelessness. The morning, often associated with new beginnings and hope, instead becomes a symbol of persistent suffering and the inescapability of despair. This cyclical experience reflects the painful reality of many who struggle with mental anguish, where time seems to stand still, and there is no relief from inner turmoil.<br><br>
+
+Kamala Das employs vivid and intimate imagery throughout the poem to express the speaker’s deep sense of isolation and emotional distance from others. The speaker feels disconnected, as though no one truly understands her pain or the heaviness she carries within. This emotional solitude intensifies the sense of alienation and makes the world appear cold and unwelcoming. The poem’s language is raw and honest, exposing the vulnerability of the human heart when faced with loneliness. The speaker’s yearning for love, connection, and purpose remains unfulfilled, underscoring the profound human desire for belonging and meaning.<br><br>
+
+Despite the prevailing sadness, the poem also reveals a subtle but undeniable strength—the mere act of waking up every morning despite the pain shows resilience and a quiet determination to continue. This persistence, though overshadowed by despair, hints at an inner will to survive and perhaps find solace one day. Kamala Das’s portrayal of the coexistence of despair and hope captures the complexity of human emotions, where suffering does not necessarily eliminate the possibility of renewal or change. This delicate balance between pain and endurance is what gives the poem its profound emotional depth.<br><br>
+
+The poem ultimately invites readers to reflect on the universal nature of loneliness and the human struggle for emotional survival. Kamala Das’s honest expression of her own despair opens a space for empathy and understanding, encouraging those who read it to confront their own feelings with courage and honesty. The poem is a reminder that while life can be filled with moments of darkness, the act of facing each new day is itself an act of bravery. It speaks to the strength found in vulnerability and the hope that, even in sadness, life continues.<br><br>
+
+In conclusion, “Every Morning I Wake” is a moving exploration of loneliness, despair, and resilience. Kamala Das’s use of simple yet powerful language brings to life the emotional experience of waking up each day to pain and alienation, while also acknowledging the human capacity to endure. The poem resonates deeply with readers, offering both a reflection on the complexities of the human heart and a message of quiet hope in the face of suffering. It is a compelling piece that invites contemplation on the courage it takes to live through emotional hardship.<br><br>
+
+
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. When does the speaker pray to the Lord?</span><br>
+                    The speaker prays to the Lord every morning when he wakes up and again in the evening before sleeping. These moments mark the beginning and the end of the day.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What does the speaker pray for?</span><br>
+                    The speaker prays for the Lord’s loving care and mercy upon all the poor, mortal creatures. He asks for protection and the blessing to see the next morning safely.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Who are the ‘poor creatures’? Why does the speaker call them ‘poor creatures’?</span><br>
+                    The ‘poor creatures’ refer to all innocent living beings on earth who are vulnerable and mortal. They are called ‘poor’ because their lives are fragile, uncertain, and they face the inevitability of death.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. What does Milk Wood sound like? A type of wood or a place? Why?</span><br>
+                    Milk Wood sounds like a place rather than a type of wood. This is because there is no article (like ‘a’, ‘an’, or ‘the’) used before it, which suggests it is a proper noun referring to a location rather than a common noun referring to a kind of wood.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. Why do the inhabitants of Milk Wood bow to the setting sun ‘but just for now’?</span><br>
+                    The inhabitants bow to the setting sun ‘but just for now’ because they understand that their time on earth is temporary. They acknowledge the ending of the day’s prayer with hope and wish to see another new day, recognizing life’s fleeting nature.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Discuss “Every Morning When I Wake” as a prayer to God.</span><br>
+                    “Every Morning When I Wake” by Dylan Thomas is essentially a heartfelt prayer poem directed towards God. In this poem, the speaker humbly asks for God’s mercy and protection over all living beings, especially the poor and vulnerable creatures who live in the small, quiet place called Milk Wood.
+                    <br><br>
+                    The poem captures the intimate and daily ritual of prayer — beginning each morning with a plea for care and ending the day with hope to see another sunrise. The speaker’s prayer reflects a deep awareness of human mortality and the fragile nature of life. By addressing God, who is portrayed as the magnificent and immortal creator, the speaker acknowledges that all life depends on divine will.
+                    <br><br>
+                    The prayer is simple yet profound. It highlights the speaker’s trust in God’s power to guide, protect, and bless. The speaker asks God to “have his loving eye” on all creatures, showing a desire for kindness and compassion that transcends social status or wealth.
+                    <br><br>
+                    Thus, the poem is more than just words; it is an expression of faith, hope, and reverence. It reminds readers of the importance of gratitude and humility in the face of life’s uncertainties, making it a sincere and universal prayer to the divine.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why does the speaker make a prayer to God, but not to a king, a billionaire, or a scientist?</span><br>
+                    The speaker chooses to pray to God instead of a king, a billionaire, or a scientist because God is the supreme, eternal power—the creator and controller of all life. Unlike human beings who are mortal and limited in power, God is immortal, all-knowing, and beyond human weakness. A king may rule over people, a billionaire may have wealth, and a scientist may have knowledge, but none of them can control life and death or offer the kind of protection and mercy that the speaker seeks.
+                    <br><br>
+                    The speaker believes that only God holds the “remote” of every creature’s life. In times of uncertainty and fear, people naturally turn to the one who is believed to have control over everything. Kings, billionaires, and scientists are also created beings, subject to the same fate as everyone else—they are born, live for a while, and eventually die. But God, in the speaker’s belief, exists beyond time and death, making Him the only one worthy of such a prayer.
+                    <br><br>
+                    In essence, the speaker's prayer to God reflects a deep faith in divine power over worldly strength, wealth, or intellect.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. How does the poet highlight the magnificence of God?</span><br>
+                    In the poem “Every Morning When I Wake”, Dylan Thomas highlights the magnificence of God by presenting Him as the supreme, eternal being who controls the fate of all creatures. The speaker shows deep devotion to God, acknowledging that He alone holds the power over life and death. Unlike kings, billionaires, or scientists, who may have temporary influence or knowledge, God is portrayed as immortal and all-powerful. The poet emphasizes that all living beings are in God’s hands and that only He has the authority to grant another day of life.
+                    <br><br>
+                    Furthermore, the poet underlines God’s magnificence by portraying Him as a compassionate and watchful guardian. God is described as someone who sees the best side of every creature, even when others cannot. This shows His ability to understand and love beyond human judgment. The speaker’s prayer for mercy reflects a belief in God’s kindness and care for even the poorest and most helpless beings. Through this, the poet not only shows God’s might but also His deep empathy, making Him both powerful and loving—truly magnificent in every sense.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. How does the rhyme scheme of the poem reinforce its message?</span><br>
+                    The poem “Every Morning When I Wake” by Dylan Thomas uses a regular AABB rhyme scheme, which contributes to the smooth, flowing rhythm of the poem and reinforces its message of peace, devotion, and divine hope. This consistent and predictable pattern mirrors the daily routine of the speaker’s prayer — a habit of seeking God’s mercy every morning and evening. The rhyme creates a soothing musicality that reflects the calm and spiritual tone of a sincere prayer, making the poem feel more meditative and heartfelt.
+                    <br><br>
+                    Each rhyming couplet contains a complete thought or emotional expression, allowing the speaker’s ideas to be clearly communicated. The rhyme not only makes the poem pleasant to read or hear but also helps the reader focus on the deeper meaning — the speaker’s trust in God and recognition of human fragility. The regularity of the rhyme suggests order, stability, and faith — key themes in a prayerful poem. Just as the speaker relies on God’s constant presence, the rhyme scheme offers a sense of emotional balance and reassurance. Through its structure, the rhyme enhances the spiritual depth of the poem and strengthens its role as a poetic prayer.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference beyond the text</h3>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">a. Does God exist? Give your opinion.</span><br>
+                    The question of God's existence has been debated for centuries, and opinions vary widely based on personal beliefs, culture, religion, and experience. In my opinion, God does exist—not necessarily as a physical being we can see, but as a powerful, invisible force that influences our lives. We cannot see air, gravity, or emotions like love, but we believe in them because we experience their effects. Similarly, many people feel God's presence during difficult times, miracles, or moments of deep peace and inspiration. This suggests that God exists in a spiritual or metaphysical way, beyond the limits of human understanding.
+                    <br><br>
+                    Moreover, the complexity, beauty, and order of the universe often point to the presence of a higher intelligence. From the structure of the human body to the perfect balance in nature, it’s hard to believe that all this happened by chance alone. While science explains many things, it cannot answer all the questions about life, purpose, or consciousness. Belief in God provides comfort, guidance, and moral direction for many people. Even though God may not be visible, the faith people hold and the positive impact of that belief in their lives strongly support the idea that God does, in some form, exist.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>

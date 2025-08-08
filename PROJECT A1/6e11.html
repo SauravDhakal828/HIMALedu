@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Two Little Soldiers Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        /* Removed display: none from here as it's handled by Tailwind's 'hidden' class */
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Two Little Soldiers Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">Two Little Soldiers Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" class="hidden content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        “Two Little Soldiers” is a touching and emotionally complex short story by French writer Guy de Maupassant. It explores themes of friendship, routine, betrayal, innocence, jealousy, and emotional pain, all presented through the lives of two simple soldiers. The story shows how fragile human relationships can be, especially when love and jealousy enter the picture.<br><br>
+
+The story is set in France, during a time of peace. It follows two young soldiers, Luc Le Ganidec and Jean Kerderen, who are close friends. They live and serve in Paris, and on every Sunday, they follow the same routine: they leave the barracks early in the morning and travel to the countryside to a place called Bezons. There, they enjoy a peaceful time, sitting on a grassy hill, eating simple food, watching cows, and appreciating the natural beauty.<br><br>
+
+Their Sunday visits are not only a break from the military routine but also a way to escape the loneliness of army life. They rarely talk much, but their silence reflects deep companionship. They are content in each other’s company and find joy in simple pleasures.<br><br>
+
+One Sunday, their routine changes when they meet a young milkmaid who is tending cows nearby. She is described as healthy, cheerful, and attractive. The two soldiers are shy but clearly interested in her. Over the next few weeks, they begin to interact with her during their visits. She becomes a new part of their quiet life, and both of them seem to enjoy her company. However, it becomes clear that Luc Le Ganidec is more outgoing and starts spending more time alone with the girl, while Jean, the quieter one, is left behind.<br><br>
+
+Jean begins to notice the change. Luc starts going out during weekdays, claiming it is for errands, but Jean suspects that Luc is secretly meeting the girl. This realization hurts Jean deeply. He never confronts Luc or the girl directly, but his heart fills with sadness, jealousy, and betrayal. The emotional pain he feels is strong but silent.<br><br>
+
+One Sunday, while sitting alone on the hill, Jean breaks down and cries. When Luc returns from the village, Jean tries to hide his tears, but Luc notices. Jean says that he is just not feeling well. The story ends with Jean weeping silently while eating, showing that his emotional world has been shaken by the loss of his closest friendship.<br><br>
+                    </p>
+                </div>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 mt-8">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Why do the two soldiers spend their free time on Sundays away from the barrack out in the countryside?</span><br>
+                    The two soldiers, Luc and Jean, spend their Sundays away from the barracks in the countryside because it reminds them of their village life and offers them peace, calmness, and a feeling of being closer to home. They find comfort in nature, enjoy eating simple food together, and feel happy sitting silently in each other’s company. It is their way of escaping the dullness of military life and reconnecting with memories of their rural upbringing.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why does the girl become the topic of conversation for these soldiers?</span><br>
+                    The girl becomes the topic of conversation because she is the only female presence in their otherwise monotonous and male-dominated lives. Her friendly and warm behavior attracts both soldiers. Since they both develop feelings for her, she naturally becomes the most interesting and important subject for them to talk about. She also becomes a symbol of beauty, affection, and emotional connection for the two lonely men.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why does deception enter into their friendship?</span><br>
+                    Deception enters into their friendship when Luc begins secretly visiting the girl during the week without informing Jean. Earlier, both used to see her together only on Sundays. Luc’s secret visits show that he wants the girl’s attention for himself. This betrayal of mutual trust and unspoken rules of friendship creates a sense of dishonesty and emotional conflict between the two friends.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Do you think that Luc is a betrayer of friendship?</span><br>
+                    Yes, Luc can be seen as a betrayer of friendship. Although he and Jean shared a deep bond and equal affection for the girl, Luc secretly visits her alone and does not tell Jean about it. This act of keeping Jean in the dark and pursuing the girl for himself shows selfishness and betrayal. He breaks the trust and understanding they had built over time, which eventually causes great emotional pain to Jean.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">e. What is the cause of suicide of Jean? Do you think that it was the only release of his love?</span><br>
+                    The cause of Jean’s suicide is emotional heartbreak and betrayal. He discovers that Luc has been secretly meeting the girl he also loved, and this shatters him emotionally. The pain of losing both love and friendship becomes unbearable for him. Jean likely felt isolated, rejected, and hopeless, leading him to take his own life.
+                    <br><br>
+                    However, suicide is never the only solution or release of love. Jean might have found peace in expressing his feelings, confronting Luc, or even moving on. But due to his emotional sensitivity and lack of support, he saw death as the only escape. His tragic end shows how deeply emotional wounds can affect a person when they have no one to share their pain with.
+                </p>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What is the central theme of the story?</span><br>
+                    The central theme of "Two Little Soldiers" is friendship and betrayal, along with emotional loneliness and the desire for love and connection. The story revolves around two soldiers, Luc and Jean, who share a deep bond and find peace in each other’s company during their Sunday visits to the countryside. Their friendship gives them comfort and reminds them of their home, making their time together emotionally meaningful.
+                    <br><br>
+                    However, the arrival of a girl disrupts this bond. Both soldiers silently admire her, but Luc begins to visit her secretly without telling Jean. This act of betrayal deeply hurts Jean, who feels emotionally abandoned and deceived. Unable to cope with the pain of losing both his friend and his unspoken love, he takes his own life. The story highlights how fragile friendships can be and how emotional pain, when unexpressed, can lead to tragic consequences.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. "What are you doing here? Are you watching the grass grow?"</span><br>
+                    <span class="font-bold">i. Who is the speaker?</span><br>
+                    The speaker is the village girl who the two soldiers, Luc and Jean, meet during their Sunday visits to the countryside.
+                    <br><br>
+                    <span class="font-bold">ii. What does the word “here” indicate?</span><br>
+                    The word “here” refers to the field or countryside where the two soldiers regularly come to relax and spend their Sundays.
+                    <br><br>
+                    <span class="font-bold">iii. Who does “you” refer to?</span><br>
+                    The word “you” refers to Luc and Jean, the two soldiers sitting in the field when the girl approaches and speaks to them.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. "He leaned–he–he was leaning–so far over–that his head carried him away–and–he–fell–he fell—-"</span><br>
+                    <span class="font-bold">i. Who is the speaker?</span><br>
+                    The speaker is Luc, one of the two soldiers.
+                    <br><br>
+                    <span class="font-bold">ii. Why is the speaker speaking with interruption?</span><br>
+                    Luc is speaking with interruption because he is shocked, nervous, and emotionally disturbed. He is trying to explain the sudden and tragic fall of his friend Jean, but his broken speech shows that he is struggling with guilt, fear, and confusion. It may also suggest that he is trying to hide the truth or convince himself that Jean’s fall was an accident.
+                    <br><br>
+                    <span class="font-bold">iii. What does he mean when he says “he–fell–he fell—”?</span><br>
+                    When Luc says “he fell—he fell—”, he is describing the moment Jean fell into the river, which led to his death. The repetition and hesitation in his words show the emotional weight and shock of the event. It also implies that Jean’s fall might not have been accidental but a suicidal act, which Luc is possibly trying to deny or avoid admitting.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Two Little Soldiers can be viewed as a series of dramatic scenes. Describe the story as tragedy.</span><br>
+                    "Two Little Soldiers" by Guy de Maupassant can be interpreted as a modern tragedy that unfolds through a series of dramatic and emotionally intense scenes. At first, the story begins with a peaceful tone as it portrays the quiet, routine life of two close friends, Luc and Jean, who find joy and comfort in spending Sundays together in the countryside. Their bond appears simple, innocent, and full of mutual trust. This calm and content setting creates a contrast with the events that follow, making the emotional shift more powerful and tragic.
+                    <br><br>
+                    As the story progresses, tension builds when a village girl enters their lives. Both soldiers develop feelings for her, but Luc begins visiting her secretly during the week, betraying Jean’s trust. This act of deception breaks their strong friendship and leaves Jean emotionally shattered. The climax reaches its peak when Jean, overwhelmed by betrayal and heartbreak, throws himself into the river. His tragic death transforms the story from a quiet tale of friendship into a heartbreaking narrative of love, loss, and emotional collapse. The story ends with sorrow and guilt, emphasizing how a moment of betrayal can lead to irreversible consequences—making "Two Little Soldiers" a deeply moving modern tragedy.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. What is the setting and style of the story?</span><br>
+                    The setting of the story “Two Little Soldiers” is mainly in the French countryside, near a quiet village outside of Paris. The story takes place during a time of peace, but the two main characters are soldiers stationed at a barrack in Courbevoie. Every Sunday, they escape the routine of military life and visit a serene and green meadow by the river. This peaceful natural setting, with its fields, trees, and flowing water, contrasts sharply with the emotional turmoil and eventual tragedy in the story. The simple countryside becomes a backdrop for complex feelings of friendship, love, jealousy, and loss.
+                    <br><br>
+                    The style of the story is realistic and descriptive, written in a clear and straightforward narrative. Maupassant uses simple language, but with emotional depth and subtle irony. His use of dialogue, short scenes, and detailed imagery helps bring the characters and their emotions to life. The story unfolds in a series of dramatic moments, gradually building tension. The calm tone in the beginning slowly shifts into sadness and shock, making the tragic ending even more powerful. Maupassant’s style allows readers to feel the emotional pain of the characters without using exaggerated language, which is a hallmark of his realist storytelling.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">f. How would you describe the conflict between the friends?</span><br>
+                    The conflict between Luc and Jean is a deeply emotional and psychological one, centered around love, jealousy, and betrayal. Initially, their friendship is portrayed as simple, genuine, and supportive. They rely on each other for companionship and comfort in the otherwise harsh and lonely environment of military life. Their weekly routine of spending Sundays together in the countryside symbolizes the strength and harmony of their bond.
+                    <br><br>
+                    However, the arrival of the village girl complicates their relationship. Both Luc and Jean quietly fall in love with her, but neither openly expresses their feelings. The tension arises when Luc secretly visits the girl alone during the week without informing Jean, breaking the mutual trust between them. This secretive behavior betrays the friendship and introduces jealousy and hurt. Jean, who is emotionally vulnerable and deeply attached to both his friend and the girl, feels profoundly betrayed and isolated. The conflict is thus not a confrontation through words or actions but an internal struggle marked by pain, silence, and heartbreak. This emotional turmoil ultimately leads to tragic consequences, illustrating how fragile trust is and how love can sometimes destroy even the closest friendships. The story shows that unresolved feelings and dishonesty can cause irreparable damage, making the conflict both tragic and deeply human.
+                </p>
+
+                ---
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Is it good to have conflict between friendship and love? Is it morally good that a person and his best friend can love the same person?</span><br>
+                    Conflicts between friendship and love are common in human relationships, but they are often painful and complicated. While having such conflicts is a natural part of life, it is generally not good when these conflicts cause hurt, betrayal, or broken trust. Ideally, friendship and love should coexist with honesty, respect, and understanding to avoid unnecessary suffering. When love comes between friends, it can test the strength of their bond, but how they handle it determines whether the friendship survives or breaks.
+                    <br><br>
+                    Regarding whether it is morally good for two best friends to love the same person, there is no clear right or wrong. Love is a natural feeling that cannot be controlled or dictated by moral rules. It is understandable that two friends may develop feelings for the same person, especially if that person is kind, attractive, or shares a connection with both. What matters most morally is how they respond to the situation — whether they communicate honestly, respect each other’s feelings, and avoid deceit or selfishness. True friendship involves trust and fairness, and handling such delicate situations with care is what defines moral goodness, not the fact of loving the same person itself.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. How would you describe the triangular love?</span><br>
+                    Triangular love refers to a situation where three people are emotionally connected in a love relationship, often creating a complex and tense dynamic. In the context of “Two Little Soldiers,” the triangle involves two friends, Luc and Jean, who both love the same girl. This creates a love triangle where feelings of affection, jealousy, competition, and betrayal emerge.
+                    <br><br>
+                    In such a relationship, the two people who are friends may find themselves in conflict because they both desire the love and attention of the third person. This can lead to emotional struggles as they compete for the affection of the same individual. The third person, the object of their love, may or may not be aware of the conflict between the two, which adds another layer of complexity.
+                    <br><br>
+                    Triangular love is often marked by tension and emotional turmoil because it challenges loyalties and trust. It raises difficult questions about friendship, honesty, and the boundaries of love. In many stories and real-life situations, love triangles can result in heartbreak, misunderstandings, or even the end of friendships or relationships if not handled with care and respect.
+                </p>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Toggle the 'hidden' class which Tailwind uses for display: none
+            summaryContent.classList.toggle('hidden');
+            if (summaryContent.classList.contains('hidden')) {
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            } else {
+                this.textContent = 'HIDE SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

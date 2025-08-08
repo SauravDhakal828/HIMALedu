@@ -1,0 +1,529 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>जीवन मार्ग Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden; /* Ensure SVGs don't cause scroll */
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+            overflow: hidden; /* Ensure SVGs don't cause scroll */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Animation for elements appearing on scroll */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for जीवन मार्ग Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">१२. जीवन मार्ग Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleJeevanMargaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleJeevanMargaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="jeevanMargaSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    “जीवन मार्ग” पाठले मानिसको जीवनलाई एउटा यात्रा वा बाटोको रूपमा प्रस्तुत गरेको छ, जहाँ अनेकौं चुनौती, सफलता, विफलता र अनुभवहरू हुन्छन्। जीवनमा सही दिशा र उद्देश्यको खोजी गर्नु आवश्यक हुन्छ भन्ने सन्देश यो पाठले दिन्छ। जीवन मार्ग भनेको केवल भौतिक रूपमा बाटो हिँड्नु होइन, तर साँचो अर्थमा आफूले रोजेको लक्ष्यमा दृढताका साथ अघि बढ्नु हो। पाठले मानिसलाई जीवनका आरोह–अवरोहहरूलाई धैर्य र साहसका साथ सामना गर्न प्रेरित गर्छ।<br><br>
+
+जीवन मार्गमा मानिसले अनेकौं समस्याहरू र कठिनाइहरू सामना गर्नुपर्छ। यी बाधाहरूले हामीलाई कमजोर होइन, बलियो बनाउँछन् भन्ने कुरा पाठमा भनिएको छ। हरेक संघर्षले हामीलाई नयाँ अनुभव र ज्ञान दिन्छ र जीवनलाई अझ समृद्ध बनाउँछ। पाठले सिकाउँछ कि जीवनमा सफल हुनका लागि निरन्तर प्रयास र आत्मविश्वास आवश्यक हुन्छ। कठिन परिस्थितिमा पनि आशा नछोड्न र आफूलाई सँधै नयाँ चुनौतीका लागि तयार राख्नुपर्छ।<br><br>
+
+पाठले जीवनको लक्ष्य र मार्ग निर्धारणको महत्त्वलाई विशेष रूपमा उजागर गरेको छ। सही मार्ग रोज्न सक्नु र त्यसमा निरन्तरता राख्न सक्नु नै जीवन सफलताको कुञ्जी हो। मानिसले आफ्नो मन, बुद्धि र भावना सबैलाई सन्तुलित गरेर जीवनको सही दिशा पहिचान गर्नुपर्छ। यसले नकारात्मकता र भ्रमबाट बच्न सहयोग गर्छ। जीवन मार्ग पाठले जीवनलाई सार्थक बनाउन सही सोच र अभ्यासको महत्वलाई जोड दिएको छ।<br><br>
+
+जीवन मार्गसँग जोडिएका मनोवैज्ञानिक र नैतिक पक्षहरूलाई पनि पाठले उजागर गरेको छ। जीवनमा सदाचार, ईमानदारी, सहिष्णुता र परिश्रमलाई प्राथमिकता दिनुपर्छ भन्ने पाठको मूल सन्देश हो। यसले मानिसलाई सकारात्मक सोच विकास गर्न र राम्रो चरित्र निर्माण गर्न प्रेरित गर्छ। जीवनका विविध आयामहरूलाई बुझेर आफूलाई परिपक्व बनाउन सिकाउँछ। यसरी जीवन मार्गमा सबै पक्षहरूको सन्तुलन अत्यन्त आवश्यक हुन्छ।<br><br>
+
+अन्ततः, “जीवन मार्ग” पाठले जीवनलाई एउटा यात्रा जस्तो मान्न र त्यसमा आउने प्रत्येक घटनालाई सिकाइको रूपमा लिन सिकाउँछ। यसले हामीलाई जीवनका आरोह–अवरोहहरूलाई धैर्य र आत्मबलका साथ सामना गर्न प्रेरित गर्छ। सही मार्ग पहिचान गरेर निरन्तर अगाडि बढ्नुपर्ने सन्देश यो पाठले दिन्छ। जीवनलाई सफल र सार्थक बनाउन सही सोच, सही लक्ष्य र आत्मबल अनिवार्य हुन् भन्ने कुरा यसले प्रस्ट बनाउँछ। यसरी, जीवन मार्गले मानिसलाई उज्जवल भविष्यको दिशामा अग्रसर हुन सहयोग पुर्‍याउँछ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                        <li><strong>१. शब्द र अर्थका बिचमा जोडा मिलाउनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>मौलिक – कसैको आधार नलिएको, सिर्जनात्मक</li>
+                                <li>बाहुल्य – धेरै हुनाको भाव वा अवस्था</li>
+                                <li>जतन – सुरक्षित</li>
+                                <li>चिनो – चिह्न, निसान</li>
+                                <li>निर्यात -स्वदेशबाट विदेशमा सामान पठाउने काम</li>
+                                <li>वर्चस्व – आफ्नो अधिकार कुरामा गरिने दखल</li>
+                                <li>मूर्त – स्पष्ट आकार भएको</li>
+                                <li>किनिमा – भटमासबाट बनाइएको एक प्रकारको परिकार</li>
+                                <li>मकर नुहाउनु – माघे सङ्क्रान्तिमा नुहाउने काम</li>
+                                <li>हस्तक्षेप – निय अधिकार</li>
+                                <li>फत्ते – सम्पन्न, पूरा</li>
+                            </ul>
+                        </li>
+                        <li><strong>२. तल पाठमा भएका खानेकुराका नामको सूची दिइएको छ । शिक्षकको सहयोगबाट ती खानेकुराका बारेमा थाहा पाउनुहोस्</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>कटुसका दिउल – कटुसको अमिलो स्वादको फल, खाजाका रूपमा खाइन्छ।</li>
+                                <li>सर्तीबयर – सर्ती र बयर मिसाएर बनाइएको खट्टा स्वादको अचार वा नास्ता।</li>
+                                <li>सिन्की – मुला गुमाएर (फरमेन्ट गरेर) बनाइएको, सुप र तरकारीमा प्रयोग हुने।</li>
+                                <li>सुचिया – जंगली तरकारी, मस्र्याङ्गाजस्तो देखिने, पकाएर खाने।</li>
+                                <li>मार्सी चामल – रातो बास्मतीजस्तो चामल, विशेष गरी मुस्ताङमा पाइने।</li>
+                                <li>गहत – दलहन बाली, गहतको झोल वा अचार बनाइन्छ।</li>
+                                <li>बुङको आलु – मुस्ताङमा पाइने सानो तर स्वादिलो आलु।</li>
+                                <li>पिँडालु – कन्दमूल तरकारी, जरा र पात दुवै खाने।</li>
+                                <li>जिम्बु – हिमाली जडीबुटी, दाल र झोलमा स्वाद दिन प्रयोग हुने।</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. शिक्षक र साथीसँग सोधखोज गरेर दिइएका सामानका बारेमा थाहा पाउनुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>काइँयो – पानी तान्ने ठूलो डोरी, बाङ्गुर घुमाउन पनि प्रयोग हुन्छ।</li>
+                                <li>थाक्रो – अन्न कुट्न प्रयोग हुने ढुंगाको ठूला चक्काजस्तो औजार।</li>
+                                <li>फिपी – काठ वा बाँसले बनाइएको भाडो, अन्न भर्ने वा सुकाउन प्रयोग हुने।</li>
+                                <li>नाङ्लो – गोलो चप्टो टोकरी, धान वा चामल सफा गर्न प्रयोग गरिने।</li>
+                                <li>डालो – बाँसले बनाइएको टोकरी, सागसब्जी राख्न प्रयोग हुने।</li>
+                                <li>चाल्नो – पीठो चाल्न प्रयोग गरिने जालीदार भाँडा।</li>
+                                <li>गलैँचा – भुइँमा बिछ्याउने गह्रौं कपडाको ओछ्यान, पश्मिनाजस्तो।</li>
+                                <li>राडी – भेडाको ऊनबाट बनाइएको मोटा ओढ्ने कपडा।</li>
+                                <li>लुकुनी – बालबालिकालाई बोकेर राख्ने कपडाको झोल (काखी झोला)।</li>
+                                <li>थाङ्का – भित्तामा झुण्ड्याइने बौद्ध चित्र वा धार्मिक चित्रकला।</li>
+                                <li>खाँडीको कपडा – हातले बुनेको स्थानीय कपडा, घरायसी प्रयोगका लागि।</li>
+                                <li>भाङ्ग्राको झोला – भाङ्ग्राको रेशा वा कपडाबाट बनाइएको झोला, परम्परागत झोला।</li>
+                                <li>बाँसका कुर्सी – बाँसले बनाइएको सजिलो र हलुका कुर्सी।</li>
+                                <li>सोफा – बस्नको लागि गद्दी भएको कुर्सी, आरामदायी फर्निचर।</li>
+                                <li>थुन्से – गोरु बाँध्ने काठको खम्बा वा गोठमा प्रयोग हुने संरचना।</li>
+                                <li>अम्रिसाको कुचो – अम्रिसा झारबाट बनाइएको कुचो, घर सफा गर्न प्रयोग हुने।</li>
+                                <li>नेपाली कागज – लोक्टा बोटबाट बनाइने हस्तनिर्मित कागज, पर्यावरणमैत्री र परम्परागत।</li>
+                                <li>ठेकी – अन्न कुट्ने काठको भाँडा, मुषलले चोट दिइन्थ्यो।</li>
+                                <li>मदानी – दहीबाट घ्यू निकाल्न प्रयोग हुने लठ्ठी वा घुमाउने औजार।</li>
+                                <li>सुरो – पोशाक लगाउने बेलामा प्रयोग हुने सुईजस्तो औजार, विशेषगरी ढाका टोपीमा।</li>
+                            </ul>
+                        </li>
+                        <li><strong>४. दिहएका शब्दको अर्थ लेख्नुहोस् ।</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li>परिकल्पनाकार – कुनै योजना, विचार वा संरचना बनाउने व्यक्ति; योजनाकार।</li>
+                                <li>आना – भूमिको नापको एकाइ, १६ आनामा १ रोपनी हुन्छ।</li>
+                                <li>धुर – जमिन मापन गर्ने सानो एकाइ, १६ धुरमा १ कठ्ठा हुन्छ।</li>
+                                <li>आत्मनिर्भर – अरुमा निर्भर नहुने, आफूले आफैं गर्नु सक्ने।</li>
+                                <li>आयात – विदेशबाट सामान ल्याउने प्रक्रिया।</li>
+                                <li>एकाधिकार – केवल एक जनाको अधिकार वा नियन्त्रण; प्रतिस्पर्धा नहुने अवस्था।</li>
+                                <li>कृत्रिम – प्राकृतिक नभई बनावटी रूपमा बनाइएको, जस्तो: कृत्रिम फूल।</li>
+                                <li>अर्गानिक – रसायनरहित, प्राकृतिक तरिकाले उत्पादन गरिएको, जैविक।</li>
+                                <li>जोखिम – खतरा वा हानि हुने सम्भावना।</li>
+                                <li>विकल्प – छान्न मिल्ने अर्को उपाय वा मार्ग।</li>
+                            </ul>
+                        </li>
+                        <li><strong>६. दिइएका कुनै पाँचओटा उखानलाई वाक्यमा प्रयोग गरी कक्षामा सुनाउनुहोस्</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>हात्तीका मुखमा जिरा:</strong> अरबौँको घाटा भएको कम्पनीलाई केही लाखको सहायता गर्नु भनेको हात्तीका मुखमा जिरा जस्तै भयो।</li>
+                                <li><strong>काम गर्ने कालु मकै खाने भालु:</strong> परियोजनामा मेहनत रामले गर्‍यो तर इनाम त रमेशकै नाममा गयो, साँच्चै काम गर्ने कालु मकै खाने भालु।</li>
+                                <li><strong>खाने मुखलाई जुँघाले छेक्दैन:</strong> शीतल बिरामी भएर पनि मिठो परिकार देखेपछि खाइहालिन्, आखिर खाने मुखलाई जुँघाले छेक्दैन।</li>
+                                <li><strong>गर्ने भन्ने हनुमान, पगरी गुथ्ने ढेडु:</strong> सन्तोषले ठूल्ठूला कुरा गर्छ, तर सानो जिम्मेवारी पनि लिन सक्दैन — गर्ने भन्ने हनुमान, पगरी गुथ्ने ढेडु।</li>
+                                <li><strong>घाँटी हेरी हाड निल्नु:</strong> खर्च गर्नु अघि आम्दानीको हिसाब गर्नुपर्छ, घाँटी हेरी हाड निल्नु भनेकै यही हो।</li>
+                            </ul>
+                        </li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <ul class="list-disc list-inside brighter-gradient-text space-y-2 mb-4">
+                        <li><strong>१. रिपोर्ताज पाठ पढी सोधिएका प्रश्नको उत्तर भन्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>(क) चोमोलुङ्गा औद्योगिक प्रतिष्ठान कस्तो प्रतिष्ठान हो ?</strong><br>उत्तर: चोमोलुङ्गा औद्योगिक प्रतिष्ठान नेपालमा रहेको वस्त्र उत्पादन गर्ने ठूलो औद्योगिक संस्था हो। यो स्थानीय कच्चा पदार्थबाट गुणस्तरीय वस्त्र बनाएर रोजगार सिर्जना गर्ने र आर्थिक विकासमा सहयोग पुर्‍याउने काम गर्छ।</li>
+                                <li><strong>(ख) चोमोलुङ्घा औद्योगिक प्रतिष्ठानबाट बिक्री गरिने सामान किन लोकप्रिय भए ?</strong><br>उत्तर: चोमोलुङ्घा औद्योगिक प्रतिष्ठानका सामान गुणस्तरीय, परम्परागत नेपाली डिजाइनमा आधारित र स्थानीय कच्चा पदार्थबाट बनेका हुनाले लोकप्रिय छन्।</li>
+                                <li><strong>(ग) छिरिङको पारिवारिक पृष्ठभूमि कस्तो छ ?</strong><br>उत्तर: छिरिङको पारिवारिक पृष्ठभूमि सरल र मिहेनती छ। उहाँको परिवार सामान्य मध्यम वर्गीय हो जहाँ पारिवारिक सदस्यहरू मेहनत गरेर जीवनयापन गर्छन्। परिवारले संस्कार, सादगी र अनुशासनलाई महत्व दिन्छ।</li>
+                                <li><strong>(घ) किन छिरिङलाई जग्गा प्लटिङ व्यवसाय ठिक लागेन ?</strong><br>उत्तर: छिरिङलाई जग्गा प्लटिङ व्यवसाय ठिक लागेन किनभने त्यो व्यवसायमा धेरै <strong>जोखिम र अनिश्चितता</strong> थियो। उहाँलाई त्यस्तो काममा धेरै लगानी र धैर्य चाहिन्थ्यो, साथै त्यसले सामाजिक तथा आर्थिक हिसाबले पनि राम्रो परिणाम दिन सक्दैन जस्तो लाग्यो। त्यसैले उनले आफूलाई अनुकूल र स्थिर व्यवसाय रोज्न चाहन्थे।</li>
+                            </ul>
+                        </li>
+                        <li><strong>२. दिइएको रिपोर्ताज अंश पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>(क) नेपाली मौलिक उत्पादनको बजार कस्तो छ ?</strong><br>उत्तर: नेपाली मौलिक उत्पादनको बजार हाल बिस्तारै विकास हुँदै गएको छ। नेपालका परम्परागत र हस्तकला उत्पादनहरू प्रति स्थानीय र विदेशी ग्राहकहरूको रुचि बढ्दो छ। धेरैजसो मानिसहरूले आफ्नो पहिचान र संस्कृतिलाई जगेर्ना गर्न नेपाली उत्पादनलाई प्राथमिकता दिन थालेका छन्। तर, बजार अझै पूर्णरूपमा विकसित भइसकेको छैन र प्रतिस्पर्धा पनि सीमित छ। गुणस्तरमा सुधार, आधुनिक प्रविधिको प्रयोग र प्रचार–प्रसारको कमीले गर्दा अझ धेरै अवसरहरू सम्भावित छन्। विदेशी बजारमा पनि नेपाली मौलिक उत्पादनको माग बढ्दै गएकोले यसको आर्थिक सम्भावना राम्रो छ। यसले नेपालको समग्र विकासमा सहयोग पुर्‍याउन सक्ने विश्वास गरिएको छ।</li>
+                                <li><strong>(ख) पाठमा प्रतिस्पर्धी थपिँदैमा आत्तिनु पर्दैन किन भनिएको हो ?</strong><br>उत्तर: पाठमा भनिएको छ कि प्रतिस्पर्धी थपिँदा आत्तिनु पर्दैन किनभने प्रतिस्पर्धाले हरेक क्षेत्रमा गुणस्तर र काममा सुधार ल्याउँछ। प्रतिस्पर्धाले मानिसहरूलाई अझ मेहनत गर्न, नयाँ तरिका अपनाउन र आफ्नो क्षमता विकास गर्न प्रेरित गर्छ। यसले बजारमा राम्रो उत्पादन र सेवा उपलब्ध गराउने अवसर बढाउँछ। त्यसैले प्रतिस्पर्धी बढ्दा डराउनुको साटो त्यसलाई सकारात्मक रुपमा लिने र आफ्नो काममा सुधार गर्ने सोच राख्नु आवश्यक हुन्छ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>३. किन लेखक चोमोलुङ्गा औद्योगिक प्रतिष्ठानका विषयमा रिपोर्ताज लेख्न अग्रसर भए, लेख्नुहोस् ।</strong><br>उत्तर: लेखक चोमोलुङ्गा औद्योगिक प्रतिष्ठानका विषयमा रिपोर्ताज लेख्न अग्रसर हुनुको कारण थियो— यो प्रतिष्ठानले नेपाली मौलिक उत्पादनलाई संरक्षण गर्दै गुणस्तरीय वस्त्र उत्पादन गरी स्थानीय रोजगार सिर्जना गरिरहेको थियो। साथै, यसले नेपालको आर्थिक विकासमा सकारात्मक भूमिका खेलेको थियो। लेखकलाई यस्तो सफल र प्रेरणादायी व्यवसायको बारेमा जनतालाई जानकारी दिन र यसको महत्व उजागर गर्न मन लाग्यो। त्यसैले उनले यो विषयमा रिपोर्ताज लेख्न रुचाएका हुन्।</li>
+                        <li><strong>४. दिइएको रिपोर्ताज अंश पढी सोधिएका प्रश्नको उत्तर भन्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>(क) देखासिकी गरी खा आरिसे मरी जा, भन्ने उखानको तात्पर्य के हो ?</strong><br>उत्तर: कुनै उद्योग वा व्यवसायले नाफा कमाएको देखेर अरूले पनि उही प्रकृतिका उद्योग खोलेको देखिन्छ । केही नगर्नुभन्दा अरुको देखासिकी गरेर खान ठिकै होला तर अरुको रिस गर्नु राम्रो होइन । यसरी अरुको रिस, डाहा गर्दा जलनले आफै मरिन्छ । यस्ता आरिसेहरुको कहिल्यै भलो हुँदैन । सबैले एउटै काम गरेर हुँदैन । अरुको प्रगतिको रिस नगरी विकल्प खोज्नुपर्छ भन्नु उपर्युक्त उखानको तात्पर्य हो।</li>
+                                <li><strong>(ख) जति धेरै उत्पादन त्यति धेरै फाइदाको अवस्थामा पुग्ने उपाय के हो ?</strong><br>उत्तर: पहिलो कुरा हो गुणस्तरमा सम्झौता गर्नुहुँदैन । दोस्रो कुरा स्वस्थ प्रतिस्पर्धा, सहकार्य र आदानप्रदानको संस्कृति बसाउनुपर्छ। त्यसो गर्न सके हामी जति धेरै उत्पादन त्यति धेरै फाइदाको अवस्थामा पुग्न सक्छौँ ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>५. विभिन्न देशको भ्रमणबाट छिरिङले कस्तो शिक्षा पाए, लेख्नुहोस्</strong><br>उत्तर: छिरिङले विभिन्न देशहरूको भ्रमणबाट अत्यन्त महत्वपूर्ण र बहुमूल्य शिक्षा प्राप्त गरे। विश्वका फरक–फरक देशहरूमा पुगेपछि उनले त्यहाँका संस्कृतिहरू, मानिसहरूको जीवनशैली, व्यवसाय सञ्चालन गर्ने तरिका, प्रविधिको प्रयोग, र बजार व्यवस्थापनका विभिन्न पक्षहरूको अनुभव गर्‍यो। यी अनुभवहरूले छिरिङको सोचलाई फराकिलो बनायो र उनलाई नयाँ दृष्टिकोण प्रदान गर्‍यो। उनले देखे–सुनेका कुराबाट आफूले नेपालमा संचालन गर्दै आएको व्यवसायलाई कसरी अझ आधुनिक र प्रतिस्पर्धी बनाउन सकिन्छ भन्ने ज्ञान प्राप्त गर्‍यो। अन्तर्राष्ट्रिय बजारको माग र प्रतिस्पर्धाको गहिरो बुझाइले उनलाई आफ्ना उत्पादन र सेवाहरू सुधार गर्न र नवप्रवर्तनशील तरिकाहरू अपनाउन प्रोत्साहित गर्‍यो। त्यसैगरी, छिरिङले विदेश भ्रमणले केवल आर्थिक र व्यवसायिक ज्ञान मात्र होइन, विभिन्न सांस्कृतिक भिन्नताहरूबारे पनि सिके। यसले उनलाई बहुसांस्कृतिक समझदारी विकास गर्न मद्दत गर्‍यो, जसले व्यवसायको दायरा मात्र होइन, मानवीय सम्बन्धहरूमा पनि सकारात्मक प्रभाव पारेको छ। यस्ता अनुभवले छिरिङलाई व्यक्तिगत रूपमा पनि धेरै विकसित गर्‍यो। उनले आत्मनिर्भर र आत्मविश्वासी भएर जीवनका चुनौतीहरू सामना गर्न सिके। यसैले विभिन्न देशहरूको भ्रमणबाट प्राप्त शिक्षा छिरिङको समग्र व्यक्तित्व र व्यवसायमा ठूलो प्रगति गर्ने आधार बनेको छ।</li>
+                        <li><strong>६. छिरिङको जीवन सङ्घर्षबाट के शिक्षा लिन सकिन्छ, आफ्नो विचार लेख्नुहोस् ।</strong><br>उत्तर: छिरिङको जीवन सङ्घर्षबाट हामी धेरै महत्वपूर्ण शिक्षा लिन सक्छौं। उनको जीवनले देखाउँछ कि कठिनाइ र चुनौतीहरू सामना गर्दा धैर्य र अठोट आवश्यक हुन्छ। छिरिङले सजिलो बाटो रोज्नुको साटो, कठिन मेहनत र लगनशीलताका साथ आफ्नो लक्ष्य प्राप्त गर्ने बाटो रोजेका छन्। यसले हामीलाई सिकाउँछ कि सफलता सजिलै हात लाग्दैन, त्यसका लागि निरन्तर प्रयास र साहस चाहिन्छ। छिरिङले नयाँ कुरा सिक्न र बदलिँदो परिस्थिति अनुसार आफूलाई अनुकूल बनाउन कुनै हिचकिचाएनन्। उनी आफ्नो व्यवसायलाई सफल बनाउन विदेशसम्म गएर अनुभव सँगालेका छन्, जसले हामीलाई पनि आफूलाई अपडेट राख्नु र नयाँ ज्ञान प्राप्त गर्न सदैव तयार रहन प्रेरित गर्छ। साथै, छिरिङको जीवनबाट आत्मनिर्भर बन्ने र आफ्नै पाइलाले अगाडि बढ्ने महत्त्वपूर्ण पाठ सिक्न सकिन्छ। समग्रमा, छिरिङको जीवन संघर्षले हामीलाई कहिल्यै हार नमान्ने, समस्या र प्रतिस्पर्धालाई चुनौतीका रूपमा लिने, र सफलताको लागि दृढ सङ्कल्पका साथ अघि बढ्नुपर्ने शिक्षा दिन्छ। यो उदाहरणले हामीलाई हाम्रो जीवनमा पनि कठिनाइहरूलाई जितेर लक्ष्य हासिल गर्न प्रोत्साहित गर्छ।</li>
+                        <li><strong>७. दिइएका उद्धरणको व्याख्या गर्नुहोस् :</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>(क) ‘हामीकहाँ नयाँ कुराको परिकल्पना गर्ने, जोखिम मोल्नेभन्दा पनि अरुले गरेको हेरेर त्यसैको अनुसरण गर्ने, अस्वस्थ प्रतिस्पर्धा गर्ने `चलन छ’ ।</strong><br>उत्तर: यस उद्धरणले हाम्रो समाजमा व्याप्त एउटा गम्भीर समस्यालाई उद्घाटित गरेको छ। हाम्रो देशमा नयाँ सोच, नयाँ योजना बनाउने र जोखिम मोल्नेको सट्टा धेरैजसो मान्छेहरूले अरूले गरेका कामलाई नक्कल गर्ने, त्यसैको अनुसरण गर्ने प्रचलन छ। यस्तो व्यवहारले सिर्जनशीलता र नवप्रवर्तनमा कमी ल्याउँछ। जब सबैले एउटै तरिका अपनाएर मात्र अघि बढ्न खोज्छन्, तब प्रतिस्पर्धा अस्वस्थ हुन्छ, जसले दीर्घकालीन विकास र प्रगतिलाई बाधा पुर्याउँछ। पाठमा देखिएको छ कि छिरिङ जस्ता व्यक्तिहरूले यो अस्वस्थ चलनलाई तोड्ने प्रयास गरेका छन्। उनले नयाँ बाटो खोज्न, जोखिम उठाउन र आफ्नो व्यवसायलाई नयाँ आयाम दिन साहस देखाएका छन्। उनको अनुभवले प्रमाणित गर्छ कि सफलता प्राप्त गर्न नयाँ परिकल्पना र जोखिम मोलेर अघि बढ्नु जरुरी हुन्छ। अरूको पछि मात्र लाग्नुले विकासका अवसरहरू गुमाउने खतरा रहन्छ। यस उद्धरणले हामीलाई बुझाउँछ कि विकास र प्रगतिका लागि सिर्जनात्मक सोच र स्वस्थ प्रतिस्पर्धा अनिवार्य छन्। हामीले हरेक क्षेत्रमा नयाँ सोचलाई प्रोत्साहित गर्नुपर्छ र जोखिम लिन तयार हुनुपर्छ। यदि हामीले यस प्रकारको नक्कल गर्ने र अस्वस्थ प्रतिस्पर्धा गर्ने बानी छोड्यौं भने मात्र हाम्रो व्यक्तिगत तथा राष्ट्रिय स्तरको समृद्धि सम्भव हुनेछ। यसले आर्थिक, सामाजिक र सांस्कृतिक प्रगतिमा ठूलो योगदान पुर्याउनेछ। यसरी, यो उद्धरणले पाठको मूल भावलाई समेट्दै हामीलाई नयाँ सोच र सकारात्मक प्रतिस्पर्धा अपनाउन प्रेरित गर्छ, जसले हाम्रो समाजलाई समृद्ध र आत्मनिर्भर बनाउन सहयोग पुर्‍याउँछ।</li>
+                                <li><strong>(ख) वास्तवमा कलम र हृदय दुवैको मेल भएपछि राम्रो लेख्न सकिने रहेछ ।</strong><br>उत्तर: "वास्तवमा कलम र हृदय दुवैको मेल भएपछि राम्रो लेख्न सकिने रहेछ" भन्ने भनाइले लेखनको गहिरो महत्व र प्रक्रिया बुझाउँछ। लेखन केवल शब्दहरूको संयोजन मात्र होइन, त्यो लेखकको मनको भावना, सोच, अनुभव र संवेदनशीलताको सजीव प्रतिबिम्ब हो। जब कलम अर्थात् लेख्ने औजार र हृदय अर्थात् लेखकको आन्तरिक भावना एकसाथ मिलेर काम गर्छन्, तब मात्र लेखाइमा जीवन्तता, प्रामाणिकता र गहिराइ आउँछ। यसले पाठकमा प्रभाव पार्ने र उनीहरूलाई सोच्न, महसुस गर्न र प्रेरित गर्न सक्ने क्षमता दिन्छ। कलम भनेको विचार व्यक्त गर्ने माध्यम हो, तर त्यो विचारमा जीवितता दिन्छ हृदयको भावना। हृदयले लेखनमा त्यो संवेदनशीलता, मर्मस्पर्शीता र आत्मीयता थप्छ जुन केवल शब्दहरूले दिन सक्दैनन्। एउटा लेखकले आफ्नो व्यक्तिगत अनुभव, प्रेम, दुःख, आशा र चिन्तनलाई कलममा सुमधुर तरिकाले अभिव्यक्त गर्न सकेमा मात्र लेखाइले पाठकको मन छोइन्छ। यसैले कलम र हृदयको मेल एक प्रकारको सन्तुलन हो, जसले लेखनलाई सामान्य शब्दहरूको समूहभन्दा माथि उठाएर कलात्मक, प्रभावकारी र स्मरणीय बनाउँछ। पाठमा पनि यो कुरा प्रष्ट हुन्छ जहाँ लेखकले आफ्नो मनका भावनालाई कलममा उतारेर जीवनका अनुभवहरूलाई सजीव र अर्थपूर्ण बनाएका छन्। सफल लेखन त्यही हो जहाँ लेखकले आफ्ना भित्री विचारहरूलाई खुला दिलले प्रस्तुत गर्छ र त्यो पाठकसम्म पु¥याउन सक्छ। यदि केवल कलमले मात्र लेखियो भने त्यो शुष्क र निर्जीव लाग्न सक्छ, र केवल हृदयको भावना भएपनि त्यसलाई शब्दमा सही तरिकाले व्यक्त गर्न सकिएन भने प्रभावहीन हुन सक्छ। त्यसैले, कलम र हृदय दुवैको मेल नै राम्रो लेखनको मूल आधार हो। यसले लेखनलाई मात्र होइन, समाजमा सन्देश पुर्याउन र परिवर्तन ल्याउन पनि मद्दत गर्छ। यस्तो लेखनले मानिसहरूलाई सोच्न बाध्य पार्छ, भावनात्मक रूपमा जोड्दछ र अन्ततः सकारात्मक प्रभाव पार्दछ। यसैले सृजनशील र प्रभावकारी लेखनका लागि कलम र हृदय दुवैको सुमधुर संगम अपरिहार्य छ।</li>
+                            </ul>
+                        </li>
+                        <li><strong>८. तपाईंलाई छिरिङसँगको वार्ताका आधारमा तयार पारिएको जीवन मार्ग कस्तो लाग्यो, तर्कसहित आफ्नो विचार लेख्नुहोस् ।</strong><br>उत्तर: छिरिङसँगको वार्ताका आधारमा तयार पारिएको ‘जीवन मार्ग’ मलाई अत्यन्तै प्रभावशाली र गहन प्रेरणादायक लाग्यो। यो पाठले केवल एउटा व्यक्तिको मात्र संघर्ष र सफलताको कथा होइन, समग्र जीवनका लागि पनि महत्वपूर्ण शिक्षा र मार्गदर्शन प्रदान गर्छ। छिरिङको जीवनमा आएका चुनौती, कठिनाइ र विफलताहरूलाई उनले कसरी धैर्य, साहस र मेहनतले पार गरे भन्ने कुरा पाठकलाई निकै प्रभावित गर्छ। उनको संघर्षपूर्ण यात्राले हामीलाई सिकाउँछ कि जीवनमा कहिलेकाहीँ असफलता र बाधा आउँछन् तर तीबाट हार मान्नु हुँदैन, निरन्तर अघि बढ्नुपर्छ। मेरा विचारमा, ‘जीवन मार्ग’ले व्यक्त गरेको छिरिङको कहानीले हामीलाई आत्मनिर्भर बन्न र आफ्नो पाइलाले अघि बढ्न प्रेरित गर्दछ। उनी सहज बाटो रोज्नुको साटो जोखिम मोल्न र नयाँ सोच अपनाउन तयार थिए। उनको दृष्टिकोण र कार्यशैलीले देखाउँछ कि जीवनमा सफलताको लागि नवप्रवर्तन, लगनशीलता र सकारात्मक सोच आवश्यक हुन्छ। साथै, विभिन्न देशहरूको भ्रमणबाट प्राप्त ज्ञान र अनुभवले उनको सोचलाई विश्वव्यापी बनायो र यसले उनको व्यवसायलाई सफल बनाउन ठूलो मद्दत पुर्‍यायो। पाठमा प्रस्तुत छिरिङको जीवनशैली र संघर्षले हामीलाई हाम्रो दैनिक जीवनका चुनौतीहरूसँग जुध्न हिम्मत दिन्छ। कठिन परिस्थिति आए पनि अडिग रहनु र आफ्नो लक्ष्यतर्फ निरन्तर लागिरहनु जीवनको सफलताको मुख्य कुञ्जी हो भन्ने कुरा स्पष्ट हुन्छ। यसले मात्र होइन, यो पाठले नयाँ सोच र स्वस्थ प्रतिस्पर्धाको महत्वलाई पनि उजागर गरेको छ, जसले समाज र राष्ट्रको प्रगतिमा योगदान पुर्‍याउँछ। समग्रमा, ‘जीवन मार्ग’ले हामीलाई प्रेरणा दिने, जीवनका कठिनाइहरूलाई सकारात्मक रूपमा लिन सिकाउने, र आफूमाथि विश्वास राख्न उत्प्रेरित गर्ने एउटा महत्वपूर्ण कथा हो। यसले हामीलाई सिकाउँछ कि सफलताको बाटो सजिलो हुँदैन, तर सही सोच र निरन्तर प्रयासले सबै बाधा पार गर्न सकिन्छ। मैले यो पाठबाट धेरै गहिरो शिक्षा र जीवनलाई हेर्ने नयाँ दृष्टिकोण पाएको महसुस गर्छु।</li>
+                        <li><strong>९. दिइएको अनुच्छेद पढी सोधिएका प्रश्नको उत्तर लेख्नुहोस्:</strong>
+                            <ul class="list-disc list-inside ml-4">
+                                <li><strong>(क) ओलम्पिक खेलमा नेपालको प्रवेश कहिले र कहाँबाट भएको हो ?</strong><br>उत्तर: ओलम्पिक खेलमा नेपालको प्रवेश सन् १९६४ मा टोकियो ओलम्पिकबाट भएको हो ।</li>
+                                <li><strong>(ख) ओलम्पिकमा नेपालको सहभागिता कुन कुन खेलमा हुने गरेको छ ?</strong><br>उत्तर: ओलम्पिकमा नेपालको सहभागिता म्याराथुन, एथलेटिक्स, बक्सिङ, भारोत्तोलन, तेक्वान्दो, सुटिङ, पौडी र जुडो खेलमा हुने गरेको छ ।</li>
+                                <li><strong>(ग) सन् १६८० को मास्को ओलम्पिकमा कति जना नेपाली खेलाडीले भाग लिए ?</strong><br>उत्तर: सन् १६८० को मास्को ओलम्पिकमा १२ जना नेपाली खेलाडीले भाग लिए ।</li>
+                                <li><strong>(घ) नेपालले ओलम्पिक खेलमा पाएको सफलता कस्तो छ ?</strong><br>उत्तर: नेपालले ओलम्पिक खेलमा पाएको सफलता ऐतिहासिक एवं उत्साहवर्द्धक छ ।</li>
+                            </ul>
+                        </li>
+                    </ul>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='nepali12.html'">
+                    Back to Nepali 12 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Jeevan Marga Notes
+        function toggleJeevanMargaSummary() {
+            const summaryText = document.getElementById('jeevanMargaSummaryText');
+            const toggleBtn = document.getElementById('toggleJeevanMargaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            // The main heading and content box no longer have fade-in-slide-up initially
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+        });
+    </script>
+</body>
+</html>

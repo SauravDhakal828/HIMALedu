@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Notes - Learn Effectively</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .subject-card {
+            /* Lighter card background with subtle gradient for dark theme */
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3); /* Stronger shadow for dark theme */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out, border 0.2s ease-in-out;
+            cursor: pointer;
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        .subject-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.4), 0 0 15px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+            border: 1px solid rgba(251, 194, 235, 0.5); /* More prominent border on hover */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .laptop-container {
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        .laptop-container svg {
+            width: 100%;
+            height: auto;
+            max-width: 450px;
+        }
+        @media (min-width: 768px) {
+            .laptop-container svg {
+                max-width: 550px;
+            }
+        }
+
+        /* Styles for class selection buttons */
+        .class-button {
+            padding: 0.75rem 1.5rem;
+            border-radius: 9999px; /* Full rounded */
+            font-weight: 600; /* Semi-bold */
+            transition: all 0.2s ease-in-out;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            border: 1px solid transparent; /* Default transparent border */
+        }
+
+        .class-button-default {
+            background-color: #ffffff; /* White background */
+            color: #4a90e2; /* Blue text */
+            border-color: #a7c8f2; /* Light blue border */
+        }
+
+        .class-button-active {
+            /* Vibrant pink/purple gradient for active button - adjusted to match theme */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            color: #ffffff;
+            /* Increased size and added glow effect */
+            transform: scale(1.25); /* Made larger for more noticeable effect */
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.4), 0 0 15px rgba(251, 194, 235, 0.7); /* Stronger shadow and prominent glow */
+            border-color: transparent;
+        }
+
+        /* Hide all content sections by default */
+        .content-section {
+            display: none;
+        }
+        /* Show only the active content section */
+        .content-section.active {
+            display: block;
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+
+        /* Adjust padding for navbar to prevent line from touching edges on smaller screens */
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+
+        /* NotesHimal Background Elements Integration (adjusted for dark theme) */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Faint white for dark background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs, using stroke for subtle effect */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* Animation for elements appearing on scroll */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Animation for elements appearing on load (e.g., browse button) */
+        @keyframes fadeAndSlideIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .fade-in-on-load {
+            animation: fadeAndSlideIn 1s ease-out forwards;
+        }
+    </style>
+</head>
+<body class="text-gray-800">
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image -->
+        <!-- Arrow Group (top-left) -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <!-- Desktop Navigation Links (visible on medium screens and up) -->
+        <div class="space-x-8 hidden md:flex">
+            <a href="#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="showContent('home-section')">Home</a>
+            <a href="#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="showContent('subjects-section')">Subjects</a>
+            <a href="#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="showContent('about-section')">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button (visible on small screens only) -->
+        <div class="md:hidden">
+            <button id="mobile-menu-button" class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <!-- Mobile Menu (hidden by default, toggled by JavaScript) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu(); showContent('home-section');">Home</a>
+            <a href="#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu(); showContent('subjects-section');">Subjects</a>
+            <a href="#about-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu(); showContent('about-section');">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Gradient Line Below Navbar -->
+    <div class="gradient-line"></div>
+
+    <!-- Main Content Area -->
+    <div id="main-content" class="flex-grow">
+
+        <!-- Home Page Content -->
+        <div id="home-section" class="content-section active">
+            <header class="container mx-auto px-4 py-16 md:py-24 flex flex-col md:flex-row items-center justify-between">
+                <div class="md:w-1/2 text-center md:text-left mb-10 md:mb-0">
+                    <p class="text-lg md:text-xl bright-solid-text mb-8">
+                        "Access free and updated Class 11 and Class 12 English and Nepali notes and guide, summaries and grammar guides — perfect for NEB students in Nepal."
+                    </p>
+                    <h1 class="text-4xl md:text-5xl lg:text-6xl font-extrabold leading-tight mb-6 brighter-gradient-text">
+                        Ace Your Studies with Comprehensive Online Notes
+                    </h1>
+                    <p class="text-lg md:text-xl bright-solid-text mb-8">
+                        Easily share and discover notes with others.
+                    </p>
+                    <button class="browse-button text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 fade-in-on-load" onclick="showContent('subjects-section')">
+                        Get Started
+                    </button>
+                </div>
+                <div class="md:w-1/2 flex justify-center md:justify-end laptop-container">
+                    <!-- SVG Laptop - Colors adjusted to dark theme with glowing accents -->
+                    <svg viewBox="0 0 400 250" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <!-- Laptop body (darker shades) -->
+                        <rect x="50" y="150" width="300" height="80" rx="10" fill="#2a1a4a"/>
+                        <rect x="60" y="155" width="280" height="70" rx="8" fill="#1a0a3a"/>
+                        <!-- Screen part (dark background, glowing border) -->
+                        <rect x="70" y="20" width="260" height="130" rx="8" fill="#0a0a2a" stroke="#6a5acd" stroke-width="2" filter="url(#glow)"/>
+                        <!-- Screen display area (darker, with glowing lines) -->
+                        <rect x="80" y="30" width="240" height="110" rx="4" fill="#05051a"/>
+                        <!-- Keyboard details (darker lines) -->
+                        <rect x="70" y="165" width="260" height="5" rx="2" fill="#3a2a5a"/>
+                        <rect x="70" y="175" width="260" height="5" rx="2" fill="#3a2a5a"/>
+                        <rect x="70" y="185" width="260" height="5" rx="2" fill="#3a2a5a"/>
+                        <rect x="70" y="195" width="260" height="5" rx="2" fill="#3a2a5a"/>
+                        <!-- Trackpad -->
+                        <rect x="150" y="210" width="100" height="15" rx="4" fill="#3a2a5a"/>
+                        <!-- Simple screen content (abstract lines) - Glowing blue/purple -->
+                        <rect x="90" y="40" width="100" height="10" rx="2" fill="#fbc2eb" filter="url(#glowSmall)"/>
+                        <rect x="90" y="55" width="150" height="10" rx="2" fill="#a18cd1" filter="url(#glowSmall)"/>
+                        <rect x="90" y="70" width="80" height="10" rx="2" fill="#fbc2eb" filter="url(#glowSmall)"/>
+                        <rect x="90" y="85" width="120" height="10" rx="2" fill="#a18cd1" filter="url(#glowSmall)"/>
+                        <rect x="90" y="100" width="180" height="10" rx="2" fill="#fbc2eb" filter="url(#glowSmall)"/>
+                        <rect x="90" y="115" width="100" height="10" rx="2" fill="#a18cd1" filter="url(#glowSmall)"/>
+
+                        <!-- SVG Filters for Glow Effect -->
+                        <!-- NOTE: These filters are defined here for the laptop SVG.
+                              The main background SVGs use the stroke property directly
+                              without filters for a more subtle effect. -->
+                        <defs>
+                            <filter id="glow">
+                                <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                            <filter id="glowSmall">
+                                <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                                <feMerge>
+                                    <feMergeNode in="coloredBlur"/>
+                                    <feMergeNode in="SourceGraphic"/>
+                                </feMerge>
+                            </filter>
+                        </defs>
+                    </svg>
+                </div>
+            </header>
+
+            <!-- Class Selection Buttons -->
+            <section id="class-selection-section" class="container mx-auto px-4 py-8 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-8 brighter-gradient-text">AVAILABLE FOR</h2>
+                <div class="flex justify-center space-x-4 mb-16">
+                    <button id="class11Btn" class="class-button class-button-active fade-in-slide-up" onclick="selectClass('11')">
+                        Class 11
+                    </button>
+                    <button id="class12Btn" class="class-button class-button-default fade-in-slide-up" onclick="selectClass('12')">
+                        Class 12
+                    </button>
+                </div>
+
+                <!-- Popular Subjects Section (dynamically filtered by class selection) -->
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 brighter-gradient-text">POPULAR SUBJECTS</h2>
+                <div id="subject-cards-container" class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- English 11 Card -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            data-class="11" onclick="window.location.href = 'english11.html';">
+                        <div class="text-5xl mb-4 gradient-text">📖</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">English 11</h3>
+                    </div>
+
+                    <!-- Nepali 11 Card -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            data-class="11" onclick="window.location.href = 'nepali11.html';">
+                        <div class="text-5xl mb-4 gradient-text">✍️</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Nepali 11</h3>
+                    </div>
+
+                    <!-- English 12 Card -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            data-class="12" onclick="window.location.href = 'english12.html';">
+                        <div class="text-5xl mb-4 gradient-text">📖</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">English 12</h3>
+                    </div>
+
+                    <!-- Nepali 12 Card -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            data-class="12" onclick="window.location.href = 'nepali12.html';">
+                        <div class="text-5xl mb-4 gradient-text">✍️</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Nepali 12</h3>
+                    </div>
+                </div>
+                <p class="text-lg md:text-xl bright-solid-text mb-8">
+                       <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">HERE ENDS YOUR SEARCHES FOR:</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold"> Class 11 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 11 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 12 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 12 Nepali Guide/Notes</p></body>
+                    </p>
+            </section>
+        </div>
+     
+
+        <!-- Dedicated Subjects Overview Page -->
+        <div id="subjects-section" class="content-section">
+             <section class="container mx-auto px-4 py-16 md:py-24">
+                <h2 class="text-3xl md:text-4xl font-bold text-center mb-12 brighter-gradient-text">ALL AVAILABLE SUBJECTS</h2>
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
+                    <!-- English 11 -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            onclick="window.location.href = 'english11.html';">
+                        <div class="text-5xl mb-4 gradient-text">📖</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Class 11 English Notes</h3>
+                    </div>
+                    <!-- Nepali 11 -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            onclick="window.location.href = 'nepali11.html';">
+                        <div class="text-5xl mb-4 gradient-text">✍️</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Class 11 Nepali Notes</h3>
+                    </div>
+                    <!-- English 12 -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            onclick="window.location.href = 'english12.html';">
+                        <div class="text-5xl mb-4 gradient-text">📖</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Class 12 English Notes2</h3>
+                    </div>
+                    <!-- Nepali 12 -->
+                    <div class="subject-card p-6 flex flex-col items-center justify-center text-center fade-in-slide-up"
+                            onclick="window.location.href = 'nepali12.html';">
+                        <div class="text-5xl mb-4 gradient-text">✍️</div>
+                        <h3 class="text-xl font-semibold brighter-gradient-text">Class 12 Nepali Notes</h3>
+                    </div>
+                </div>
+                <div class="text-center mt-12">
+                     <button class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="showContent('home-section')">
+                        Back to Home
+                    </button>
+                </div>
+            </section>
+        </div>
+
+        <!-- About Page Content -->
+        <div id="about-section" class="content-section">
+            <div class="container mx-auto px-4 py-16 md:py-24">
+                <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">About Us</h2>
+                <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        Welcome to HIMAL_edu, your go-to platform for effective online learning! We are dedicated to providing high-quality educational resources across various subjects.
+                    </p>
+                    <p class="text-lg brighter-gradient-text mb-4">
+                        Our mission is to make learning accessible and engaging for students worldwide. We believe that well-structured and easy-to-understand notes are key to academic success.
+                        <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold"> WE OFFER:</p></body>
+                        <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold"> Class 11 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 11 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 12 English Guide/Notes</p></body>
+                         <body class="h-screen flex items-center justify-center bg-black"><p class="text-center text-white text-base font-bold">Class 12 Nepali Guide/Notes</p></body>
+                    </p>
+                    <p class="text-lg brighter-gradient-text">
+                        Thank you for choosing HIMAL_edu for your educational journey.
+                    </p>
+                    <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="showContent('home-section')">
+                        Back to Home
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Generic Coming Soon Page (This section will be hidden by default as all subjects now have pages) -->
+        <div id="coming-soon-section" class="content-section">
+            <div class="container mx-auto px-4 py-16 md:py-24 text-center">
+                <h2 class="text-4xl md:text-5xl font-bold mb-8 brighter-gradient-text">Content Coming Soon!</h2>
+                <p class="text-lg md:text-xl bright-solid-text mb-8">
+                    We are working hard to bring you detailed notes for this subject. Please check back later!
+                </p>
+                <button class="browse-button text-white font-semibold py-3 px-8 rounded-full shadow-lg hover:shadow-xl focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-opacity-50 fade-in-slide-up" onclick="showContent('subjects-section')">
+                        Back to Subjects
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to show a specific content section and hide others within index.html
+        function showContent(sectionId) {
+            // Hide all content sections
+            document.querySelectorAll('.content-section').forEach(section => {
+                section.classList.remove('active');
+            });
+
+            // Show the requested content section
+            const targetSection = document.getElementById(sectionId);
+            if (targetSection) {
+                targetSection.classList.add('active');
+                window.scrollTo({ top: 0, behavior: 'smooth' }); // Scroll to top when changing sections
+            } else {
+                console.error('Content section not found:', sectionId);
+            }
+            // Close mobile menu if open
+            const mobileMenu = document.getElementById('mobile-menu');
+            if (mobileMenu.classList.contains('active')) {
+                mobileMenu.classList.remove('active');
+            }
+        }
+
+        // Function to handle class selection (updates subject card visibility on home page)
+        function selectClass(classYear) {
+            const class11Btn = document.getElementById('class11Btn');
+            const class12Btn = document.getElementById('class12Btn');
+
+            // Update button active state
+            if (classYear === '11') {
+                class11Btn.classList.add('class-button-active');
+                class11Btn.classList.remove('class-button-default');
+                class12Btn.classList.remove('class-button-active');
+                class12Btn.classList.add('class-button-default');
+            } else if (classYear === '12') {
+                class12Btn.classList.add('class-button-active');
+                class12Btn.classList.remove('class-button-default');
+                class11Btn.classList.remove('class-button-active');
+                class11Btn.classList.add('class-button-default');
+            }
+
+            // Show/hide subject cards based on selected class
+            const subjectCards = document.querySelectorAll('#home-section #subject-cards-container .subject-card');
+            subjectCards.forEach(card => {
+                if (card.dataset.class === classYear) {
+                    card.style.display = 'flex'; // Show the card
+                } else {
+                    card.style.display = 'none'; // Hide the card
+                }
+            });
+        }
+
+        // Intersection Observer for scroll animations
+        document.addEventListener('DOMContentLoaded', () => {
+            const observerOptions = {
+                root: null, // viewport
+                rootMargin: '0px',
+                threshold: 0.1 // 10% of element visible to trigger
+            };
+
+            const observer = new IntersectionObserver((entries, observer) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting) {
+                        entry.target.classList.add('is-visible');
+                        observer.unobserve(entry.target); // Stop observing once visible
+                    }
+                });
+            }, observerOptions);
+
+            // Observe elements that should fade in on scroll
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                observer.observe(element);
+            });
+
+            // Initialize with Home section and Class 11 subjects on page load
+            const hash = window.location.hash;
+            if (hash) {
+                const sectionId = hash.substring(1); // Remove '#'
+                const targetSection = document.getElementById(sectionId);
+                if (targetSection && targetSection.classList.contains('content-section')) {
+                    showContent(sectionId);
+                } else {
+                    showContent('home-section');
+                }
+            } else {
+                showContent('home-section');
+            }
+            selectClass('11'); // Ensure Class 11 subjects are shown by default on home page
+        });
+    </script>
+</body>
+</html>
+
+

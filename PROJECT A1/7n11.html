@@ -1,0 +1,630 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>पर्यापर्यटनका सम्भावना र आयाम Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching 2n11.html */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out, opacity 0.3s ease-out; /* Add opacity for smoother fade */
+            overflow: hidden;
+            max-height: 0;
+            opacity: 0; /* Start hidden */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px; /* Adjust as needed for content */
+            opacity: 1; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for पर्यापर्यटनका सम्भावना र आयाम Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">७. पर्यापर्यटनका सम्भावना र आयाम Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Toggle Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 animate-on-load delay-1">
+                    View Summary
+                </button>
+
+                <!-- Summary Text (initially hidden) -->
+                <div id="summary-content" class="hidden mb-8">
+                    <p class="text-lg brighter-gradient-text mb-4">
+                         पर्यटन भनेको मानिसहरूले मनोरञ्जन, अध्ययन, विश्राम र नयाँ संस्कृतिको अनुभवका लागि गर्ने यात्रालाई जनाउँछ। नेपाल जस्तो विविधतापूर्ण देशमा पर्यटनले मात्र होइन, सामाजिक, सांस्कृतिक र आर्थिक क्षेत्रमा पनि धेरै महत्व राख्दछ। यो पाठले पर्यटन क्षेत्रले नेपाललाई कस्तो लाभ दिन सक्छ र त्यसले समग्र समाजमा कस्तो प्रभाव पार्न सक्छ भन्ने विषयमा गहिरो विश्लेषण गरेको छ। पर्यटनलाई एउटा व्यापक परिप्रेक्ष्यबाट हेर्दा यो देशको समृद्धि र विकासका लागि एक अत्यावश्यक साधन बन्न सक्ने बताइएको छ।<br><br>
+
+नेपालमा पर्यटनका धेरै सम्भावना छन्। हिमाल, जंगल, ताल, हिमाली क्षेत्रका साहसिक खेलकुद, सांस्कृतिक तथा धार्मिक सम्पदा, सबैले पर्यटकलाई आकर्षित गर्छन्। विश्वका विभिन्न मुलुकबाट आउने पर्यटकहरू हिमाल आरोहण, पदयात्रा, राफ्टिङ, जंगल सफारी जस्ता साहसिक गतिविधिमा भाग लिन यहाँ आउँछन्। साथै, काठमाडौं उपत्यकाका पुराना मठ, मन्दिर र सांस्कृतिक चाडपर्वले पनि पर्यटकलाई मोहित बनाउँछन्। यी सबै पक्षहरूले नेपालको पर्यटनलाई एक विशेष र बहुआयामिक क्षेत्र बनाएको छ, जसले देशको आर्थिक वृद्धिमा महत्वपूर्ण भूमिका खेलिरहेको छ।<br><br>
+
+पर्यटनका विभिन्न आयामहरूमा प्राकृतिक, सांस्कृतिक, धार्मिक र साहसिक पर्यटन पर्दछन्। प्राकृतिक पर्यटनमा हिमालको मनोरम दृश्य, वन्यजन्तु संरक्षण क्षेत्रहरू र ताल–पोखरीहरू पर्यटकको मुख्य आकर्षण हुन्। सांस्कृतिक पर्यटनले नेपालीहरूको समृद्ध सांस्कृतिक परम्परा, भाषा, कला र लोकजीवनलाई उजागर गर्छ। धार्मिक पर्यटनमा पशुपतिनाथ, लुम्बिनी, स्वयम्भूनाथ जस्ता प्रमुख धार्मिक स्थलहरूले विश्वभरका भक्तजन र तीर्थयात्रुलाई आकर्षित गर्छन्। साहसिक पर्यटनले ट्रेकिङ, पर्वतारोहण, राफ्टिङ, प्यारा ग्लाइडिङ जस्ता क्रियाकलापमार्फत युवा र साहसिक पर्यटकहरूलाई नेपालतर्फ आकर्षित गराउँछ।<br><br>
+
+पर्यटनको विकासले देशको आर्थिक वृद्धिलाई मात्र होइन, सामाजिक सद्भाव र सांस्कृतिक आदानप्रदानलाई पनि प्रोत्साहित गर्दछ। पर्यटनबाट रोजगारीका अवसरहरू सिर्जना हुन्छन्, जसले ग्रामीण क्षेत्रका जनजीवनमा सकारात्मक प्रभाव पार्छ। तर, पर्यटनलाई दिगो र सुरक्षित बनाउनु महत्त्वपूर्ण छ। यसका लागि पर्यावरणीय संरक्षण, सांस्कृतिक पहिचानको सम्मान र व्यवस्थित व्यवस्थापन अपरिहार्य छ। असंरचित पर्यटनले वातावरणीय नाश र सांस्कृतिक विनाश गर्न सक्छ, जसले दीर्घकालीन रूपमा नकारात्मक प्रभाव पार्ने सम्भावना हुन्छ।<br><br>
+
+अन्ततः, पर्यटन नेपालका लागि विकास र समृद्धिको एउटा मुख्य स्रोत हो। यसको पूर्ण सदुपयोगका लागि सरकारी निकाय, निजी क्षेत्र र स्थानीय समुदायबीच सहकार्य आवश्यक छ। पर्यटन क्षेत्रको दिगो विकासका लागि प्रभावकारी योजना र नीति बनाउनु आवश्यक छ। यदि यी सबै पक्षहरू राम्रोसँग कार्यान्वयन भएमा, नेपालले विश्व पर्यटन बजारमा आफ्नो पहिचान मजबुत बनाउन र आर्थिक रूपमा आत्मनिर्भर बन्न सक्छ। यसले देशलाई मात्र होइन, नेपाली जनतालाई पनि समृद्धि र खुशीयाली प्रदान गर्नेछ।<br><br>
+                    </p>
+                </div>
+
+                <!-- New Content: शब्दभण्डार, बोध र अभिव्यक्ति, व्याकरण अभ्यास -->
+                <div class="new-content mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4 animate-on-load delay-2">शब्दभण्डार</h3>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-3">१. दिइएका शब्द र अर्थबिच जोडा मिलाउनुहोस्:</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-4">
+                        <li>क) परिस्थितिक प्रणाली: परिस्थितिका कारण निम्तिने प्रणाली</li>
+                        <li>ख) विहङ्गम दृष्टि: आकाशमा उडिरहेको चराले जस्तै कुनै कुरालाई हेर्ने काम</li>
+                        <li>ग) तृणहारी: दुबो, पराल, खर आदि घाँसपात खाने</li>
+                        <li>घ) कटिबन्ध: पृथ्वीका दुई ध्रुवका बिचका भुभागलाई हावापानी आदिका हिसाबले बाँडिने भाग</li>
+                        <li>ङ) पर्यापर्यटन: विविधताका कारण हुने पर्यटन</li>
+                        <li>च) जलक्रीडा: पानीमा गर्न सकिने विभिन्न खेल; मनोरञ्जन</li>
+                        <li>छ) पर्यावरणमैत्री: वातावरण सुहाउँदो</li>
+                        <li>ज) प्रतिकूल प्रभाव: पक्षमा नभएको प्रभाव</li>
+                        <li>झ) हिमाच्छादित छाना: हिउँ नै हिउँले ढाकिएको छाना</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-5">२. दिइएका शब्दहरुको अर्थ शब्दकोशका सहायताले पत्ता लगाउनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-6">
+                        <li>लवज : भन्ने तरिका, बोल्ने तरिका</li>
+                        <li>वायुमण्डल : हावाले ढाकेको भाग</li>
+                        <li>संजाल : जालो</li>
+                        <li>लीन : काममा एकाग्र भएर लागेको, तल्लीन</li>
+                        <li>नभचर : आकाशमा बस्ने</li>
+                        <li>अक्षांश : पृथ्वीको सतहमा पूर्वपश्चिम खिचिएका काल्पनिक रेखा</li>
+                        <li>शीतोष्ण : समुन्द्र सतहबाट २००० देखि ३००० मिटरसम्मको भाग</li>
+                        <li>सिमसार : हिलो र पानी भएको ठाउँ</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-7">३. पाठबात दशओटा आगन्तुक शब्द पहिचान गरी वाक्यमा प्रयोग गर्नुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-1">
+                        <li>ग्रीक : ग्रीक सभ्यताले दर्शन, विज्ञान र कलामा उल्लेखनीय योगदान पुर्‍याएको छ।</li>
+                        <li>र्‍याफ्टिङ : ट्रिसुली नदीमा र्‍याफ्टिङ गर्न हजारौं पर्यटकहरू हरेक वर्ष नेपाल आउँछन्।</li>
+                        <li>बोटिङ : फेवातालमा बोटिङ गर्दा प्राकृतिक सुन्दरता र हिमालको प्रतिबिम्ब देख्न पाइन्छ।</li>
+                        <li>बन्जी जम्पिङ : नेपालमा भोटेकोसी नदीमाथिको पुलबाट बन्जी जम्पिङको रोमाञ्चक अनुभव लिन सकिन्छ।</li>
+                        <li>गल्फ : गल्फ देशहरूमा लाखौं नेपाली कामदारहरू रोजगारीको लागि गएका छन्।</li>
+                        <li>इकोफ्रेन्ड्ली : इकोफ्रेन्ड्ली प्रविधिको प्रयोगले वातावरणीय क्षति घटाउन मद्दत गर्दछ।</li>
+                        <li>इकोटुरिजम : इकोटुरिजमले प्राकृतिक स्रोतको संरक्षणसँगै स्थानीयको जीवनस्तर उकास्ने काम गर्छ।</li>
+                        <li>इकोलोजी : कुनै पनि विकास परियोजना अघि इकोलोजीको अध्ययन गर्नु अत्यावश्यक हुन्छ।</li>
+                        <li>इकोसिस्टम : जङ्गलको इकोसिस्टम सन्तुलित राख्न सबै जीवजन्तुको योगदान महत्वपूर्ण हुन्छ।</li>
+                        <li>मैदान : बालबालिकाहरू बिहान सबेरै मैदानमा फुटबल खेल्न गएका थिए।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-2">४. पाठबाट पर्यटन र पर्यावरणसँग सम्बन्धित दश दशओटा शब्द पहिचान गरी लेख्नुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-3">पर्यटन</p>
+                    <ul class="list-disc list-inside brighter-gradient-text mb-6 animate-on-load delay-4">
+                        <li>र्‍याफि्टङ, कायाकिङ, क्यानोइङ, बोटिङ, मत्स्यविहार, बाइक यात्रा, घोडसवार, रक क्लाइम्बिङ, हिउँचिप्लेटी, गल्फ</li>
+                    </ul>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-5">पर्यावरण</p>
+                    <ul class="list-disc list-inside brighter-gradient-text mb-6 animate-on-load delay-6">
+                        <li>पोखरी, ताल, सिसिमसार, वनस्पति, घाँस, पात, पशुपन्छी, स्थलचर, जङ्गल, जलथर</li>
+                    </ul>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mt-8 mb-4 animate-on-load delay-7">बोध र अभिव्यक्ति</h3>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-1">१. दिइएका प्रश्नको उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-2">
+                        <li>क) पर्यापर्यटन पाठ कति अनुच्छेदमा संरचित छ ?<br>पर्यापर्यटन पाठ दस अनुच्छेदमा संरचित छ ।</li>
+                        <li>ख) सबैभन्दा लामो अनुच्छेद कुन हो र कति वाक्यमा संरचित छ ?<br>सबैभन्दा लामो अनुच्छेद नवौ हो र यो ९ वाक्यमा संरचित छ ।</li>
+                        <li>ग) सबैभन्दा छोटो अनुच्छेदमा कति वाक्यहरु छन् र कुन हो ?<br>सबैभन्दा छोटो अनुच्छेदमा ३ वाक्यहरु छन र यो दशौ अनुच्छेद हो ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-3">३. पाठको दोस्रो अनुच्छेद पढ्नुहोस् र सोधिएका प्रश्नहरुको उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-4">
+                        <li>क) जलचरहरु के खाएर बाँच्छन् ?<br>जलचरहरू प्रायः पानीमा पाइने साना साना जीवाणु, कीट, पौधा तथा अन्य साना जीवहरू खाएर बाँच्छन्। उनीहरूले आफूलाई जीवित राख्न र ऊर्जा प्राप्त गर्न यी साना जीवहरूलाई आहारको रूपमा ग्रहण गर्छन्। केही जलचरहरू भने ठूला जीवहरू वा माछा पनि खान सक्छन्, तर सामान्यतया उनीहरूको आहारमा सूक्ष्म जीवहरू प्रमुख हुन्छन्।</li>
+                        <li>ख) जमिनले पोषण कसरी प्राप्त गर्दछ ?<br>जमिनले पोषण मुख्यतया पानी, हावा र जैविक पदार्थहरूबाट प्राप्त गर्दछ। पानीले माटोका तत्वहरूलाई घुलाएर बिरुवाहरूको जरामा पुर्याउँछ भने हावाबाट अक्सिजन प्राप्त हुन्छ। साथै, जमिनमा रहेका सूक्ष्म जीवाणु र सड्ने जीवहरूले जैविक पदार्थहरूलाई विघटित गरेर माटोलाई उपयुक्त पोषण तत्वहरूले भरिपूर्ण बनाउँछन्। यसरी जमिन स्वस्थ र पोषित रहन्छ।</li>
+                        <li>ग) आहारको सञ्जाल कसरी निर्माण हुन्छ ?<br>आहारको सञ्जाल विभिन्न जीवहरूको बीचको पोषण सम्बन्ध हो, जसले ऊर्जा र पोषणलाई एक जीवबाट अर्को जीवमा स्थानान्तरण गर्छ। सानो जीवहरू (जस्तै कीरा, प्ल्यांकटन) बाट सुरु भएर तिनीहरूलाई खाने मध्यम आकारका जीवहरू, र त्यसपछि ठूलो जनावरहरूले आहारको श्रृंखला बनाउँछन्। यी श्रृंखलाहरू जटिल रूपमा जडित भएर एक ठूलो सञ्जाल निर्माण गर्छन् जसले पारिस्थितिक प्रणालीलाई सन्तुलित राख्छ।</li>
+                        <li>घ) प्राणीहरू किन जन्मन्छन् र मर्छन् ?<br>प्राणीहरू जन्मन्छन् ताकि उनीहरूले आफ्नो प्रजातिलाई अगाडि बढाउन र जीवनचक्र पूरा गर्न सकून्। जन्मले नयाँ जीवनको सुरुवात जनाउँछ र प्रजाति निरन्तरता पाउँछ। प्राणीहरू मर्छन् किनभने जीवन चक्रको अन्त्य आउँछ, शरीरमा हुने जैविक प्रक्रिया रोकिन्छ र उनीहरूको भौतिक अस्तित्व समाप्त हुन्छ। मृत्यु प्रकृतिको अनिवार्य नियम हो जसले नयाँ जीवनका लागि स्थान बनाउँछ र पारिस्थितिक सन्तुलन कायम राख्छ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-5">४. दिइएको निबन्धांश पढी सोधिएका प्रश्नहरुको छोटो उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-6">
+                        <li>क) पृथ्वी नै सबैको साझा घर हो, कसरी ?<br>पृथ्वी हाम्रो अस्तित्वको आधार हो जहाँ मानिस, जनावर, वनस्पति र विभिन्न जीवहरू बसोबास गर्छन्। यसले हामी सबैलाई जीवनका लागि आवश्यक स्रोतहरू—जस्तै पानी, हावा, खाना र आवास—प्रदान गर्दछ। पृथ्वीमा रहेका प्राकृतिक स्रोतहरू सबै जीवहरूको साझा उपयोगका लागि छन्, र यी स्रोतहरूको संरक्षण गरेर मात्र हामी जीवनको निरन्तरता सुनिश्चित गर्न सक्छौं। सबै प्राणीहरू पृथ्वीमा आपसमा सम्बन्धित र निर्भर छन्, जसले गर्दा पृथ्वी सबैको साझा घरको रूपमा रहेको छ।<br><br>पृथ्वीमा विभिन्न संस्कृतिका मानिसहरू, विभिन्न जाति, भाषा र धर्मका मानिसहरू बसेका छन्। यद्यपि तिनीहरू फरक–फरक छन्, तर पृथ्वीले सबैलाई समान अधिकार र सुरक्षा दिन्छ। पृथ्वीको वातावरण, माटो, पानी र हावा सबैको साझा सम्पत्ति हुन् र यसमा सबैले समान रूपमा जीवन यापन गर्न पाउनु आवश्यक छ। यसैले हामीले पृथ्वीलाई साझा घर भनेर हेर्नुपर्छ र यसको संरक्षण तथा सदुपयोग सबैको सामूहिक जिम्मेवारी हो।</li>
+                        <li>ख) वायुमण्डल प्रदुषणका कारण पृथ्वीको सतह अप्रत्यासित ढङ्गले तात्ने क्रमलाई लिएर किन चासो र चिन्ता बढेको छ ?<br><br>वायुमण्डल प्रदूषणका कारण पृथ्वीको सतह अप्रत्यासित ढङ्गले तात्न थालेको छ, जसलाई हामी विश्वव्यापी तापक्रम वृद्धिको रूपमा चिनिन्छ। यसको मुख्य कारण भनेको वातावरणमा हरितगृह ग्याँसहरूको मात्रा बढ्नु हो, जस्तै कार्बन डाइअक्साइड, मिथेन, नाइट्रस अक्साइड आदि। यी ग्याँसहरूले सूर्यको तापलाई पृथ्वीबाट बाहिर जान नदिई पृथ्वीको सतहमा जोगाउँछन् जसले गर्दा तातो बढी हुन्छ। यसरी बढेको तापक्रमले ग्लेशियर पगाल्ने, समुद्रको सतह बढ्ने, र अनियमित मौसम परिवर्तन जस्ता असरहरू ल्याउँछ। यसले प्राकृतिक आवासहरूमा असर पुर्याउने, कृषिमा क्षति पुर्याउने, र मानव स्वास्थ्यलाई पनि जोखिममा पार्ने भएकाले विश्वभर चासो र चिन्ता बढेको हो।<br><br>अप्रत्याशित रूपमा तापक्रम बढ्नुले जलवायु परिवर्तनलाई तीव्र बनाएको छ जसले बाढी, सुख्खा, आँधी र अन्य प्राकृतिक विपत्तिहरूको सम्भावना बढाएको छ। यो न केवल पर्यावरणीय समस्या हो, तर सामाजिक र आर्थिक क्षेत्रहरूमा पनि गम्भीर असर पार्दछ। बढ्दो तापक्रमले खाद्य सुरक्षा संकट ल्याउन सक्छ र दिगो विकासका लक्ष्यहरूमा बाधा पुर्‍याउँछ। यस्ता प्रभावहरूले विश्वका सरकारहरू, वैज्ञानिकहरू, र नागरिकहरूलाई वायुमण्डल प्रदूषण नियन्त्रण र वातावरण संरक्षणमा थप सजग र सक्रिय हुन प्रेरित गरेको छ। त्यसैले पृथ्वीको सतहको अनपेक्षित तापक्रम वृद्धिले चासो र चिन्ता बढाउनु स्वाभाविक र आवश्यक छ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-7">५. दिइएको निबन्धांश पढी सोधिएका प्रश्नहरुको छोटो उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-1">
+                        <li>क) पर्यटकीय गतिविधिका क्षेत्रहरु के के हुन् ?<br>पर्यटकीय गतिविधिका क्षेत्रहरूमा प्राकृतिक सुन्दरता, ऐतिहासिक स्थलहरू, सांस्कृतिक क्षेत्रहरू, धार्मिक स्थानहरू, जलाशय र मनोरञ्जन केन्द्रहरू पर्दछन्।</li>
+                        <li>ख) पर्यापर्यटनका निम्ति आचारसंहिता कसलाई र किन आवश्यक छ ?<br>पर्यापर्यटनका लागि आचारसंहिता पर्यटकहरूलाई आवश्यक हुन्छ ताकि उनीहरूले स्थानिय संस्कृतिको सम्मान गरोस्, प्राकृतिक स्रोतहरू संरक्षण होस् र सामाजिक सद्भाव कायम रहोस्।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-2">६. उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-3">
+                        <li>क) जलवायुका दृष्टिकोणले पृथ्वीलाई कसरी वर्गीकरण गरिएको छ ?<br>जलवायुका आधारमा पृथ्वीलाई विभिन्न क्षेत्रहरूमा वर्गीकरण गरिएको छ जसले पृथ्वीको वातावरणीय विविधता र भौगोलिक विशेषताहरूलाई स्पष्ट पार्दछ। प्रमुख रूपमा पृथ्वीलाई पाँच प्रकारका जलवायु क्षेत्रहरूमा विभाजन गरिएको छ—उष्णकटिबंधीय, समशीतोष्ण, ध्रुवीय, मरुभूमि, र मध्यस्थ जलवायु क्षेत्र। उष्णकटिबंधीय क्षेत्रहरूमा तापक्रम प्रायः उच्च र वर्षा धेरै हुने गर्दछ, जसले घना जङ्गल र जैविक विविधता उत्पन्न गर्दछ। समशीतोष्ण क्षेत्रहरूमा चार  मौसम—बसन्त, ग्रीष्म, शरद र हिउँ—हुन् र यहाँ कृषिजन्य क्रियाकलापहरू धेरै सक्रिय हुन्छन्। ध्रुवीय क्षेत्रहरू अत्यन्त चिसो र हिउँमय हुने हुँदा जीवजन्तु र मानवीय बसोबास सीमित हुन्छ। मरुभूमि क्षेत्रहरू धेरै सुख्खा र गर्म हुन्छन् जहाँ पानीको अभावले जैविक विविधता कम हुन्छ।<br><br>यस वर्गीकरणले केवल पर्यावरणीय पक्षमा मात्र नभई मानवीय जीवनशैली र संस्कृतिमा पनि ठूलो प्रभाव पार्दछ। उदाहरणका लागि, उष्णकटिबंधीय क्षेत्रमा कृषिकर्म प्रायः वर्षाको भरमा निर्भर हुन्छ भने समशीतोष्ण क्षेत्रमा कृषिलाई मौसम अनुसार योजना गर्न सकिन्छ। ध्रुवीय क्षेत्रमा बसोबास गर्न कठिन भएकाले त्यहाँ बसोबास गर्ने मानिसहरूको संख्या कम हुन्छ। साथै, यी जलवायु क्षेत्रहरूको ज्ञानले हामीलाई प्राकृतिक स्रोतहरूको संरक्षण, मौसम पूर्वानुमान, र जलवायु परिवर्तनको प्रभाव मूल्याङ्कन गर्न मद्दत गर्छ। पृथ्वीको जलवायु वर्गीकरणले मानव समाज र प्रकृतिको सम्बन्धलाई बुझ्न र संरक्षणका उपायहरू निर्माण गर्न अत्यावश्यक भूमिका खेल्दछ।</li>
+                        <li>ख) पर्यापर्यटनका विशेषताहरु उल्लेख गर्नुहोस् ।<br>पर्यापर्यटनका विशेषताहरू धेरै बहुआयामिक छन् जसले यसलाई अन्य पर्यटनका प्रकारहरूबाट अलग बनाउँछन्। पहिलो विशेषता हो—पर्यापर्यटन प्रकृति र वातावरणसँग निकट सम्बन्धित हुन्छ। यसले प्राकृतिक स्रोतहरूको संरक्षण र टिकाउ व्यवस्थापनमा जोड दिन्छ। पर्यापर्यटनले पर्यावरणीय सन्तुलन कायम राख्दै, पर्यटन गतिविधिहरूलाई प्राकृतिक क्षेत्रहरूमा सीमित राख्छ ताकि संसाधनहरूको अत्यधिक दोहन नहोस्। यसले स्थानीय जैविक विविधता, वनस्पति र जनावरहरूको संरक्षणमा मद्दत पुर्‍याउँछ।<br><br>अर्को विशेषता भनेको यसले सांस्कृतिक र सामाजिक पक्षहरूलाई पनि महत्व दिन्छ। पर्यापर्यटनले स्थानीय समुदायसँग सहकार्य गरी उनीहरूको सांस्कृतिक धरोहर र जीवनशैलीलाई संरक्षण र प्रवर्द्धन गर्छ। यसले पर्यटकहरूलाई स्थानिय संस्कृतिको सम्मान गर्न सिकाउँछ र पारस्परिक सम्मान र समझदारीलाई बढावा दिन्छ। यसैगरी, पर्यापर्यटनले आर्थिक रूपमा पनि स्थानीय समुदायलाई सशक्त बनाउने अवसर प्रदान गर्दछ जसले दीगो विकासलाई प्रोत्साहन गर्छ। यस्ता विशेषताहरूले पर्यापर्यटनलाई सामाजिक, आर्थिक र पर्यावरणीय तीनै दृष्टिले महत्वपूर्ण बनाउँछन्।</li>
+                        <li>ग) जल, थल र आकाशमा हुने पर्यटकीय गतिविधिहरु उल्लेख गर्नुहोस् ।<br>जलमा हुने पर्यटकीय गतिविधिहरु : र्‍याफि्टङ, कायाकिङ, क्यानोनिङ, बोटिङ, मत्स्य विहार आदि ।<br><br>थलमा हुने पर्यटकीय गतिविधिहरु : पर्वतारोहण, पदयात्रा ,जङ्गलसफारी, वन्यजन्तु अवलोकन, पर्वत वाइक यात्रा आदि ।<br><br>आकाशमा हुने पर्यटकीय गतिविधिहरु : पर्वतीय उडान, ह्यन्ड ग्लाइडिङ, पाराग्लाइडिङ, हट एयर बेलून आदि ।</li>
+                        <li>घ) नेपालको पर्यावरणको विविधतालाई निबन्धमा कसरी वर्णन गरिएको छ ?<br>नेपालको पर्यावरणको विविधताको वर्णन पाँचतले घरसँग तुलना गरेर गरिएको छ । भुईतलामा तराई, पहिलो तलामा चुरे मधेश तथा टारवेंसी दोस्रो तलामा पहाडी प्रदेश, तेस्रो तलामा पर्वतीय प्रदेश, चौथो तलामा उच्च पर्वतीय भाग र त्यसको शिरमा हिमाच्छादित छानाका रूपमा निबन्धमा वर्णन गरिएको छ । यसको उत्तरी मोहडामा बार्दली झै निस्किएको भोट प्रदेशको आकर्षण छ भन्ने कुरालाई यस निबन्धमा व्यक्त गरिएको छ ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-4">७. व्याख्या गर्नुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-5">
+                        <li>क) पृथ्वीको ………………………….सङ्कटमा पर्छ ।<br>प्रस्तुत गद्यांश कक्षा ११ को नेपाली विषय अन्तर्गत पर्ने "पर्यापर्यटनका सम्भावना र आयाम" नामक निबन्धवाट साभार गरिएको हो । यस निबन्धका लेखक तीर्थबहादुर श्रेष्ठ हुन् । पृथ्वी हाम्रो साझा घर हो । यसलाई हामी सबैले संरक्षण गर्नुपर्छ भन्ने आशयलाई यस निबन्धाशमा व्यक्त गरिएको छ ।<br><br>पृथ्वी एक मात्र जीवित ग्रह हो । यहाँ बसोबास गर्ने सम्पूर्ण प्राणी र वनस्पतिहरु एकअर्कामा निर्भर छन् । यहां जल, वायु, आकाश र तेज जस्ता पञ्चतत्त्व छन् जसले जीवको अस्तित्वलाई बचाएको छ । यी पञ्चतत्त्वलाई हामी मानवल प्रदूषित गर्नुहुँदैन । पृथ्वीको परिस्थितिक प्रणालीमा गडबडी भएमा प्राणी र वन्स्पतिको अस्तित्व सङ्कटमा पर्छ । विकासका नाममा आज मानिसले प्रकृतिको विनास गर्दै छ । अब मानव समुदायले पृथ्वीको पारिस्थितिक प्रणालीलाई बिचोलिदियौं भने हाम्रो अस्तित्व सङ्कटमा पर्ने सम्भावना छ । मानिसले विकासका नाममा गरेको पर्यावरणीय विनासले सम्पूर्ण प्राणी जगत नै सङ्कटमा पर्न सक्छ ।<br><br>हाल वायुमण्डल प्रदूषणका कारण पृथ्वीको सतह अप्रत्यासित ढङ्गले तात्न थालेको छ, जलवायु परिवर्तन भएको छ, पारिस्थितिक प्रणाली नै बिथोलिएको छ, मानिस लगायत सम्पूर्ण प्राणी एवं वनस्पति जगत नै प्रभावित भएको छ । यो क्रम रोकिएन भने मानव अस्तित्व नै सङ्कटमा पर्ने भएकाले यसप्रति चासो र चिन्ता बढेको छ ।</li>
+                        <li>ख) नयाँ पिँढिको ………………………. माग पनि हो ।<br>प्रस्तुत गद्यांश कक्षा ११ को नेपाली विषय अन्तर्गत पर्ने "पर्यापर्यटनका सम्भावना र आयाम" नामक निबन्धवाट साभार गरिएको हो । यस निबन्धका लेखक तीर्थबहादुर श्रेष्ठ हुन् । पृथ्वी हाम्रो साझा घर हो । यसलाई हामी सबैले संरक्षण गर्नुपर्छ भन्ने आशयलाई यस निबन्धाशमा व्यक्त गरिएको छ ।<br><br>नेपालमा गरिबी, सीमित रोजगारीका अवसरहरू भएकाले नयाँ पिँढि विदेश पलायन हुन्छन् । नेपालमा धेरै गाउँहरू छन् जहाँ श्रम बसाइँसराइलाई समुदायको संस्कृतिको रूपमा स्थापित गरिएको छ; अर्थात् केही समयको लागि कामका लागि विदेश जानु र केही पैसा लिएर फर्किनु येहाको चालचलन नै बनको छ । यी र यस्ता समस्याहरूको सम्बोधन हुने खालका योजनाहरू अब स्थानीय सरकार वा राज्यले गर्नुपर्छ । युवा पुस्तालाई पर्यटन व्यवसायको क्षेत्रमा आकर्षण गर्न सीप, तालिम एवं क्षमता अभिवृद्धिका लागि प्रशिक्षण एवं तालिमको व्यवस्था अनि लगानीको वातावरण सिर्जना गरी अवसरहरु दिन सक्नुपर्दछ । वा श्रमशक्तिलाई स्वदेशमै प्रयोग गरी देश विकासकै अभियानमा सरकार लागेमा नयाँ पिँढी स्वदेशमा नै बसी पर्यापर्यटनको विकासमा महत्वपूर्ण भूमिका खेल्ने छ । तसर्थ युवापुस्तालाई आफ्नो देशमा राख्न सके आफ्नो देशको विकास गर्न सकिन्छ भन्ने आशयलाई माथिको अपने व्यक्त गरेको छ ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-6">८. समीक्षात्मक उत्तर लेख्नुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-7">
+                        <li>क) नेपालको पर्यावरणले पर्यटनलाई कसरी सहयोग पुर्‍याएको छ ?<br>नेपालको पर्यावरण अत्यन्तै विविधतापूर्ण र प्राकृतिक सौन्दर्यले भरिपूर्ण छ, जसले यसलाई विश्वकै प्रमुख पर्यटन गन्तव्यहरू मध्ये एक बनाएको छ। हिमालय पर्वतदेखि तराईका घना जंगलहरू, हिमाली उपत्यकाहरू, झरना, तालहरू र जैविक विविधताले भरिपूर्ण वन्यजन्तु संरक्षण क्षेत्रहरूले पर्यटकहरूलाई आकर्षित गर्दछ। यी प्राकृतिक स्रोतहरूले पर्यटकहरूलाई शान्ति, रमाइलो र साहसिक अनुभव दिन्छन्। साथै, नेपालका हिमालहरूमा ट्रेकिङ, पर्वतारोहण, र क्यानियोनिङजस्ता साहसिक खेलहरू पर्यटकलाई आकर्षित गर्ने प्रमुख कारणहरू हुन्।<br><br>नेपालको वातावरणले पर्यटनलाई सहयोग गर्ने अर्को महत्वपूर्ण पक्ष भनेको यहाँको जैविक विविधता हो। राष्ट्रिय निकुञ्जहरू र संरक्षण क्षेत्रहरूमा पाइने दुर्लभ प्राणी र वनस्पतिहरूले जैविक पर्यटन र प्रकृति अवलोकनलाई प्रोत्साहित गरेको छ। यसले विदेशी पर्यटकलाई मात्र होइन, भित्री पर्यटकलाई पनि आकर्षित गर्ने काम गर्दछ। साथै, नेपालमा रहेको प्राकृतिक सौन्दर्य र शुद्ध हावाले मानिसहरूलाई स्वास्थ्य र मनोबल सुधार्ने अवसर दिन्छ, जसले दीगो पर्यटन विकासमा ठूलो योगदान पुर्‍याउँछ।<br><br>तर, नेपालको पर्यावरणीय संरक्षणमा चुनौतिहरू पनि छन्, जस्तै जंगल कटान, प्रदूषण र अतिपर्यटन। यी समस्याहरूले पर्यटन क्षेत्रलाई नकारात्मक प्रभाव पार्न सक्ने भएकाले समुचित व्यवस्थापन आवश्यक छ। यदि पर्यावरण संरक्षणमा ध्यान दिइयो भने नेपालको प्राकृतिक वातावरणले पर्यटन क्षेत्रलाई दीर्घकालीन रूपमा सफल र समृद्ध बनाउन महत्वपूर्ण भूमिका खेल्न सक्छ। यसैले, नेपालको पर्यावरण र पर्यटन बीच गहिरो सम्बन्ध रहेको छ र यो सम्बन्धलाई सुदृढ पार्नु आवश्यक छ।</li>
+                        <li>ख) नेपालको पर्यापर्यटनको विकासमा स्थानीय, समुदाय तथा सरकारको भूमिका उल्लेख गर्नुहोस् ।<br>नेपालको पर्यापर्यटनको विकासमा स्थानीय स्तरको भूमिका अत्यन्त महत्वपूर्ण छ। स्थानीयहरू नै पर्यापर्यटन क्षेत्रका सिधा सहभागी र व्यवस्थापक हुन्। उनीहरूले आफ्नो प्राकृतिक र सांस्कृतिक सम्पदाको संरक्षण र प्रवर्द्धन गरेर पर्यटकहरूलाई स्वागत गर्ने वातावरण तयार गर्छन्। स्थानीय समुदायले आफ्ना परम्परागत संस्कृतिहरू, खानपान, कला र हस्तकला जस्ता विषयहरूलाई संरक्षण गरी पर्यटकहरूलाई आकर्षित गर्ने काम गर्छन्। साथै, उनीहरूले पर्यटनबाट प्राप्त आम्दानीले आफ्नो आर्थिक स्थिति सुधार गर्न सक्छन् र दीगो विकासमा योगदान दिन सक्छन्।<br><br>समुदायको सहभागिताले पर्यापर्यटनलाई सफल बनाउन सहयोग पुर्‍याउँछ किनभने उनीहरूले आफ्नो जीवनशैली र वातावरणको संरक्षणमा सधैं चासो राख्छन्। सामुदायिक स्तरमा पर्यापर्यटनका लागि प्रशिक्षण, सचेतना अभिवृद्धि र स्रोत व्यवस्थापन गर्ने कामले पर्यटनलाई दीगो बनाउँछ। समुदायमा पर्यावरणीय संरक्षण, सामाजिक सद्भाव र सांस्कृतिक सम्मानको भावना फैलिनुले पर्यापर्यटनको गुणस्तरमा वृद्धि हुन्छ। यसरी समुदायको सक्रिय सहभागिता पर्यापर्यटनको दीगो विकासका लागि अनिवार्य छ।<br><br>सरकारको भूमिका पनि धेरै महत्वपूर्ण छ। सरकारले नीति निर्माण, योजना, वित्तीय सहायता, संरचना निर्माण र नियम–कानुनको कार्यान्वयन गरेर पर्यापर्यटनलाई व्यवस्थित गर्न आवश्यक वातावरण बनाउँछ। सरकारले संरक्षण क्षेत्रहरू, राष्ट्रिय निकुञ्ज र साँस्कृतिक सम्पदाको संरक्षण गर्दै पर्यटन प्रवर्द्धनमा जोड दिन्छ। साथै, सरकारी तहबाट सुरक्षा, पूर्वाधार विकास र अन्तर्राष्ट्रिय सम्बन्धहरू सुधार गरेर पर्यापर्यटनको विस्तारमा मद्दत पुर्‍याइन्छ। सरकार, स्थानीय समुदाय र निजी क्षेत्रको सहकार्यले मात्र नेपालको पर्यापर्यटनलाई दीगो र समृद्ध बनाउने सम्भावना रहन्छ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-1">१०. दिइएको अनुच्छेद पढी अन्त्यमा सोधिएका प्रश्नहरुको उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-2">
+                        <li>क) भौतिक विज्ञानका प्रणेता को को हुन् ?<br>भौतिक विज्ञानका प्रणेता न्युटन, ग्यालिलियो र आइन्स्टाइन हुन् ।</li>
+                        <li>ख) भौतिक विज्ञानका आधारमा शक्ति र बलमा के भिन्नता छ ?<br>भौतिक विज्ञानका आधारमा शक्ति भनेको कार्य गर्ने सामर्थ्यको नाप हो भने बल भनेको एकसमान गतिलाई बदल्ने एकाइ हो ।</li>
+                        <li>ग) माथिको अनुच्छेदबाट दुईवटा तत्सम शब्द टिप्नुहोस् र तिनको बनोट देखाउनुहोस ।<br>समुद्रपारि : समुद्रदेखि पारि<br>जीवनजगत : जीवन र जगत</li>
+                        <li>घ) भौतिक विज्ञानले कसरी प्रकृतिको व्यापक क्षेत्रलाई समेटेको छ ?<br>भौतिक विज्ञानले स्थान, काल, गति, विद्युत्, प्रकाश, ऊर्जा, भूगर्भ, खगोल, प्रकृति, जीवनजगत तथा ब्रह्माण्ड समेतको अध्ययन गरेकाले यसले प्रकृतिको व्यापक क्षेत्रलाई समेट्न सफल भएको छ ।</li>
+                        <li>ङ) `भूगर्भ´ र `खगोल´ शब्दको अर्थ लेख्नुहोस् ।<br>भूगर्भ : पृथ्वीको भित्री तह<br>खगोल : आकाश, अन्तरीक्ष</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-3">११. दिइएको अनुच्छेद पढी चारवटा बुँदा टिप्नुहोस् र एक तृतीयांश सार लेख्नुहोस् ।</h4>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-4">बुँदाहरु :</p>
+                    <ul class="list-disc list-inside brighter-gradient-text mb-4 animate-on-load delay-5">
+                        <li>नेपालको भूमिमा प्रशस्त खनिज सम्पदा पाइनु,</li>
+                        <li>नेपालका कतिपय नदी, खोलामा सुन र कतिपय खोला नदीका बगरमा चांदी पाइने,</li>
+                        <li>मुक्तिनाथमा युरेनियम जस्ता केहि बहुमुल्य खनिज पाइनु,</li>
+                        <li>खनिजहरुको आधुनिक तरिकाले उत्खनन, प्रशोधन र प्रयोग गर्न आवश्यक भएको ।</li>
+                    </ul>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-6">सारांश<br>खनिज पदार्थ</p>
+                    <p class="brighter-gradient-text mb-4 animate-on-load delay-7">
+                        नेपालको भूमिमा प्रशस्त खनिज पाइन्छ । यहाँका कतिपय नदीमा सुन र नदीकिनार तथा बगरमा चांदी पाइन्छ । अझ मुक्तिनाथमा त युरेनियम जस्तो बहुमुल्य खनिज पनि पाइन्छ । नेपालका सातवटै प्रदेशमा विभिन्न खनिज सम्पदा भुगर्भमा लुकेर बसेका छ्न् । नेपालमा पाइने यस्ता विभिन्न प्रकारका खनिज पदार्थलाई आधुनिक तरिकाले उत्खनन, प्रशोधन र प्रयोग गर्न जरुरी छ ।
+                    </p>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-1">अनुच्छेदमा दिइएको शब्द सङ्ख्या : १६६</p>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-2">हुनुपर्ने शब्द : ५५</p>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-3">सारांश लेखिएको शब्द सङ्ख्या : ५५</p>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-4">१२. दिइएको अनुच्छेद पढ्नुहोस र सोधिएका प्रश्नहरुको उत्तर दिनुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-5">
+                        <li>क) आधारभूत रुपमा अनुच्छेद कति किसिमका हुन्छन् ?<br>आधारभूत रुपमा अनुच्छेद आत्मपरक र वस्तुपरक गरी दुई किसिमका हुन्छन् ।</li>
+                        <li>ख) कस्तो अनुच्छेदलाई आत्मपरक अनुच्छेद भनिन्छ ?<br>प्रथमपुरुष दृष्टिविन्दु प्रयोग भएको लेखकको निजि विचार प्रधान गर्ने अनुच्छेदलाई आत्मपरक अनुच्छेद भनिन्छ ।</li>
+                        <li>ग) अनुच्छेदमा वस्तुपरक विषयलाई कसरी वर्णन गरिएको छ ?<br>अनुच्छेदमा वस्तुपरक विषयलाई तृतीयपुरुष दृष्टिविन्दु र तथ्यगत रुपमा वर्णन गरिएको छ ।</li>
+                        <li>घ) आत्मपरक अनुच्छेद र वस्तुपरक अनुच्छेदबिचको मुख्य अन्तर के हो ?<br>आत्मपरक अनुच्छेदमा लेखकको विचार वा अनुभूतिलाई प्राथमिकता दिइन्छ भने वस्तुपरक अनुच्छेदमा सत्य तथ्य वस्तु वा घटनालाई आधार बनाइन्छ ।</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-6">१३. दिइएको अनुच्छेद आत्मपरक हो भन्ने आधार के के छन् ,पुष्टि गर्नुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-7">
+                        दिइएको अनुच्छेदमा प्रथम पुरुष दृष्टिविन्दु प्रयोग भएको छ । साथै प्रकृतिलाई मानिस जस्तै मानेर कञ्चनजङ्घा, पहाडी टार, जबरे खोलाको सङ्गीतको चित्रण गरिएको छ । पानीलाई अमृत मान्नु, आफ्नो गाउँलाई स्वर्ग ठान्नु जस्ता आधारले दिइएको अनुच्छेद आत्मपरक अनुच्छेद हो भन्न सकिन्छ ।
+                    </p>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-1">१४. दिइएको अनुच्छेद वस्तुपरक हो भन्ने आधार के के छन् ,पुष्टि गर्नुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-2">
+                        दिइएको अनुच्छेदमा तृतीय पुरुष दृष्टिविन्दु प्रयोग भएको छ । साथै सत्यतथ्यमा आधारित रहेर पहिले सूचनाका लागि पङ्क्षी, वाद्यवादनलाई प्रयोग गरि लेखकले तथ्यगत रुपमा विषयवस्तुको पुष्टि गरेको हुनाले दिइएको अनुच्छेद वस्तुपरक अनुच्छेद हो भन्न सकिन्छ ।
+                    </p>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mt-8 mb-4 animate-on-load delay-3">व्याकरण अभ्यास</h3>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-4">१. दिइएको अनुच्छेद पढी उपसर्ग लागेका शब्द पहिचान गर्नुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-5">
+                        विलक्षण, सम्पन्न, विशिष्ट, संरचना, अपार, विभिन्न, सुलभ, दुर्लभ, अनेक, प्रकृति, प्रदत्त, सम्पदा , अत्यन्त, समृद्ध आदि ।
+                    </p>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-6">२. दिइएको अनुच्छेदबाट दशओटा उपसर्ग व्युत्पन्न शब्द छानी निर्माण प्रक्रिया देखाउनुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-7">
+                        प्रतिवर्ष, अवलोकन, अतिथि, स्वागत, उपस्थिति, प्रतिकूल, प्रभाव, पर्यटन, सचेत, आधार ।
+                    </p>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-1">उपसर्ग आधार पद व्युत्पन्न शब्द</p>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-2">
+                        <li>प्रति + वर्ष : प्रतिवर्ष</li>
+                        <li>अब + लोकन : अवलोकन</li>
+                        <li>अ + तिथि : अतिथि</li>
+                        <li>सु + आगत : स्वागत</li>
+                        <li>उप + स्थिति : उपस्थिति</li>
+                        <li>प्रति + कूल : प्रतिकूल</li>
+                        <li>प्र + भाव : प्रभाव</li>
+                        <li>परि + अटन : पर्यटन</li>
+                        <li>स + चेत : सचेत</li>
+                        <li>आ + धार : आधार</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-3">३. `पर्यापर्यटनका सम्भावना र आयाम ´ पाठको पहिलो अनुच्छेदमा रहेका उपसर्ग व्युत्पन्न शब्द पहिचान गरी निर्माण प्रक्रिया देखाउनुहोस् :</h4>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-4">
+                        प्रतिवर्ष : प्रति + वर्ष, सम्बन्ध : सम् + बन्ध<br>
+                        सन्तुलन : सम् + तुलन, उपसर्ग : उप + सर्ग<br>
+                        प्रयोग : प्र + योग, अभिव्यक्ति : अभि + व्यक्ति<br>
+                        आधार : आ + धार, अध्ययन : अधि + अयन<br>
+                        अनुसन्धान : अनु + सन्धान, परिचर्चा : परि + चर्चा<br>
+                        निर्माण : निर् + माण, अनुसार : अनु + सार<br>
+                        परिवेश : परि + वेश, निर्जीव : निर् + जीव<br>
+                        प्रक्रिया : प्र + क्रिया, संहार : सं + हार आदि ।
+                    </p>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-5">५. दिइएका उपसर्ग लगाई शब्द निर्माण गर्नुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-6 animate-on-load delay-6">
+                        <li>अधि + कार : अधिकार ,</li>
+                        <li>दुर् + गम : दुर्गम</li>
+                        <li>दुस् + सहास : दुस्साहस</li>
+                        <li>निस् + कपट : निष्कपट</li>
+                        <li>प्र + माण : प्रमाण</li>
+                        <li>अ + स्वीकार : अस्वीकार</li>
+                        <li>उत् + पन्न : उत्पन्न</li>
+                        <li>सु + गम : सुगम</li>
+                        <li>आ + कार : आकार</li>
+                        <li>सम् + मान : सम्मान</li>
+                    </ul>
+
+                    <h4 class="text-xl font-medium brighter-gradient-text mb-2 animate-on-load delay-7">६. अ, अन, कु, बे, ब, बद, गैर, ना, स उपसर्ग लागाई शब्द बनाउनुहोस् । यसरी बनेका शब्द प्रयोग गरी अनुच्छेद रचना गर्नुहोस् :</h4>
+                    <ul class="list-none space-y-2 brighter-gradient-text mb-4 animate-on-load delay-1">
+                        <li>अ + विवाहित : अविवाहित</li>
+                        <li>अन + मेल : अनमेल</li>
+                        <li>कु + चेष्टा : कुचेष्टा</li>
+                        <li>बि + चल्ली : बिचल्ली</li>
+                        <li>बे + इज्जत : बेइज्जत</li>
+                        <li>बद् + नाम : बदनाम</li>
+                        <li>गैर + जिम्मेवार : गैरजिम्मेवार</li>
+                        <li>ना + मर्द : नामर्द</li>
+                        <li>स + चेत : सचेत</li>
+                    </ul>
+                    <p class="brighter-gradient-text mb-2 animate-on-load delay-2">अनुच्छेद रचना :</p>
+                    <p class="brighter-gradient-text mb-6 animate-on-load delay-3">
+                        अविवाहित रामले अनमेल विवाह गर्ने कुचेष्टा गरेकाले समाजले उसलाई कारवाही गरेपछि उसको बेइज्जत मात्र नभएर बदनाम नै भएपछि सचेत हुनुको साटो ऊ गैरजिम्मेवार बनी नामर्द झै कुलतमा सक्रिय भई बिचल्लीमा परेको देखिन्छ ।
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const toggleButton = document.getElementById('toggle-summary-button');
+
+            if (summaryContent.classList.contains('hidden')) {
+                summaryContent.classList.remove('hidden');
+                toggleButton.textContent = 'Hide Summary';
+            } else {
+                summaryContent.classList.add('hidden');
+                toggleButton.textContent = 'View Summary';
+            }
+        }
+
+        // Apply animation class to elements on page load and attach summary toggle event
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+
+            // Attach event listener to the summary toggle button
+            const toggleButton = document.getElementById('toggle-summary-button');
+            if (toggleButton) {
+                toggleButton.addEventListener('click', toggleSummary);
+            }
+        });
+    </script>
+</body>
+</html>

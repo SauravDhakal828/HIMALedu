@@ -1,0 +1,640 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>जलस्रोत र ऊर्जा Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for जलस्रोत र ऊर्जा Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">१२. जलस्रोत र ऊर्जा Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleJalsrotSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleJalsrotSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="jalsrotSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    “जलस्रोत र ऊर्जा” पाठले जलस्रोतको महत्व र त्यसबाट प्राप्त हुने ऊर्जा स्रोतहरूको बारेमा विस्तृत रुपमा जानकारी दिन्छ। जल भनेको जीवनको आधार हो मात्र नभई यो ऊर्जा उत्पादनका लागि पनि अत्यन्त आवश्यक स्रोत हो। जल स्रोतले प्राकृतिक चक्रमा महत्वपूर्ण भूमिका खेल्ने भएकाले यसको संरक्षण र सदुपयोग आवश्यक हुन्छ। जलशक्तिलाई ऊर्जा उत्पादनका लागि उपयोग गर्दा वातावरणमैत्री र दिगो ऊर्जा स्रोतको विकास सम्भव हुन्छ भन्ने कुरा यस पाठले बताउँछ।<br><br>
+
+पाठमा जल स्रोतबाट ऊर्जा उत्पादनका विविध विधिहरूको वर्णन गरिएको छ। जलविद्युत् ऊर्जा उत्पादन सबैभन्दा लोकप्रिय र प्रभावकारी उपाय हो, जसले जलको बहावलाई विद्युतमा परिवर्तन गर्छ। नेपालको भौगोलिक अवस्था जलविद्युत विकासको लागि अत्यन्त अनुकूल छ। हिमाली क्षेत्र र धेरै नदीनालाहरूले जलशक्तिको स्रोत प्रदान गर्छन् जसले देशलाई ऊर्जा आत्मनिर्भर बनाउन सहयोग पुर्‍याउँछ। जलशक्ति नवीकरणीय स्रोत भएकाले यसको उपयोगले वातावरणीय प्रदूषण कम गर्न महत्वपूर्ण भूमिका खेल्दछ।<br><br>
+
+यस पाठले जलस्रोतको संरक्षण र व्यवस्थापनको आवश्यकता पनि जोड दिएको छ। जलस्रोत अनियन्त्रित उपयोग र प्रदूषणले नष्ट हुनसक्छन् जसले ऊर्जा उत्पादनमा समस्या ल्याउँछ। त्यसैले जलस्रोतलाई बचाउन र दिगो बनाउन जल संरक्षण, नदीनालाको सफाइ, वन संरक्षण जस्ता उपायहरू अपनाउनुपर्छ। जलशक्तिको विकास गर्दा सामाजिक, आर्थिक र पर्यावरणीय पक्षहरूलाई समेत ध्यान दिनुपर्ने पाठले सिकाउँछ।<br><br>
+
+पाठमा जलशक्तिको ऊर्जा उत्पादनले देशको विकासमा पुर्याउने योगदान पनि चर्चा गरिएको छ। पर्याप्त र सस्तो ऊर्जा प्राप्त भएपछि उद्योग, यातायात, र घरेलु उपयोग सजिलै चलाउन सकिन्छ जसले आर्थिक गतिविधिहरूलाई गति दिन्छ। जलशक्ति विकासले रोजगारी सिर्जना गर्ने मात्र होइन, ग्रामीण विकास र जनजीवन सुधारमा पनि सहयोग पुर्‍याउँछ। यसले देशलाई ऊर्जा संकटबाट मुक्त गर्न र दिगो विकासमा महत्वपूर्ण भूमिका खेल्न सक्षम बनाउँछ।<br><br>
+
+अन्ततः, “जलस्रोत र ऊर्जा” पाठले जल स्रोतको संरक्षण, सही उपयोग र जलविद्युत उत्पादनलाई जोड दिँदै प्राकृतिक स्रोतहरूको दिगोपन र विकासका लागि जागरूक बनाउँछ। जलशक्ति ऊर्जा हाम्रो भविष्यका लागि महत्वपूर्ण साधन हो र यसलाई समुचित रूपमा विकास गर्न सबैले सहयोग गर्नुपर्छ भन्ने सन्देश दिन्छ। यसरी जलस्रोत र ऊर्जा विषयले हामीलाई दिगो र स्वच्छ ऊर्जा प्रयोग गर्न प्रोत्साहित गर्दछ।<br><br>
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका शब्द र अर्थ बीच जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>अथाह – ज्यादै धेरै</p>
+                            <p>नौका – डुङ्गा</p>
+                            <p>अलावा – अतिरिक्त</p>
+                            <p>अख्तियार – नियम कानुनद्वारा दिइएको अधिकार</p>
+                            <p>नित्य – सधैँ</p>
+                            <p>सर्वेक्षण – कुनै विषयको तथ्यपूर्ण जानकारीका लागि गरिने निरिक्षण</p>
+                            <p>निकाय – कुनै संस्था वा सदन</p>
+                        </div>
+                        <p><strong>२. मिना अयरको वक्तृता पढी दिइएको खाली ठाउँमा मिल्ने शब्द भर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क) सम्पदाका</p>
+                            <p>ख) हौस्याउने र अख्तियार</p>
+                            <p>ग) नौका विहार</p>
+                            <p>घ) चलायमान</p>
+                            <p>ङ) जलस्रोतको</p>
+                        </div>
+                        <p><strong>३. दिइएको शब्दहरुको उल्टो अर्थ दिने शब्द पाठबाट खोजेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>कृत्रिम : प्राकृतिक</p>
+                            <p>विपन्न : सम्पन्न</p>
+                            <p>प्राचीन : आधुनिक</p>
+                            <p>साँघुरो : फराकिलो</p>
+                            <p>आन्तरिक : बाह्य</p>
+                            <p>सङ्कुचन : बिस्तार</p>
+                            <p>कुरुप : सुन्दर</p>
+                            <p>सदुपयोग : दुरुपयोग</p>
+                            <p>व्यय : आय</p>
+                            <p>अटुट : अटल</p>
+                            <p>विष : अमृत</p>
+                        </div>
+                        <p><strong>४. दिइएका शब्दहरुको अर्थ खुल्ने गरी वाक्यमा प्रयोग गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>मञ्चासीन:</strong> <span class="text-justify">कार्यक्रममा मञ्चासीन वक्ताहरूले जलविद्युत विकासको महत्त्वबारे प्रकाश पारे।</span></p>
+                            <p><strong>द्रुततर:</strong> <span class="text-justify">सरकारले द्रुततर आर्थिक विकासका लागि नयाँ नीतिहरू घोषणा गरेको छ।</span></p>
+                            <p><strong>सामर्थ्य:</strong> <span class="text-justify">मलाई आफ्नो सामर्थ्य माथि विश्वास छ कि म यो परीक्षामा राम्रो गर्न सक्छु।</span></p>
+                            <p><strong>खपत:</strong> <span class="text-justify">उत्पादित विद्युत्को खपत बढाउन राज्यले उद्योगहरूलाई प्रोत्साहन दिनुपर्छ।</span></p>
+                            <p><strong>पैनी:</strong> <span class="text-justify">पैनी खनेर खेतसम्म पानी पुर्‍याउँदा बाली राम्रो भयो।</span></p>
+                            <p><strong>उर्वरा:</strong> <span class="text-justify">नदी छेउछाउको उर्वरा भूमिमा खेतीपाती राम्रो हुन्छ।</span></p>
+                            <p><strong>अभियान:</strong> <span class="text-justify">हामीले प्लास्टिक मुक्त विद्यालय अभियान चलायौँ।</span></p>
+                            <p><strong>सङ्कट:</strong> <span class="text-justify">कोभिड-१९ महामारीले विश्वव्यापी आर्थिक सङ्कट निम्त्यायो।</span></p>
+                            <p><strong>गगनचुम्बी:</strong> <span class="text-justify">हिमालका गगनचुम्बी चुचुराहरूले नेपालको पहिचान बनाएका छन्।</span></p>
+                            <p><strong>अन्नामृत:</strong> <span class="text-justify">किसानको परिश्रम र सिँचाइको व्यवस्थाले धर्तीले अन्नामृत प्रदान गर्छ।</span></p>
+                            <p><strong>निर्यात:</strong> <span class="text-justify">नेपालले कृषिजन्य वस्तुहरूको निर्यात बढाउन सकेमा धेरै आम्दानी गर्न सक्छ।</span></p>
+                        </div>
+                        <p><strong>५. तल दिइएका पदावलीहरु प्रयोग गरी अनुच्छेद लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p class="text-justify">प्रकृतिको अनुपम वरदान पाएको हाम्रो देश नेपालमा प्राकृतिक सौन्दर्यको खानी छ। यहाँका सुन्दर ताल, पहाड, वनजङ्गल र जीवजन्तुले यसलाई एक पर्यटकीय गन्तव्य बनाएका छन्। यिनै स्रोतहरूलाई उपयोग गरेर हामीले देशोन्नतिको सिँढी चढ्न सक्छौँ। यहाँको अथाह सेतो सुन, पानी र कृषिजन्य उत्पादन को सही सदुपयोग गर्न सकेमा देशको मुहार फेरिनेछ। एकपटक आएर प्रकृतिको छटालाई अनुभव गरेका पर्यटकहरू फेरि पनि नेपाल आउन चाहन्छन्। फेवाको फैलावट, राराको रमिता, गण्डकीको गहिराइ र यहाँको चमत्कारी पानीले हाम्रो सम्पन्नताको ढोका खोल्ने सम्भावनालाई उजागर गरेको छ। त्यसैले, अब हामीले देशको दिगो विकासका लागि एकजुट भएर काम गर्नुपर्छ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. `जलस्रोत र ऊर्जा ´ पाठ पढी दिइएका प्रश्नहरुको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) पहिलो वक्ता र दोस्रो वक्ताले कति कति अनुच्छेदमा आफ्नो प्रस्तुति राखेका छन् ?</strong><br>उत्तर: पाठअनुसार, पहिलो वक्ताले आफ्नो वक्तृतालाई छ अनुच्छेदमा र दोस्रो वक्ताले आठ अनुच्छेदमा प्रस्तुत गरेका छन्।</p>
+                            <p><strong>ख) वक्तृता सन्चालनको विधिलाई पाठमा कसरी प्रस्तुत गरेको छ ?</strong><br><span class="text-justify">उत्तर: पाठमा वक्तृता सन्चालनलाई औपचारिक रूपमा प्रस्तुत गरिएको छ। यसमा प्रधानाध्यापकले अध्यक्षता गर्नुभएको छ, तीनजना निर्णायक शिक्षकहरू छन् र एकजना शिक्षक समय पालकको रूपमा छन्। कार्यक्रमको सुरुवात विद्यार्थी उद्घोषकले गरेका छन्, जसले पालोपाले वक्ताहरूलाई मञ्चमा बोलाएका छन्। वक्तृता सकिएपछि निर्णायकले नतिजा सुनाउने र अध्यक्षले पुरस्कार वितरण गर्ने व्यवस्था मिलाइएको छ।</span></p>
+                            <p><strong>ग) पहिलो वक्ताले जलस्रोतसम्बन्धी कुन कुन सन्दर्भलाई समेटेको छ ?</strong><br><span class="text-justify">उत्तर: पहिलो वक्ताले जलस्रोतसम्बन्धी सन्दर्भहरूलाई व्यापक रूपमा समेटेका छन्। उनले हिमालमा जमेको हिउँ, नदीनाला, खोला, झरना, तालतलैया, आफैँ पानी निस्कने मूलहरू, इनार, ट्युबवेल र वर्षात्को पानीलाई प्रमुख जलस्रोतको रूपमा प्रस्तुत गरेका छन्।</span></p>
+                            <p><strong>घ) दुवै वक्ताले वक्तृताका समापन कसरी गरेका छन् ?</strong><br><span class="text-justify">उत्तर: पहिलो वक्ताले नेपालको जलस्रोतलाई सेतो सुनको संज्ञा दिँदै त्यसको उचित सदुपयोग गरेमा देशको विकास हुने बताउँदै आफ्नो वक्तृता टुङ्ग्याएका छन्। दोस्रो वक्ताले भने जलस्रोतको सही उपयोग गरेमा देशमा बेरोजगारीको समस्या समाधान हुने र सबै युवाले रोजगारी पाउने आशा व्यक्त गर्दै समापन गरेका छन्।</span></p>
+                            <p><strong>ङ) नेपालमा उपलब्ध जलस्रोत के के हुन् ?</strong><br>उत्तर: नेपालमा उपलब्ध जलस्रोतहरू हिमाल, नदीनाला, झरना, तालतलैया, आफैँ पानी निस्कने मूलहरू, इनार, ट्युबवेल र वर्षात्बाट आउने पानी हुन्।</p>
+                        </div>
+                        <p><strong>२. `नेपालमा जलस्रोतको ……..वातावरण तयार गर्नुपर्छ´वक्तृतांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ;</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) नेपाली जलराशिमा कति मेगावाट विद्युत् उत्पादन गर्ने क्षमता छ ?</strong><br><span class="text-justify">उत्तर: नेपाली जलराशिमा ८३ हजार मेगावाटभन्दा बढी विद्युत् उत्पादन गर्ने सम्भावित क्षमता रहेको छ।</span></p>
+                            <p><strong>ख) के गर्न सके देशको आर्थिक समृद्धि हुने सम्भावना छ ?</strong><br><span class="text-justify">उत्तर: नेपाली जलस्रोतको सम्पूर्ण क्षमताको पचास प्रतिशत मात्रै विद्युत् उत्पादन गर्न सकेमा देशको आर्थिक समृद्धि हुने सम्भावना छ।</span></p>
+                            <p><strong>ग) विद्युतको खपत कसरी बढाउन सकिन्छ ?</strong><br><span class="text-justify">उत्तर: विद्युत्को खपत बढाउनका लागि सरकारले जलविद्युतसँग सम्बन्धित उद्योगहरूलाई प्रोत्साहित गर्नुपर्छ। साथै, घरायसी प्रयोगमा विद्युत्को खपत बढाउनका लागि नीतिगत प्रोत्साहन गर्नुपर्छ र उत्पादित विद्युत्लाई विदेशमा निर्यात गर्न सकेमा यसको खपत बढ्छ।</span></p>
+                            <p><strong>घ) जल विद्युतीकरणका लागि नेपालको भूगोल किन उपयुक्त मानिएको छ ?</strong><br><span class="text-justify">उत्तर: जल विद्युतीकरणका लागि नेपालको भूगोल अत्यन्त उपयुक्त छ किनभने यहाँ बाह्रै महिना हिउँ पर्ने हुनाले नदीहरूमा पानीको बहाव निरन्तर रहन्छ। यसका अतिरिक्त, यहाँको भिरालो भौगोलिक बनोटले पानीको प्रवाहलाई तीव्र बनाउँछ, जसले गर्दा विद्युत् उत्पादन सहज हुन्छ।</span></p>
+                        </div>
+                        <p><strong>३. दिइएको वक्तृतांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् ;</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) जलस्रोत र ऊर्जाका क्षेत्रमा दिगो विकास कसरी गर्न सकिन्छ ?</strong><br><span class="text-justify">उत्तर: जलस्रोत र ऊर्जाका क्षेत्रमा दिगो विकासका लागि आवश्यक नीति, नियम र योजनाहरू निर्माण गर्नुपर्छ। यसको कार्यान्वयनमा विदेशमा रहेका युवाहरूको सीप र अनुभवलाई स्वदेशमै प्रयोग गर्नुपर्छ। राज्यले जलविद्युतसँग सम्बन्धित उद्योगहरूलाई प्रोत्साहन गर्ने, घरायसी विद्युत् खपत बढाउने र उत्पादित विद्युत्लाई विदेशमा निर्यात गर्ने नीति लिएमा दिगो विकास सम्भव हुन्छ।</span></p>
+                            <p><strong>ख) राष्ट्रको अर्थतन्त्र निर्माणमा सिँचाइको कस्तो भुमिका हुन्छ ?</strong><br><span class="text-justify">उत्तर: राष्ट्रको अर्थतन्त्र निर्माणमा सिँचाइको भूमिका निर्णायक हुन्छ। नेपालका ६०० भन्दा बढी नदीहरू बाह्रै महिना बग्ने भएकाले यिनीहरूबाट कुलो, पैनी वा नहर बनाएर खेतीयोग्य जमिनमा सिँचाइ पुर्‍याउन सकिन्छ। यसले गर्दा खाद्यान्न उत्पादनमा वृद्धि भई देश आत्मनिर्भर बन्न सक्छ। अत्यधिक उत्पादनलाई विदेशमा निर्यात गरेर वैदेशिक मुद्रा आर्जन गर्न सकिन्छ, जसले राष्ट्रिय अर्थतन्त्रलाई बलियो बनाउँछ।</span></p>
+                        </div>
+                        <p><strong>४. `जलस्रोत र ऊर्जा ´विषयक वक्तृताका दुवै वक्ताहरुले आफ्नो वक्तृतालाई प्रभावकारी बनाउन के कस्ता सहायक तर्क वा तथ्यहरु पेस गरेका छन्, दुवैको वक्तृताबाट कम्तिमा तीन तीनवटा बुँदाहरु टुप्नुहोस् :</strong><br>उत्तर: पहिलो वक्ताका सहायक बुँदाहरु:</p>
+                        <div class="ml-4">
+                            <p>नेपालमा जलस्रोतको अथाह सम्भावना छ।</p>
+                            <p>६०० भन्दा बढी नदीहरू बाह्रै महिना बग्ने भएकाले सिँचाइमा प्रयोग गर्न सकिन्छ।</p>
+                            <p>८३ हजार मेगावाटभन्दा बढी विद्युत् उत्पादन क्षमता छ।</p>
+                        </div>
+                        <p>दोस्रो वक्ताका सहायक बुँदाहरु:</p>
+                        <div class="ml-4">
+                            <p>स्वच्छ पानीलाई विश्वबजारमा बेचेर देश सम्पन्न हुन सक्छ।</p>
+                            <p>सिँचाइको व्यवस्थाले कृषि उत्पादन बढाएर अर्थतन्त्रमा योगदान पुग्छ।</p>
+                            <p>जलस्रोतबाट विद्युत् उत्पादन गरी उद्योगहरू चलाउन सकिन्छ।</p>
+                        </div>
+                        <p><strong>५. माथिको `जलस्रोत र ऊर्जा ´वक्तृता विषय पढी त्यसमा अपुग विषयहरु के के हुन्, कक्षामा छलफल गरी लेख्नुहोस्:</strong><br>उत्तर: जलस्रोत र ऊर्जा विषयक वक्तृतामा निम्न विषयहरू अपुग छन्:</p>
+                        <div class="ml-4">
+                            <p>क) जलविद्युत् आयोजनाहरूले वातावरणमा पार्ने नकारात्मक असर र त्यसको समाधानबारे कुनै चर्चा गरिएको छैन।</p>
+                            <p>ख) जलस्रोतको उचित व्यवस्थापनका लागि सरकारी नीति र निजी क्षेत्रको सहभागितामाथि थप प्रकाश पारिएको छैन।</p>
+                            <p>ग) जलस्रोतको विकास गर्दा स्थानीय बासिन्दाहरूको जीवनस्तरमा पर्ने प्रभाव र त्यसको समाधानबारे छलफल गरिएको छैन।</p>
+                        </div>
+                        <p><strong>६. नेपालको जलस्रोतले देशको समृद्धिको आधार कसरी तयार पार्छ, लेख्नुहोस् ।</strong><br><span class="text-justify">उत्तर: नेपालको जलस्रोतले देशको समृद्धिको आधार तयार पार्ने धेरै सम्भावनाहरू छन्। नेपालमा ६ हजारभन्दा बढी खोलानाला छन्, जसले गर्दा यहाँ जलविद्युत् उत्पादनको ठूलो क्षमता छ (८३ हजार मेगावाटभन्दा बढी)। यो क्षमताको आधा मात्रै उपयोग गर्न सकेमा देशको आर्थिक उन्नति हुन सक्छ। राज्यले जलविद्युत्लाई उद्योगमा, घरायसी प्रयोगमा र विदेशमा निर्यात गरेर ठूलो आम्दानी गर्न सक्छ।
+                        सिँचाइको माध्यमबाट पनि जलस्रोतले समृद्धि ल्याउन सक्छ। नेपालका धेरै नदीहरू बाह्रै महिना बग्ने भएकाले तीबाट कुलो, पैनी वा नहर बनाएर खेतीयोग्य जमिनमा सिँचाइ पुर्‍याउन सकिन्छ। यसले गर्दा खाद्यान्न उत्पादनमा वृद्धि भई देश आत्मनिर्भर बन्न सक्छ। यसरी कृषि उत्पादनबाट वैदेशिक मुद्रा आर्जन गर्न सकिन्छ, जसले राष्ट्रिय अर्थतन्त्रलाई बलियो बनाउँछ।</span></p>
+                        <p><strong>१०. दिइएका गद्यांश पढी सोधिएका प्रश्नहरुको उत्तर दिनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) संविधानलाई किन देशको मूल कानुन भनिएको हो ?</strong><br><span class="text-justify">संविधानलाई देशको मूल कानुन भनिएको हो किनभने यसले राजनीतिक, नागरिक र मानव अधिकारका मूलभूत मान्यताहरूलाई समेटेको हुन्छ र यसले देशमा भएका सबै कानुनहरूको सर्वोच्चतालाई निर्धारण गर्दछ।</span></p>
+                            <p><strong>ख) सबैले कानुनको परिपालना नगरे के हुन्छ ?</strong><br><span class="text-justify">यदि सबैले कानुनको परिपालना नगरेमा समाजमा अराजकता बढ्छ, मानिसका अधिकार र कर्तव्यहरू स्पष्ट हुँदैनन् र एक सभ्य, अनुशासित र मर्यादित समाजको निर्माण गर्न सकिँदैन।</span></p>
+                            <p><strong>ग) अध्यादेशबाट निर्मित कानुन संसद बैठकबाट किन अनुमोदन गराउनुपर्छ ?</strong><br><span class="text-justify">संसदको बैठक नभएको बेला आवश्यक परेमा सरकारले अध्यादेशमार्फत कानुन बनाउन सक्छ। तर, त्यसलाई स्थायी र वैध बनाउनका लागि संसदको बैठक सुरु भएको ६० दिनभित्र अनुमोदन गराउनुपर्छ।</span></p>
+                            <p><strong>घ) सङ्घीय संसद´ र अध्यादेश´ को अर्थ लेख्नुहोस् ।</strong></p>
+                            <div class="ml-4">
+                                <p>सङ्घीय संसद: लोकतान्त्रिक मुलुकहरूमा जनताद्वारा निर्वाचित प्रतिनिधिहरूको सर्वोच्च संस्था।</p>
+                                <p>अध्यादेश: संसदको अधिवेशन नभएको बेला विशेष परिस्थितिको सामना गर्न राष्ट्रपतिद्वारा जारी गरिने कानुनसरहको आदेश।</p>
+                            </div>
+                        </div>
+                        <p><strong>११. दिइएको अनुच्छेद पढी बुँदा टिपोट गर्नुहोस् ।</strong><br>उत्तर: बुँदाहरु :</p>
+                        <div class="ml-4">
+                            <p>नेपाललाई ६ हजारभन्दा बढी खोलानाला भएको देश भनिन्छ।</p>
+                            <p>नेपालको १७० अरब क्युबिक मिटर पानी गङ्गा नदीमा मिलेर बङ्गालको खाडीमा पुग्छ।</p>
+                            <p>जलसम्पदाको अथाह सम्भावना भए तापनि त्यसको सदुपयोग गर्न सकिएको छैन।</p>
+                            <p>खेर गइरहेको जलसम्पदालाई सदुपयोग गरी देश विकासमा लगाउनुपर्छ।</p>
+                            <p>जलविद्युत् विकासले खाद्यान्न, ऊर्जा र अन्य समस्याहरू समाधान गर्न सक्छ।</p>
+                            <p>जलविद्युत्बाहेक अन्य ऊर्जा स्रोतहरू जस्तै कोइला, ग्यास आदिको पनि उपयोग गर्नुपर्छ।</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका वाक्यबाट उद्देश्य र विधेय भाग छुट्याउनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) उद्देश्य: युवाशक्ति, विधेय: छन्</p>
+                            <p>ख) उद्देश्य: जल, विधेय: हुन्छन्</p>
+                            <p>ग) उद्देश्य: बेरोजगारहरु, विधेय: आउने छन्</p>
+                            <p>घ) उद्देश्य: अन्य वक्ता, विधेय: राख्नुहुन्छ</p>
+                            <p>ङ) उद्देश्य: प्रधानाध्यापक, विधेय: टुङ्याउनुहुन्छ</p>
+                        </div>
+                        <p><strong>२. दिइएका वाक्यबाट उद्देश्य र उद्देश्य विस्तार, विधेय र विधेय विस्तार खण्ड छुट्याएर देखाउनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) उद्देश्य: बहिनी, उद्देश्य विस्तार: उसकी, विधेय: बस्दिनन्, विधेय विस्तार: निर्वाचन समितिमा</p>
+                            <p>ख) उद्देश्य: ऊ, उद्देश्य विस्तार: धेरै दिनपछि मनलाई दरो पारी, विधेय: गई, विधेय विस्तार: आँगनतिर</p>
+                            <p>ग) उद्देश्य: मान्छे, उद्देश्य विस्तार: आज बिहान हिडेको, विधेय: पुगेछ, विधेय विस्तार: छिटै नै दार्चुला</p>
+                            <p>घ) उद्देश्य: पहिरन, उद्देश्य विस्तार: गाउँमा तिम्रो, विधेय: देखिन्छ, विधेय विस्तार: गजबको</p>
+                        </div>
+                        <p><strong>३. दिइएको अनुच्छेदका वाक्यहरुको लिङ्ग परिवर्तन गर्नुहोस् :</strong><br><span class="text-justify">उत्तर: मेरो भाइ विद्यालय गयो। मेरी बहिनी पनि विद्यालय गई। भाइ सरासर कक्षामा पस्यो। बहिनी चाहिँ बाटामा साथीसँग कुराकानी गर्न थाली। भान्जाले बाटोमै बहिनीलाई भेट्यो। आमाले पनि बहिनीलाई बाटोमै भेट्नुभयो।</span></p>
+                        <p><strong>४. दिइएका वाक्यलाई कोष्ठमा बताएअनुसार परिवर्तन गर्नुहोस :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) जेठो छोरो आउँदै छ। (स्त्रीलिङ्ग)<br>जेठी छोरी आउँदै छे।</p>
+                            <p>ख) उसकी बहिनी घरमा बसेकी छे। (पुलिङ्ग)<br>उसको भाइ घरमा बसेको छ।</p>
+                            <p>ग) तिम्रा छोराहरु असल छन्। (स्त्रीलिङ्ग)<br>तिम्री छोरीहरु असल छिन्।</p>
+                            <p>घ) सानी नानी पानी भर्छिन्। (पुलिङ्ग)<br>सानो बाबू पानी भर्छन्।</p>
+                        </div>
+                        <p><strong>५. दिइएको अनुच्छेदका वाक्यहरुको वचन परिवर्तन गर्नुहोस् :</strong><br><span class="text-justify">उत्तर: मैले गाउँमा मेरो पुरानो साथी भेटेँ। हामीले धेरैबेर कुरा गर्यौँ। साथीले आफ्नो प्रगतिको कथा सुनायो। तिमी पनि एकछिनमा आइपुग्यौ। उसले तिमीलाई चिनेन। तिमीले उनीहरूलाई बिर्सिएछौ।</span></p>
+                        <p><strong>६. दिइएका वाक्यहरुलाई कोष्ठकमा बताएअनुसार परिवर्तन गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) सानो छोरो रोयो। (बहुवचन)<br>साना छोराहरु रोए।</p>
+                            <p>ख) तिम्रा बहिनीहरु खेल्छन्। (एकवचन)<br>तिम्री बहिनी खेल्छिन्।</p>
+                            <p>ग) त्यो फूल ओइलियो। (बहुवचन)<br>ती फूलहरु ओइलिए।</p>
+                            <p>घ) असल मान्छेहरु नम्र हुन्छन्। (एकवचन)<br>असल मान्छे नम्र हुन्छ।</p>
+                        </div>
+                        <p><strong>७. दिइएका वाक्यहरुलाई कोष्ठकमा बताएअनुसार परिवर्तन गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) हामीले सर्प र बिच्छी देखेका छौँ। (तृतीय पुरुष)<br>उनीहरुले सर्प र बिच्छी देखेका छन्।</p>
+                            <p>ख) हजुर किन हास्नुभयो ? (प्रथम पुरुष)<br>म किन हाँसेँ?</p>
+                            <p>ग) उहाँ राम्ररी बोल्नुहुन्छ। (प्रथम पुरुष)<br>म राम्ररी बोल्छु।</p>
+                            <p>घ) हामी ज्यादै दु:खी छौँ। (द्वितीय र तृतीय पुरुष)<br>तिमीहरु ज्यादै दु:खी छौ।<br>उनीहरु ज्यादै दु:खी छन्।</p>
+                            <p>ङ) तिमीहरु होहल्ला गर्दै छौ। (तृतीय र प्रथम पुरुष)<br>उनीहरु होहल्ला गर्दै छन्।<br>हामी होहल्ला गर्दै छौँ।</p>
+                        </div>
+                        <p><strong>८. कोष्ठका अनुसार परिवर्तन गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) तँ भात खान्छस्। (उच्च आदरार्थी)<br>हजुर भात खानुहुन्छ।</p>
+                            <p>ख) हजुर कहिले फर्किनुहुन्छ ? (सामान्य आदरार्थी)<br>तिमी कहिले फर्किन्छौ।</p>
+                            <p>ग) तिमी सबैलाई चिन्छौ। (उच्च आदरार्थी)<br>हजुर सबैलाई चिन्नुहुन्छ।</p>
+                            <p>घ) ऊ प्रथम हुन्छ। (मध्यम आदरार्थी)<br>तँ प्रथम हुन्छस्।</p>
+                            <p>ङ) धनीलाल गाउँमा बस्छ। (उच्च आदरार्थी)<br>धनीलाल गाउँमा बस्नुहुन्छ।</p>
+                        </div>
+                        <p><strong>९. दिइएको अनुच्छेदका वाक्यहरुलाई करण भए अकरणमा र अकरण भए करणमा बदल्नुहोस् :</strong><br><span class="text-justify">उत्तर: उनीहरु प्रदर्शनीमा गए। हामी चाहिँ गएनौँ। तिमीहरु पनि गएनछौ नि। उनीहरु कुनै पनि स्थलहरुको भ्रमण गरेछन्। हामी त त्यत्तिकै बस्यौँ। नयाँ नयाँ कुराहरु देखेनौँ।</span></p>
+                        <p><strong>१०. कोष्ठकमा बताएअनुसार परिवर्तन गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) उनीहरु धेरै राम्रा छन्। (अकरण)<br>उनीहरु धेरै राम्रा छैनन्।</p>
+                            <p>ख) तिमी कहिल्यै नराम्रो बोल्दैनौ। (करण)<br>तिमी सधैँ राम्रो बोल्छौ।</p>
+                            <p>ग) आज धेरै जाडो होला जस्तो छ। (अकरण)<br>आज धेरै जाडो होला जस्तो छैन।</p>
+                            <p>घ) पानी परेन र जाडो भएन। (करण)<br>पानी पर्‍यो र जाडो भयो।</p>
+                            <p>ङ) उसले चिनेको मान्छे बाटामा भेट्यो। (अकरण)<br>उसले चिनेको मान्छे बाटामा भेटेन।</p>
+                        </div>
+                        <p><strong>११. कोष्ठका सहायताले तलका वाक्यहरु (काल, पक्ष, भाव, वाच्य र प्रेरणार्थ ) परिवर्तन गर्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) म घरमै बस्छु। (सामान्य भूत)<br>म घरमै बसेँ।</p>
+                            <p>ख) हामी चिठी लेख्छौ। (अपूर्ण भूत)<br>हामी चिठी लेख्दै थियौँ।</p>
+                            <p>ग) तँ त्यही बस्छस्। (पूर्ण भूत)<br>तँ त्यही बसेको थिइस्।</p>
+                            <p>घ) तिमीहरु गृहकार्य गर्छौ। (अभ्यस्त भूत)<br>तिमीहरु गृहकार्य गर्थ्यौ।</p>
+                            <p>ङ) तपाईं पोखरा जानुहुन्छ। (अज्ञात भूत)<br>तपाईं पोखरा जानुभएछ।</p>
+                            <p>च) उनीहरु बजार गएछन्। (सामान्य वर्तमान)<br>उनीहरु बजार जान्छन्।</p>
+                            <p>छ) तिमी सधैँ डुल्थ्यौ। (अपूर्ण वर्तमान)<br>तिमी सधैँ डुल्दै छौ।</p>
+                            <p>ज) नरेशले रुख ढाल्यो। (पूर्ण वर्तमान)<br>नरेशले रुख ढालेको छ।</p>
+                            <p>झ) उहाँहरु यहाँ आउनुभयो। (सामान्य भविष्यत)<br>उहाँहरु यहाँ आउनुहुनेछ।</p>
+                            <p>ञ) उनी गट्टा खेल्थिन्। (अपूर्ण भविष्यत्)<br>उनी गट्टा खेल्दै हुनेछिन्।</p>
+                            <p>ट) सानी पाठ पढ्थिन्। (पूर्ण भविष्यत्)<br>सानीले पाठ पढेकी हुनेछिन्।</p>
+                            <p>ठ) उनीहरु खेल खेल्छन्। (सम्भावनाअर्थ)<br>उनीहरु खेल खेल्ला।</p>
+                            <p>ड) तिमीहरु बजार गयौ। (आज्ञार्थ)<br>तिमीहरु बजार जाओ।</p>
+                            <p>ढ) तपाईं मिठाई खानुहोला। (अनुरोधार्थ)<br>तपाईं मिठाई खाइदिनुहोस्।</p>
+                            <p>ण) तँ फुटबल खेल्छस्। (इच्छार्थ)<br>तँ फुटबल खेलेस्।</p>
+                            <p>त) भाइहरु मेहनत गर्छन्। (प्रश्नार्थ)<br>भाइहरु मेहनत गर्छन्?</p>
+                            <p>थ) मैले पर्यटकहरु देखे। (कर्मवाच्य)<br>मद्वारा पर्यटकहरू देखिए।</p>
+                            <p>द) उनीहरु यतैतिर आऊन्। (भाववाच्य)<br>(उनीहरु) यतैतिर आइयोस्।</p>
+                            <p>ध) उनीहरुले घर बनाएका छन्। (कर्मवाच्य)<br>उनीहरुद्वारा घर बनाइएको छ।</p>
+                            <p>न) तिमी कथाहरु पढौला। (प्रेरणार्थ)<br>शिक्षकले तिमीलाई कथाहरु पढाउनुहोला।</p>
+                            <p>प) ऊ घरमै बसोस्। (प्रेरणार्थ)<br>आमाले उसलाई घरमै बसाउनुहोस्।</p>
+                            <p>फ) गुरुले तिमीलाई के के पढाउनु भएको छ ? (अप्रेरणार्थ)<br>तिमीले के के पढेका छौ?</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">उक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका कथनहरु प्रत्यक्ष वा अप्रत्यक्ष के हुन् छुट्याउनुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) प्रत्यक्ष कथन</p>
+                            <p>ख) अप्रत्यक्ष कथन</p>
+                            <p>ग) प्रत्यक्ष कथन</p>
+                            <p>घ) अप्रत्यक्ष कथन</p>
+                            <p>ङ) अप्रत्यक्ष कथन</p>
+                            <p>च) प्रत्यक्ष कथन</p>
+                        </div>
+                        <p><strong>२. दिइएका वाक्यहरुलाई अप्रत्यक्ष कथनमा बदल्नुहोस् :</strong><br>उत्तर:</p>
+                        <div class="ml-4">
+                            <p>क) पूर्णमानले समाजको अवस्था दयनीय भएको बतायो।</p>
+                            <p>ख) सन्तोषले गम्भीर हुँदै नेपालमा विकासको नयाँ परिभाषा आवश्यक भएको भन्यो।</p>
+                            <p>ग) सन्जीवले परिभाषा बदल्दैमा समाजको समस्या समाधान नहुने कुरामा चिन्ता व्यक्त गर्‍यो।</p>
+                            <p>घ) विमलाले समाज परिवर्तनका लागि आफू पनि खट्ने कुरा उत्साहका साथ व्यक्त गरी।</p>
+                        </div>
+                        <p><strong>३. दिइएको अनुच्छेदलाई प्रत्यक्ष कथनमा बदल्नुहोस् :</strong><br><span class="text-justify">उत्तर: आमाले छोरीलाई भन्नुभयो, “के गर्दैछ्यौ?” छोरीले भनिन्, “म वक्तृताका लागि सामग्री सङ्कलन गरिरहेको छु।” आमाले भन्नुभयो, “म पनि वक्तृताको विषयमा चासो राख्छु।” छोरीले आमालाई सोधिन्, “नेपालको सिँचाइ स्थिति कस्तो छ?”</span></p>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Jalsrot Notes
+        function toggleJalsrotSummary() {
+            const summaryText = document.getElementById('jalsrotSummaryText');
+            const toggleBtn = document.getElementById('toggleJalsrotSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>

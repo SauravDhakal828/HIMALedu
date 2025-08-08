@@ -1,0 +1,458 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sharing Tradition Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background for futuristic theme */
+            background: linear-gradient(135deg, #0a0a2a 0%, #2a2a5a 50%, #4a4a8a 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #e0e0e0; /* Default light text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for main titles (matching Gift in Wartime) */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text (matching Gift in Wartime) */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer (matching Gift in Wartime) */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons (matching Gift in Wartime) */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1);
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line (matching Gift in Wartime) */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(10, 10, 42, 0.9); /* Darker background for mobile menu */
+            color: #e0e0e0; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0e0; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from new gradient */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Slightly transparent white */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow (matching Gift in Wartime) */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border matching new gradient */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #050515; /* Even darker footer */
+            color: #e0e0e0; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* Initially hide the summary output */
+        #summaryOutput {
+            display: none;
+        }
+
+        /* Styling for the new text content */
+        .text-section h3 {
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+            font-size: 1.5rem; /* Equivalent to text-2xl */
+            font-weight: 600; /* Equivalent to font-semibold */
+        }
+        .text-section p {
+            margin-bottom: 0.5rem;
+            line-height: 1.6;
+            text-align: justify; /* Added for text justification */
+        }
+        .text-section strong {
+            /* Tailwind's font-bold is 700, font-semibold is 600 */
+            font-weight: 700;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-400 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-400 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-400 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0e0] bright-solid-text hover:bg-blue-900 hover:text-blue-400 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-400 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0e0] bright-solid-text hover:bg-blue-900 hover:text-blue-400 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Sharing Tradition Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 gradient-text">Sharing Tradition Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <button id="showSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+                <div id="summaryOutput" class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <p>
+                        “Sharing Tradition” by Frank LaPena is a thoughtful and inspiring essay that explores the importance of preserving and passing on cultural traditions. LaPena, a Native American artist and writer, emphasizes how stories, rituals, and cultural practices play a vital role in maintaining the identity of a community. He argues that by sharing traditions with younger generations, we ensure the survival of our heritage and values in a rapidly changing world.<br><br>
+
+In the essay, LaPena explains that traditions are not just old customs, but living experiences that shape who we are. They include storytelling, music, dance, ceremonies, and everyday practices that reflect the beliefs of a culture. These traditions are passed on through generations, usually by elders, and hold deep meanings that connect people to their history, land, and ancestors. He believes that without this connection, people can lose their sense of belonging and purpose.<br><br>
+
+The author warns that modern society, especially through technology and Western education, often causes young people to forget or ignore their traditional culture. He believes this is dangerous because it creates a cultural gap between generations. Many elders worry that if young people do not listen, learn, and respect these traditions, their language, identity, and unique way of life could disappear forever. He encourages youth to remain curious and respectful towards the teachings of their community.<br><br>
+
+LaPena also highlights how oral tradition is central to cultural survival. Unlike written records, oral tradition depends on face-to-face sharing, which creates deeper personal bonds and a stronger emotional impact. When an elder tells a story, it’s not just the words that matter, but also the voice, expression, and presence of the storyteller. This process helps listeners feel connected not only to the speaker but to the spiritual world and the wisdom of the ancestors.<br><br>
+
+Importantly, the essay promotes the idea that traditions are not fixed or outdated. They can grow and evolve while still keeping their core values alive. LaPena believes that new generations can adapt traditions to modern life in meaningful ways, as long as they understand and respect the original purpose behind them. This balance between preservation and adaptation is the key to keeping culture relevant and strong.<br><br>
+
+In conclusion, “Sharing Tradition” is a powerful reminder of how crucial it is to listen, learn, and pass on the wisdom of the past. LaPena encourages all people, especially the young, to value their heritage and take responsibility in keeping their culture alive. The essay teaches that traditions are not just about the past—they are about identity, unity, and survival. Without them, we risk losing the richness and meaning of who we are.<br><br>
+                    </p>
+                </div>
+
+                <div class="text-section brighter-gradient-text mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                    <p>
+                        <strong>a. According to LaPena, what is the importance of the oral tradition? To what extent do you agree with his opinions and why?</strong><br>
+                        According to LaPena, oral tradition preserves culture, values, and identity across generations.
+                        I agree because it helps the young understand their roots and traditions.
+                    </p>
+                    <p>
+                        <strong>b. Who preserve and pass on the oral tradition?</strong><br>
+                        Elders and experienced community members preserve and pass on oral traditions through storytelling and rituals.
+                    </p>
+                    <p>
+                        <strong>c. What is the danger of not passing on information from generation to generation?</strong><br>
+                        If not passed on, cultural knowledge, values, and identity may be lost forever.
+                        This can lead to cultural disconnection and extinction.
+                    </p>
+                    <p>
+                        <strong>d. What is the difference between oral tradition and literary tradition?</strong><br>
+                        Oral tradition is spoken and shared face-to-face.
+                        Literary tradition is written and recorded in texts.
+                    </p>
+                    <p>
+                        <strong>e. How does LaPena establish a relationship between art and the oral tradition?</strong><br>
+                        LaPena says oral tradition inspires artistic creation.
+                        Stories shape how artists imagine designs, colors, and characters.
+                    </p>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mt-8 mb-4">Reference to the Context</h3>
+                    <p>
+                        <strong>a. LaPena states that the oral tradition helps maintain the values of a culture. If you believe that the oral tradition is important, how would you maintain it?</strong><br>
+                        I believe that oral tradition is a powerful way to preserve cultural values, identity, and history. To maintain it, I would start by actively listening to my elders and learning the stories, customs, and teachings they share. These oral teachings carry not only information but also the emotions and experiences of past generations. I would make efforts to record these stories, whether through writing, audio, or video, to ensure they are preserved even if the original speakers are no longer around.
+                    </p>
+                    <p>
+                        In addition to preserving these stories, I would also regularly share them with others—especially the younger generation. This can be done at family gatherings, community events, or through educational programs. Schools and cultural centers can also organize storytelling sessions where elders pass down their knowledge. By creating spaces where people feel encouraged to speak and listen, we can keep oral tradition alive and ensure it continues to shape our identity, moral values, and connection with our roots.
+                    </p>
+                    <p>
+                        <strong>b. “Not everyone is capable of fulfilling the roles of the elders.” Explain this statement with reference to the essay.</strong><br>
+                        In the essay Sharing Tradition, LaPena emphasizes that elders play a vital role in preserving and passing down cultural values, stories, and traditions through oral communication. However, he also states that not everyone can fulfill these roles because being an elder requires wisdom, experience, responsibility, and a deep understanding of cultural knowledge. It's not just about age—it’s about having the ability and willingness to guide others and share knowledge truthfully and respectfully.
+                    </p>
+                    <p>
+                        The essay highlights that elders are seen as the bridge between generations, and they must be trusted with the community’s stories and values. If individuals lack commitment, understanding, or a respectful attitude toward their culture, they cannot serve as effective carriers of the oral tradition. Therefore, LaPena suggests that preserving culture through oral tradition depends on finding the right people who can truly uphold the responsibility of the elders.
+                    </p>
+                    <p>
+                        <strong>c. What is the controlling idea or thesis of this essay?</strong><br>
+                        The central idea or thesis of Frank LaPena's essay Sharing Tradition is that oral tradition plays a vital role in preserving the cultural identity, history, and values of a community. He emphasizes that stories, teachings, and experiences passed down verbally from elders to younger generations carry deep meanings that help people understand their place in the world. Oral tradition is more than just storytelling—it is a form of education and a spiritual link to ancestors, guiding people in how to live, behave, and honor their culture.
+                    </p>
+                    <p>
+                        LaPena also stresses that the loss of oral tradition can weaken the bond between generations and erode the identity of a community. He explains that in the modern world, people often rely heavily on written texts, which may not fully capture the emotions, values, and context carried in oral communication. Therefore, the essay calls for respect toward elders and an active effort to maintain oral practices. By encouraging younger generations to listen and learn from the wisdom of their elders, LaPena highlights the importance of keeping traditions alive through voice, memory, and personal connection.
+                    </p>
+                    <p>
+                        <strong>d. How do topic sentences guide the reader through the essay? What would be lost without them?</strong><br>
+                        Topic sentences act as clear signposts at the beginning of each paragraph, introducing the main idea that will be discussed. They help guide the reader through the essay by outlining the structure and focus of each section, making it easier to follow the writer’s argument or explanation step by step. By providing a preview of the content, topic sentences ensure that readers understand the purpose of each paragraph and how it contributes to the overall message of the essay.
+                    </p>
+                    <p>
+                        Without topic sentences, the essay would lack clarity and coherence, making it difficult for readers to grasp the main points being made. The flow of ideas would become confusing, and readers might lose track of the writer’s argument or the connections between different parts of the essay. Important details could be overlooked or misunderstood, reducing the overall effectiveness and impact of the essay. In short, topic sentences are essential for maintaining organization and helping readers engage with the text meaningfully.
+                    </p>
+                    <p>
+                        <strong>e. What are the four major problems developed by LaPena with regard to maintaining the oral tradition? How are they used to structure the essay?</strong><br>
+                        LaPena outlines four significant problems threatening the continuation of the oral tradition. First, the loss of elders, who are the primary keepers and storytellers of cultural knowledge, means that valuable stories and lessons risk being forgotten. Second, the younger generation often shows a lack of interest in listening to or learning these oral histories, which weakens the transmission of culture. Third, the rise of modern technology and the dominance of written and digital media overshadow oral storytelling, making it less relevant in today’s fast-paced world. Lastly, there is the overarching risk that if oral traditions are not actively preserved, entire cultural identities and knowledge systems may disappear over time.
+                    </p>
+                    <p>
+                        LaPena uses these four problems as the backbone of his essay’s structure, dedicating sections to each issue and exploring their impact in detail. This clear organization allows readers to grasp the complexities of maintaining oral traditions in a changing world and underscores the urgency of taking steps to preserve them. By breaking down the challenges this way, LaPena effectively emphasizes why oral tradition remains vital and the efforts needed to keep it alive for future genera
+                    </p>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mt-8 mb-4">Reference Beyond the Text</h3>
+                    <p>
+                        <strong>a. Write a paragraph or two explaining your attitude toward the oral tradition of passing along information.</strong><br>
+                        I believe the oral tradition of passing along information is incredibly valuable because it preserves culture, history, and wisdom in a way that connects generations personally and meaningfully. Through stories, songs, and spoken words, people not only share facts but also emotions, values, and lessons that help shape identity and community. This tradition keeps the past alive and relevant, allowing younger generations to understand their roots and maintain a sense of belonging.
+                    </p>
+                    <p>
+                        Moreover, oral tradition fosters communication skills and strengthens relationships within families and communities. It encourages listening, memory, and storytelling, which are important for cultural continuity. In today’s fast-changing world, where technology often dominates, oral tradition offers a unique, human way of learning and preserving knowledge that should be respected and protected.
+                    </p>
+                    <p>
+                        <strong>b. Our culture is our identity. Write a few paragraphs explaining how you intend to preserve your culture, values and norms.</strong><br>
+                        Our culture is indeed the foundation of our identity, shaping who we are and how we relate to the world. To preserve my culture, values, and norms, I intend to actively participate in cultural practices such as festivals, rituals, and traditional ceremonies. By celebrating these events with family and community, I can keep our heritage alive and pass it on to younger generations. Additionally, I will make an effort to learn and use our native language, as language is a powerful carrier of culture and helps maintain a strong connection to our roots.
+                    </p>
+                    <p>
+                        Furthermore, I plan to respect and uphold the values and morals that define our society, such as respect for elders, hospitality, and honesty. I will teach these values to others through my actions and words, serving as a role model in my community. By sharing stories and traditions with friends and family, I can encourage others to appreciate our culture. In this way, I hope to contribute to preserving our unique identity in a rapidly changing world, ensuring that our culture remains a vibrant and guiding force for future generations.
+                    </p>
+                </div>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+
+            const showSummaryBtn = document.getElementById('showSummaryBtn');
+            const summaryOutput = document.getElementById('summaryOutput');
+
+            // Toggle summary visibility when button is clicked
+            showSummaryBtn.addEventListener('click', () => {
+                if (summaryOutput.style.display === 'none' || summaryOutput.style.display === '') {
+                    summaryOutput.style.display = 'block';
+                    showSummaryBtn.textContent = 'Hide Summary'; // Change button text
+                } else {
+                    summaryOutput.style.display = 'none';
+                    showSummaryBtn.textContent = 'View Summary'; // Change button text
+                }
+            });
+        });
+    </script>
+</body>
+</html>

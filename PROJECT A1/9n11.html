@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>सफलताको कथा Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background matching previous notes pages */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant pink/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant pink/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        .gradient-line {
+            height: 2px;
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem);
+            margin: 0 auto;
+            border-radius: 9999px;
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            padding: 2rem; /* Adjusted padding */
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Specific SVGs from the uploaded image - Adjusted opacity and removed static scale */
+        .svg-arrow-group {
+            top: 5%;
+            left: 5%;
+            width: 150px;
+            height: 150px;
+            animation-delay: 1s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.15; /* Made more subtle */
+            stroke: rgba(255, 255, 255, 0.2);
+            /* Removed transform: scale(0.9); to let animation handle scaling */
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Responsive adjustments for background elements */
+        @media (max-width: 768px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 80px; /* Smaller SVGs on mobile */
+                height: 80px;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .svg-1, .svg-2, .svg-3, .svg-4, .svg-5, .svg-6, .svg-7, .svg-arrow-group, .svg-spiral {
+                width: 50px;
+                height: 50px;
+            }
+        }
+
+        /* New animation for elements appearing on load */
+        @keyframes fadeInSlideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .animate-on-load {
+            opacity: 0; /* Hidden initially */
+            animation: fadeInSlideUp 0.8s ease-out forwards; /* Apply animation */
+        }
+
+        /* Apply delays to different elements for staggered effect */
+        .animate-on-load.delay-1 { animation-delay: 0.2s; }
+        .animate-on-load.delay-2 { animation-delay: 0.4s; }
+        .animate-on-load.delay-3 { animation-delay: 0.6s; }
+        .animate-on-load.delay-4 { animation-delay: 0.8s; }
+        .animate-on-load.delay-5 { animation-delay: 1.0s; }
+        .animate-on-load.delay-6 { animation-delay: 1.2s; }
+        .animate-on-load.delay-7 { animation-delay: 1.4s; }
+
+        /* Custom mobile padding for content-box */
+        @media (max-width: 767px) {
+            .content-box {
+                padding-left: 0.5rem; /* px-2 */
+                padding-right: 0.5rem; /* px-2 */
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- New SVGs from the uploaded image - Adjusted opacity and removed static scale -->
+        <svg class="svg-arrow-group" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <line x1="10" y1="50" x2="90" y2="50" stroke-width="2" />
+            <polyline points="70,30 90,50 70,70" stroke-width="2" fill="none" />
+            <line x1="10" y1="20" x2="70" y2="20" stroke-width="2" />
+            <polyline points="50,0 70,20 50,40" stroke-width="2" fill="none" />
+            <line x1="10" y1="80" x2="70" y2="80" stroke-width="2" />
+            <polyline points="50,60 70,80 50,100" stroke-width="2" fill="none" />
+        </svg>
+
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for सफलताको कथा Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text animate-on-load">९. सफलताको कथा Notes</h2>
+            <div class="content-box px-2 py-8 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto animate-on-load delay-1">
+                <!-- Summary Section with Toggle Button -->
+                <button id="toggleSaphaltakoKathaSummaryBtn" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4" onclick="toggleSaphaltakoKathaSummary()">
+                    VIEW SUMMARY
+                </button>
+                <p id="saphaltakoKathaSummaryText" class="text-lg brighter-gradient-text mb-4 text-justify" style="display: none;">
+                    सफलताको कथा” एउटा प्रेरणादायी र जीवन्त कथा हो जसले मानिसले आफ्नो जीवनमा सफलता प्राप्त गर्न कस्तो मेहनत, धैर्यता र सकारात्मक सोचको आवश्यकता हुन्छ भन्ने विषयमा गहिरो पाठ दिन्छ। कथाको मुख्य पात्रले अनेकौं कठिनाइ र चुनौतीहरूको सामना गर्यो । तर, उसले हार मान्नुभन्दा निरन्तर संघर्ष गर्‍यो र आफ्नो लक्ष्यप्रति दृढ रह्यो। उसको यात्राले देखाउँछ कि सफलता केवल भाग्यले होइन, निरन्तर प्रयास, आत्मविश्वास र उत्साहले प्राप्त गर्न सकिन्छ। यो कथा हरेक पाठकलाई आफ्नो लक्ष्यमा अडिग रहन र कठिन परिस्थितिमा पनि आशा नछोड्न प्रेरित गर्छ।<br><br>
+
+कथामा वर्णित मुख्य पात्रले धेरै पटक असफलताको स्वाद चाख्यो, तर उसले आफ्नो विगतका गल्तीबाट सिक्दै अघि बढ्ने बाटो खोज्यो। उसले आफूलाई सुधार्न र नयाँ तरिकाले काम गर्न सदैव तत्पर रह्यो। नकारात्मकता, आलोचना र असफलताले उसलाई कमजोर बनाउन सकेनन्, बरु अझै बलियो बनाए। उसको धैर्य, मेहनत र आत्मबलले अन्ततः सफलता हासिल गरायो। यसले पाठकलाई सिकाउँछ कि जीवनमा आउने असफलताहरूले निराश नबनाई, तिनीहरूलाई सिकाइको अवसरको रूपमा लिनु पर्छ।<br><br>
+
+कथाले सफलताको मार्ग कठिन र चुनौतीपूर्ण हुन्छ भन्ने कुरा स्पष्ट गर्छ। सफलता सजिलो छैन; यसका लागि धेरै प्रयास र समय दिनुपर्छ। केवल सपना देख्नु मात्रै पर्याप्त हुँदैन, त्यसलाई पूरा गर्न निरन्तर योजना बनाउँदै काम गर्नुपर्ने हुन्छ। मुख्य पात्रले पनि त्यो प्रक्रिया पुरा गर्‍यो । उसले आफ्ना कमजोरीहरूलाई चिन्दै सुधार गर्‍यो र आफूलाई नयाँ सीपहरू सिक्न तयार राख्यो। यसरी कथाले सकारात्मक सोच, लक्ष्य प्रति समर्पण र धैर्यताको महत्वलाई जोड दिएको छ।<br><br>
+
+अन्ततः, सफलताको कथा केवल कुनै एक घटना वा उपलब्धि होइन, जीवनभरको निरन्तर प्रक्रिया हो भन्ने कुरा स्पष्ट हुन्छ। मुख्य पात्रले प्राप्त गरेको सफलता उसको चरित्र, सोचाइ र जीवनशैलीको परिवर्तनसँग जोडिएको छ। उसको जीवनमा आएको सफलताले उसलाई मात्र नभएर अरूलाई पनि प्रेरित गर्‍यो। यस कथाले पाठकमा आशा र आत्मविश्वास जगाउँछ र भनिन्छ कि जीवनका सबै कठिनाइहरूलाई जितेर मात्र सफलताको स्वाद चाख्न सकिन्छ।<br><br>
+
+अन्तमा, “सफलताको कथा” ले जीवनका चुनौतीहरूलाई साहस र मेहनतले पार गर्ने सन्देश दिन्छ। यसले मानिसलाई आफूले राखेको लक्ष्यमा अडिग रहन, निराश नहुन र कठिनाइहरूलाई अवसरका रूपमा लिने पाठ सिकाउँछ। सफलताको लागि आवश्यक योग्यता भनेको धैर्यता, लगनशीलता र आत्मबल हो भन्ने कुरा यस कथाले प्रस्ट्याउँछ। यसरी, यो कथा जीवनका प्रत्येक संघर्षमाथि विजय प्राप्त गर्ने प्रेरणाको स्रोत बनेको छ।<br><br>
+
+
+                </p>
+
+                <!-- New content added below the summary -->
+                <div class="mt-8">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">शब्दभण्डार</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका योगसँग सम्बन्धित पारिभाषिक शब्दको अर्थ शब्दकोशका सहायताले लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>यम : आठवटा योगमध्येको पहिलो चरण वा योग</p>
+                            <p>नियम : अनुशासन</p>
+                            <p>आसन : बस्ने ठाउँ</p>
+                            <p>प्राणायाम : श्वासप्रश्वासमा लयबद्धताका साथ गरिने योग</p>
+                            <p>प्रत्याहार : अष्टाङ्ग योग मध्यको पाँचौँ योग</p>
+                            <p>धारणा : विचार</p>
+                            <p>ध्यान : चित्त एकाग्र पार्ने साधना योगमा रहने मनको स्थिति</p>
+                            <p>समाधि : ब्रह्म चिन्तनमा केन्द्रित हुने योग साधनाको आठौँ वा अन्तिम अवस्था</p>
+                        </div>
+                        <p><strong>२. दिइएका अर्थसँग मिल्ने शब्द पाठबाट खोजेर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क) हलचल नगर्ने : स्थिर</p>
+                            <p>ख) ओइलाएको : मलिन</p>
+                            <p>ग) बौद्धस्मारक : स्तूप</p>
+                            <p>घ) प्राचीन चिकित्साशास्त्र : आयुर्वेद</p>
+                            <p>ङ) एकचित्त : एकाग्रता</p>
+                            <p>च) कथाहिनता : अकथा</p>
+                            <p>छ) एम.ए. वा सो सरह : स्नातकोत्तर</p>
+                        </div>
+                        <p><strong>३. दिइएका शब्दहरूलाई अर्थ खुल्ने गरी वाक्य बनाउनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>व्यग्र</strong><br><span class="text-justify">भारतसँग वार्ता गर्न सरकार व्यग्र प्रतीक्षामा रहेको छ ।</span></p>
+                            <p><strong>चैत्य</strong><br><span class="text-justify">लुम्बिनीमा विभिन्न देशहरूले चैत्य को निर्माण गरेका छन् ।</span></p>
+                            <p><strong>योग</strong><br><span class="text-justify">योगले मानिसमा आफूभित्र रहेको रोगलाई निरोध गर्न सक्छ ।</span></p>
+                            <p><strong>स्नातक</strong><br><span class="text-justify">(१०+२) तथा प्रविणता प्रमाणपत्र तह वा सो सरहको शैक्षिक तह उत्तीर्ण गरेपछि स्नातक तहमा प्रवेश पाइन्छ ।</span></p>
+                            <p><strong>मनोचिकित्सा</strong><br><span class="text-justify">मनोचिकित्साको मानववादी दृष्टिकोणले मानिसहरूलाई उनीहरूको सम्भावनालाई अधिकतम बनाउन मद्दत पुर्‍याउँछ ।</span></p>
+                            <p><strong>समग्रता</strong><br><span class="text-justify">जीव र निर्जीवको समग्रता लाई नै वातावरण भनिन्छ ।</span></p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">बोध र अभिव्यक्ति</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p><strong>क) रिपोर्ताज कुन विषयमा लेखिएको छ ?</strong><br>उत्तर: रिपोर्ताज योग साधना र यसको फाइदाको बारेमा लेखिएको छ ।</p>
+                            <p><strong>ख) रिपोर्ताजमा कति जना व्यक्तिको नाम उल्लेख भएको छ ?</strong><br>उत्तर: रिपोर्ताजमा अमित, सुन्दर र युगेन्द्र गरी तीन जना व्यक्तिको नाम उल्लेख भएको छ ।</p>
+                            <p><strong>ग) रिपोर्ताज कतिओटा अनुच्छेदमा संरचित छ ?</strong><br>उत्तर: रिपोर्ताज २५ अनुच्छेदमा संरचित छ ।</p>
+                            <p><strong>घ) रिपोर्ताजमा प्रयुक्त भाषाशैली कस्तो छ ?</strong><br>उत्तर: रिपोर्ताजमा प्रयुक्त भाषाशैली निजात्मक छ ।</p>
+                        </div>
+                        <p><strong>३. पाठका आधारमा जोडा मिलाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>क) अमित ठाकुर – पत्रकार</p>
+                            <p>ख) सुन्दर छन्त्याल – योगसाधनाका कारण पुनर्जीवन र सफलता पाउने व्यक्ति</p>
+                            <p>ग) रत्न राज्यलक्ष्मी – अमित ठाकुरले पत्रकारिता पढेको क्याम्पस</p>
+                            <p>घ) धुलिखेल – अमित ठाकुर फिचर स्टोरी खोज्न गएको ठाउँ</p>
+                            <p>ङ) आरुबारी – काठमाडौँमा सुन्दर छन्त्यालहरूको बसोबास रहेको ठाउँ</p>
+                            <p>च) म्याग्दी – सुन्दरको जन्मथलो</p>
+                            <p>छ) हृदयघात – सुन्दरका पिताको मृत्युको कारण</p>
+                            <p>ज) क्यान्सर – सुन्दर छन्त्यालकी आमालाई लागेको रोग</p>
+                            <p>झ) तौलिहवा – अमित ठाकुरको घर भएको ठाउँ</p>
+                        </div>
+                        <p><strong>४. " योग ध्यान …….. ताँती सुरु भयो " रिपोर्ताजको अंश पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) ध्यान गर्नका लागि म पात्र कहाँ कहाँ पुगेको थियो ?</strong><br><span class="text-justify">उत्तर: ध्यान गर्नका लागि म पात्र लुम्बिनीको स्तूप, चैत्य, पिपलको बोटमुनि, देवालयको खुला मैदान, पशुपति आदि ठाउँहरूमा पुगेका थिए ।</span></p>
+                            <p><strong>ख) गोठाटारले म पात्रलाई किन आकर्षित गर्छ ?</strong><br><span class="text-justify">उत्तर: गोठाटारको शान्त, एकान्त र योगसाधनाको लागि अनुकूल वातावरणले म पात्रलाई आकर्षित गर्छ ।</span></p>
+                            <p><strong>ग) "हजारौँ माइलको यात्रा एक सानो पाइलाबाट सुरु हुन्छ ।" भन्नुको तात्पर्य के हो ?</strong><br><span class="text-justify">उत्तर: कुनै पनि महान् कार्य वा ठूला ठूला कामको सुरुवात सानो योजनाबाट नै हुन्छ भन्नु नै हजारौँ माइलको यात्रा एक सानो पाइलाबाट सुरु हुन्छ भन्नु हो ।</span></p>
+                            <p><strong>घ) योगले मानव जीवनलाई कसरी परिवर्तन गर्छ ?</strong><br><span class="text-justify">उत्तर: योगले मनलाई एकाग्रता बनाई, नयाँ ऊर्जा र सकारात्मक सोच दिने भएकाले जीवनलाई परिवर्तन गर्छ ।</span></p>
+                        </div>
+                        <p><strong>५. दिइएको रिपोर्ताजको अंश पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) सुन्दर छन्त्यालमा कसरी बाँच्ने इच्छाशक्ति जागृत भयो ?</strong><br><span class="text-justify">उत्तर: योग र साधनाले मनमा रहेका विकारहरू हटाएकोले उनमा नयाँ सोच, चेतना, प्राणायाम, प्रत्याहार, धारणा र ध्यान हुँदै समाधिको यात्रा तय गरिने कुरा बुझेकाले मनको विकार हट्दै गई सुन्दर छन्त्यालमा बाँच्ने इच्छाशक्ति जागृत भयो ।</span></p>
+                            <p><strong>ख) योग साधनाले मानव स्वास्थ्यमा पार्ने प्रभावहरू के के हुन् ?</strong><br><span class="text-justify">उत्तर: योग साधनाले मानव स्वास्थ्यमा पार्ने प्रभावहरू थुप्रै छन् । योग साधनाले मनलाई एकाग्र बनाई चिन्तन र ज्ञानको विकास गर्नुका साथै मनका विकार हटाउन मद्दत गर्छ । योग चिन्तन, मनको एकाग्रता र समाधितर्फको यात्रा हो । योगले नै मनको विकार हटाई आत्मिक एवम् भौतिक शान्ति दिलाई सुखी र निरोगी जीवन बाँच्ने आधार खडा गर्दछ । योगले सहनशीलता, दूरगामी सोच र उदार विचार जस्ता जीवनोपयोगी कलाको विकास गर्दछ ।</span></p>
+                        </div>
+                        <p><strong>६. म पात्रले सुन्दरको कथा प्राप्त गर्नका लागि गरेका प्रयत्नहरूलाई क्रमबद्ध रूपमा टिपोट गर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>१. धुलिखेल कार्यक्रममा जानु,</p>
+                            <p>२. सुन्दर छन्त्यालको फोन नम्बर लिनु,</p>
+                            <p>३. सुन्दर छन्त्यालको घर आरुबारी जानु,</p>
+                            <p>४. दाजुभाइको सम्बन्ध विकास गर्नु ।</p>
+                        </div>
+                        <p><strong>७. उत्तर लेख्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) रिपोर्ताजमा प्राकृतिक परिवेशको वर्णन कसरी भएको छ ?</strong><br><span class="text-justify">उत्तर: रिपोर्ताजमा प्राकृतिक परिवेशलाई मानिसको मनको शान्तिसँग तुलना गर्दै वर्णन गरिएको छ । यसमा जङ्गल, एकान्त स्थल, ठूला चौर, आदिलाई शान्त, ज्ञान प्राप्त गर्ने स्थलका रूपमा वर्णन गरिएको छ । अमितलाई गोठाटार औधी मन पर्नुको कारण पनि प्राकृतिक परिवेश नै थियो । गोठाटारको शान्त वातावरणमा पात्रलाई राखेर एकान्त र शान्त परिवेशको सिर्जना गर्दै, त्यसको सकारात्मक प्रभावलाई चित्रण गरिएको छ । सुन्दरको घरबाट देखिने पहाडी चुचुरो, घामको प्रकाशले उज्यालो बनाएको आरुबारीको सुन्दर प्राकृतिक चित्रण यस रिपोर्ताजमा गरिएको छ । तसर्थ रिपोर्ताजमा प्राकृतिक परिवेशलाई सुन्दर, शान्त र आकर्षक ढङ्गले मानवीकरण गरी वर्णन गरिएको छ ।</span></p>
+                            <p><strong>ख) सुन्दर छन्त्यालको सफलताको कथा सङ्क्षिप्त रूपमा लेख्नुहोस् ।</strong><br><span class="text-justify">उत्तर: सुन्दर छन्त्याल मध्यमवर्गीय परिवारमा सुखको वातावरणमा हुर्किएको व्यक्ति हो । उसको जन्म सरकारी अधिकृत बुबा र माध्यमिक तहकी शिक्षक आमाको एक मात्र सन्तानको रूपमा भएको थियो । म्याग्दीको गाउँमा जन्मिए पनि सुन्दरले काठमाडौँको नाम चलेको विद्यालयबाट एस.एल.सी. पास गरी विज्ञान विषय लिई उच्च माध्यमिक तह उत्तीर्ण गरेका र सिभिल इन्जिनियरिङमा स्नातक गरेका थिए । उसको बाबुको अचानक हृदयघातका कारण मृत्यु भएपछि उसको पढाइमा रोकावट आएको छ । उसकी आमा पनि बिरामी हुनुभयो । आमालाई जँचाउँदा क्यान्सर लागेको रहेछ । डाक्टरको सल्लाह अनुसार दिल्लीमा गई उपचार गराउँदा आमा ठिक हुनुभयो । ऋणमा डुबेको यो सानो परिवारले आफ्नो पहाडको केही जमिन बेचेर ऋण तिर्‍यो । त्यसपछि आमाछोरा एक दिन डा. युरेन्द्र झाको चिकित्साकेन्द्र नयाँ बानेश्वर गए । एक दिन डा. युरेन्द्र झाको चिकित्सा केन्द्रमा गई योग र ध्यानका विधि अपनाउँदा क्रमशः सुन्दरको मन शान्त हुन थाल्यो । योगको विषय बोध गर्दै गएपछि मनको विकार हटी बाँच्ने इच्छाशक्ति जागृत भयो । पहाडको जग्गा बेची ऋण तिरे भने बाँकी ऋण पौरख गरी तिर्ने आत्मविश्वास उनमा जाग्यो । निरन्तरको मिहिनेत र अध्ययनका कारण सुन्दरले प्राविधिकतर्फ अधिकृतमा नाम निकाले । यसरी सुन्दर तनावमुक्त जिन्दगी बिताउन सफल भए ।</span></p>
+                            <p><strong>ग) पाठको मुख्य उद्देश्य के हो ?</strong><br><span class="text-justify">उत्तर: जीवन उतारचढावको सम्मिश्रण हो । जस्तो परिस्थिति छ त्यससँग सहमत भएर अघि बढे जीवन स्वाभाविक रूपमा चल्छ । सुख र दु:ख भनेका मानिसका जीवनमा आइरहने घामछायाजस्तै हुन् । सहमत हुन नसक्दा मानसिक चिन्ता सुरु हुन्छ । आफ्नो मन आफैँ विस्तारै मान्छ भनियो भने यसले दुःख मात्र दिन्छ । जीवनमा आइपर्ने हरेक समस्यासँग जुधेर त्यसको समाधान निकाल्नुपर्छ । यसका लागि एकाग्रता चाहिन्छ । मनलाई सधैँ शान्त र स्थिर पार्नुपर्छ । इच्छाशक्ति भयो भने जस्तोसुकै समस्याबाट पनि मुक्ति पाउन सकिन्छ । गहिरो शान्ति ध्यानबाट प्राप्त हुन्छ र शारीरिक शान्ति योगाभ्यासबाट प्राप्त हुन्छ । अतः सुखी र निरोगी जीवनका लागि योगाभ्यास आवश्यक हुन्छ भन्ने भाव नै यस पाठको मुख्य सन्देश हो ।</span></p>
+                        </div>
+                        <p><strong>८. व्याख्या गर्नुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>क) यो स्मृति भन्ने वस्तु पनि रमाइलो छ । स्मृतिले नै शब्दलाई जोड्छ र भत्काउँछ । स्मृतिले मानिसलाई मानिस बनाउँछ र पुनर्जीवित गर्छ ।</strong><br><span class="text-justify">उत्तर: प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तकमा सङ्कलित सफलताको कथा शीर्षक रिपोर्ताजमूलक रचनाबाट साभार गरिएको हो । यस रिपोर्ताजमा योग र ध्यानले मानिसलाई शारीरिक तथा मानसिक शान्ति प्रदान गर्छ भन्ने भावलाई प्रकाश पारिएको छ ।
+                            विगतका अनुभवको सम्झना नै स्मृति हो । विगतको स्मृति वर्तमानको सुखद पक्ष हो । यसको सम्झनाले मानिसलाई काम गर्ने ऊर्जा दिनुका साथै वर्तमानलाई रमाइलो र रङ्गीन बनाइदिन्छ । विगतले मानिसको वर्तमानलाई धेरै कुरा सिकाएको हुन्छ । विगतको अनुभव र अनुभूतिबाट पाठ सिकेर नै वर्तमानमा पाइला चाली भविष्यको गन्तव्य पछ्याउने प्रयास गर्नुपर्छ । विगतको जीवन भोगाइको स्मृतिले कहिले सुखद अनुभूति दिलाउँछ त कहिले भावविह्वल पनि बनाउँछ । स्मृतिले मानिसलाई विगतका कमजोर पक्षहरू सुधार गरी सत्कर्ममा गतिशील बनाई पुनर्जीवित बनाउन सक्दछ । यस रचनामा पनि अमितलाई विगतको स्मृतिले आफ्नो लक्ष्य प्राप्तिका लागि पृष्ठपोषणको काम गरेको पाइन्छ । अतः मानवको जीवनमा स्मृतिको महत्त्वपूर्ण स्थान रहेको पाइन्छ ।</span></p>
+                            <p><strong>ख) मनको शान्ति खोज्न टाढा जानुपर्दैन, यो तपाईँभित्रै छ । योगबाट यो प्राप्त हुन्छ ।</strong><br><span class="text-justify">उत्तर: प्रस्तुत गद्यांश कक्षा ११ को नेपाली पाठ्यपुस्तकमा सङ्कलित सफलताको कथा शीर्षक रिपोर्ताजमूलक रचनाबाट साभार गरिएको हो । यस रिपोर्ताजमा योग र ध्यानले मानिसलाई शारीरिक तथा मानसिक शान्ति प्रदान गर्छ भन्ने भावलाई प्रकाश पारिएको छ ।
+                            कुनै किसिमको मानसिक विकार नभएको अवस्था नै शान्ति हो । परिस्थितिसँग सहमत भइएन भने मानसिक चिन्ता सुरु हुन्छ र आफ्नो मन हो मिलिहाल्छ भनियो भने पनि यसले असर गर्छ । मानसिक चिन्ताले मानिसलाई चितामा पनि पुर्‍याउन सक्छ । मानसिक चिन्ताले मानिसलाई विक्षिप्त बनाउँछ । मनको शान्तिका लागि समग्रता र एकाग्रता चाहिन्छ । एकाग्रताले मनलाई शान्त र स्थिर बनाउँछ । गहिरो शान्ति ध्यानबाट प्राप्त हुन्छ र शारीरिक शान्ति योगाभ्यासबाट प्राप्त हुन्छ । योग र ध्यानबाट नै मानसिक विकार हटी जीवन सुन्दर बन्दछ । योगबाट नै तनावमुक्त भई तन र मन दुवै स्वस्थ र तन्दुरुस्त बन्न पुग्दछ । अतः सुख शान्तिको आधार नै मन भएकाले मानसिक रूपमा निरोगी बनी शारीरिक रूपमा स्वस्थ र तन्दुरुस्त बनी खुसी र सुखी जीवन बाँच्नका लागि योग साधना गर्नुपर्दछ । हामी मनको शान्ति खोज्न अन्यत्र जानु पर्दैन, त्यो त हामीसँगै हुन्छ । इच्छाशक्ति भएमा मानिसले आफूले आफूलाई बुझाउन सक्छ र जीवनलाई अगाडि बढाउन सहयोग मिल्छ भन्ने आशयलाई माथिको गद्यांशले व्यक्त गरेको छ ।</span></p>
+                        </div>
+                        <p><strong>९. दिइएको अनुच्छेद पढी सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p><strong>(क) स्वस्थ हुनु भनेको के हो ?</strong><br><span class="text-justify">उत्तर: स्वस्थ हुनु भनेको रोग वा दुर्बलताको अभाव मात्र नभएर शारीरिक, मानसिक र सामाजिक रूपले पूर्ण तन्दुरुस्तीको अवस्था हो ।</span></p>
+                            <p><strong>(ख) देशका नागरिकको स्वास्थ्य स्थिति कुन कुन कुरामा निर्भर हुन्छ ?</strong><br><span class="text-justify">उत्तर: देशका नागरिकको स्वास्थ्य स्थिति सुर्तीजन्य पदार्थको प्रयोगको स्थिति, उच्च रक्तचाप तथा मोटोपनको स्थिति, शुद्ध पानीको उपलब्धता, औसत आयु कुपोषणग्रस्त जनसङ्ख्याको प्रतिशतका साथै मृत्युको अवस्था आदि कुरामा निर्भर हुन्छ ।</span></p>
+                            <p><strong>(ग) चिकित्सा विज्ञान कसरी रोकथामतिर पनि केन्द्रित हुन थालेको छ ?</strong><br><span class="text-justify">उत्तर: चिकित्सा विज्ञान विभिन्न किसिमका खोप, जनहितमा जारी हुने विभिन्न जनस्वास्थ्यसम्बन्धी सूचना, जानकारी, तालिम आदिको व्यवस्था गरी रोकथामतिर पनि केन्द्रित हुन थालेको छ ।</span></p>
+                            <p><strong>(घ) चिकित्सा विज्ञानमा कुन कुराले बढी महत्त्व पाएको छ ?</strong><br><span class="text-justify">उत्तर: चिकित्सा विज्ञानमा रोकथामलाई भन्दा रोग लागिसकेपछि उपचार गर्ने कुराले बढी महत्त्व पाएको छ ।</span></p>
+                        </div>
+                        <p><strong>१०. दिइएको अनुच्छेद पढी अन्त्यमा सोधिएका प्रश्नहरूको उत्तर दिनुहोस् :</strong></p>
+                        <div class="ml-4 space-y-2">
+                            <p>बुँदाहरू</p>
+                            <p>१. विचारहरूमध्ये निर्विचार सबैभन्दा राम्रो विचार हुनु ।</p>
+                            <p>२. निर्विचारको अभ्यासले परमानन्द प्राप्त हुनु ।</p>
+                            <p>३. जरुरतभन्दा बढी विषयमा दिल नलगाई मन खाली राखी प्रशान्तिको अभ्यासले दुःखदायी विचारले गर्ने आक्रमणबाट साधकलाई सुरक्षित राख्नु ।</p>
+                            <p>४. भयानक दुःखको परिस्थितिमा पनि यस्तो साधकले धैर्य नगुमाउनु ।</p>
+                            <p>५. आएका जुनसुकै तत्त्व फर्किएर जानलाई हो तसर्थ दुश्चिन्ताग्रस्त हुनुपर्ने कारण नहुनु ।</p>
+                            <p>सारांश</p>
+                            <p class="text-justify">योग साधना र विचार</p>
+                            <p class="text-justify">विचारहरूमध्ये सबैभन्दा राम्रो विचार निर्विचार हो र यसबाट परमानन्द प्राप्त हुन्छ । अरूभन्दा बढी विषयमा दिल नलगाई मन खाली राखी प्रशान्तिको अभ्यासले दुःखदायी विचारको आक्रमणबाट साधक सुरक्षित हुन्छ । भयानक दुःखको परिस्थितिमा पनि यस्तो साधकले धैर्य गुमाउँदैन । आएका जुनसुकै वैचारिक तत्त्वहरू जानलाई हो, तसर्थ दुश्चिन्ताग्रस्त हुनुपर्ने कारण छैन ।</p>
+                            <p>जम्मा शब्द सङ्ख्या : १४०</p>
+                            <p>सारांश गर्नुपर्ने शब्दसङ्ख्या : ४७</p>
+                            <p>सारांश गरिएको शब्दसङ्ख्या : ४४</p>
+                        </div>
+                    </div>
+
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">व्याकरण</h3>
+                    <div class="brighter-gradient-text space-y-2 mb-4">
+                        <p><strong>१. दिइएको अनुच्छेद पढी रेखङ्कित गरिएका शब्दहरू टिपेर तिनको निर्माण प्रक्रिया देखाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>लेखक = लेख् + अक</p>
+                            <p>पाठक = पाठ् + अक</p>
+                            <p>भावक = भू + अक</p>
+                            <p>आदरणीय = आदृ + अनीय</p>
+                            <p>सम्माननीय = सम् मान् + अनीय</p>
+                            <p>भौगोलिक = भूगोल + इक</p>
+                            <p>सम्मानित = सम्मान + इत</p>
+                            <p>शिक्षित = शिक्षा + इत</p>
+                            <p>प्राचीन = प्राच् + ईन</p>
+                            <p>आधुनिक = अधुना + इक</p>
+                            <p>नवीन = नव + इन</p>
+                            <p>तल्लीन = तल् + इन</p>
+                            <p>पूजनीय = पूज् + अनीय</p>
+                            <p>माननीय = मान् + अनीय</p>
+                            <p>बालक = बाल + अक</p>
+                            <p>काव्य = कवि + य</p>
+                            <p>कारण = कृ + अन</p>
+                            <p>श्रेष्ठतम = श्रेष्ठ + तम</p>
+                            <p>गन्तव्य = गम् + तव्य</p>
+                            <p>हास्य = हास् + य</p>
+                            <p>वक्ता = वच् + ता</p>
+                            <p>गतिवान् = गति + वान</p>
+                            <p>व्यक्तित्व = व्यक्ति + त्व</p>
+                            <p>कवित्व = कवि + त्व</p>
+                            <p>लेखकत्व = लेखक + त्व</p>
+                            <p>सिद्धत्व = सिद्ध + त्व</p>
+                            <p>क्षमतावान् = क्षमता + वान्</p>
+                            <p>बुद्धिमान् = बुद्धि + मान</p>
+                            <p>कीर्तिमान = कीर्ति + मान</p>
+                            <p>भावमय = भाव + मय</p>
+                            <p>रहस्यमय = रहस्य + मय</p>
+                            <p>लेखकत्व = लेखक + त्व</p>
+                            <p>दयालु = दया + आलु</p>
+                            <p>लालित्य = ललित + य</p>
+                            <p>माधुर्य = मधुर + य</p>
+                            <p>लेखनी = लेखन + ई</p>
+                        </div>
+                        <p><strong>२. ‘सफलताको कथा’ पाठबाट दशओटा शब्दहरू टिप्नुहोस् र ती शब्दहरूको निर्माण प्रक्रिया देखाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>१. जीवनी = जीवन + ई</p>
+                            <p>२. उत्साहित = उत्साह + इत</p>
+                            <p>३. समर्पित = समर्पण + इत</p>
+                            <p>४. थकाइ = थाक् + आइ</p>
+                            <p>५. प्राचीनपन = प्राचीन + पन</p>
+                            <p>६. काटेर = काट् + एर</p>
+                            <p>७. कारण = कृ + अन</p>
+                            <p>८. लेखक = लिख् + अक</p>
+                            <p>९. लेखकीय = लेखक + इय</p>
+                            <p>१०. स्मृति = स्मृ + ति</p>
+                        </div>
+                        <p><strong>३. दिइएका प्रत्यय लगाई दुई दुईओटा शब्द निर्माण गर्नुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>अक : लेखक (लिख्+अक), नर्तक (नृत्+अक)</p>
+                            <p>अन : दर्शन (दृश्+अन), भोजन (भुज्+अन)</p>
+                            <p>अनीय : दर्शनीय (दृश्+अनीय), पूजनीय (पूज्+अनीय)</p>
+                            <p>इक : शैक्षिक (शिक्षा+इक), मौखिक (मुख+इक)</p>
+                            <p>इत : लिखित (लिख्+इत), रचित (रच्+इत)</p>
+                            <p>ई : धनी (धन+ई), नेपाली (नेपाल+ई)</p>
+                            <p>ईन : युगीन (युग + ईन), कुलीन (कुल + ईन)</p>
+                            <p>ईय : केन्द्रीय (केन्द्र+ईय), आत्मीय (आत्मा+ईय)</p>
+                            <p>क : बालक (बाल+क), शीर्षक (शीर्ष+क)</p>
+                            <p>तर : बृहत्तर (बृहत्+तर), उत्तर (उत्+तर)</p>
+                            <p>तम : उच्चतम (उच्च+तम), प्रियतम (प्रिय+तम)</p>
+                            <p>तव्य : गन्तव्य (गम्+तव्य), मन्तव्य (मन्+तव्य)</p>
+                            <p>ता : कर्ता (कृ+ता), श्रोता (श्रु+ता)</p>
+                            <p>ति : स्मृति (स्मृ+ति), गति (गम्+ति)</p>
+                            <p>त्व : मानवत्व (मानव+त्व), पुरुषत्व (पुरुष+त्व)</p>
+                            <p>मय : जलमय (जल+मय), रहस्यमय (रहस्य+मय)</p>
+                            <p>वान/मान : गुणवान् (गुण+वान्), बलवान् (बल+वान्)</p>
+                            <p>य : काव्य (कवि+य), माधुर्य (मधुर+य)</p>
+                        </div>
+                        <p><strong>४. दिइएका शब्दहरूको निर्माण प्रक्रिया देखाउनुहोस् :</strong></p>
+                        <div class="ml-4">
+                            <p>नायक = नी + अक</p>
+                            <p>शुद्धता = शुद्ध + ता</p>
+                            <p>गुरुत्व = गुरु + त्व</p>
+                            <p>व्यवस्थित = व्यवस्था + इत</p>
+                            <p>द्विपक्षीय = द्विपक्ष + ईय</p>
+                            <p>आयुष्मान् = आयुष् + मान्</p>
+                            <p>वैदेशिक = विदेश + इक</p>
+                            <p>गरिमामय = गरिमा + मय</p>
+                            <p>सौन्दर्य = सुन्दर + य</p>
+                            <p>गति = गम् + ति</p>
+                            <p>कारक = कृ + अक</p>
+                            <p>धैर्य = धीर + य</p>
+                            <p>योगी = युज् + ई</p>
+                            <p>श्रेष्ठतम = श्रेष्ठ + तम</p>
+                            <p>पाशविक = पशु + इक</p>
+                            <p>पञ्चक = पञ्च + क</p>
+                            <p>सौर्य = सूर्य + य</p>
+                            <p>वित्तीय = वित्त + ईय</p>
+                            <p>चटनी = चाट् + अनी</p>
+                            <p>हतियार = हात + इयार</p>
+                            <p>बोलक्कड = बोल् + अक्कड</p>
+                            <p>दुधालु = दुध + आलु</p>
+                            <p>पुर्वेली = पूर्व + एली</p>
+                            <p>मूर्ख्याइँ = मूर्ख + याइँ</p>
+                            <p>गँजेडी = गाँजा + अडी</p>
+                            <p>पँधेरो = पानी + एराे</p>
+                        </div>
+                    </div>
+                </div>
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md animate-on-load delay-7" onclick="window.location.href='nepali11.html'">
+                    Back to Nepali 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility for Saphaltako Katha Notes
+        function toggleSaphaltakoKathaSummary() {
+            const summaryText = document.getElementById('saphaltakoKathaSummaryText');
+            const toggleBtn = document.getElementById('toggleSaphaltakoKathaSummaryBtn');
+
+            if (summaryText.style.display === 'none') {
+                summaryText.style.display = 'block';
+                toggleBtn.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryText.style.display = 'none';
+                toggleBtn.textContent = 'VIEW SUMMARY';
+            }
+        }
+
+        // Apply animation class to elements on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            const elementsToAnimate = document.querySelectorAll('.animate-on-load');
+            elementsToAnimate.forEach(element => {
+                // Trigger reflow to ensure animation plays from start
+                void element.offsetWidth;
+                element.style.opacity = '1'; // Make visible after reflow
+                element.style.transform = 'translateY(0)'; // Reset transform for animation
+            });
+        });
+    </script>
+</body>
+</html>
+

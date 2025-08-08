@@ -1,0 +1,454 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>A Respectable Woman Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for A Respectable Woman Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">2. A Respectable Woman Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “A Respectable Woman” by Kate Chopin is a subtle and insightful story that explores the complex emotions and societal expectations experienced by Mrs. Baroda, a woman who prides herself on being proper and respectable. The story focuses on Mrs. Baroda’s internal conflict when she is faced with the presence of her husband’s friend, Gouvernail, who unexpectedly visits their home. Through Mrs. Baroda’s thoughts and feelings, Chopin delves into themes of desire, restraint, and the social roles imposed on women.<br><br>
+
+The story begins with Mrs. Baroda welcoming Gouvernail to her home while her husband is away on business. Gouvernail is a refined and courteous man, and Mrs. Baroda finds herself unexpectedly attracted to him. This attraction surprises her because she has always considered herself a “respectable” woman who adheres to social norms and moral standards. Her initial reaction is one of confusion and discomfort, as she grapples with feelings that contradict her self-image and societal expectations.<br><br>
+
+As the visit continues, Mrs. Baroda becomes more aware of her growing feelings for Gouvernail. She notices his charm, kindness, and the genuine way he treats her, which awakens emotions she had long suppressed. However, she also struggles with guilt and the fear of losing her dignity and reputation. This internal conflict highlights the restrictive roles women were expected to play in society, where any expression of desire outside marriage was frowned upon.<br><br>
+
+Despite her attraction, Mrs. Baroda ultimately chooses to maintain her composure and uphold her sense of respectability. She decides to control her feelings and keep her distance from Gouvernail, recognizing the importance of loyalty and social expectations. Her decision reflects the societal pressures women faced to prioritize reputation and moral conduct over personal desires. Through Mrs. Baroda’s struggle, Chopin critiques the limitations placed on women’s emotional lives and the sacrifices they make to conform.<br><br>
+
+The story ends with Mrs. Baroda reflecting on the complexity of human emotions and the delicate balance between desire and duty. She acknowledges the power of attraction but also the strength required to resist it for the sake of propriety. Chopin’s narrative leaves readers contemplating the challenges women face in reconciling personal feelings with societal expectations, and the quiet courage involved in such restraint.<br><br>
+
+In conclusion, “A Respectable Woman” is a poignant exploration of inner conflict, social norms, and female desire. Through Mrs. Baroda’s experience, Kate Chopin reveals the constraints of respectability and the emotional turmoil that can arise when personal feelings clash with societal duties. The story invites readers to reflect on the nature of respectability, the complexities of human emotion, and the often unseen struggles faced by women.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">1. Why was Mrs. Baroda unhappy with the information about Gouvernail’s visit to their farm?</span><br>
+                    Mrs. Baroda was unhappy because she was looking forward to some peaceful, uninterrupted rest and private time alone with her husband. The news of Gouvernail’s visit disturbed this expectation.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">2. How was Gouvernail different from Mrs. Baroda’s expectation?</span><br>
+                    Mrs. Baroda had imagined Gouvernail to be tall, slim, cynical, wearing eyeglasses, and carrying his hands in his pockets. However, when she met him, she found him to be only slim, not very tall, neither cynical nor wearing glasses, and he did not carry his hands in his pockets.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">3. How does Mrs. Baroda compare Gouvernail with her husband?</span><br>
+                    Mrs. Baroda notes that her husband Gaston is frank and talkative, whereas Gouvernail is quiet, reserved, and not as open or chatty.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">4. Why and how did Mrs. Baroda try to change Gouvernail’s solitary habits?</span><br>
+                    Being a frank and hospitable woman, Mrs. Baroda wanted Gouvernail to feel at home and be more open. She tried to draw him out of his silence by being friendly, chatty, and offering warm and wordy hospitality.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">5. How does Gaston disagree with his wife on Gouvernail’s character?</span><br>
+                    Gaston believes Gouvernail is a peaceful man who avoids trouble and commotion. He disagrees with his wife’s serious and somewhat intense feelings about Gouvernail’s character, suggesting Gouvernail causes no problems.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">6. Why is Gaston surprised with his wife’s expression towards the end of the story?</span><br>
+                    Gaston is surprised because although Mrs. Baroda initially disliked the idea of Gouvernail’s visit, towards the end she herself suggests having Gouvernail visit them again and says she will be very nice to him, which was unexpected.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">1. What is the cause of conflict in Mrs. Baroda’s mind? What role does Mrs. Baroda ‘being a respectable woman’ play in the story?</span><br>
+                    The cause of conflict in Mrs. Baroda’s mind is her unexpected attraction towards Gouvernail, her husband’s friend. She finds herself drawn to him emotionally and physically, which creates inner turmoil because she is married and bound by social and moral responsibilities.
+                    <br><br>
+                    Mrs. Baroda’s identity as a respectable woman plays a crucial role in controlling this conflict. Being respectable means she values her social reputation, moral standards, and the sanctity of her marriage. Despite her strong feelings for Gouvernail, she restrains herself and does not act on her desires because she fears societal judgment and the consequences of violating social norms. Her respectability forces her to suppress her emotions and maintain dignity, which highlights the tension between personal feelings and social expectations in the story.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">2. Sketch the character of Gouvernail and contrast it with Gaston.</span><br>
+                    Gouvernail is Mr. Baroda’s college friend who comes to stay at their sugar plantation for a short time. He is described as a slim, attractive man who enjoys peace and solitude. Gouvernail is quiet, reserved, and not very talkative. He doesn’t wear eyeglasses and prefers to spend time smoking a cigar quietly on the portico, enjoying the cool air. He is polite and accepts whatever hospitality is offered without making demands. Gouvernail is introverted and calm, valuing peace and quiet over social chatter.
+                    <br><br>
+                    In contrast, Gaston Baroda, Mrs. Baroda’s husband, is an extroverted and sociable man. He is frank, open, and chatty. Gaston enjoys engaging in conversations and is more outgoing than Gouvernail. He doesn’t smoke and is more lively in his interactions. Gaston’s personality is warm and expressive, which is quite different from Gouvernail’s silent and introspective nature.
+                    <br><br>
+                    In summary, Gouvernail is calm, introverted, and reserved, while Gaston is lively, extroverted, and talkative. Their contrasting personalities highlight different ways of engaging with the world around them.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">3. Why does Mrs. Baroda not disclose her feelings towards Gouvernail to her husband?</span><br>
+                    Mrs. Baroda does not reveal her feelings for Gouvernail to her husband because she understands the delicate nature of such emotions and the potential consequences they could have. She is a respectable woman who values her marriage and social reputation. Sharing her attraction could cause serious misunderstandings, hurt her husband’s feelings, and damage the friendship between Gaston and Gouvernail.
+                    <br><br>
+                    Moreover, admitting such feelings might lead to conflict or distrust in her marriage. Mrs. Baroda believes that some battles of the heart are meant to be fought alone, and she chooses to control and suppress her emotions rather than expose them to others. She fears the social stigma and personal complications that could arise if she were to disclose her inner turmoil.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">4. The last three sentences of the story bring a kind of twist. After reading these three sentences, how do you analyze Mrs. Baroda’s attitude towards Gouvernail?</span><br>
+                    The last three sentences of the story reveal a notable and surprising change in Mrs. Baroda’s attitude towards Gouvernail. Throughout the story, she struggles with an inner conflict caused by her unexpected attraction to him and the social constraints that make her suppress these feelings. Initially, she feels uncomfortable and hesitant about Gouvernail’s visit because she fears the judgment of society and the impact it might have on her marriage and reputation. However, by the end, she tells her husband that she has “overcome everything” and that this time she will be “very nice to him.” This statement suggests that Mrs. Baroda has experienced a shift from fear and restraint to acceptance and openness. It could mean that she has finally decided to follow her heart and express her feelings more freely, setting aside social fears, or it might imply that she has gained control over her emotions and intends to behave more openly without the previous tension. Either way, the twist highlights a transformation in her mindset, showing that she is ready to face her emotions honestly and possibly welcome Gouvernail’s presence in her life without the earlier hesitation and inner turmoil.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">1. The entry of an outsider into a family has been a recurring subject in both literature and films. Narrate a story real or imaginative where an outsider’s arrival destroys the intimate relationship between the husband and the wife and causes break up in marital relationship without direct fault of anyone. (Anton Chekhov’s story ‘About Love’ is a reference.)</span><br>
+                    Raj and Meera had a loving marriage, built on trust and companionship. Their peaceful life changed when Meera’s childhood friend, Arjun, came to stay with them due to work. Arjun was warm and understanding, and Meera found comfort and joy in his company. Gradually, she grew emotionally closer to Arjun, sharing thoughts and feelings that she didn’t with her husband. Though Raj trusted Meera, he sensed the growing distance between them. Without any deliberate fault or intention, misunderstandings began to arise, and emotional walls grew higher. The closeness between Meera and Arjun unintentionally created a gap between husband and wife. Eventually, this silent drift led Raj and Meera to separate, showing how the presence of an outsider can disrupt a marriage, even when no one is directly to blame.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">2. Mrs. Baroda makes an expectation about Gouvernail even before meeting him. Suppose you are a mature girl/boy and your family members are giving you pressure for getting married. Write in about 200 words describing what qualities you would like to get in your future husband/wife.</span><br>
+                    Marriage is a lifelong commitment that requires careful consideration before choosing a life partner. If my family pressures me to get married, I would want my future husband or wife to possess qualities that help build a strong and loving relationship. First and foremost, I would like someone who is caring, loving, and understanding. A partner who listens patiently and supports me through both happy and difficult times is very important. Respect and honesty would be the foundation of our relationship because trust is essential for a successful marriage.
+                    <br><br>
+                    I would also want my future spouse to be responsible and mature, someone who can handle life’s challenges with patience and cooperation. Communication plays a vital role in any relationship, so I hope my partner is open to sharing their thoughts and feelings and can resolve conflicts calmly and respectfully. Kindness and empathy are important qualities because they help create a warm and peaceful home environment.
+                    <br><br>
+                    Besides these serious qualities, I also value a good sense of humor and a positive attitude. Life can be stressful, and being able to laugh together can strengthen our bond and make the journey enjoyable. Ambition and hard work are also qualities I admire, as they help us grow individually and as a couple. Lastly, I would like my partner to be supportive of my dreams and goals and to work together as a team so that we can build a happy and fulfilling life.
+                    <br><br>
+                    Overall, these qualities would ensure that our marriage is based on mutual love, respect, and understanding, making it a strong and lasting partnership.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>
+

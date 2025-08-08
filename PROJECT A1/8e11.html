@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Corona Says Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* Background Animated Lines */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for Corona Says Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">Corona Says Notes</h2>
+            <div class="content-box p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4 w-full">
+                    CLICK HERE FOR SUMMARY
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content" style="display: none;" class="content-justified">
+                    <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Summary:</h3>
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “Corona Says” is a thought-provoking poem written by the Nepali poet and educationist Vishnu S. Rai during the time of the COVID-19 pandemic. The poem presents the voice of the coronavirus itself, speaking directly to human beings in a calm, reflective, and almost philosophical tone. Rather than expressing anger or destruction, the virus explains the purpose of its arrival and offers a serious critique of human behavior and modern civilization.<br><br>
+
+The poem begins with a bold and surprising idea: Corona is not the enemy, nor is it here to destroy the world. Instead, it says, “I have not come here of my own will.” This line immediately shifts the tone from fear to reflection. It presents the virus as a messenger or symbol, not a villain. The virus blames humans for forcing nature to respond in this way. It suggests that its arrival is the result of human greed, carelessness, and selfishness.<br><br>
+
+Corona observes that for centuries, humans have believed they are the supreme rulers of the Earth, thinking they own nature and everything in it. In their desire for development, wealth, and power, humans have exploited the environment, cut down forests, killed animals, polluted rivers, and ignored the balance of nature. The poem criticizes this arrogance and abuse of the Earth, reminding readers that humans have crossed their limits.<br><br>
+
+The virus also points out the irony of human life. Even though people live in large cities filled with concrete buildings, factories, and machines, they are emotionally distant. The virus says that in modern life, people don't have time for love, care, or family. Instead, they are busy chasing money, technology, and status. Through the pandemic, however, people were forced to stop, stay at home, and face their own behavior.<br><br>
+
+Corona challenges humans to rethink their values. It says that the Earth is not only for humans, but also for animals, birds, insects, and all forms of life. The virus becomes a symbol of nature’s warning, asking humans to slow down, live in balance, and respect the planet. It warns that if humans don’t learn from this experience, worse things may come in the future.<br><br>
+
+The poem ends on a reflective note, encouraging humanity to wake up and change before it’s too late. It delivers a strong moral message: development is meaningless if it destroys nature and distances people from love, compassion, and human connection.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Who is the speaker in the poem?</span><br>
+                    The speaker in the poem is Corona (the coronavirus).
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Who claims that they are superior to all?</span><br>
+                    The humans of the modern world claim that they are superior to all other beings.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why has the speaker come to the Earth?</span><br>
+                    The speaker (Corona) has come to Earth as a consequence of humans’ abuse and exploitation of nature. It acts as a reminder of nature’s power and the consequences of human arrogance.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">d. What positive changes have occurred on Earth after the speaker’s visit?</span><br>
+                    After Corona’s visit, positive changes include reduced pollution, cleaner air and water, and nature beginning to heal because human activities slowed down due to lockdowns and restrictions.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the Context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What does the speaker mean when he says:</span><br>
+                    <span class="italic">“But have you ever counted</span><br>
+                    <span class="italic">How many have died so far</span><br>
+                    <span class="italic">Because of you and your wars?”</span><br><br>
+                    In these lines, the speaker—Corona—is asking humans to reflect deeply on their own actions. While many fear the virus because of the deaths it has caused, the speaker reminds humans that they themselves have been responsible for far greater loss of life through wars, violence, and conflicts throughout history. The speaker wants humans to realize that their own aggression, hatred, and desire for power have led to countless deaths, suffering, and destruction over the years.
+                    <br><br>
+                    This is a powerful way of holding up a mirror to humanity, showing that the real threat isn’t just from a microscopic virus, but also from the choices and behaviors of humans themselves. It urges people to think about how their wars and conflicts have been far deadlier and more damaging, and perhaps encourages them to change for the better. It’s a call for self-awareness and a reminder of the consequences of human violence.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Explain the following lines:</span><br>
+                    <span class="italic">“I will depart one day.</span><br>
+                    <span class="italic">But remember</span><br>
+                    <span class="italic">There’re many others like me.</span><br>
+                    <span class="italic">They’ll come too.</span><br>
+                    <span class="italic">If you don’t get rid of your inflated ego,</span><br>
+                    <span class="italic">You’ll be back to your cave time</span><br>
+                    <span class="italic">That you endured</span><br>
+                    <span class="italic">Long, long, long ago …”</span><br><br>
+                    The speaker, Corona, tells us that although it will eventually leave the Earth, it is not the only threat out there. There are many other viruses and challenges waiting to appear if humans do not change their behavior. Corona warns that the human tendency to be arrogant and prideful—referred to as an “inflated ego”—is dangerous. This arrogance makes people believe they are more powerful than nature and can act without consequences, but that mindset will only bring more problems.
+                    <br><br>
+                    Corona also warns that if humans do not get rid of this ego and continue to disrespect nature, they might have to return to a primitive and difficult way of life, symbolized by the phrase “back to your cave time.” This means losing all the progress and comforts of modern life and suffering hardships similar to those faced by early humans. The message is clear: unless people learn humility and live in harmony with nature, they risk repeating past mistakes and facing great suffering again.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. What does the speaker mean in the following lines?</span><br>
+                    <span class="italic">“The earth is not your property alone –</span><br>
+                    <span class="italic">It’s as much ours as yours.”</span><br><br>
+                    The speaker, Corona, is emphasizing that the Earth does not belong exclusively to humans. Often, people behave as if they are the sole owners of the planet, using its resources freely and without considering the impact on other living beings. This attitude has led to the destruction of forests, pollution of air and water, and harm to animals and plants. However, the speaker reminds us that Earth is a shared home, not only for humans but for countless other creatures — animals, birds, plants, and even microscopic beings like viruses.
+                    <br><br>
+                    By saying, “It’s as much ours as yours,” the speaker is stressing that every living thing has a rightful place and claim to the Earth. Humans must understand that they are just one part of a larger ecosystem. This line calls for humility and respect towards all forms of life. It urges people to live in harmony with nature, protecting and preserving the environment instead of exploiting it selfishly. The message is clear: Earth is a shared responsibility, and only by acknowledging this can humans ensure a balanced and sustainable future for all inhabitants of the planet.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference Beyond the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What human behaviours are responsible for suffering in people’s lives?</span><br>
+                    Many human behaviors contribute significantly to the suffering experienced by people around the world. One of the primary causes is arrogance and pride, where humans develop an inflated ego and consider themselves superior to nature and all other living beings. This arrogance leads to careless exploitation of the Earth’s resources—cutting down forests, polluting air and water, and destroying habitats. Such disrespect for the environment disrupts the natural balance, which in turn causes natural calamities, spread of diseases, and long-term damage to human health and livelihoods.
+                    <br><br>
+                    Besides environmental harm, human conflicts also play a major role in causing suffering. Wars, violence, and intolerance fueled by greed, hatred, and the desire for power result in loss of life, displacement of people, and destruction of communities. These behaviors create fear, trauma, and instability on both local and global scales. Moreover, selfishness and greed lead to social inequality, poverty, and neglect of the vulnerable sections of society, further deepening human misery. Lack of empathy, compassion, and cooperation prevent people from living peacefully and happily together. The poem warns that unless humans change these harmful behaviors and develop humility, respect, and kindness, the cycle of suffering will continue and may become even more severe in the future.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">b. How does an epidemic differ from a pandemic? Briefly explain the impact of Corona Virus on human life and environment.</span><br>
+                    An epidemic is the sudden outbreak of a disease that affects many people within a particular community, region, or country. It is usually limited to a specific geographic area. In contrast, a **pandemic** is an epidemic that spreads over multiple countries or continents, affecting a large number of people worldwide.
+                    <br><br>
+                    Impact of Coronavirus on human life and environment:
+                    <br><br>
+                    The Coronavirus (COVID-19) pandemic has had a profound impact on human life. It caused widespread illness and loss of life, overwhelming healthcare systems globally. The pandemic led to lockdowns, travel restrictions, and social distancing measures, which disrupted daily life, economies, and education. Many people faced job losses, mental health challenges, and uncertainty about the future.
+                    <br><br>
+                    On the environment, the pandemic had some positive effects. With reduced human activity, pollution levels dropped, air and water quality improved, and nature started to recover in some areas. However, the pandemic also increased the use of disposable plastics like masks and gloves, which created new environmental challenges. Overall, the pandemic highlighted the close connection between human health and the environment and showed the need for sustainable living.
+                </p>
+
+                <button class="mt-8 browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md fade-in-slide-up" onclick="window.location.href='english11.html'">
+                    Back to English 11 Notes
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        document.getElementById('toggle-summary-button').addEventListener('click', function() {
+            const summaryContent = document.getElementById('summary-content');
+            // Check current display style
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block'; // Show the content
+                this.textContent = 'HIDE SUMMARY';
+            } else {
+                summaryContent.style.display = 'none'; // Hide the content
+                this.textContent = 'CLICK HERE FOR SUMMARY';
+            }
+        });
+
+        // Ensure elements with fade-in-slide-up are visible on page load
+        document.addEventListener('DOMContentLoaded', () => {
+            document.querySelectorAll('.fade-in-slide-up').forEach(element => {
+                element.classList.add('is-visible');
+            });
+        });
+    </script>
+</body>
+</html>

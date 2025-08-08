@@ -1,0 +1,449 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>The Awakening Age Notes - HIMAL_edu</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Base styles, reset, and font import */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Inter', sans-serif;
+            /* Dark gradient background from the provided image */
+            background: linear-gradient(135deg, #1a0a3a 0%, #4a3a6a 50%, #6a5acd 100%);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            color: #ffffff; /* Default text color for dark background */
+            overflow-x: hidden; /* Prevent horizontal scroll */
+        }
+        .gradient-text {
+            /* Vibrant blue/purple gradient for text - adjusted for dark background */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for brighter gradient on main headings and content text */
+        .brighter-gradient-text {
+            background: linear-gradient(90deg, #ffffff, #e0e0ff); /* White to Light Lavender */
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* New class for bright solid text, used for navigation and footer */
+        .bright-solid-text {
+            color: #e0e0ff; /* Light lavender, similar to end of brighter-gradient-text */
+        }
+        .browse-button {
+            /* Vibrant blue/purple gradient for buttons - kept for contrast */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+        }
+        .browse-button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3), 0 0 10px rgba(251, 194, 235, 0.6); /* Stronger shadow and subtle glow */
+        }
+        /* Style for the gradient line */
+        .gradient-line {
+            height: 2px; /* Thin line */
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Matches gradient-text */
+            width: calc(100% - 2rem); /* Adjusted width to leave space on sides */
+            margin: 0 auto; /* Center the line */
+            border-radius: 9999px; /* Fully rounded corners */
+        }
+        /* Mobile menu specific styles */
+        #mobile-menu {
+            transition: max-height 0.3s ease-out;
+            overflow: hidden;
+            max-height: 0 !important; /* Ensure it's hidden initially */
+            display: none !important; /* Ensure it's hidden initially */
+            background-color: rgba(26, 26, 26, 0.9); /* Darker background for mobile menu */
+            color: #e0e0ff; /* Lighter text */
+        }
+        #mobile-menu.active {
+            max-height: 200px !important; /* Adjust as needed for content */
+            display: block !important; /* Show when active */
+        }
+        #mobile-menu a {
+            color: #e0e0ff; /* Lighter text for mobile links */
+            transition: color 0.3s ease-in-out;
+        }
+        #mobile-menu a:hover {
+            color: #fbc2eb; /* Hover color from NotesHimal */
+        }
+        @media (max-width: 767px) {
+            nav.container {
+                padding-left: 1rem;
+                padding-right: 1rem;
+            }
+        }
+        /* Style for the new Avyash buttons (not used in this file, but kept for consistency if needed) */
+        .avyash-button {
+            background: linear-gradient(90deg, #fbc2eb, #a18cd1); /* Pink to Purple gradient */
+            color: white;
+            padding: 0.25rem 0.75rem; /* Smaller padding */
+            border-radius: 0.5rem; /* Slightly rounded corners */
+            font-size: 0.875rem; /* Smaller font size */
+            font-weight: 500; /* Medium weight */
+            transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+            display: inline-block; /* To allow padding/margin */
+            text-decoration: none; /* Remove underline by default */
+            margin-left: 0.5rem; /* Space between text and button */
+        }
+        .avyash-button:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.15), 0 0 8px rgba(251, 194, 235, 0.5); /* Added subtle glow on hover */
+        }
+
+        /* Content box styling to match subject cards on landing page */
+        .content-box {
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), rgba(255, 255, 255, 0.05)); /* Brighter, slightly transparent white to light pinkish-purple */
+            backdrop-filter: blur(5px);
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2), 0 0 5px rgba(251, 194, 235, 0.2); /* Subtle glow */
+            border: 1px solid rgba(161, 140, 209, 0.2); /* Subtle border */
+        }
+        /* Footer adjustments for dark background */
+        footer {
+            background-color: #0a0a1a; /* Darker footer to match new background */
+            color: #e0e0ff; /* Ensure footer text is bright */
+        }
+
+        /* NotesHimal Background Elements Integration */
+        .background-lines {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none; /* Allow clicks through */
+            z-index: 0; /* Behind all content */
+            overflow: hidden;
+        }
+
+        .line {
+            position: absolute;
+            width: 100%;
+            height: 2px; /* Consistent thickness */
+            background: rgba(255, 255, 255, 0.05); /* Subtle background */
+            animation: slide 10s linear infinite; /* Animation speed */
+        }
+
+        /* Different starting positions and delays for lines */
+        .line:nth-child(1) { top: 20%; animation-delay: 0s; }
+        .line:nth-child(2) { top: 45%; animation-delay: 3s; }
+        .line:nth-child(3) { top: 70%; animation-delay: 6s; }
+        .line:nth-child(4) { top: 90%; animation-delay: 9s; }
+
+        @keyframes slide {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .svg-overlay {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            top: 0;
+            left: 0;
+            z-index: 0; /* Behind all content */
+        }
+
+        .svg-overlay svg {
+            position: absolute;
+            stroke: rgba(255, 255, 255, 0.15); /* Faint white for dark background */
+            filter: none; /* Removed glow filter for these SVGs */
+            animation: rotateAndFade 20s linear infinite; /* Animation */
+        }
+
+        /* Positioning for individual SVG shapes with animation delays */
+        .svg-1 { top: 10%; left: 5%; width: 120px; height: 120px; animation-delay: 0s; }
+        .svg-2 { bottom: 15%; right: 10%; width: 150px; height: 150px; animation-delay: 5s; }
+        .svg-3 { top: 30%; right: 20%; width: 100px; height: 100px; animation-delay: 10s; }
+        .svg-4 { top: 5%; right: 40%; width: 80px; height: 80px; animation-delay: 2s; } /* New shape */
+        .svg-5 { bottom: 5%; left: 30%; width: 90px; height: 90px; animation-delay: 7s; } /* New shape */
+        .svg-6 { top: 50%; left: 15%; width: 110px; height: 110px; animation-delay: 12s; } /* New shape */
+        .svg-7 { bottom: 30%; right: 25%; width: 70px; height: 70px; animation-delay: 4s; } /* New shape */
+
+        /* Removed .svg-arrow-group as requested */
+        .svg-spiral {
+            top: 5%;
+            right: 5%;
+            width: 100px;
+            height: 100px;
+            animation-delay: 6s;
+            opacity: 0.7; /* Slightly more prominent */
+            stroke: rgba(255, 255, 255, 0.2);
+            transform: scale(0.9);
+        }
+
+        @keyframes rotateAndFade {
+            0% { transform: rotate(0deg) scale(0.8); opacity: 0.5; }
+            50% { transform: rotate(180deg) scale(1.1); opacity: 0.7; }
+            100% { transform: rotate(360deg) scale(0.8); opacity: 0.5; }
+        }
+
+        /* Animation for elements appearing on page load */
+        .fade-in-slide-up {
+            opacity: 0;
+            transform: translateY(20px);
+            transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+        }
+
+        .fade-in-slide-up.is-visible {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        /* New style for the summary content to be hidden by default */
+        #summary-content {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Background Animated Lines -->
+    <div class="background-lines">
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+        <div class="line"></div>
+    </div>
+
+    <!-- Futuristic SVG Overlays for abstract decoration -->
+    <div class="svg-overlay">
+        <!-- Define a single glow filter to be reused by all SVGs (for laptop, not background SVGs) -->
+        <svg width="0" height="0" style="position:absolute; overflow:hidden;">
+            <defs>
+                <filter id="glow">
+                    <feGaussianBlur stdDeviation="3" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+                <filter id="glowSmall">
+                    <feGaussianBlur stdDeviation="1.5" result="coloredBlur"/>
+                    <feMerge>
+                        <feMergeNode in="coloredBlur"/>
+                        <feMergeNode in="SourceGraphic"/>
+                    </feMerge>
+                </filter>
+            </defs>
+        </svg>
+
+        <!-- Existing Abstract SVGs -->
+        <svg class="svg-1" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 60,40 95,40 65,60 75,95 50,75 25,95 35,60 5,40 40,40" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-2" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 50 L30 20 L50 80 L70 20 L90 50" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-3" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,25 95,75 50,95 5,75 5,25" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-4" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="50" cy="50" r="45" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-5" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <polygon points="50,5 95,95 5,95" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-6" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M10 10 Q 90 10, 90 50 T 10 90" stroke-width="2" fill="none" />
+        </svg>
+        <svg class="svg-7" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M20 80 C 0 0, 100 0, 80 80 S 0 100, 20 80" stroke-width="2" fill="none" />
+        </svg>
+
+        <!-- Spiral/Clock (top-right) -->
+        <svg class="svg-spiral" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+            <path d="M50 5 A 45 45 0 1 1 50 95 A 40 40 0 1 0 50 5 A 35 35 0 1 1 50 95" stroke-width="2" fill="none" />
+            <circle cx="50" cy="50" r="5" fill="none" stroke-width="2" />
+        </svg>
+
+    </div>
+
+    <!-- Navbar -->
+    <nav class="container mx-auto px-2 sm:px-4 py-6 flex justify-between items-center">
+        <div class="text-2xl font-bold gradient-text flex items-center space-x-2">
+            <!-- HIMAL_edu Logo SVG -->
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path d="M12 2L2 22H22L12 2Z" fill="url(#logoGradient1)"/>
+                <path d="M12 5L4.5 20.5H19.5L12 5Z" fill="url(#logoGradient2)"/>
+                <defs>
+                    <linearGradient id="logoGradient1" x1="12" y1="2" x2="12" y2="22" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#fbc2eb"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#a18cd1"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                    <linearGradient id="logoGradient2" x1="12" y1="5" x2="12" y2="20.5" gradientUnits="userSpaceOnUse">
+                        <stop stop-color="#a18cd1"/> <!-- Adjusted to new gradient start -->
+                        <stop offset="1" stop-color="#fbc2eb"/> <!-- Adjusted to new gradient end -->
+                    </linearGradient>
+                </defs>
+            </svg>
+            <span>HIMAL_edu</span>
+        </div>
+        <div class="space-x-8 hidden md:flex">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+        <!-- Mobile menu button -->
+        <div class="md:hidden">
+            <button class="bright-solid-text focus:outline-none" onclick="toggleMobileMenu()">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+        </div>
+    </nav>
+    <div class="gradient-line"></div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden bg-white shadow-lg py-4">
+        <div class="flex flex-col items-center space-y-4">
+            <a href="index.html#home-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Home</a>
+            <a href="index.html#subjects-section" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">Subjects</a>
+            <a href="about.html" class="bright-solid-text hover:text-blue-600 transition duration-300" onclick="toggleMobileMenu()">About</a>
+            <a href="#" class="px-6 py-2 rounded-full bg-white border border-[#e0e0ff] bright-solid-text hover:bg-blue-50 hover:text-blue-600 transition duration-300 shadow-md">Sign In</a>
+        </div>
+    </div>
+
+    <!-- Main Content for The Awakening Age Notes -->
+    <div class="flex-grow">
+        <div class="container mx-auto px-2 sm:px-4 py-16 md:py-24">
+            <h2 class="text-4xl md:text-5xl font-bold text-center mb-12 brighter-gradient-text">4. The Awakening Age Notes</h2>
+            <div class="content-box p-4 sm:p-6 md:p-8 rounded-lg shadow-lg max-w-3xl mx-auto fade-in-slide-up">
+                <!-- Summary Button -->
+                <button id="toggle-summary-button" class="browse-button text-white font-semibold py-2 px-6 rounded-full shadow-md mb-4">
+                    View Summary
+                </button>
+
+                <!-- Summary Content (initially hidden) -->
+                <div id="summary-content">
+                    <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                        “The Awakening Age” by Sarojini Naidu is a patriotic and inspiring poem that celebrates the spirit of India’s awakening during the struggle for independence. The poem captures the mood of a nation rising from the slumber of colonial rule and stepping confidently into a new era of freedom and self-awareness. Through vivid imagery and rhythmic language, Naidu expresses hope, pride, and determination, encouraging Indians to embrace their heritage and work towards a brighter future.<br><br>
+
+The poem begins by describing India as an ancient land that has been asleep but is now waking up. This awakening symbolizes the country’s growing awareness of its rights, identity, and the injustices it has endured. Naidu uses powerful metaphors to depict this transformation, comparing India to a sleeping giant or a blooming flower ready to shine. The imagery reflects the strength and potential of the nation as it prepares to break free from the chains of oppression.<br><br>
+
+As the poem progresses, Naidu highlights the enthusiasm and courage of the people who are part of this awakening. She refers to the young generation, the leaders, and the common folk who are joining hands to fight for justice and freedom. The poem celebrates unity and collective action, emphasizing that the strength of the nation lies in the solidarity of its people. Naidu’s passionate tone inspires readers to contribute actively to the cause of national revival.<br><br>
+
+The theme of renewal is central to the poem. “The Awakening Age” portrays a time of hope, change, and progress. Naidu expresses her belief that the country will overcome difficulties and emerge stronger, with a renewed sense of pride and self-respect. The poem encourages optimism, urging Indians to leave behind fear and despair and embrace the possibilities of a free and prosperous nation.<br><br>
+
+Towards the end, the poem becomes a call to action, motivating the people to remain steadfast and courageous. Naidu’s words serve as a reminder that the journey towards independence requires sacrifice, patience, and unwavering determination. The poem captures the spirit of the freedom movement and the collective aspiration for a better future.<br><br>
+
+In conclusion, “The Awakening Age” is a stirring and hopeful poem that reflects India’s awakening during the struggle for freedom. Sarojini Naidu’s lyrical language and vivid imagery inspire pride, unity, and perseverance. The poem stands as a timeless tribute to the spirit of a nation ready to reclaim its destiny and build a new era of freedom and dignity.<br><br>
+                    </p>
+                </div>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Understanding the Text</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. Who are the people ‘who travel the meridian line’?</span><br>
+                    The people who travel the meridian line are Nigerians who are grouped after a long civil war. They represent the citizens who have endured suffering such as hunger, poverty, and unemployment but are moving forward towards unity and peace after their country’s division and conflict.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. What does the poet mean by ‘a new world’?</span><br>
+                    By ‘a new world,’ the poet refers to a hopeful future marked by peace, unity, prosperity, and creativity. It symbolizes the emergence of a harmonious and prosperous Nigeria where people live in solidarity and progress after the hardships of war and division.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. How are people connected?</span><br>
+                    People are connected through hope, optimism, and shared dreams for a better future. Their unity stems from a collective dedication to overcoming past struggles and working towards a common goal of peace, prosperity, and creativity.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. What can we gain after our perceptions are changed?</span><br>
+                    When our perceptions change, we gain new opportunities, honesty, harmony, love, integrity, creativity, wisdom, and vision. Changing the way we see things can transform negative experiences into positive growth and open up pathways for development and unity.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. How are we benefited by new people?</span><br>
+                    New people bring happiness, harmony, knowledge, sincerity, creativity, and discipline. Their presence strengthens bonds and unity, helps us explore new ideas and visions, and contributes to the flourishing of society or the nation.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">f. Describe the rhyme scheme of this sonnet.</span><br>
+                    The sonnet follows a rhyme scheme of seven couplets, each with two rhyming lines. The pattern is AA BB CC DD EE FF GG, creating a rhythmic and sonorous tone that complements the poem’s themes of hope and optimism.
+                </p>
+
+                <h3 class="text-2xl font-semibold brighter-gradient-text mb-4">Reference to the context</h3>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">a. What does the poet mean by ‘the awakening age’?</span><br>
+                    The phrase ‘the awakening age’ in the poem refers to a crucial period when the people of Africa, particularly Nigerians, become aware of their true circumstances after enduring years of conflict, poverty, and exploitation. This awakening marks a shift from despair and division toward hope and unity. It represents a time when people realize the importance of peace, solidarity, and collective effort to rebuild their nation following the brutal civil war. The awakening is not only about recognizing past struggles but also about embracing a new vision for a better future.
+                    <br><br>
+                    In this age of awakening, the poet envisions a society filled with harmony, liberty, creativity, and prosperity. It is a time of renewal when people unite to overcome social, political, and economic challenges and work toward common goals like justice and progress. The “awakening age” is both a literal and symbolic rebirth—an era of enlightenment and transformation that inspires Nigerians to reclaim their dignity and build a peaceful, thriving nation. This concept fills the poem with optimism and faith in the power of hope and collective action.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">b. Why, in your view, have these people ‘lived with poverty’s rage’?</span><br>
+                    These people have ‘lived with poverty’s rage’ because of a combination of historical exploitation, political instability, and internal conflicts. For many years, African countries, including Nigeria, were subjected to exploitation by foreign powers such as Europeans and Americans who extracted natural resources and wealth without benefiting the local people. This long period of injustice deprived the people of opportunities for growth and development, trapping them in poverty.
+                    <br><br>
+                    Moreover, prolonged civil wars and ethnic conflicts within these countries further worsened the situation. Political instability meant that governments were weak or corrupt, leading to uneven distribution of resources and wealth, which increased the suffering of ordinary citizens. The people were also burdened by social issues like discrimination, cultural divisions, and lack of education. All these factors combined to create an environment where poverty was widespread and deeply entrenched, causing the people to live with the harsh realities and ‘rage’ of poverty for generations.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">c. Why does the poet appeal for solidarity among the people?</span><br>
+                    The poet appeals for solidarity among the people because unity is essential for overcoming the deep divisions and hardships caused by years of war, poverty, and exploitation. After enduring so much suffering, the people need to come together to heal the wounds of the past and build a stronger, more peaceful society. Solidarity creates a sense of collective strength and shared purpose that can inspire hope and motivate positive change. It is through this unity that they can face challenges like inequality, injustice, and social fragmentation more effectively.
+                    <br><br>
+                    Moreover, the poet believes that only by standing together can the people realize the dream of a “new world” filled with peace, prosperity, and creativity. Solidarity helps to foster trust, cooperation, and mutual support, which are crucial for progress and development. Without it, the people remain vulnerable to continued conflict and poverty. The poet’s appeal is a call for the community to unite in spirit and action, recognizing that their combined efforts are the key to awakening and transforming their society into one where liberty, harmony, and growth can flourish.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">d. Does the poet present migration in a positive light? Why? Why not?</span><br>
+                    Yes, the poet presents migration in a positive light. Migration is portrayed as a powerful and hopeful process that allows people, particularly the working-age population, to transform their lives and broaden their perspectives. The poet emphasizes that migrants carry with them valuable skills, knowledge, creativity, and capital when they move to new places. These qualities help them grow personally and professionally, which ultimately benefits both the migrants themselves and the societies they return to or remain connected with.
+                    <br><br>
+                    Furthermore, migration is seen as a catalyst for social and economic progress. Migrants often bring new ideas, innovations, and experiences gained abroad, which can lead to positive changes in their home countries. The poet suggests that migration contributes to a more unified, prosperous, and creative society, as migrants help foster development by sharing their knowledge and resources. Rather than being a loss, migration is viewed as an opportunity for renewal and growth, helping individuals and communities rise above past hardships and contribute to building a better future.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-2 text-justify">
+                    <span class="font-bold">e. Nepal is also known for its economic as well as educational migrants. Have you noticed any change in the perceptions and behaviours of these migrants when they return home from abroad?</span><br>
+                    Yes, there are noticeable changes in the perceptions and behaviours of Nepali migrants when they return home from abroad, both economically and educationally. Exposure to different cultures, education systems, and work environments broadens their outlook and often transforms their attitudes toward life, work, and society. Many returnees develop a more modern and open-minded approach, valuing education, discipline, and financial literacy more than before.
+                    <br><br>
+                    They bring back new skills, knowledge, and sometimes capital, which they invest in their communities or businesses. This often leads to positive changes such as adopting innovative ideas, better financial management, and a stronger desire to contribute to Nepal’s development. Additionally, returning migrants tend to have increased awareness of global issues, social equality, and the importance of unity and cooperation, which influences their behaviour and encourages progressive changes in their families and communities.
+                </p>
+                <p class="text-lg brighter-gradient-text mb-4 text-justify">
+                    <span class="font-bold">f. Relate the rhyme scheme of this sonnet to the kind of life idealized by the poet.</span><br>
+                    The rhyme scheme of this sonnet is AA BB CC DD EE FF GG, which consists of seven rhyming couplets. This structured and harmonious pattern reflects the optimism, order, and hope that the poet idealizes in life. Just as the rhyme scheme creates a smooth, rhythmic flow, the poet envisions a life filled with peace, unity, and stability—a world where people live in harmony and work together towards a brighter future.
+                    <br><br>
+                    The consistent couplets symbolize connection and solidarity, reinforcing the poet’s message that progress and prosperity come from togetherness and shared purpose. The sonorous and rhythmic nature of the rhyme scheme echoes the poet’s dream of a balanced and flourishing society, where optimism and creativity flourish side by side with wisdom and liberty. In this way, the rhyme scheme itself mirrors the idealized life the poet wishes for the people—a life that is orderly, hopeful, and full of promise.
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="bg-gray-800 text-white text-center py-6 mt-auto">
+        <p class="bright-solid-text">&copy; 2025 HIMAL_edu. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // Function to toggle mobile menu visibility
+        function toggleMobileMenu() {
+            const mobileMenu = document.getElementById('mobile-menu');
+            mobileMenu.classList.toggle('active');
+        }
+
+        // Function to toggle summary visibility
+        function toggleSummary() {
+            const summaryContent = document.getElementById('summary-content');
+            const button = document.getElementById('toggle-summary-button');
+            if (summaryContent.style.display === 'none' || summaryContent.style.display === '') {
+                summaryContent.style.display = 'block';
+                button.textContent = 'Hide Summary';
+            } else {
+                summaryContent.style.display = 'none';
+                button.textContent = 'View Summary';
+            }
+        }
+
+        // This function will apply the animation immediately on page load
+        function applyInitialAnimations() {
+            const contentBox = document.querySelector('.content-box');
+            if (contentBox) {
+                contentBox.classList.add('is-visible');
+            }
+        }
+
+        // Call the animation function when the DOM is fully loaded
+        document.addEventListener('DOMContentLoaded', applyInitialAnimations);
+
+        // Add event listener to the new summary button
+        document.getElementById('toggle-summary-button').addEventListener('click', toggleSummary);
+    </script>
+</body>
+</html>
